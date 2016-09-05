@@ -63,11 +63,11 @@ class Catalogo
     }
 
     /**
-     * Get id
+     * Get idCatalogo
      *
      * @return integer 
      */
-    public function getId()
+    public function getIdCatalogo()
     {
         return $this->idCatalogo;
     }

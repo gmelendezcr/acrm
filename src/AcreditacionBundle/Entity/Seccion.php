@@ -73,11 +73,11 @@ class Seccion
     }
 
     /**
-     * Get id
+     * Get idSeccion
      *
      * @return integer 
      */
-    public function getId()
+    public function getIdSeccion()
     {
         return $this->idSeccion;
     }

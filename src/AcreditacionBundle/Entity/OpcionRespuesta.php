@@ -59,11 +59,11 @@ class OpcionRespuesta
 
 
     /**
-     * Get id
+     * Get idOpcionRespuesta
      *
      * @return integer 
      */
-    public function getId()
+    public function getIdOpcionRespuesta()
     {
         return $this->idOpcionRespuesta;
     }

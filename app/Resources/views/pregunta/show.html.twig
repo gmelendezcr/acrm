@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pregunta</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Idpregunta</th>
+                <td>{{ preguntum.idPregunta }}</td>
+            </tr>
+            <tr>
+                <th>Codpregunta</th>
+                <td>{{ preguntum.codPregunta }}</td>
+            </tr>
+            <tr>
+                <th>Descripcionpregunta</th>
+                <td>{{ preguntum.descripcionPregunta }}</td>
+            </tr>
+            <tr>
+                <th>Textolongitudmaxima</th>
+                <td>{{ preguntum.textoLongitudMaxima }}</td>
+            </tr>
+            <tr>
+                <th>Textomascara</th>
+                <td>{{ preguntum.textoMascara }}</td>
+            </tr>
+            <tr>
+                <th>Valorminimorespuesta</th>
+                <td>{{ preguntum.valorMinimoRespuesta }}</td>
+            </tr>
+            <tr>
+                <th>Valormaximorespuesta</th>
+                <td>{{ preguntum.valorMaximoRespuesta }}</td>
+            </tr>
+            <tr>
+                <th>Opcionotro</th>
+                <td>{{ preguntum.opcionOtro }}</td>
+            </tr>
+            <tr>
+                <th>Opcionotrotexto</th>
+                <td>{{ preguntum.opcionOtroTexto }}</td>
+            </tr>
+            <tr>
+                <th>Opcionnoaplica</th>
+                <td>{{ preguntum.opcionNoAplica }}</td>
+            </tr>
+            <tr>
+                <th>Opcionnoaplicatexto</th>
+                <td>{{ preguntum.opcionNoAplicaTexto }}</td>
+            </tr>
+            <tr>
+                <th>Idpreguntapadre</th>
+                <td>{{ preguntum.idPreguntaPadre }}</td>
+            </tr>
+            <tr>
+                <th>Encabezadosubpreguntas</th>
+                <td>{{ preguntum.encabezadoSubPreguntas }}</td>
+            </tr>
+            <tr>
+                <th>Numerarsubpreguntas</th>
+                <td>{{ preguntum.numerarSubPreguntas }}</td>
+            </tr>
+            <tr>
+                <th>Cantidadcolumnassubpreguntas</th>
+                <td>{{ preguntum.cantidadColumnasSubPreguntas }}</td>
+            </tr>
+            <tr>
+                <th>Totalesfilas</th>
+                <td>{{ preguntum.totalesFilas }}</td>
+            </tr>
+            <tr>
+                <th>Totalescolumnas</th>
+                <td>{{ preguntum.totalesColumnas }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{{ preguntum.activo }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pregunta_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

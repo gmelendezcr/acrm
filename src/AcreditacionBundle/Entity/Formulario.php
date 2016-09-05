@@ -64,11 +64,11 @@ class Formulario
     }
 
     /**
-     * Get id
+     * Get idFormulario
      *
      * @return integer 
      */
-    public function getId()
+    public function getIdFormulario()
     {
         return $this->idFormulario;
     }

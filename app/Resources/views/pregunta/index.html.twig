@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pregunta list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Idpregunta</th>
+                <th>Codpregunta</th>
+                <th>Descripcionpregunta</th>
+                <th>Textolongitudmaxima</th>
+                <th>Textomascara</th>
+                <th>Valorminimorespuesta</th>
+                <th>Valormaximorespuesta</th>
+                <th>Opcionotro</th>
+                <th>Opcionotrotexto</th>
+                <th>Opcionnoaplica</th>
+                <th>Opcionnoaplicatexto</th>
+                <th>Idpreguntapadre</th>
+                <th>Encabezadosubpreguntas</th>
+                <th>Numerarsubpreguntas</th>
+                <th>Cantidadcolumnassubpreguntas</th>
+                <th>Totalesfilas</th>
+                <th>Totalescolumnas</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for preguntum in preguntas %}
+            <tr>
+                <td><a href="{{ path('pregunta_show', { 'id': preguntum.idPregunta }) }}">{{ preguntum.idPregunta }}</a></td>
+                <td>{{ preguntum.codPregunta }}</td>
+                <td>{{ preguntum.descripcionPregunta }}</td>
+                <td>{{ preguntum.textoLongitudMaxima }}</td>
+                <td>{{ preguntum.textoMascara }}</td>
+                <td>{{ preguntum.valorMinimoRespuesta }}</td>
+                <td>{{ preguntum.valorMaximoRespuesta }}</td>
+                <td>{{ preguntum.opcionOtro }}</td>
+                <td>{{ preguntum.opcionOtroTexto }}</td>
+                <td>{{ preguntum.opcionNoAplica }}</td>
+                <td>{{ preguntum.opcionNoAplicaTexto }}</td>
+                <td>{{ preguntum.idPreguntaPadre }}</td>
+                <td>{{ preguntum.encabezadoSubPreguntas }}</td>
+                <td>{{ preguntum.numerarSubPreguntas }}</td>
+                <td>{{ preguntum.cantidadColumnasSubPreguntas }}</td>
+                <td>{{ preguntum.totalesFilas }}</td>
+                <td>{{ preguntum.totalesColumnas }}</td>
+                <td>{{ preguntum.activo }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('pregunta_show', { 'id': preguntum.idPregunta }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

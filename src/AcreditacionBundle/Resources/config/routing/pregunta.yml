@@ -1,0 +1,12 @@
+pregunta_index:
+    path:     /
+    defaults: { _controller: "AcreditacionBundle:Pregunta:index" }
+    methods:  GET
+
+pregunta_show:
+    path:     /{id}/show
+    defaults: { _controller: "AcreditacionBundle:Pregunta:show" }
+    methods:  GET
+
+
+

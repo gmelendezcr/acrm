@@ -180,11 +180,11 @@ class Pregunta
     }
 
     /**
-     * Get id
+     * Get idPregunta
      *
      * @return integer 
      */
-    public function getId()
+    public function getIdPregunta()
     {
         return $this->idPregunta;
     }

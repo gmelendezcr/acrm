@@ -59,11 +59,11 @@ class DetalleCatalogo
 
 
     /**
-     * Get id
+     * Get idDetalleCatalogo
      *
      * @return integer 
      */
-    public function getId()
+    public function getIdDetalleCatalogo()
     {
         return $this->idDetalleCatalogo;
     }
