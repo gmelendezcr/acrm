@@ -1,0 +1,3 @@
+acreditacion_homepage:
+    path:     /
+    defaults: { _controller: AcreditacionBundle:Default:index }
