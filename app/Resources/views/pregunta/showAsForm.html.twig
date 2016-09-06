@@ -1,73 +1,63 @@
-{% extends 'base.html.twig' %}
-
-{% block body %}
-
-<script type="text/javascript" src="https://srn.uca.edu.sv/js/jquery.min.js"></script>
+{% set tipoValido = true %}
+{% set id = pregunta.idTipoPregunta.codTipoPregunta ~ "_" ~ pregunta.idPregunta %}
 
 
 
-    {% set tipoValido = true %}
-    {% set id = pregunta.idTipoPregunta.codTipoPregunta ~ "_" ~ pregunta.idPregunta %}
+{% if pregunta.textoLongitudMaxima %}
+    {% set maxLength = "maxlength=" ~ pregunta.textoLongitudMaxima %}
+{% endif %}
 
 
 
-    {% if pregunta.textoLongitudMaxima %}
-        {% set maxLength = "maxlength=" ~ pregunta.textoLongitudMaxima %}
-    {% endif %}
+{% if pregunta.idTipoPregunta.codTipoPregunta == 'TA' %}
+
+{% elseif pregunta.idTipoPregunta.codTipoPregunta == 'SN' %}
+
+    {% set opciones = [{'codigo': 'S', 'texto': 'Sí'}, {'codigo': 'N', 'texto': 'No'}, {'codigo': 'O', 'texto': pregunta.opcionOtroTexto}] %}
+
+{% elseif pregunta.idTipoPregunta.codTipoPregunta == 'CA' %}
+
+    {% set opciones = pregunta.idCatalogo.detallesCatalogo|merge(pregunta.opcionOtro ?
+        [{'codDetalleCatalogo': pregunta.opcionOtroTexto, 'nbrDetalleCatalogo': pregunta.opcionOtroTexto}] : []) %}
+
+{% elseif pregunta.idTipoPregunta.codTipoPregunta == 'FE' %}
+
+    {% set maxLength = "maxlength=10" %}
+    {% set datePicker = "[datePicker]" %}
+
+{% elseif pregunta.idTipoPregunta.codTipoPregunta == 'FH' %}
+
+    {% set maxLength = "maxlength=16" %}
+    {% set datePicker = "[datePicker]" %}
+    {% set tipoPreguntaTwig = 'FE' %}
+
+{% elseif pregunta.idTipoPregunta.codTipoPregunta == 'OC'
+    or pregunta.idTipoPregunta.codTipoPregunta == 'OR' %}
+
+    {% set opciones = pregunta.opcionesRespuesta|merge(pregunta.opcionOtro ?
+        [{'codOpcionRespuesta': pregunta.opcionOtroTexto, 'descripcionOpcionRespuesta': pregunta.opcionOtroTexto}] : []) %}
+
+{% elseif pregunta.idTipoPregunta.codTipoPregunta == 'MA' %}
+
+{% else %}
+
+    Tipo de pregunta {{ pregunta.idTipoPregunta.codTipoPregunta }} no definido.
+    {% set tipoValido = false %}
+
+{% endif %}
 
 
 
-    {% if pregunta.idTipoPregunta.codTipoPregunta == 'TA' %}
+{% if tipoValido %}
 
-    {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'SN' %}
+    {% set vars = {
+        'pregunta': pregunta, 'id': id,
+        'opciones': opciones ?? null, 'controlOpcionNoAplica': controlOpcionNoAplica ?? null,
+        'colspanDescripcion': colspanDescripcion ?? 1, 'maxLength': maxLength ?? 1, 'datePicker': datePicker ?? '',
+        '': idFila ?? null
+    } %}
 
-        {% set opciones = [{'codigo': 'S', 'texto': 'Sí'}, {'codigo': 'N', 'texto': 'No'}, {'codigo': 'O', 'texto': pregunta.opcionOtroTexto}] %}
+    {% include 'pregunta/' ~ (pregunta.idPreguntaPadre ? 'sub' : 'tipo') ~ 'Pregunta' ~ 
+        tipoPreguntaTwig ?? pregunta.idTipoPregunta.codTipoPregunta ~ '.html.twig' with vars %}
 
-    {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'CA' %}
-
-        {% set opciones = pregunta.idCatalogo.detallesCatalogo|merge(pregunta.opcionOtro ?
-            [{'codDetalleCatalogo': pregunta.opcionOtroTexto, 'nbrDetalleCatalogo': pregunta.opcionOtroTexto}] : []) %}
-
-    {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'FE' %}
-
-        {% set maxLength = "maxlength=10" %}
-        {% set datePicker = "[datePicker]" %}
-
-    {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'FH' %}
-
-        {% set maxLength = "maxlength=16" %}
-        {% set datePicker = "[datePicker]" %}
-        {% set tipoPreguntaTwig = 'FE' %}
-
-    {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'OC'
-        or pregunta.idTipoPregunta.codTipoPregunta == 'OR' %}
-
-        {% set opciones = pregunta.opcionesRespuesta|merge(pregunta.opcionOtro ?
-            [{'codOpcionRespuesta': pregunta.opcionOtroTexto, 'descripcionOpcionRespuesta': pregunta.opcionOtroTexto}] : []) %}
-
-    {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'MA' %}
-
-    {% else %}
-
-        Tipo de pregunta {{ pregunta.idTipoPregunta.codTipoPregunta }} no definido.
-        {% set tipoValido = false %}
-
-    {% endif %}
-
-
-
-    {% if tipoValido %}
-
-        {% set vars = {
-            'pregunta': pregunta, 'id': id,
-            'opciones': opciones ?? null, 'controlOpcionNoAplica': controlOpcionNoAplica ?? null,
-            'colspanDescripcion': colspanDescripcion ?? 1, 'maxLength': maxLength ?? 1, 'datePicker': datePicker ?? ''
-        } %}
-
-        {% include 'pregunta/tipoPregunta' ~ tipoPreguntaTwig ?? pregunta.idTipoPregunta.codTipoPregunta ~ '.html.twig' with vars %}
-
-    {% endif %}
-
-
-
-{% endblock %}
+{% endif %}

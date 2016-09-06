@@ -1,0 +1,7 @@
+{% for opcion in opciones %}
+    {% if opcion.texto %}
+        {% set id = 'idFila' ~ idFila ~ '_idColumna' ~ pregunta.idPregunta %}
+        <input type='radio' class='subPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}'
+            value='{{ opcion.codigo }}'>{{ opcion.texto }}
+    {% endif %}
+{% endfor %}

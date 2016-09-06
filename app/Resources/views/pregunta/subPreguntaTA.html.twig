@@ -1,0 +1,8 @@
+{% set id = 'idFila' ~ idFila ~ '_idColumna' ~ pregunta.idPregunta %}
+{% if pregunta.opcionNoAplica %}
+    <input type='checkbox' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica'
+        id='{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica_{{ pregunta.idPregunta }}'
+        name='{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica_{{ pregunta.idPregunta }}'
+        onClick="$('#{{ id }}').prop('disabled',!$('#{{ id }}').prop('disabled'));">{{ pregunta.opcionNoAplicaTexto }}
+{% endif %}
+<input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' {{ maxLength }}>
