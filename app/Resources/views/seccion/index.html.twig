@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Seccion list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Idseccion</th>
+                <th>Codseccion</th>
+                <th>Nbrseccion</th>
+                <th>Descripcionseccion</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for seccion in seccions %}
+            <tr>
+                <td><a href="{{ path('seccion_show', { 'id': seccion.idSeccion }) }}">{{ seccion.idSeccion }}</a></td>
+                <td>{{ seccion.codSeccion }}</td>
+                <td>{{ seccion.nbrSeccion }}</td>
+                <td>{{ seccion.descripcionSeccion }}</td>
+                <td>{{ seccion.activo }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('seccion_show', { 'id': seccion.idSeccion }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

@@ -1,0 +1,12 @@
+seccion_index:
+    path:     /
+    defaults: { _controller: "AcreditacionBundle:Seccion:index" }
+    methods:  GET
+
+seccion_show:
+    path:     /{id}/show
+    defaults: { _controller: "AcreditacionBundle:Seccion:show" }
+    methods:  GET
+
+
+

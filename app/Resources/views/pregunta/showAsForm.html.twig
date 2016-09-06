@@ -2,12 +2,12 @@
 
 {% block body %}
 
+<script type="text/javascript" src="https://srn.uca.edu.sv/js/jquery.min.js"></script>
+
+
+
     {% set tipoValido = true %}
-    {% set colspanDescripcion = 1 %}
-    {% set maxLength = "" %}
-    {% set controlOpcionNoAplica = "" %}
-    {% set codTipoPregunta = pregunta.idTipoPregunta.codTipoPregunta %}
-    {% set id = codTipoPregunta ~ "_" ~ pregunta.idPregunta %}
+    {% set id = pregunta.idTipoPregunta.codTipoPregunta ~ "_" ~ pregunta.idPregunta %}
 
 
 
@@ -15,71 +15,59 @@
         {% set maxLength = "maxlength=" ~ pregunta.textoLongitudMaxima %}
     {% endif %}
 
-    {% if pregunta.opcionNoAplica %}
-        {% set controlOpcionNoAplica = "<input type='checkbox' class='tipoPregunta" ~ codTipoPregunta ~ "NoAplica'
-            id='" ~ codTipoPregunta ~ "NoAplica_" ~ pregunta.idPregunta ~ "'
-            name='" ~ codTipoPregunta ~ "NoAplica_" ~ pregunta.idPregunta ~ "'>" ~ pregunta.opcionNoAplicaTexto %}
-    {% endif %}
 
 
+    {% if pregunta.idTipoPregunta.codTipoPregunta == 'TA' %}
 
-    {% if codTipoPregunta == 'TA' %}
+    {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'SN' %}
 
-        {% set controlPregunta = controlOpcionNoAplica ~
-            "<textarea class='tipoPregunta" ~ codTipoPregunta ~ "' id='" ~ id ~ "' name='" ~ id ~ "' " ~ maxLength ~ "></textarea>" %}
+        {% set opciones = [{'codigo': 'S', 'texto': 'Sí'}, {'codigo': 'N', 'texto': 'No'}, {'codigo': 'O', 'texto': pregunta.opcionOtroTexto}] %}
 
-    {% elseif codTipoPregunta == 'SN' %}
+    {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'CA' %}
 
-        {% set controlPregunta = "" %}
-        {% set opciones = ['Sí', 'No', pregunta.opcionOtroTexto] %}
+        {% set opciones = pregunta.idCatalogo.detallesCatalogo|merge(pregunta.opcionOtro ?
+            [{'codDetalleCatalogo': pregunta.opcionOtroTexto, 'nbrDetalleCatalogo': pregunta.opcionOtroTexto}] : []) %}
 
-        {% for opcion in opciones %}
-            {% if opcion %}
-                {% set controlPregunta = controlPregunta ~
-                    "<input type='radio' class='tipoPregunta" ~ codTipoPregunta ~ "' id='" ~ id ~ "' name='" ~ id ~ "'>" ~ opcion %}
-            {% endif %}
-        {% endfor %}
+    {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'FE' %}
 
-    {% elseif codTipoPregunta == 'CA' %}
+        {% set maxLength = "maxlength=10" %}
+        {% set datePicker = "[datePicker]" %}
 
-        {% set controlPregunta =
-            "<select class='tipoPregunta" ~ codTipoPregunta ~ "' id='" ~ id ~ "' name='" ~ id ~ "' " ~ maxLength ~ ">" %}
-        {% for opcion in pregunta.idCatalogo.detallesCatalogo %}
-            {% set controlPregunta = controlPregunta ~ "<option value='" ~ opcion.codDetalleCatalogo ~ "'>" ~ opcion.nbrDetalleCatalogo ~ "</option>" %}
-        {% endfor %}
-        {% if pregunta.opcionOtro %}
-            {% set controlPregunta = controlPregunta ~ "<option value='" ~ pregunta.opcionOtroTexto ~ "'>" ~ pregunta.opcionOtroTexto ~ "</option>" %}
-        {% endif %}
-        {% set controlPregunta = controlPregunta ~ "</select>" %}
+    {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'FH' %}
+
+        {% set maxLength = "maxlength=16" %}
+        {% set datePicker = "[datePicker]" %}
+        {% set tipoPreguntaTwig = 'FE' %}
+
+    {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'OC'
+        or pregunta.idTipoPregunta.codTipoPregunta == 'OR' %}
+
+        {% set opciones = pregunta.opcionesRespuesta|merge(pregunta.opcionOtro ?
+            [{'codOpcionRespuesta': pregunta.opcionOtroTexto, 'descripcionOpcionRespuesta': pregunta.opcionOtroTexto}] : []) %}
+
+    {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'MA' %}
 
     {% else %}
 
-        Tipo de pregunta {{ codTipoPregunta }} no definido.
+        Tipo de pregunta {{ pregunta.idTipoPregunta.codTipoPregunta }} no definido.
         {% set tipoValido = false %}
 
     {% endif %}
 
 
 
-    {% if tipoValido  %}
+    {% if tipoValido %}
 
-        <table border=1>
-            <tbody>
-                <tr>
-                    <th colspan={{ colspanDescripcion }}>
-                        {{ pregunta.idSeccion.codSeccion ~ '.' ~ pregunta.codPregunta ~ ' ' ~ pregunta.descripcionPregunta }}
-                    </th>
-                </tr>
-                <tr>
-                    <td>
-                        {% autoescape false %}
-                            {{ controlPregunta }}
-                        {% endautoescape %}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        {% set vars = {
+            'pregunta': pregunta, 'id': id,
+            'opciones': opciones ?? null, 'controlOpcionNoAplica': controlOpcionNoAplica ?? null,
+            'colspanDescripcion': colspanDescripcion ?? 1, 'maxLength': maxLength ?? 1, 'datePicker': datePicker ?? ''
+        } %}
+
+        {% include 'pregunta/tipoPregunta' ~ tipoPreguntaTwig ?? pregunta.idTipoPregunta.codTipoPregunta ~ '.html.twig' with vars %}
 
     {% endif %}
+
+
 
 {% endblock %}

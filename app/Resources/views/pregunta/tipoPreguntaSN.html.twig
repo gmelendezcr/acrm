@@ -1,0 +1,19 @@
+<table border=1>
+    <tbody>
+        <tr>
+            <th>
+                {{ pregunta.idSeccion.codSeccion ~ '.' ~ pregunta.codPregunta ~ ' ' ~ pregunta.descripcionPregunta }}
+            </th>
+        </tr>
+        <tr>
+            <td>
+                {% for opcion in opciones %}
+                    {% if opcion.texto %}
+                        <input type='radio' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}'
+                            value='{{ opcion.codigo }}'>{{ opcion.texto }}
+                    {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -2,6 +2,10 @@ acreditacion_pregunta:
     resource: "@AcreditacionBundle/Resources/config/routing/pregunta.yml"
     prefix:   /pregunta
 
+acreditacion_seccion:
+    resource: "@AcreditacionBundle/Resources/config/routing/seccion.yml"
+    prefix:   /seccion
+
 acreditacion_homepage:
     path:     /
     defaults: { _controller: AcreditacionBundle:Default:index }

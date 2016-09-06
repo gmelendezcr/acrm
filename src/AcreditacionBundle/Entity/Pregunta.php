@@ -118,7 +118,8 @@ class Pregunta
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_PREGUNTA_PADRE", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Pregunta", inversedBy="subPreguntas")
+     * @ORM\JoinColumn(name="ID_PREGUNTA_PADRE",referencedColumnName="ID_PREGUNTA")
      */
     private $idPreguntaPadre;
 
@@ -170,6 +171,11 @@ class Pregunta
      */
     private $opcionesRespuesta;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Pregunta",mappedBy="idPreguntaPadre")
+     */
+    private $subPreguntas;
+
 
     /**
      * Constructor
@@ -177,6 +183,7 @@ class Pregunta
     public function __construct()
     {
         $this->opcionesRespuesta = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->subPreguntas = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -492,10 +499,10 @@ class Pregunta
     /**
      * Set idPreguntaPadre
      *
-     * @param integer $idPreguntaPadre
+     * @param  \AcreditacionBundle\Entity\Pregunta $idPreguntaPadre
      * @return Pregunta
      */
-    public function setIdPreguntaPadre($idPreguntaPadre)
+    public function setIdPreguntaPadre(\AcreditacionBundle\Entity\Pregunta $idPreguntaPadre)
     {
         $this->idPreguntaPadre = $idPreguntaPadre;
 
@@ -505,7 +512,7 @@ class Pregunta
     /**
      * Get idPreguntaPadre
      *
-     * @return integer 
+     * @return \AcreditacionBundle\Entity\Pregunta
      */
     public function getIdPreguntaPadre()
     {
@@ -681,5 +688,38 @@ class Pregunta
     public function getOpcionesRespuesta()
     {
         return $this->opcionesRespuesta;
+    }
+
+    /**
+     * Add subPreguntas
+     *
+     * @param \AcreditacionBundle\Entity\Pregunta $subPreguntas
+     * @return Pregunta
+     */
+    public function addSubPreguntas(\AcreditacionBundle\Entity\Pregunta $subPreguntas)
+    {
+        $this->subPreguntas[] = $subPreguntas;
+
+        return $this;
+    }
+
+    /**
+     * Remove subPreguntas
+     *
+     * @param \AcreditacionBundle\Entity\Pregunta $subPreguntas
+     */
+    public function removeSubPreguntas(\AcreditacionBundle\Entity\Pregunta $subPreguntas)
+    {
+        $this->subPreguntas->removeElement($subPreguntas);
+    }
+
+    /**
+     * Get subPreguntas
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSubPreguntas()
+    {
+        return $this->subPreguntas;
     }
 }

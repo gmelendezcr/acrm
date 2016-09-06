@@ -1,0 +1,20 @@
+<table border=1>
+    <tbody>
+        <tr>
+            <th>
+                {{ pregunta.idSeccion.codSeccion ~ '.' ~ pregunta.codPregunta ~ ' ' ~ pregunta.descripcionPregunta }}
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <select class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' {{ maxLength }}>
+                    {% for opcion in opciones %}
+                        {% if opcion %}
+                            <option value='{{ opcion.codDetalleCatalogo }}'>{{ opcion.nbrDetalleCatalogo }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+    </tbody>
+</table>

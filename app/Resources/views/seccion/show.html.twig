@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Seccion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Idseccion</th>
+                <td>{{ seccion.idSeccion }}</td>
+            </tr>
+            <tr>
+                <th>Codseccion</th>
+                <td>{{ seccion.codSeccion }}</td>
+            </tr>
+            <tr>
+                <th>Nbrseccion</th>
+                <td>{{ seccion.nbrSeccion }}</td>
+            </tr>
+            <tr>
+                <th>Descripcionseccion</th>
+                <td>{{ seccion.descripcionSeccion }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{{ seccion.activo }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('seccion_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}
