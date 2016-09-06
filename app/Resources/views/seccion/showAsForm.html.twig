@@ -1,0 +1,9 @@
+{% for pregunta in seccion.preguntas %}
+
+    {% if not pregunta.idPreguntaPadre %}
+
+        {% include 'pregunta/showAsForm.html.twig' with {'pregunta': pregunta} %}
+
+    {% endif %}
+
+{% endfor %}

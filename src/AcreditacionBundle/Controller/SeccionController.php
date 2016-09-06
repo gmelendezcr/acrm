@@ -35,7 +35,7 @@ class SeccionController extends Controller
     public function showAction(Seccion $seccion)
     {
 
-        return $this->render('seccion/show.html.twig', array(
+        return $this->render('seccion/showAsForm.html.twig', array(
             'seccion' => $seccion,
         ));
     }
