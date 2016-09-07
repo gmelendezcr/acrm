@@ -1,0 +1,22 @@
+<table border=1>
+    <tbody>
+
+        <tr>
+            <th colspan={{ colspanDescripcion }}>
+                {{ pregunta.idSeccion.codSeccion ~ '.' ~ pregunta.codPregunta ~ ' ' ~ pregunta.descripcionPregunta }}
+            </th>
+        </tr>
+
+        {% for subPregunta in pregunta.subPreguntas %}
+            <tr>
+                {% if numerarSubPreguntas == 'S' %}
+                    <td>
+                        {{ loop.index }}
+                    </td>
+                {% endif %}
+                {% include 'pregunta/showAsForm.html.twig' with {'pregunta': subPregunta} %}
+            </tr>
+        {% endfor %}
+
+    </tbody>
+</table>

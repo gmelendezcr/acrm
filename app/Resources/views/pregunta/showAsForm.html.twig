@@ -41,7 +41,11 @@
 
 {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'MS' %}
 
-    {# ... #}
+    {% set numerarSubPreguntas = pregunta.numerarSubPreguntas %}
+    {% set colspanDescripcion = pregunta.numerarSubPreguntas == 'S' ? 3 : 2 %}
+    {% set opciones = [{'codigo': 'S', 'texto': 'Sí'}, {'codigo': 'N', 'texto': 'No'}, {'codigo': 'O', 'texto': pregunta.opcionOtroTexto}] %}
+
+{% elseif pregunta.idTipoPregunta.codTipoPregunta == 'SS' %}
 
 {% else %}
 
@@ -58,7 +62,7 @@
         'pregunta': pregunta, 'id': id,
         'opciones': opciones ?? null, 'controlOpcionNoAplica': controlOpcionNoAplica ?? null,
         'colspanDescripcion': colspanDescripcion ?? 1, 'maxLength': maxLength ?? 1, 'datePicker': datePicker ?? '',
-        '': idFila ?? null
+        '': idFila ?? null, 'numerarSubPreguntas': numerarSubPreguntas
     } %}
 
     {% include 'pregunta/' ~ (pregunta.idPreguntaPadre ? 'sub' : 'tipo') ~ 'Pregunta' ~ 
