@@ -1,9 +1,9 @@
 <td>
-	{{ pregunta.descripcionPregunta }}
+    {{ pregunta.descripcionPregunta }}
 </td>
 <td>
-	{% for opcion in opciones %}
-	    {% if opcion.texto %}
+    {% for opcion in opciones %}
+        {% if opcion.texto %}
             <input type='radio' class='subPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}'
                 value='{{ opcion.codigo }}'>{{ opcion.texto }}
         {% endif %}

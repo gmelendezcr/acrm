@@ -1,5 +1,8 @@
+{# <script type='text/javascript' src='https://srn.uca.edu.sv//js/jquery.min.js'></script> #}
+
 {% set tipoValido = true %}
 {% set id = pregunta.idTipoPregunta.codTipoPregunta ~ "_" ~ pregunta.idPregunta %}
+{% set opcionesSiNo = [{'codigo': 'S', 'texto': 'Sí'}, {'codigo': 'N', 'texto': 'No'}, {'codigo': 'O', 'texto': pregunta.opcionOtroTexto}] %}
 
 
 
@@ -13,7 +16,7 @@
 
 {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'SN' %}
 
-    {% set opciones = [{'codigo': 'S', 'texto': 'Sí'}, {'codigo': 'N', 'texto': 'No'}, {'codigo': 'O', 'texto': pregunta.opcionOtroTexto}] %}
+    {% set opciones = opcionesSiNo %}
 
 {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'CA' %}
 
@@ -42,10 +45,16 @@
 {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'MS' %}
 
     {% set numerarSubPreguntas = pregunta.numerarSubPreguntas %}
-    {% set colspanDescripcion = pregunta.numerarSubPreguntas == 'S' ? 3 : 2 %}
-    {% set opciones = [{'codigo': 'S', 'texto': 'Sí'}, {'codigo': 'N', 'texto': 'No'}, {'codigo': 'O', 'texto': pregunta.opcionOtroTexto}] %}
+    {% set colspanDescripcion = (pregunta.numerarSubPreguntas == 'S' ? 3 : 2) - ( pregunta.padreComoPregunta ? 1 : 0 ) %}
+    {% set opciones = opcionesSiNo %}
 
 {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'SS' %}
+
+    {% set opciones = opcionesSiNo %}
+
+{% elseif pregunta.idTipoPregunta.codTipoPregunta == 'CT' %}
+
+    {% set tipoPreguntaTwig = 'MA' %}
 
 {% else %}
 
@@ -60,9 +69,9 @@
 
     {% set vars = {
         'pregunta': pregunta, 'id': id,
-        'opciones': opciones ?? null, 'controlOpcionNoAplica': controlOpcionNoAplica ?? null,
+        'opciones': opciones ?? null,
         'colspanDescripcion': colspanDescripcion ?? 1, 'maxLength': maxLength ?? 1, 'datePicker': datePicker ?? '',
-        '': idFila ?? null, 'numerarSubPreguntas': numerarSubPreguntas
+        'idFila': idFila ?? null, 'numerarSubPreguntas': numerarSubPreguntas ?? null
     } %}
 
     {% include 'pregunta/' ~ (pregunta.idPreguntaPadre ? 'sub' : 'tipo') ~ 'Pregunta' ~ 

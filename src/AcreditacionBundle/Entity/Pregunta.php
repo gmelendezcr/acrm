@@ -104,6 +104,13 @@ class Pregunta
     /**
      * @var string
      *
+     * @ORM\Column(name="OPCION_OTRO_CAMPO_TEXTO", type="string", length=1, nullable=true, columnDefinition="CHAR(1) NULL CHECK (OPCION_OTRO IN ('S','N'))")
+     */
+    private $opcionOtroCampoTexto;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="OPCION_NO_APLICA", type="string", length=1, nullable=true, columnDefinition="CHAR(1) NULL CHECK (OPCION_NO_APLICA IN ('S','N'))")
      */
     private $opcionNoAplica;
@@ -144,6 +151,12 @@ class Pregunta
      */
     private $cantidadColumnasSubPreguntas;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="PADRE_COMO_PREGUNTA", type="string", length=1, columnDefinition="CHAR(1) NULL CHECK (ACTIVO IN ('S','N'))")
+     */
+    private $padreComoPregunta;
 
     /**
      * @var string
@@ -451,6 +464,29 @@ class Pregunta
     }
 
     /**
+     * Set opcionOtroCampoTexto
+     *
+     * @param string $opcionOtroCampoTexto
+     * @return Pregunta
+     */
+    public function setOpcionOtroCampoTexto($opcionOtroCampoTexto)
+    {
+        $this->opcionOtroCampoTexto = $opcionOtroCampoTexto;
+
+        return $this;
+    }
+
+    /**
+     * Get opcionOtroCampoTexto
+     *
+     * @return string
+     */
+    public function getOpcionOtroCampoTexto()
+    {
+        return $this->opcionOtroCampoTexto;
+    }
+
+    /**
      * Set opcionNoAplica
      *
      * @param string $opcionNoAplica
@@ -586,6 +622,29 @@ class Pregunta
     public function getCantidadColumnasSubPreguntas()
     {
         return $this->cantidadColumnasSubPreguntas;
+    }
+
+    /**
+     * Set padreComoPregunta
+     *
+     * @param integer $padreComoPregunta
+     * @return Pregunta
+     */
+    public function setPadreComoPregunta($padreComoPregunta)
+    {
+        $this->padreComoPregunta = $padreComoPregunta;
+
+        return $this;
+    }
+
+    /**
+     * Get padreComoPregunta
+     *
+     * @return integer
+     */
+    public function getPadreComoPregunta()
+    {
+        return $this->padreComoPregunta;
     }
 
     /**
