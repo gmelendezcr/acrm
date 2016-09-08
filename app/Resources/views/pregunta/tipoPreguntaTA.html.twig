@@ -1,20 +1,24 @@
-<table border=1>
-    <tbody>
-        <tr>
-            <th>
-                {{ pregunta.idSeccion.codSeccion ~ '.' ~ pregunta.codPregunta ~ ' ' ~ pregunta.descripcionPregunta }}
-            </th>
-        </tr>
-        <tr>
-            <td>
-                {% if pregunta.opcionNoAplica %}
-                    <input type='checkbox' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica'
-                        id='{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica_{{ pregunta.idPregunta }}'
-                        name='{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica_{{ pregunta.idPregunta }}'
-                        onClick="$('#{{ id }}').prop('disabled',!$('#{{ id }}').prop('disabled'));">{{ pregunta.opcionNoAplicaTexto }}
-                {% endif %}
-                <textarea class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' {{ maxLength }}></textarea>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="col-md-12">
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th>
+                        {{ pregunta.idSeccion.codSeccion ~ '.' ~ pregunta.codPregunta ~ ' ' ~ pregunta.descripcionPregunta }}
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        {% if pregunta.opcionNoAplica %}
+                            <input type='checkbox' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica'
+                            id='{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica_{{ pregunta.idPregunta }}'
+                            name='{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica_{{ pregunta.idPregunta }}'
+                            onClick="$('#{{ id }}').prop('disabled',!$('#{{ id }}').prop('disabled'));">{{ pregunta.opcionNoAplicaTexto }}
+                            {% endif %}
+                            <textarea class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' {{ maxLength }}></textarea>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

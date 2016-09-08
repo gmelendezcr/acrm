@@ -1,30 +1,34 @@
-<table border=1>
-    <tbody>
-        <tr>
-            <th>
-                {{ pregunta.idSeccion.codSeccion ~ '.' ~ pregunta.codPregunta ~ ' ' ~ pregunta.descripcionPregunta }}
-            </th>
-        </tr>
-        <tr>
-            <td>
-                {% for opcion in opciones %}
-                    {% if opcion.texto %}
-                        <input type='radio' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}'
-                            value='{{ opcion.codigo }}'
-                            {% if pregunta.opcionOtroCampoTexto == 'S' %}
-                                {% if opcion.codigo == 'O' %}
-                                    onClick="$('#{{ id }}_Texto').prop('disabled',!$(this).prop('checked'));"
-                                {% else %}
-                                    onClick="$('#{{ id }}_Texto').prop('disabled',true);"
-                                {% endif %}
+<div class="col-md-12">
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th>
+                        {{ pregunta.idSeccion.codSeccion ~ '.' ~ pregunta.codPregunta ~ ' ' ~ pregunta.descripcionPregunta }}
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        {% for opcion in opciones %}
+                            {% if opcion.texto %}
+                                <input type='radio' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}'
+                                value='{{ opcion.codigo }}'
+                                    {% if pregunta.opcionOtroCampoTexto == 'S' %}
+                                        {% if opcion.codigo == 'O' %}
+                                            onClick="$('#{{ id }}_Texto').prop('disabled',!$(this).prop('checked'));"
+                                        {% else %}
+                                            onClick="$('#{{ id }}_Texto').prop('disabled',true);"
+                                        {% endif %}
+                                    {% endif %}
+                                >{{ opcion.texto }}
                             {% endif %}
-                            >{{ opcion.texto }}
-                    {% endif %}
-                {% endfor %}
-                {% if pregunta.opcionOtroCampoTexto == 'S' %}
-                    <input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}Texto' id='{{ id }}_Texto' name='{{ id }}_Texto' {{ maxLength }} disabled>
-                {% endif %}
-            </td>
-        </tr>
-    </tbody>
-</table>
+                        {% endfor %}
+                        {% if pregunta.opcionOtroCampoTexto == 'S' %}
+                            <input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}Texto' id='{{ id }}_Texto' name='{{ id }}_Texto' {{ maxLength }} disabled>
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

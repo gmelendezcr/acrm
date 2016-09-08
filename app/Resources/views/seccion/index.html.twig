@@ -1,38 +1,46 @@
 {% extends 'base.html.twig' %}
-
 {% block body %}
-    <h1>Seccion list</h1>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Idseccion</th>
-                <th>Codseccion</th>
-                <th>Nbrseccion</th>
-                <th>Descripcionseccion</th>
-                <th>Activo</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for seccion in seccions %}
-            <tr>
-                <td><a href="{{ path('seccion_show', { 'id': seccion.idSeccion }) }}">{{ seccion.idSeccion }}</a></td>
-                <td>{{ seccion.codSeccion }}</td>
-                <td>{{ seccion.nbrSeccion }}</td>
-                <td>{{ seccion.descripcionSeccion }}</td>
-                <td>{{ seccion.activo }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('seccion_show', { 'id': seccion.idSeccion }) }}">show</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    
+    <div class="col-md-12 text-center">                                            
+        <h2 class="sin-margin">
+            Secciones
+        </h2>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th class="text-center">Código</th>
+                        <th>Sección</th>
+                        <th>Descripción</th>
+                        <th class="text-center">Activo</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for seccion in seccions %}
+                        <tr>
+                            <td class="text-center"><a href="{{ path('seccion_show', { 'id': seccion.idSeccion }) }}">{{ seccion.idSeccion }}</a></td>
+                            <td class="text-center">{{ seccion.codSeccion }}</td>
+                            <td>{{ seccion.nbrSeccion }}</td>
+                            <td>{{ seccion.descripcionSeccion }}</td>
+                            <td class="text-center">
+                                {% if seccion.activo=='S' %}
+                                    <span class="btn btn-success">Sí</span>
+                                {% else %}
+                                    <span class="btn btn-warning">No</span
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a class="btn btn-info" href="{{ path('seccion_show', { 'id': seccion.idSeccion }) }}">Mostrar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}
