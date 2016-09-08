@@ -1,6 +1,5 @@
 {# <script type='text/javascript' src='https://srn.uca.edu.sv//js/jquery.min.js'></script> #}
 
-{% set tipoValido = true %}
 {% set id = pregunta.idTipoPregunta.codTipoPregunta ~ "_" ~ pregunta.idPregunta %}
 {% set opcionesSiNo = [{'codigo': 'S', 'texto': 'Sí'}, {'codigo': 'N', 'texto': 'No'}, {'codigo': 'O', 'texto': pregunta.opcionOtroTexto}] %}
 
@@ -11,6 +10,9 @@
 {% endif %}
 
 
+
+{% set tipoValido = true %}
+{% set tipoPreguntaTwig = null %}
 
 {% if pregunta.idTipoPregunta.codTipoPregunta == 'TA' %}
 
@@ -52,10 +54,6 @@
 
     {% set opciones = opcionesSiNo %}
 
-{% elseif pregunta.idTipoPregunta.codTipoPregunta == 'CT' %}
-
-    {% set tipoPreguntaTwig = 'MA' %}
-
 {% else %}
 
     Tipo de pregunta {{ pregunta.idTipoPregunta.codTipoPregunta }} no definido.
@@ -70,7 +68,7 @@
     {% set vars = {
         'pregunta': pregunta, 'id': id,
         'opciones': opciones ?? null,
-        'colspanDescripcion': colspanDescripcion ?? 1, 'maxLength': maxLength ?? 1, 'datePicker': datePicker ?? '',
+        'colspanDescripcion': colspanDescripcion ?? 1, 'maxLength': maxLength ?? null, 'datePicker': datePicker ?? '',
         'idFila': idFila ?? null, 'numerarSubPreguntas': numerarSubPreguntas ?? null
     } %}
 

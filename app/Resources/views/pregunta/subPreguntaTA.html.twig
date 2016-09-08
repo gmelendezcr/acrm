@@ -5,4 +5,8 @@
         name='{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica_{{ pregunta.idPregunta }}'
         onClick="$('#{{ id }}').prop('disabled',!$('#{{ id }}').prop('disabled'));">{{ pregunta.opcionNoAplicaTexto }}
 {% endif %}
-<input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' {{ maxLength }}>
+<input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' {{ maxLength }}
+	{% if pregunta.idPreguntaPadre.totalesFilas == 'S' or pregunta.idPreguntaPadre.totalesColumnas == 'S' %}
+		onChange="calcularTotalesPregunta{{ pregunta.idPreguntaPadre.idTipoPregunta.codTipoPregunta ~ pregunta.idPreguntaPadre.idPregunta }}();"
+	{% endif %}
+>
