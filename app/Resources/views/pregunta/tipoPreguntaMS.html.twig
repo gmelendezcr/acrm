@@ -1,39 +1,42 @@
-<table border=1>
-    <tbody>
-
-        <tr>
-            <th colspan={{ colspanDescripcion }}>
-                {{ pregunta.idSeccion.codSeccion ~ '.' ~ pregunta.codPregunta ~ ' ' ~ pregunta.descripcionPregunta }}
-            </th>
-            {% if pregunta.padreComoPregunta %}
-                <td>
-                    {% for opcion in opciones %}
-                        {% if opcion.texto %}
-                            <input type='radio' class='subPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}'
-                                value='{{ opcion.codigo }}'>{{ opcion.texto }}
-                        {% endif %}
-                    {% endfor %}
-                </td>
-            {% endif %}
-        </tr>
-
-        {% for subPregunta in pregunta.subPreguntas %}
-            {% if subPregunta.encabezadoSubPreguntas %}
-                <tr>
-                    <td colspan={{ colspanDescripcion + 1 }}>
-                        {{ subPregunta.encabezadoSubPreguntas }}
-                    </td>
+<div class="col-md-12">
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <tbody>
+                <tr class="bg-info">
+                    <th  colspan={{ colspanDescripcion }}>
+                        {{ pregunta.idSeccion.codSeccion ~ '.' ~ pregunta.codPregunta ~ ' ' ~ pregunta.descripcionPregunta }}
+                    </th>
+                    {% if pregunta.padreComoPregunta %}
+                        <td>
+                            {% for opcion in opciones %}
+                                {% if opcion.texto %}
+                                    <label class="checkbox-inline btn btn-info">
+                                        <input type='radio' class='subPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}'
+                                        value='{{ opcion.codigo }}'> {{ opcion.texto }}
+                                    </label>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                    {% endif %}
                 </tr>
-            {% endif %}
-            <tr>
-                {% if numerarSubPreguntas == 'S' %}
-                    <td>
-                        {{ loop.index }}
-                    </td>
-                {% endif %}
-                {% include 'pregunta/showAsForm.html.twig' with {'pregunta': subPregunta} %}
-            </tr>
-        {% endfor %}
-
-    </tbody>
-</table>
+                {% for subPregunta in pregunta.subPreguntas %}
+                    {% if subPregunta.encabezadoSubPreguntas %}
+                        <tr>
+                            <td colspan={{ colspanDescripcion + 1 }}>
+                                {{ subPregunta.encabezadoSubPreguntas }}
+                            </td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        {% if numerarSubPreguntas == 'S' %}
+                            <td>
+                                {{ loop.index }}
+                            </td>
+                        {% endif %}
+                        {% include 'pregunta/showAsForm.html.twig' with {'pregunta': subPregunta} %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

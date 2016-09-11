@@ -2,7 +2,7 @@
     <div class="table-responsive">
         <table class="table table-bordered">
             <tbody>
-                <tr>
+                <tr class="bg-info">
                     <th>
                         {{ pregunta.idSeccion.codSeccion ~ '.' ~ pregunta.codPregunta ~ ' ' ~ pregunta.descripcionPregunta }}
                     </th>
@@ -11,8 +11,10 @@
                     <td>
                         {% for opcion in opciones %}
                             {% if opcion.codOpcionRespuesta %}
-                            <input type='radio' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}'
-                            value='{{ opcion.codOpcionRespuesta }}'>{{ opcion.descripcionOpcionRespuesta }}
+                            <label class="checkbox-inline btn btn-info">
+                                <input type='radio' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}'
+                                value='{{ opcion.codOpcionRespuesta }}'> {{ opcion.descripcionOpcionRespuesta }}
+                            </label>
                         {% endif %}
                         {% endfor %}
                     </td>

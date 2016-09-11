@@ -1,11 +1,13 @@
 <td>
     {{ pregunta.descripcionPregunta }}
 </td>
-<td>
+<td class="col-xs-2">
     {% for opcion in opciones %}
         {% if opcion.texto %}
+            <label class="checkbox-inline btn btn-info">
             <input type='radio' class='subPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}'
-                value='{{ opcion.codigo }}'>{{ opcion.texto }}
+                value='{{ opcion.codigo }}'> {{ opcion.texto }}
+                </label>
         {% endif %}
     {% endfor %}
 </td>

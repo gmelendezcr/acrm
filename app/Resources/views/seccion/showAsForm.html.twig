@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <div class="col-md-2 col-md-offset-10 text-right"><a class="btn btn-success" href="{{ asset('app_dev.php/seccion') }}">Regresar</a></div>
+    <div class="col-md-2 col-md-offset-10 text-right"><a class="btn btn-success" href="{{ asset('app_dev.php/seccion') }}"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a></div>
     <div class="clearfix capa-separador-1"></div>
     {% for pregunta in seccion.preguntas %}
         {% if not pregunta.idPreguntaPadre %}

@@ -2,7 +2,7 @@
     <div class="table-responsive">
         <table class="table table-bordered">
             <tbody>
-                <tr>
+                <tr class="bg-info">
                     <th>
                         {{ pregunta.idSeccion.codSeccion ~ '.' ~ pregunta.codPregunta ~ ' ' ~ pregunta.descripcionPregunta }}
                     </th>
@@ -11,6 +11,7 @@
                     <td>
                         {% for opcion in opciones %}
                             {% if opcion.texto %}
+                            <label class="checkbox-inline btn  btn-info">
                                 <input type='radio' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}'
                                 value='{{ opcion.codigo }}'
                                     {% if pregunta.opcionOtroCampoTexto == 'S' %}
@@ -20,11 +21,12 @@
                                             onClick="$('#{{ id }}_Texto').prop('disabled',true);"
                                         {% endif %}
                                     {% endif %}
-                                >{{ opcion.texto }}
+                                > {{ opcion.texto }}
+                                </label>
                             {% endif %}
                         {% endfor %}
                         {% if pregunta.opcionOtroCampoTexto == 'S' %}
-                            <input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}Texto' id='{{ id }}_Texto' name='{{ id }}_Texto' {{ maxLength }} disabled>
+                            <input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}Texto form-control' id='{{ id }}_Texto' name='{{ id }}_Texto' {{ maxLength }} disabled>
                         {% endif %}
                     </td>
                 </tr>

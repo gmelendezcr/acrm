@@ -2,7 +2,7 @@
     <div class="table-responsive">
         <table class="table table-bordered">
             <tbody>
-                <tr>
+                <tr class="bg-info">
                     <th>
                         {{ pregunta.idSeccion.codSeccion ~ '.' ~ pregunta.codPregunta ~ ' ' ~ pregunta.descripcionPregunta }}
                     </th>
@@ -10,12 +10,14 @@
                 <tr>
                     <td>
                         {% if pregunta.opcionNoAplica %}
-                            <input type='checkbox' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica'
-                            id='{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica_{{ pregunta.idPregunta }}'
-                            name='{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica_{{ pregunta.idPregunta }}'
-                            onClick="$('#{{ id }}').prop('disabled',!$('#{{ id }}').prop('disabled'));">{{ pregunta.opcionNoAplicaTexto }}
+                            <label class="btn btn-info">
+                                <input type='checkbox' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica'
+                                id='{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica_{{ pregunta.idPregunta }}'
+                                name='{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica_{{ pregunta.idPregunta }}'
+                                onClick="$('#{{ id }}').prop('disabled',!$('#{{ id }}').prop('disabled'));"> {{ pregunta.opcionNoAplicaTexto }}
+                            </label>
                             {% endif %}
-                            <textarea class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' {{ maxLength }}></textarea>
+                            <textarea class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control' id='{{ id }}' name='{{ id }}' {{ maxLength }}></textarea>
                     </td>
                 </tr>
             </tbody>

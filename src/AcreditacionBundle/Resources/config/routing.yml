@@ -8,4 +8,19 @@ acreditacion_seccion:
 
 acreditacion_homepage:
     path:     /
-    defaults: { _controller: AcreditacionBundle:Default:index }
+    defaults: { _controller: AcreditacionBundle:Default:inicio }
+  
+    
+acreditacion_recovery:
+    path:     /recovery
+    defaults: { _controller: AcreditacionBundle:Default:recovery }
+    
+acreditacion_login:
+    path:     /admin
+    defaults: { _controller: AcreditacionBundle:Default:admin }
+acreditacion_adduser:
+    path:     /agregar-usuario
+    defaults: { _controller: AcreditacionBundle:Default:adduser }
+acreditacion_listauser:
+    path:     /lista-usuarios
+    defaults: { _controller: AcreditacionBundle:Default:listauser }

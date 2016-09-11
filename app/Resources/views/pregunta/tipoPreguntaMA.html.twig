@@ -2,7 +2,7 @@
     <div class="table-responsive">
         <table class="table table-bordered">
             <tbody>
-                <tr>
+                <tr class="bg-info">
                     <th colspan={{ pregunta.subPreguntas|length + (pregunta.totalesFilas == 'S' or pregunta.totalesColumnas == 'S' ? 1 : 0) }}>
                         {{ pregunta.idSeccion.codSeccion ~ '.' ~ pregunta.codPregunta ~ ' ' ~ pregunta.descripcionPregunta }}
                     </th>
@@ -42,7 +42,7 @@
                         {% endfor %}
                         {% if pregunta.totalesFilas == 'S' %}
                             <td>
-                                <input type='text' id='subtotalFila_{{ fila.idOpcionRespuesta }}' readonly>
+                                <input class="form-control" type='text' id='subtotalFila_{{ fila.idOpcionRespuesta }}' readonly>
                                 {% set sumaFila = "$('#subtotalFila_" ~ fila.idOpcionRespuesta ~ "').val(0" ~ sumaFila ~ "); " %}
                                 {% set ceroColumnas = ceroColumnas ~ "$('#total_" ~ pregunta.idTipoPregunta.codTipoPregunta ~ '_' ~ pregunta.idPregunta ~ "').val(0); " %}
                             </td>
@@ -58,14 +58,14 @@
                         {% for subPregunta in pregunta.subPreguntas %}
                             {% if subPregunta.idTipoPregunta.codTipoPregunta != 'CF' %}
                                 <td>
-                                    <input type='text' id='subtotalColumna_{{ subPregunta.idPregunta }}' readonly>
+                                    <input class="form-control" type='text' id='subtotalColumna_{{ subPregunta.idPregunta }}' readonly>
                                     {% set sumaColumnas = sumaColumnas ~ "$('#total_" ~ pregunta.idTipoPregunta.codTipoPregunta ~ '_' ~ pregunta.idPregunta ~ "').val(parseInt($('#total_" ~ pregunta.idTipoPregunta.codTipoPregunta ~ '_' ~ pregunta.idPregunta ~ "').val())+parseInt($('#subtotalColumna_" ~ subPregunta.idPregunta ~ "').val())); " %}
                                 </td>
                             {% endif %}
                         {% endfor %}
                         {% if pregunta.totalesFilas == 'S' %}
                             <td>
-                                <input type='text' id='total_{{ pregunta.idTipoPregunta.codTipoPregunta }}_{{ pregunta.idPregunta }}' readonly>
+                                <input class="form-control" type='text' id='total_{{ pregunta.idTipoPregunta.codTipoPregunta }}_{{ pregunta.idPregunta }}' readonly>
                             </td>
                         {% endif %}
                     </tr>

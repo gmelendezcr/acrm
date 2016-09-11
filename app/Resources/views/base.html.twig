@@ -19,7 +19,7 @@
     </head>
     <body>
     <!--Inicia menú-->
-    <div class="container-fluid sin-padding">
+    <div class="container-fluid sin-padding navbar-fixed-top">
         <div class="header-control-page fondo-2 text-color-1">
             <div class="container">
                 <div class="col-md-8">
@@ -59,8 +59,8 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Usuarios <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="registrar-usuario.php">Registrar</a></li>
-                                <li><a href="lista-usuarios.php">Ver todos</a></li>                              
+                                <li><a href="{{ absolute_url(asset('app_dev.php/agregar-usuario')) }}">Registrar</a></li>
+                                <li><a href="{{ absolute_url(asset('app_dev.php/lista-usuarios')) }}">Mantenimiento</a></li>                              
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -69,7 +69,14 @@
                                 <li><a href="#">Registrar</a></li>
                                 <li><a href="#">Ver todos</a></li>                              
                             </ul>
-                        </li>                    
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Zonas<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Registrar</a></li>
+                                <li><a href="#">Mantenimiento</a></li>                              
+                            </ul>
+                        </li>
                     </ul>            
                 </div><!--/.nav-collapse -->
             </div>

@@ -2,7 +2,7 @@
     <div class="table-responsive">
         <table class="table table-bordered">
             <tbody>
-                <tr>
+                <tr class="bg-info">
                     <th>
                         {{ pregunta.idSeccion.codSeccion ~ '.' ~ pregunta.codPregunta ~ ' ' ~ pregunta.descripcionPregunta }}
                     </th>
@@ -15,8 +15,12 @@
                             name='{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica_{{ pregunta.idPregunta }}'
                             onClick="$('#{{ id }}').prop('disabled',!$('#{{ id }}').prop('disabled'));">{{ pregunta.opcionNoAplicaTexto }}
                         {% endif %}
-                        <input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' {{ maxLength }}>
-                        {{ datePicker }}
+                        <div class="input-group input-3">
+                            <input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control' id='{{ id }}' name='{{ id }}' {{ maxLength }}>
+                            <span class="input-group-addon">
+                                {{ datePicker }}
+                            </span>
+                        </div>
                     </td>
                 </tr>
             </tbody>

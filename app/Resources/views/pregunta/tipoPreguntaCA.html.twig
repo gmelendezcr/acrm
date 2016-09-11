@@ -2,14 +2,14 @@
     <div class="table-responsive">
         <table class="table table-bordered">
             <tbody>
-                <tr>
+                <tr class="bg-info">
                     <th>
                         {{ pregunta.idSeccion.codSeccion ~ '.' ~ pregunta.codPregunta ~ ' ' ~ pregunta.descripcionPregunta }}
                     </th>
                 </tr>
                 <tr>
                     <td>
-                        <select class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' {{ maxLength }}>
+                        <select class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control input-2' id='{{ id }}' name='{{ id }}' {{ maxLength }}>
                             {% for opcion in opciones %}
                                 {% if opcion %}
                                     <option value='{{ opcion.codDetalleCatalogo }}'>{{ opcion.nbrDetalleCatalogo }}</option>
