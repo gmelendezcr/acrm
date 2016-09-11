@@ -57,6 +57,19 @@ class OpcionRespuesta
      */
     private $activo;
 
+    /**
+     * @ORM\OneToMany(targetEntity="RespuestaPorFormularioPorCentroEducativo",mappedBy="idOpcionRespuesta")
+     */
+    private $respuestasPorFormularioPorCentroEducativo;
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->respuestasPorFormularioPorCentroEducativo = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get idOpcionRespuesta
@@ -181,5 +194,38 @@ class OpcionRespuesta
     public function getActivo()
     {
         return $this->activo;
+    }
+
+    /**
+     * Add respuestasPorFormularioPorCentroEducativo
+     *
+     * @param \AcreditacionBundle\Entity\RespuestaPorFormularioPorCentroEducativo $respuestasPorFormularioPorCentroEducativo
+     * @return OpcionRespuesta
+     */
+    public function addRespuestasPorFormularioPorCentroEducativo(\AcreditacionBundle\Entity\RespuestaPorFormularioPorCentroEducativo $respuestasPorFormularioPorCentroEducativo)
+    {
+        $this->respuestasPorFormularioPorCentroEducativo[] = $respuestasPorFormularioPorCentroEducativo;
+
+        return $this;
+    }
+
+    /**
+     * Remove respuestasPorFormularioPorCentroEducativo
+     *
+     * @param \AcreditacionBundle\Entity\RespuestaPorFormularioPorCentroEducativo $respuestasPorFormularioPorCentroEducativo
+     */
+    public function removeRespuestasPorFormularioPorCentroEducativo(\AcreditacionBundle\Entity\RespuestaPorFormularioPorCentroEducativo $respuestasPorFormularioPorCentroEducativo)
+    {
+        $this->respuestasPorFormularioPorCentroEducativo->removeElement($respuestasPorFormularioPorCentroEducativo);
+    }
+
+    /**
+     * Get respuestasPorFormularioPorCentroEducativo
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRespuestasPorFormularioPorCentroEducativo()
+    {
+        return $this->respuestasPorFormularioPorCentroEducativo;
     }
 }

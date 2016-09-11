@@ -189,6 +189,11 @@ class Pregunta
      */
     private $subPreguntas;
 
+    /**
+     * @ORM\OneToMany(targetEntity="RespuestaPorFormularioPorCentroEducativo",mappedBy="idPregunta")
+     */
+    private $respuestasPorFormularioPorCentroEducativo;
+
 
     /**
      * Constructor
@@ -197,6 +202,7 @@ class Pregunta
     {
         $this->opcionesRespuesta = new \Doctrine\Common\Collections\ArrayCollection();
         $this->subPreguntas = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->respuestasPorFormularioPorCentroEducativo = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -780,5 +786,38 @@ class Pregunta
     public function getSubPreguntas()
     {
         return $this->subPreguntas;
+    }
+
+    /**
+     * Add respuestasPorFormularioPorCentroEducativo
+     *
+     * @param \AcreditacionBundle\Entity\RespuestaPorFormularioPorCentroEducativo $respuestasPorFormularioPorCentroEducativo
+     * @return Pregunta
+     */
+    public function addRespuestasPorFormularioPorCentroEducativo(\AcreditacionBundle\Entity\RespuestaPorFormularioPorCentroEducativo $respuestasPorFormularioPorCentroEducativo)
+    {
+        $this->respuestasPorFormularioPorCentroEducativo[] = $respuestasPorFormularioPorCentroEducativo;
+
+        return $this;
+    }
+
+    /**
+     * Remove respuestasPorFormularioPorCentroEducativo
+     *
+     * @param \AcreditacionBundle\Entity\RespuestaPorFormularioPorCentroEducativo $respuestasPorFormularioPorCentroEducativo
+     */
+    public function removeRespuestasPorFormularioPorCentroEducativo(\AcreditacionBundle\Entity\RespuestaPorFormularioPorCentroEducativo $respuestasPorFormularioPorCentroEducativo)
+    {
+        $this->respuestasPorFormularioPorCentroEducativo->removeElement($respuestasPorFormularioPorCentroEducativo);
+    }
+
+    /**
+     * Get respuestasPorFormularioPorCentroEducativo
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRespuestasPorFormularioPorCentroEducativo()
+    {
+        return $this->respuestasPorFormularioPorCentroEducativo;
     }
 }

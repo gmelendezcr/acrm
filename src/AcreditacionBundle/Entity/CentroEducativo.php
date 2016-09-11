@@ -85,6 +85,10 @@ class CentroEducativo
      */
     private $gradosEscolaresPorCentroEducativo;
 
+    /**
+     * @ORM\OneToMany(targetEntity="FormularioPorCentroEducativo",mappedBy="idCentroEducativo")
+     */
+    private $formulariosPorCentroEducativo;
 
     /**
      * Constructor
@@ -92,6 +96,7 @@ class CentroEducativo
     public function __construct()
     {
         $this->gradosEscolaresPorCentroEducativo = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formulariosPorCentroEducativo = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -319,5 +324,38 @@ class CentroEducativo
     public function getGradosEscolaresPorCentroEducativo()
     {
         return $this->gradosEscolaresPorCentroEducativo;
+    }
+
+    /**
+     * Add formulariosPorCentroEducativo
+     *
+     * @param \AcreditacionBundle\Entity\FormularioPorCentroEducativo $formulariosPorCentroEducativo
+     * @return CentroEducativo
+     */
+    public function addFormulariosPorCentroEducativo(\AcreditacionBundle\Entity\FormularioPorCentroEducativo $formulariosPorCentroEducativo)
+    {
+        $this->formulariosPorCentroEducativo[] = $formulariosPorCentroEducativo;
+
+        return $this;
+    }
+
+    /**
+     * Remove formulariosPorCentroEducativo
+     *
+     * @param \AcreditacionBundle\Entity\FormularioPorCentroEducativo $formulariosPorCentroEducativo
+     */
+    public function removeFormulariosPorCentroEducativo(\AcreditacionBundle\Entity\FormularioPorCentroEducativo $formulariosPorCentroEducativo)
+    {
+        $this->formulariosPorCentroEducativo->removeElement($formulariosPorCentroEducativo);
+    }
+
+    /**
+     * Get formulariosPorCentroEducativo
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormulariosPorCentroEducativo()
+    {
+        return $this->formulariosPorCentroEducativo;
     }
 }

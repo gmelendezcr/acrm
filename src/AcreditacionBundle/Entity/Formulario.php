@@ -54,6 +54,11 @@ class Formulario
      */
     private $secciones;
 
+    /**
+     * @ORM\OneToMany(targetEntity="EstadoFormulario",mappedBy="idFormulario")
+     */
+    private $formulariosPorCentroEducativo;
+
 
     /**
      * Constructor
@@ -61,6 +66,7 @@ class Formulario
     public function __construct()
     {
         $this->secciones = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formulariosPorCentroEducativo = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -196,5 +202,38 @@ class Formulario
     public function getSecciones()
     {
         return $this->secciones;
+    }
+
+    /**
+     * Add formulariosPorCentroEducativo
+     *
+     * @param \AcreditacionBundle\Entity\FormularioPorCentroEducativo $formulariosPorCentroEducativo
+     * @return Formulario
+     */
+    public function addFormulariosPorCentroEducativo(\AcreditacionBundle\Entity\FormularioPorCentroEducativo $formulariosPorCentroEducativo)
+    {
+        $this->formulariosPorCentroEducativo[] = $formulariosPorCentroEducativo;
+
+        return $this;
+    }
+
+    /**
+     * Remove formulariosPorCentroEducativo
+     *
+     * @param \AcreditacionBundle\Entity\FormularioPorCentroEducativo $formulariosPorCentroEducativo
+     */
+    public function removeFormulariosPorCentroEducativo(\AcreditacionBundle\Entity\FormularioPorCentroEducativo $formulariosPorCentroEducativo)
+    {
+        $this->formulariosPorCentroEducativo->removeElement($formulariosPorCentroEducativo);
+    }
+
+    /**
+     * Get formulariosPorCentroEducativo
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormulariosPorCentroEducativo()
+    {
+        return $this->formulariosPorCentroEducativo;
     }
 }
