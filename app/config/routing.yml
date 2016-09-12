@@ -8,3 +8,7 @@ app:
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
+acreditacion_usuario:
+    resource: "@AcreditacionBundle/Resources/config/routing/usuario.yml"
+    prefix:   /usuario

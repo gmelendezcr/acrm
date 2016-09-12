@@ -1,0 +1,17 @@
+{% extends ':usuario:new.html.twig' %}
+
+{% block titulo %}
+    Editar un usuario
+{% endblock %}
+
+{% block guardar %}
+    <input type="submit" value="Modificar" />
+{% endblock %}
+
+{% block eliminar %}
+    <li>
+        {{ form_start(delete_form) }}
+            <input type="submit" value="Desactivar">
+        {{ form_end(delete_form) }}
+    </li>
+{% endblock %}

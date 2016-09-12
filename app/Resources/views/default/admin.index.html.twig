@@ -16,20 +16,21 @@
                             </div>
                             <div class="panel-body">
                                 <!--Formulario-->
-                                <form class="form-login">
+                                <form action="{{ path("fos_user_security_check") }}" method="post" class="form-login">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
                                     <div class="form-group">
                                         <div class="input-group input-group-md">
                                             <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-user"></span>                                            
                                             </span>
-                                            <input type="text" class="form-control" placeholder="Digite su usuario">
+                                            <input type="text" name="_username" class="form-control" placeholder="Digite su usuario">
                                         </div>
                                         <div class="capa-separador-1 clearfix"></div>
                                         <div class="input-group input-group-md">
                                             <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-lock"></span>                                            
                                             </span>
-                                            <input type="text" class="form-control" placeholder="Digite su clave">                                        
+                                            <input type="password" name="_password" class="form-control" placeholder="Digite su clave">
                                         </div>                                    											
                                         <div class="help-block text-right">
                                             <a href="{{ asset('app_dev.php/recovery') }}">
@@ -37,12 +38,12 @@
                                             </a>
                                         </div>                                                                        
                                         <div class="col-md-12 sin-padding text-center">
-                                            <a href='{{ asset('app_dev.php/') }}' class="btn btn-info btn-md btn-block ">
+                                            <a href='#' onClick="$('form:first').submit();" class="btn btn-info btn-md btn-block ">
                                                 <span class="glyphicon glyphicon-triangle-right"></span> Entrar
                                             </a>
                                             <div class="checkbox">
                                                 <label>
-                                                    <input type="checkbox"> Recordarme
+                                                    <input type="checkbox" id="remember_me" name="_remember_me" value="on" /> Recordarme
                                                 </label>
                                             </div>
                                         </div>

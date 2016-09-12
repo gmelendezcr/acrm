@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="col-md-12 text-center">
+        <h2 class="sin-margin">
+            Usuarios
+        </h2>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Correo electrónico</th>
+                        <th>Activo</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario.username }}</td>
+                        <td>{{ usuario.nombres }}</td>
+                        <td>{{ usuario.apellidos }}</td>
+                        <td>{{ usuario.email }}</td>
+                        <td>
+                            {% if usuario.enabled=='S' %}
+                                <span class="btn btn-success">Sí</span>
+                            {% else %}
+                                <span class="btn btn-warning">No</span
+                            {% endif %}
+                        </td>
+                        <td>
+                            <ul>
+                                <li>
+                                    <a class="btn btn-info" href="{{ path('usuario_show', { 'id': usuario.id }) }}">Mostrar</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('usuario_edit', { 'id': usuario.id }) }}">edit</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <ul>
+        <li>
+            <a href="{{ path('usuario_new') }}">Agregar</a>
+        </li>
+    </ul>
+{% endblock %}

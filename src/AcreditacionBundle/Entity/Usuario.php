@@ -23,6 +23,20 @@ class Usuario extends BaseUser
     protected $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="NOMBRES", type="string", length=20)
+     */
+    private $nombres;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="APELLIDOS", type="string", length=20)
+     */
+    private $apellidos;
+
+    /**
      * @ORM\OneToMany(targetEntity="FormularioPorCentroEducativo",mappedBy="idUsuarioEntrevista")
      */
     private $formulariosPorCentroEducativoEntrevistados;
@@ -56,6 +70,52 @@ class Usuario extends BaseUser
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set nombres
+     *
+     * @param string $nombres
+     * @return Usuario
+     */
+    public function setNombres($nombres)
+    {
+        $this->nombres = $nombres;
+
+        return $this;
+    }
+
+    /**
+     * Get nombres
+     *
+     * @return string
+     */
+    public function getNombres()
+    {
+        return $this->nombres;
+    }
+
+    /**
+     * Set apellidos
+     *
+     * @param string $apellidos
+     * @return Usuario
+     */
+    public function setApellidos($apellidos)
+    {
+        $this->apellidos = $apellidos;
+
+        return $this;
+    }
+
+    /**
+     * Get apellidos
+     *
+     * @return string
+     */
+    public function getApellidos()
+    {
+        return $this->apellidos;
     }
 
     /**

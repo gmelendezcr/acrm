@@ -9,12 +9,9 @@ acreditacion_seccion:
 acreditacion_homepage:
     path:     /
     defaults: { _controller: AcreditacionBundle:Default:inicio }
-  
-    
 acreditacion_recovery:
     path:     /recovery
     defaults: { _controller: AcreditacionBundle:Default:recovery }
-    
 acreditacion_login:
     path:     /admin
     defaults: { _controller: AcreditacionBundle:Default:admin }

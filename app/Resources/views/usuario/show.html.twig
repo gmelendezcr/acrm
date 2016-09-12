@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="col-md-12 text-center">
+        <h2 class="sin-margin">
+            Usuario
+        </h2>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>Usuario</th>
+                        <td>{{ usuario.username }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nombres</th>
+                        <td>{{ usuario.nombres }}</td>
+                    </tr>
+                    <tr>
+                        <th>Apellidos</th>
+                        <td>{{ usuario.apellidos }}</td>
+                    </tr>
+                    <tr>
+                        <th>Correo electrónico</th>
+                        <td>{{ usuario.email }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <ul>
+        <li>
+            <a href="{{ path('usuario_index') }}">Regresar</a>
+        </li>
+        <li>
+            <a href="{{ path('usuario_edit', { 'id': usuario.id }) }}">Editar</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Desactivar">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
