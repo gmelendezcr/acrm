@@ -25,14 +25,14 @@ class Usuario extends BaseUser
     /**
      * @var string
      *
-     * @ORM\Column(name="NOMBRES", type="string", length=20)
+     * @ORM\Column(name="NOMBRES", type="string", length=20, nullable=true)
      */
     private $nombres;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="APELLIDOS", type="string", length=20)
+     * @ORM\Column(name="APELLIDOS", type="string", length=20, nullable=true)
      */
     private $apellidos;
 
@@ -57,6 +57,7 @@ class Usuario extends BaseUser
      */
     public function __construct()
     {
+        parent::__construct();
         $this->formulariosPorCentroEducativoEntrevistados = new \Doctrine\Common\Collections\ArrayCollection();
         $this->formulariosPorCentroEducativoDigitados = new \Doctrine\Common\Collections\ArrayCollection();
         $this->formulariosPorCentroEducativoRevisados = new \Doctrine\Common\Collections\ArrayCollection();
