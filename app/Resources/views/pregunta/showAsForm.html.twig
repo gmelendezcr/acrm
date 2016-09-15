@@ -1,7 +1,16 @@
 {# <script type='text/javascript' src='https://srn.uca.edu.sv//js/jquery.min.js'></script> #}
 
-{% set id = pregunta.idTipoPregunta.codTipoPregunta ~ "_" ~ pregunta.idPregunta %}
 {% set opcionesSiNo = [{'codigo': 'S', 'texto': 'Sí'}, {'codigo': 'N', 'texto': 'No'}, {'codigo': 'O', 'texto': pregunta.opcionOtroTexto}] %}
+
+
+
+{% set opciones = null %}
+{% set maxLength = null %}
+{% set datePicker = null %}
+{% set tipoPreguntaTwig = null %}
+{% set colspanDescripcion = null %}
+{% set numerarSubPreguntas = null %}
+{% set tipoValido = true %}
 
 
 
@@ -10,9 +19,6 @@
 {% endif %}
 
 
-
-{% set tipoValido = true %}
-{% set tipoPreguntaTwig = null %}
 
 {% if pregunta.idTipoPregunta.codTipoPregunta == 'TA' %}
 
@@ -54,6 +60,8 @@
 
     {% set opciones = opcionesSiNo %}
 
+{% elseif pregunta.idTipoPregunta.codTipoPregunta == 'MN' %}
+
 {% else %}
 
     Tipo de pregunta {{ pregunta.idTipoPregunta.codTipoPregunta }} no definido.
@@ -64,6 +72,13 @@
 
 
 {% if tipoValido %}
+
+    {% if pregunta.idPreguntaPadre and (pregunta.idTipoPregunta.codTipoPregunta == 'OR' or
+        pregunta.idTipoPregunta.codTipoPregunta == 'SN' or pregunta.idTipoPregunta.codTipoPregunta == 'TA') %}
+        {% set id = 'idFila' ~ idFila ~ '_idColumna' ~ pregunta.idPregunta %}
+    {%else%}
+        {% set id = pregunta.idTipoPregunta.codTipoPregunta ~ ( pregunta.idPreguntaPadre ? '_' ~ pregunta.idPreguntaPadre.idPregunta : null ) ~ "_" ~ pregunta.idPregunta %}
+    {% endif %}
 
     {% set vars = {
         'pregunta': pregunta, 'id': id,

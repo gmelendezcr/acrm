@@ -36,6 +36,17 @@
                         {% include 'pregunta/showAsForm.html.twig' with {'pregunta': subPregunta} %}
                     </tr>
                 {% endfor %}
+                {% if pregunta.totalesColumnas == 'S' %}
+                    <tr>
+                        <td colspan={{ colspanDescripcion - 1 }}>
+                            Total
+                        </td>
+                        <td>
+                            <input type='text' id='total_{{ pregunta.idTipoPregunta.codTipoPregunta }}_{{ pregunta.idPregunta }}_si' readonly>
+                            <input type='text' id='total_{{ pregunta.idTipoPregunta.codTipoPregunta }}_{{ pregunta.idPregunta }}_no' readonly>
+                        </td>
+                    </tr>
+                {% endif %}
             </tbody>
         </table>
     </div>

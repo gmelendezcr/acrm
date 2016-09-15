@@ -1,6 +1,5 @@
 {% for opcion in opciones %}
     {% if opcion.descripcionOpcionRespuesta %}
-        {% set id = 'idFila' ~ idFila ~ '_idColumna' ~ pregunta.idPregunta %}
         <label class="checkbox-inline btn btn-info">
             <input type='radio' class='subPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}'
             value='{{ opcion.codOpcionRespuesta }}'> {{ opcion.descripcionOpcionRespuesta }}

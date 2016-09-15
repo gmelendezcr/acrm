@@ -73,7 +73,6 @@
             </tbody>
         </table>
         {% if pregunta.totalesFilas == 'S' or pregunta.totalesColumnas == 'S' %}
-        
             <script languaje='javascript'>
                 function calcularTotalesPregunta{{ pregunta.idTipoPregunta.codTipoPregunta ~ pregunta.idPregunta }}(){
                     {% autoescape false %}
@@ -83,7 +82,6 @@
                     {% endautoescape %}
                 }
             </script>
-        
         {% endif %}
     </div>
 </div>

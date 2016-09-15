@@ -1,0 +1,39 @@
+<div class="col-md-12">
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th colspan={{ pregunta.cantidadColumnasSubPreguntas }}>
+                        {{ pregunta.idSeccion.codSeccion ~ '.' ~ pregunta.codPregunta ~ ' ' ~ pregunta.descripcionPregunta }}
+                    </th>
+                </tr>
+                {% set idx = 0 %}
+                {% for subPregunta in pregunta.subPreguntas %}
+                    {% if idx % pregunta.cantidadColumnasSubPreguntas == 0 %}
+                        {% if idx > 0 %}
+                            </tr>
+                        {% endif %}
+                        <tr>
+                    {% endif %}
+                    {% if subPregunta.idTipoPregunta.codTipoPregunta == 'SN' %}
+                        <td>
+                            {{ subPregunta.descripcionPregunta }}
+                            {% include 'pregunta/showAsForm.html.twig' with {'pregunta': subPregunta} %}
+                        </td>
+                    {% else %}
+                        </tr>
+                        <tr>
+                        </tr>
+                            <td colspan={{ pregunta.cantidadColumnasSubPreguntas }}>
+                                {{ subPregunta.descripcionPregunta }}
+                                {% include 'pregunta/showAsForm.html.twig' with {'pregunta': subPregunta} %}
+                            </td>
+                        <tr>
+                    {% endif %}
+                    {% set idx = idx + 1 %}
+                {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
