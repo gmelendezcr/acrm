@@ -23,14 +23,24 @@
                         </th>
                     {% endif %}
                 </tr>
-                {% set sumaFila, sumaFilas, ceroColumnas, sumaColumnas = '', '', '', '' %}
+                {% set sumaFila, sumaFilas, ceroColumnas, sumaColumnas, existePreguntaSiNo = '', '', '', '', false %}
                 {% for fila in columnaFija.opcionesRespuesta %}
                     {% set sumaFila, ceroColumnas = '', '' %}
+                    {% if fila.encabezadoOpciones %}
+                        <tr>
+                            <th colspan={{ pregunta.subPreguntas|length + (pregunta.totalesFilas == 'S' or pregunta.totalesColumnas == 'S' ? 1 : 0) }}>
+                                {{ fila.encabezadoOpciones }}
+                            </th>
+                        </tr>
+                    {% endif %}
                     <tr>
                         <th>
                             {{ fila.descripcionOpcionRespuesta }}
                         </th>
                         {% for subPregunta in pregunta.subPreguntas %}
+                            {% if subPregunta.idTipoPregunta.codTipoPregunta == 'SN' %}
+                                {% set existePreguntaSiNo = true %}
+                            {% endif %}
                             {% if subPregunta.idTipoPregunta.codTipoPregunta != 'CF' %}
                                 <td>
                                     {% include 'pregunta/showAsForm.html.twig' with {'pregunta': subPregunta, 'idFila': fila.idOpcionRespuesta} %}
@@ -42,7 +52,12 @@
                         {% endfor %}
                         {% if pregunta.totalesFilas == 'S' %}
                             <td>
-                                <input class="form-control" type='text' id='subtotalFila_{{ fila.idOpcionRespuesta }}' readonly>
+                                {% if existePreguntaSiNo %}
+                                    <input class="form-control" type='text' id='subtotalFila_{{ fila.idOpcionRespuesta }}_si' readonly>
+                                    <input class="form-control" type='text' id='subtotalFila_{{ fila.idOpcionRespuesta }}_no' readonly>
+                                {% else %}
+                                    <input class="form-control" type='text' id='subtotalFila_{{ fila.idOpcionRespuesta }}' readonly>
+                                {% endif %}
                                 {% set sumaFila = "$('#subtotalFila_" ~ fila.idOpcionRespuesta ~ "').val(0" ~ sumaFila ~ "); " %}
                                 {% set ceroColumnas = ceroColumnas ~ "$('#total_" ~ pregunta.idTipoPregunta.codTipoPregunta ~ '_' ~ pregunta.idPregunta ~ "').val(0); " %}
                             </td>
