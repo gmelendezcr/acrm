@@ -21,7 +21,7 @@ class CentroEducativoController extends Controller{
         $municipios = $em->getRepository('AcreditacionBundle:Municipio')->findAll();
         $jornadas = $em->getRepository('AcreditacionBundle:JornadaCentroEducativo')->findAll();
         $tamannos = $em->getRepository('AcreditacionBundle:TamannoCentroEducativo')->findAll();
-        return $this->render('default/addcedu.index.html.twig', array(
+        return $this->render('centro-educativo/addcedu.index.html.twig', array(
             'departamentos' => $departamentos,
             'municipios'=> $municipios,
             'jornadas'=> $jornadas,

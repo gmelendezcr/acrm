@@ -32,7 +32,7 @@ class UsuarioType extends AbstractType
                 'label' =>'Activo',
             ))
             
-            ->add('roles', 'collection', array(
+            ->add('roles', null, array(
                     'type' => 'choice',
                     'label' => 'Roles',
                     'mapped' => true,

@@ -41,6 +41,10 @@ class UsuarioController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            //$request->get('usuario');
+            $us=$request->get('usuario');
+            $usuario->addRole($us['roles']['0']);
+            
             $em->persist($usuario);
             $em->flush();
 
