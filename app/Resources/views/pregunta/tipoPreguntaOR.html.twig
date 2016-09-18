@@ -13,7 +13,11 @@
                             {% if opcion.codOpcionRespuesta %}
                             <label class="checkbox-inline btn btn-info">
                                 <input type='radio' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}'
-                                value='{{ opcion.codOpcionRespuesta }}'> {{ opcion.descripcionOpcionRespuesta }}
+                                value='{{ opcion.codOpcionRespuesta }}'
+                                    {% if respuestas[pregunta.idPregunta] is defined and respuestas[pregunta.idPregunta]==opcion.codOpcionRespuesta %}
+                                        checked
+                                    {% endif %}
+                                > {{ opcion.descripcionOpcionRespuesta }}
                             </label>
                         {% endif %}
                         {% endfor %}

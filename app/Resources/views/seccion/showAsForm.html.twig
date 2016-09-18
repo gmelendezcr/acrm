@@ -1,10 +1,14 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <div class="col-md-2 col-md-offset-10 text-right"><a class="btn btn-success" href="{{ asset('app_dev.php/seccion') }}"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a></div>
-    <div class="clearfix capa-separador-1"></div>
-    {% for pregunta in seccion.preguntas %}
-        {% if not pregunta.idPreguntaPadre %}
-            {% include 'pregunta/showAsForm.html.twig' with {'pregunta': pregunta} %}
-        {% endif %}
-    {% endfor %}
+    <form id="seccion{{ seccion.idSeccion }}" method="POST" action="{{ path('seccion_guardar') }}">
+        <div class="col-md-2 col-md-offset-10 text-right"><a class="btn btn-success" href="{{ asset('app_dev.php/seccion') }}"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a></div>
+        <div class="clearfix capa-separador-1"></div>
+        {% for pregunta in seccion.preguntas %}
+            {% if not pregunta.idPreguntaPadre %}
+                {% include 'pregunta/showAsForm.html.twig' with {'pregunta': pregunta, 'respuestas': respuestas} %}
+            {% endif %}
+        {% endfor %}
+        <input type="hidden" name="idSeccion" value="{{ seccion.idSeccion }}">
+        <input type="submit" name="Guardar" value="Guardar">
+    </form>
 {% endblock %}

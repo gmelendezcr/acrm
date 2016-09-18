@@ -1,6 +1,6 @@
 {% for opcion in opciones %}
     {% if opcion.texto %}
-        {% if respuestas[pregunta.idPregunta][idFila] is defined and respuestas[pregunta.idPregunta][idFila]==opcion.codigo %}
+        {% if respuestas[pregunta.idPregunta] is defined and respuestas[pregunta.idPregunta]==opcion.codigo %}
             {% set checked = 'checked' %}
         {% else %}
             {% set checked = '' %}

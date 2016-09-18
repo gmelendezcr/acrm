@@ -1,8 +1,12 @@
 {% for opcion in opciones %}
     {% if opcion.descripcionOpcionRespuesta %}
+        {% if respuestas[pregunta.idPregunta][idFila] is defined and respuestas[pregunta.idPregunta][idFila]==opcion.codOpcionRespuesta %}
+            {% set checked = 'checked' %}
+        {% else %}
+            {% set checked = '' %}
+        {% endif %}
         <label class="checkbox-inline btn btn-info">
-            <input type='radio' class='subPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}'
-            value='{{ opcion.codOpcionRespuesta }}'> {{ opcion.descripcionOpcionRespuesta }}
+            <input type='radio' class='subPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' value='{{ opcion.codOpcionRespuesta }}' {{ checked }}> {{ opcion.descripcionOpcionRespuesta }}
         </label>
     {% endif %}
 {% endfor %}

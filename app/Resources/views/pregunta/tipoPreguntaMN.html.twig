@@ -15,20 +15,19 @@
                         {% endif %}
                         <tr>
                     {% endif %}
-                    {% if subPregunta.idTipoPregunta.codTipoPregunta == 'SN' %}
+                    {% if subPregunta.idTipoPregunta.codTipoPregunta == 'SM' %}
                         <td>
                             {{ subPregunta.descripcionPregunta }}
                             {% include 'pregunta/showAsForm.html.twig' with {'pregunta': subPregunta} %}
                         </td>
-                    {% else %}
+                    {% elseif subPregunta.idTipoPregunta.codTipoPregunta == 'TA' %}
                         </tr>
                         <tr>
-                        </tr>
                             <td colspan={{ pregunta.cantidadColumnasSubPreguntas }}>
                                 {{ subPregunta.descripcionPregunta }}
                                 {% include 'pregunta/showAsForm.html.twig' with {'pregunta': subPregunta} %}
                             </td>
-                        <tr>
+                        </tr>
                     {% endif %}
                     {% set idx = idx + 1 %}
                 {% endfor %}

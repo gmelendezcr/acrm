@@ -10,9 +10,14 @@
                         <td>
                             {% for opcion in opciones %}
                                 {% if opcion.texto %}
+                                    {% if respuestas[pregunta.idPregunta] is defined and respuestas[pregunta.idPregunta]==opcion.codigo %}
+                                        {% set checked = 'checked' %}
+                                    {% else %}
+                                        {% set checked = '' %}
+                                    {% endif %}
                                     <label class="checkbox-inline btn btn-info">
                                         <input type='radio' class='subPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}'
-                                        value='{{ opcion.codigo }}'> {{ opcion.texto }}
+                                        value='{{ opcion.codigo }}' {{ checked }}> {{ opcion.texto }}
                                     </label>
                                 {% endif %}
                             {% endfor %}
@@ -33,7 +38,7 @@
                                 {{ loop.index }}
                             </td>
                         {% endif %}
-                        {% include 'pregunta/showAsForm.html.twig' with {'pregunta': subPregunta} %}
+                        {% include 'pregunta/showAsForm.html.twig' with {'pregunta': subPregunta, 'respuestas': respuestas} %}
                     </tr>
                 {% endfor %}
                 {% if pregunta.totalesColumnas == 'S' %}

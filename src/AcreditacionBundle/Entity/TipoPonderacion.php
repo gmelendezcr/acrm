@@ -5,35 +5,35 @@ namespace AcreditacionBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TipoPregunta
+ * TipoPonderacion
  *
- * @ORM\Table(name="TIPO_PREGUNTA")
- * @ORM\Entity(repositoryClass="AcreditacionBundle\Repository\TipoPreguntaRepository")
+ * @ORM\Table(name="TIPO_PONDERACION")
+ * @ORM\Entity(repositoryClass="AcreditacionBundle\Repository\TipoPonderacionRepository")
  */
-class TipoPregunta
+class TipoPonderacion
 {
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_TIPO_PREGUNTA", type="integer")
+     * @ORM\Column(name="ID_TIPO_PONDERACION", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $idTipoPregunta;
+    private $idTipoPonderacion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="COD_TIPO_PREGUNTA", type="string", length=2, unique=true, options={"fixed":true})
+     * @ORM\Column(name="COD_TIPO_PONDERACION", type="string", length=2, unique=true, options={"fixed":true})
      */
-    private $codTipoPregunta;
+    private $codTipoPonderacion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="NBR_TIPO_PREGUNTA", type="string", length=100)
+     * @ORM\Column(name="NBR_TIPO_PONDERACION", type="string", length=100)
      */
-    private $nbrTipoPregunta;
+    private $nbrTipoPonderacion;
 
     /**
      * @var string
@@ -43,7 +43,7 @@ class TipoPregunta
     private $activo;
 
     /**
-     * @ORM\OneToMany(targetEntity="Pregunta",mappedBy="idTipoPregunta")
+     * @ORM\OneToMany(targetEntity="Pregunta",mappedBy="idTipoPonderacion")
      */
     private $preguntas;
 
@@ -58,66 +58,66 @@ class TipoPregunta
     }
 
     /**
-     * Get idTipoPregunta
+     * Get idTipoPonderacion
      *
      * @return integer 
      */
-    public function getIdTipoPregunta()
+    public function getIdTipoPonderacion()
     {
-        return $this->idTipoPregunta;
+        return $this->idTipoPonderacion;
     }
 
     /**
-     * Set codTipoPregunta
+     * Set codTipoPonderacion
      *
-     * @param string $codTipoPregunta
-     * @return TipoPregunta
+     * @param string $codTipoPonderacion
+     * @return TipoPonderacion
      */
-    public function setCodTipoPregunta($codTipoPregunta)
+    public function setCodTipoPonderacion($codTipoPonderacion)
     {
-        $this->codTipoPregunta = $codTipoPregunta;
+        $this->codTipoPonderacion = $codTipoPonderacion;
 
         return $this;
     }
 
     /**
-     * Get codTipoPregunta
+     * Get codTipoPonderacion
      *
      * @return string 
      */
-    public function getCodTipoPregunta()
+    public function getCodTipoPonderacion()
     {
-        return $this->codTipoPregunta;
+        return $this->codTipoPonderacion;
     }
 
     /**
-     * Set nbrTipoPregunta
+     * Set nbrTipoPonderacion
      *
-     * @param string $nbrTipoPregunta
-     * @return TipoPregunta
+     * @param string $nbrTipoPonderacion
+     * @return TipoPonderacion
      */
-    public function setNbrTipoPregunta($nbrTipoPregunta)
+    public function setNbrTipoPonderacion($nbrTipoPonderacion)
     {
-        $this->nbrTipoPregunta = $nbrTipoPregunta;
+        $this->nbrTipoPonderacion = $nbrTipoPonderacion;
 
         return $this;
     }
 
     /**
-     * Get nbrTipoPregunta
+     * Get nbrTipoPonderacion
      *
      * @return string 
      */
-    public function getNbrTipoPregunta()
+    public function getNbrTipoPonderacion()
     {
-        return $this->nbrTipoPregunta;
+        return $this->nbrTipoPonderacion;
     }
 
     /**
      * Set activo
      *
      * @param string $activo
-     * @return TipoPregunta
+     * @return TipoPonderacion
      */
     public function setActivo($activo)
     {
@@ -140,7 +140,7 @@ class TipoPregunta
      * Add preguntas
      *
      * @param \AcreditacionBundle\Entity\Pregunta $preguntas
-     * @return TipoPregunta
+     * @return TipoPonderacion
      */
     public function addPreguntas(\AcreditacionBundle\Entity\Pregunta $preguntas)
     {

@@ -16,7 +16,7 @@
                             onClick="$('#{{ id }}').prop('disabled',!$('#{{ id }}').prop('disabled'));">{{ pregunta.opcionNoAplicaTexto }}
                         {% endif %}
                         <div class="input-group input-3">
-                            <input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control' id='{{ id }}' name='{{ id }}' {{ maxLength }}>
+                            <input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control' id='{{ id }}' name='{{ id }}' {{ maxLength }} value={{ respuestas[pregunta.idPregunta] ?? null }}>
                             <span class="input-group-addon">
                                 {{ datePicker }}
                             </span>

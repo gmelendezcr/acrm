@@ -84,6 +84,13 @@ class FormularioPorCentroEducativo
     private $idUsuarioRevisa;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="OBSERVACIONES", type="string", length=255, nullable=true)
+     */
+    private $observaciones;
+
+    /**
      * @ORM\OneToMany(targetEntity="RespuestaPorFormularioPorCentroEducativo",mappedBy="idFormularioPorCentroEducativo")
      */
     private $respuestasPorFormularioPorCentroEducativo;
@@ -290,6 +297,29 @@ class FormularioPorCentroEducativo
     public function getIdUsuarioRevisa()
     {
         return $this->idUsuarioRevisa;
+    }
+
+    /**
+     * Set observaciones
+     *
+     * @param string $observaciones
+     * @return FormularioPorCentroEducativo
+     */
+    public function setObservaciones($observaciones)
+    {
+        $this->observaciones = $observaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get observaciones
+     *
+     * @return string 
+     */
+    public function getObservaciones()
+    {
+        return $this->observaciones;
     }
 
     /**

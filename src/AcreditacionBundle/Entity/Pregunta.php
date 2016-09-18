@@ -154,7 +154,7 @@ class Pregunta
     /**
      * @var string
      *
-     * @ORM\Column(name="PADRE_COMO_PREGUNTA", type="string", length=1, columnDefinition="CHAR(1) NULL CHECK (ACTIVO IN ('S','N'))")
+     * @ORM\Column(name="PADRE_COMO_PREGUNTA", type="string", length=1, columnDefinition="CHAR(1) NULL CHECK (PADRE_COMO_PREGUNTA IN ('S','N'))")
      */
     private $padreComoPregunta;
 
@@ -171,6 +171,56 @@ class Pregunta
      * @ORM\Column(name="TOTALES_COLUMNAS", type="string", length=1, nullable=true)
      */
     private $totalesColumnas;
+
+    /**
+     * @var int
+     *
+     * @ORM\ManyToOne(targetEntity="TipoPonderacion", inversedBy="preguntas")
+     * @ORM\JoinColumn(name="ID_TIPO_PONDERACION",referencedColumnName="ID_TIPO_PONDERACION")
+     */
+    private $idTipoPonderacion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="PONDERACION", type="decimal", precision=6, scale=2, nullable=true)
+     */
+    private $ponderacion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="VALOR_ESPERADO", type="string", length=20, nullable=true)
+     */
+    private $valorEsperado;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="ID_PREGUNTA_CASTIGA", type="integer", nullable=true)
+     */
+    private $idPreguntaCastiga;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="PONDERACION_CASTIGA", type="decimal", precision=6, scale=2, nullable=true)
+     */
+    private $ponderacionCastiga;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="PONDERACION_MAXIMA", type="decimal", precision=6, scale=2, nullable=true)
+     */
+    private $ponderacionMaxima;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="FORMULA_PONDERACION", type="string", length=255, nullable=true)
+     */
+    private $formulaPonderacion;
 
     /**
      * @var string
@@ -194,6 +244,11 @@ class Pregunta
      */
     private $respuestasPorFormularioPorCentroEducativo;
 
+    /**
+     * @ORM\OneToMany(targetEntity="DetallePonderacionPregunta",mappedBy="idPregunta")
+     */
+    private $detallesPonderacionPregunta;
+
 
     /**
      * Constructor
@@ -203,6 +258,7 @@ class Pregunta
         $this->opcionesRespuesta = new \Doctrine\Common\Collections\ArrayCollection();
         $this->subPreguntas = new \Doctrine\Common\Collections\ArrayCollection();
         $this->respuestasPorFormularioPorCentroEducativo = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->detallesPonderacionPregunta = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -700,6 +756,167 @@ class Pregunta
     }
 
     /**
+     * Set idTipoPonderacion
+     *
+     * @param  \AcreditacionBundle\Entity\TipoPonderacion $idTipoPonderacion
+     * @return Ponderacion
+     */
+    public function setIdTipoPonderacion(\AcreditacionBundle\Entity\TipoPonderacion $idTipoPonderacion)
+    {
+        $this->idTipoPonderacion = $idTipoPonderacion;
+
+        return $this;
+    }
+
+    /**
+     * Get idTipoPonderacion
+     *
+     * @return \AcreditacionBundle\Entity\TipoPonderacion
+     */
+    public function getIdTipoPonderacion()
+    {
+        return $this->idTipoPonderacion;
+    }
+
+    /**
+     * Set ponderacion
+     *
+     * @param string $ponderacion
+     * @return borrar
+     */
+    public function setPonderacion($ponderacion)
+    {
+        $this->ponderacion = $ponderacion;
+
+        return $this;
+    }
+
+    /**
+     * Get ponderacion
+     *
+     * @return string 
+     */
+    public function getPonderacion()
+    {
+        return $this->ponderacion;
+    }
+
+    /**
+     * Set valorEsperado
+     *
+     * @param string $valorEsperado
+     * @return borrar
+     */
+    public function setValorEsperado($valorEsperado)
+    {
+        $this->valorEsperado = $valorEsperado;
+
+        return $this;
+    }
+
+    /**
+     * Get valorEsperado
+     *
+     * @return string 
+     */
+    public function getValorEsperado()
+    {
+        return $this->valorEsperado;
+    }
+
+    /**
+     * Set idPreguntaCastiga
+     *
+     * @param integer $idPreguntaCastiga
+     * @return borrar
+     */
+    public function setIdPreguntaCastiga($idPreguntaCastiga)
+    {
+        $this->idPreguntaCastiga = $idPreguntaCastiga;
+
+        return $this;
+    }
+
+    /**
+     * Get idPreguntaCastiga
+     *
+     * @return integer 
+     */
+    public function getIdPreguntaCastiga()
+    {
+        return $this->idPreguntaCastiga;
+    }
+
+    /**
+     * Set ponderacionCastiga
+     *
+     * @param string $ponderacionCastiga
+     * @return borrar
+     */
+    public function setPonderacionCastiga($ponderacionCastiga)
+    {
+        $this->ponderacionCastiga = $ponderacionCastiga;
+
+        return $this;
+    }
+
+    /**
+     * Get ponderacionCastiga
+     *
+     * @return string 
+     */
+    public function getPonderacionCastiga()
+    {
+        return $this->ponderacionCastiga;
+    }
+
+    /**
+     * Set ponderacionMaxima
+     *
+     * @param string $ponderacionMaxima
+     * @return borrar
+     */
+    public function setPonderacionMaxima($ponderacionMaxima)
+    {
+        $this->ponderacionMaxima = $ponderacionMaxima;
+
+        return $this;
+    }
+
+    /**
+     * Get ponderacionMaxima
+     *
+     * @return string 
+     */
+    public function getPonderacionMaxima()
+    {
+        return $this->ponderacionMaxima;
+    }
+
+    /**
+     * Set formulaPonderacion
+     *
+     * @param string $formulaPonderacion
+     * @return borrar
+     */
+    public function setFormulaPonderacion($formulaPonderacion)
+    {
+        $this->formulaPonderacion = $formulaPonderacion;
+
+        return $this;
+    }
+
+    /**
+     * Get formulaPonderacion
+     *
+     * @return string 
+     */
+    public function getFormulaPonderacion()
+    {
+        return $this->formulaPonderacion;
+    }
+
+    /**
      * Set activo
      *
      * @param string $activo
@@ -819,5 +1036,38 @@ class Pregunta
     public function getRespuestasPorFormularioPorCentroEducativo()
     {
         return $this->respuestasPorFormularioPorCentroEducativo;
+    }
+
+    /**
+     * Add detallesPonderacionPregunta
+     *
+     * @param \AcreditacionBundle\Entity\DetallePonderacionPregunta $detallesPonderacionPregunta
+     * @return Pregunta
+     */
+    public function addDetallesPonderacionPregunta(\AcreditacionBundle\Entity\DetallePonderacionPregunta $detallesPonderacionPregunta)
+    {
+        $this->detallesPonderacionPregunta[] = $detallesPonderacionPregunta;
+
+        return $this;
+    }
+
+    /**
+     * Remove detallesPonderacionPregunta
+     *
+     * @param \AcreditacionBundle\Entity\DetallePonderacionPregunta $detallesPonderacionPregunta
+     */
+    public function removeDetallesPonderacionPregunta(\AcreditacionBundle\Entity\DetallePonderacionPregunta $detallesPonderacionPregunta)
+    {
+        $this->detallesPonderacionPregunta->removeElement($detallesPonderacionPregunta);
+    }
+
+    /**
+     * Get detallesPonderacionPregunta
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDetallesPonderacionPregunta()
+    {
+        return $this->detallesPonderacionPregunta;
     }
 }

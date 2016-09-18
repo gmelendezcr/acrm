@@ -6,8 +6,14 @@
         onClick="$('#{{ id }}').prop('disabled',!$('#{{ id }}').prop('disabled'));">{{ pregunta.opcionNoAplicaTexto }}
     </div>
 {% endif %}
-<input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control' id='{{ id }}' name='{{ id }}' {{ maxLength }}
-	{% if pregunta.idPreguntaPadre.totalesFilas == 'S' or pregunta.idPreguntaPadre.totalesColumnas == 'S' %}
-		onChange="calcularTotalesPregunta{{ pregunta.idPreguntaPadre.idTipoPregunta.codTipoPregunta ~ pregunta.idPreguntaPadre.idPregunta }}();"
-	{% endif %}
->
+{% if pregunta.idPreguntaPadre.totalesFilas == 'S' or pregunta.idPreguntaPadre.totalesColumnas == 'S' %}
+    {% set onChange = 'calcularTotalesPregunta' ~ pregunta.idPreguntaPadre.idTipoPregunta.codTipoPregunta ~ pregunta.idPreguntaPadre.idPregunta ~ '();' %}
+{% else %}
+    {% set onChange = '' %}
+{% endif %}
+{% if respuestas[pregunta.idPregunta][idFila] is defined %}
+    {% set value = respuestas[pregunta.idPregunta][idFila] %}
+{% else %}
+    {% set value = '' %}
+{% endif %}
+<input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control' id='{{ id }}' name='{{ id }}' {{ maxLength }} onChange='{{ onChange }}' value='{{ value }}'>

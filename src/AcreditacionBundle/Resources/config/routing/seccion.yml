@@ -7,3 +7,8 @@ seccion_show:
     path:     /{id}/show
     defaults: { _controller: "AcreditacionBundle:Seccion:show" }
     methods:  GET
+
+seccion_guardar:
+    path:     /guardar
+    defaults: { _controller: "AcreditacionBundle:Seccion:guardar" }
+    methods:  POST

@@ -60,6 +60,10 @@
 
     {% set opciones = opcionesSiNo %}
 
+{% elseif pregunta.idTipoPregunta.codTipoPregunta == 'SM' %}
+
+    {% set opciones = opcionesSiNo %}
+
 {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'MN' %}
 
 {% else %}
@@ -73,11 +77,10 @@
 
 {% if tipoValido %}
 
-    {% if pregunta.idPreguntaPadre and (pregunta.idTipoPregunta.codTipoPregunta == 'OR' or
-        pregunta.idTipoPregunta.codTipoPregunta == 'SN' or pregunta.idTipoPregunta.codTipoPregunta == 'TA') %}
+    {% if pregunta.idPreguntaPadre %}
         {% set id = 'idFila' ~ idFila ~ '_idColumna' ~ pregunta.idPregunta %}
     {%else%}
-        {% set id = pregunta.idTipoPregunta.codTipoPregunta ~ ( pregunta.idPreguntaPadre ? '_' ~ pregunta.idPreguntaPadre.idPregunta : null ) ~ "_" ~ pregunta.idPregunta %}
+        {% set id = pregunta.idTipoPregunta.codTipoPregunta ~ "_" ~ pregunta.idPregunta %}
     {% endif %}
 
     {% set vars = {

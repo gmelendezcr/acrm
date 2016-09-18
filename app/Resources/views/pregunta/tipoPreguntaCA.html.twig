@@ -12,7 +12,11 @@
                         <select class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control input-2' id='{{ id }}' name='{{ id }}' {{ maxLength }}>
                             {% for opcion in opciones %}
                                 {% if opcion %}
-                                    <option value='{{ opcion.codDetalleCatalogo }}'>{{ opcion.nbrDetalleCatalogo }}</option>
+                                    <option value='{{ opcion.codDetalleCatalogo }}'
+                                        {% if respuestas[pregunta.idPregunta] is defined and respuestas[pregunta.idPregunta]==opcion.codDetalleCatalogo %}
+                                            selected
+                                        {% endif %}
+                                    >{{ opcion.nbrDetalleCatalogo }}</option>
                                 {% endif %}
                             {% endfor %}
                         </select>

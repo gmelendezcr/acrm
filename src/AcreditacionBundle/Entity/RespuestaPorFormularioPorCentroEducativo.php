@@ -48,30 +48,37 @@ class RespuestaPorFormularioPorCentroEducativo
     /**
      * @var string
      *
-     * @ORM\Column(name="VALOR_RESPUESTA", type="string", length=255)
+     * @ORM\Column(name="VALOR_RESPUESTA", type="string", length=5000)
      */
     private $valorRespuesta;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="TEXTO_RESPUESTA", type="string", length=5000)
-     */
-    private $textoRespuesta;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="OPCION_OTRO", type="string", length=1)
+     * @ORM\Column(name="OPCION_OTRO", type="string", length=1, nullable=true)
      */
     private $opcionOtro;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="OPCION_NO_APLICA", type="string", length=1)
+     * @ORM\Column(name="OPCION_NO_APLICA", type="string", length=1, nullable=true)
      */
     private $opcionNoAplica;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="REVISAR", type="string", length=1, nullable=true)
+     */
+    private $revisar;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="PONDERACION_GANADA", type="decimal", precision=6, scale=2, nullable=true)
+     */
+    private $ponderacionGanada;
 
 
     /**
@@ -177,29 +184,6 @@ class RespuestaPorFormularioPorCentroEducativo
     }
 
     /**
-     * Set textoRespuesta
-     *
-     * @param string $textoRespuesta
-     * @return RespuestaPorFormularioPorCentroEducativo
-     */
-    public function setTextoRespuesta($textoRespuesta)
-    {
-        $this->textoRespuesta = $textoRespuesta;
-
-        return $this;
-    }
-
-    /**
-     * Get textoRespuesta
-     *
-     * @return string 
-     */
-    public function getTextoRespuesta()
-    {
-        return $this->textoRespuesta;
-    }
-
-    /**
      * Set opcionOtro
      *
      * @param string $opcionOtro
@@ -243,5 +227,51 @@ class RespuestaPorFormularioPorCentroEducativo
     public function getOpcionNoAplica()
     {
         return $this->opcionNoAplica;
+    }
+
+    /**
+     * Set revisar
+     *
+     * @param string $revisar
+     * @return RespuestaPorFormularioPorCentroEducativo
+     */
+    public function setRevisar($revisar)
+    {
+        $this->revisar = $revisar;
+
+        return $this;
+    }
+
+    /**
+     * Get revisar
+     *
+     * @return string 
+     */
+    public function getRevisar()
+    {
+        return $this->revisar;
+    }
+
+    /**
+     * Set ponderacionGanada
+     *
+     * @param string $ponderacionGanada
+     * @return DetallePonderacionPregunta
+     */
+    public function setPonderacionGanada($ponderacionGanada)
+    {
+        $this->ponderacionGanada = $ponderacionGanada;
+
+        return $this;
+    }
+
+    /**
+     * Get ponderacionGanada
+     *
+     * @return string 
+     */
+    public function getPonderacionGanada()
+    {
+        return $this->ponderacionGanada;
     }
 }

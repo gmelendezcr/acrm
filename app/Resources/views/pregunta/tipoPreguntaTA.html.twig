@@ -17,7 +17,7 @@
                                 onClick="$('#{{ id }}').prop('disabled',!$('#{{ id }}').prop('disabled'));"> {{ pregunta.opcionNoAplicaTexto }}
                             </label>
                             {% endif %}
-                            <textarea class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control' id='{{ id }}' name='{{ id }}' {{ maxLength }}></textarea>
+                            <textarea class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control' id='{{ id }}' name='{{ id }}' {{ maxLength }}>{{ respuestas[pregunta.idPregunta] ?? null }}</textarea>
                     </td>
                 </tr>
             </tbody>

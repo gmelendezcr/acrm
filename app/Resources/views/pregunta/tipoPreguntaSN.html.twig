@@ -21,6 +21,9 @@
                                             onClick="$('#{{ id }}_Texto').prop('disabled',true);"
                                         {% endif %}
                                     {% endif %}
+                                    {% if respuestas[pregunta.idPregunta] is defined and respuestas[pregunta.idPregunta]==opcion.codigo %}
+                                        checked
+                                    {% endif %}
                                 > {{ opcion.texto }}
                                 </label>
                             {% endif %}
