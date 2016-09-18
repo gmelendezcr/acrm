@@ -53,6 +53,13 @@ class OpcionRespuesta
     /**
      * @var string
      *
+     * @ORM\Column(name="ENCABEZADO_OPCIONES", type="string", length=255, nullable=true)
+     */
+    private $encabezadoOpciones;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="ACTIVO", type="string", length=1, columnDefinition="CHAR(1) NOT NULL DEFAULT 'S' CHECK (ACTIVO IN ('S','N'))")
      */
     private $activo;
@@ -171,6 +178,29 @@ class OpcionRespuesta
     public function getOrdenOpcionRespuesta()
     {
         return $this->ordenOpcionRespuesta;
+    }
+
+    /**
+     * Set encabezadoOpciones
+     *
+     * @param string $encabezadoOpciones
+     * @return Pregunta
+     */
+    public function setEncabezadoOpciones($encabezadoOpciones)
+    {
+        $this->encabezadoOpciones = $encabezadoOpciones;
+
+        return $this;
+    }
+
+    /**
+     * Get encabezadoOpciones
+     *
+     * @return string
+     */
+    public function getEncabezadoOpciones()
+    {
+        return $this->encabezadoOpciones;
     }
 
     /**
