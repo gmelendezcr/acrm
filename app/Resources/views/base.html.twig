@@ -8,6 +8,7 @@
         {% block stylesheets %}
             <link href="{{ asset('css/bootstrap.min.css') }}" type="text/css" rel="stylesheet" />
             <link href="{{ asset('css/style.css') }}" type="text/css" rel="stylesheet" />
+            <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" type="text/css" rel="stylesheet" />
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -61,19 +62,25 @@
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a href="index.php">Inicio</a></li>                            
+                        <li><a href="{{path('acreditacion_homepage')}}">Inicio</a></li>                            
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Usuarios <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ absolute_url(asset('app_dev.php/agregar-usuario')) }}">Registrar</a></li>
-                                <li><a href="{{ absolute_url(asset('app_dev.php/lista-usuarios')) }}">Mantenimiento</a></li>                              
+                                <li><a href="{{ path('usuario_new') }}">Registrar</a></li>
+                                <li><a href="{{ path('usuario_index') }}">Mantenimiento</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Centros educativos <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">Registrar</a></li>
-                                <li><a href="#">Ver todos</a></li>                              
+                                <li><a href="{{path('centro_educativo_add')}}">Registrar</a></li>
+                                <li><a href="{{path('centro_educativo_lista')}}">Mantenimiento</a></li>
+                                <li><a href="{{path('centro_educativo_form_dig_corr')}}">Digitar o corregir formulario</a></li>
+                                <li><a href="">Revisar formulario</a></li>
+                                <li><a href="">Corregir formulario</a></li>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                <li><a href="">Evaluar formulario</a></li>
+                                {% endif %}
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -106,6 +113,17 @@
    {% block javascripts %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/lib.js') }}"></script>
+        <script src="{{ asset('js/moment.min.js') }}"></script>
+        <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
+        <script src="{{ asset('js/bootstrap-datetimepicker.es.js') }}"></script>
+        <script type="text/javascript">
+         $('#divMiCalendario').datetimepicker({
+            format: 'YYYY-MM-DD',
+            pickTime: false
+          });
+      
+   </script>
    {% endblock %}
 </body>
 </html>

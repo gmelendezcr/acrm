@@ -31,7 +31,21 @@ class UsuarioType extends AbstractType
             ->add('enabled',null,array(
                 'label' =>'Activo',
             ))
-        ;
+            
+            ->add('roles', 'collection', array(
+                    'type' => 'choice',
+                    'label' => 'Roles',
+                    'mapped' => true,
+                    'options' => array(
+                        'label' => false,
+                        'choices' => array('ROLE_USER' => 'Digitador', 'ROLE_ADMIN' => 'Evaluador'),
+                        'multiple' => false,
+                        'data' => 1
+                    ),
+                    
+                    
+            ));
+        
     }
     
     /**

@@ -6,18 +6,17 @@ acreditacion_seccion:
     resource: "@AcreditacionBundle/Resources/config/routing/seccion.yml"
     prefix:   /seccion
 
+acreditacion_centro_educativo:
+    resource: "@AcreditacionBundle/Resources/config/routing/centro-educativo.yml"
+    prefix:   /lista-centros-educativos
+
 acreditacion_homepage:
     path:     /
     defaults: { _controller: AcreditacionBundle:Default:inicio }
+
 acreditacion_recovery:
     path:     /recovery
     defaults: { _controller: AcreditacionBundle:Default:recovery }
 acreditacion_login:
     path:     /admin
     defaults: { _controller: AcreditacionBundle:Default:admin }
-acreditacion_adduser:
-    path:     /agregar-usuario
-    defaults: { _controller: AcreditacionBundle:Default:adduser }
-acreditacion_listauser:
-    path:     /lista-usuarios
-    defaults: { _controller: AcreditacionBundle:Default:listauser }

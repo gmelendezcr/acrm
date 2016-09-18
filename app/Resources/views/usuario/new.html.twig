@@ -4,7 +4,7 @@
     <div class="col-md-12 text-center">
         <h2 class="sin-margin">
             {% block titulo %}
-                Crear un usuario
+                Crear usuario
             {% endblock %}
         </h2>
         <div class="clearfix capa-separador-1 border-bottom"></div>
@@ -12,18 +12,18 @@
     </div>
     <div class="col-md-12">
         <div class="header-control-general">
-            <form class="form-registro form-border" method="{{ form.vars.method }}" action="{{ form.vars.action }}">
+            <form class="form-registro form-border" method="{{ form.vars.method }}" action="{{ form.vars.action }}" onsubmit="return checkForm(this);">
                 <div class="form-group">
                     {{ form_label(form.username) }}
                     {{ form_widget(form.username, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite el usuario'}}) }}
                 </div>
                 <div class="form-group">
                     {{ form_label(form.nombres) }}
-                    {{ form_widget(form.nombres, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite los nombres'}}) }}
+                    {{ form_widget(form.nombres, {'attr': {'class': 'form-control input-1', 'placeholder': 'Digite los nombres'}}) }}
                 </div>
                 <div class="form-group">
                     {{ form_label(form.apellidos) }}
-                    {{ form_widget(form.apellidos, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite los apellidos'}}) }}
+                    {{ form_widget(form.apellidos, {'attr': {'class': 'form-control input-1', 'placeholder': 'Digite los apellidos'}}) }}
                 </div>
                 <div class="form-group">
                     {{ form_label(form.email) }}
@@ -38,22 +38,33 @@
                     {{ form_widget(form.passwordConfirmation, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite la confirmación de la contraseña'}}) }}
                 </div>
                 <div class="form-group">
+                    <label>
                     {{ form_label(form.enabled) }}
-                    {{ form_widget(form.enabled, {'attr': {'class': 'form-control input-3'}}) }}
+                    {{ form_widget(form.enabled, {'attr': {'class': ' '}}) }}
+                    </label>
                 </div>
-                {{ form_widget(form) }}
-                {% block guardar %}
-                    <input type="submit" value="Agregar" />
-                {% endblock %}
-            {{ form_end(form) }}
+                <div class="form-group">
+                    {{ form_label(form.roles) }}
+                    {{ form_widget(form.roles) }}
+                </div>
+                
+                    {{ form_widget(form) }}
+                    {% block guardar %}
+                    <div class="btn-group" role="group">
+                        <a class="btn btn-info" href="{{ path('usuario_index') }}"><span class="glyphicon glyphicon-triangle-left"></span> Regresar</a>
+                        <button class="btn  btn-success" type="submit" value="Agregar"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Agregar</button>
+                    </div>
+                    {% endblock %}
+                    {{ form_end(form) }}
+                
         </div>
     </div>
 
-    <ul>
-        <li>
-            <a href="{{ path('usuario_index') }}">Regresar</a>
-        </li>
+    
+        
+            
+       
         {% block eliminar %}
         {% endblock %}
-    </ul>
+    
 {% endblock %}

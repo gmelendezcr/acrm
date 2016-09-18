@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 {% block body %}
     <div class="col-md-12">
-                    <div class="header-control-page">
-                        <div class="jumbotron text-center">
-                            <h2>
-                                Bienvenido, José Soriano {{ absolute_url(asset('images/logo.png')) }} 
-                            </h2>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-                </div>
+        <div class="header-control-page">
+            <div class="jumbotron text-center">
+                <h2>
+                    Bienvenido, {{ app.user.nombres }} 
+                </h2>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -10,40 +10,40 @@
     </div>
     <div class="col-md-12">
         <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-hover">
                 <tbody>
                     <tr>
-                        <th>Usuario</th>
-                        <td>{{ usuario.username }}</td>
+                        <th class="col-sm-2">Usuario</th>
+                        <td class="col-sm-10">{{ usuario.username }}</td>
                     </tr>
                     <tr>
-                        <th>Nombres</th>
-                        <td>{{ usuario.nombres }}</td>
+                        <th class="col-sm-1">Nombres</th>
+                        <td class="col-sm-10">{{ usuario.nombres }}</td>
                     </tr>
                     <tr>
-                        <th>Apellidos</th>
-                        <td>{{ usuario.apellidos }}</td>
+                        <th class="col-sm-1">Apellidos</th>
+                        <td class="col-sm-10">{{ usuario.apellidos }}</td>
                     </tr>
                     <tr>
-                        <th>Correo electrónico</th>
-                        <td>{{ usuario.email }}</td>
+                        <th class="col-sm-1">Correo electrónico</th>
+                        <td class="col-sm-10">{{ usuario.email }}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-    </div>
-
-    <ul>
-        <li>
-            <a href="{{ path('usuario_index') }}">Regresar</a>
-        </li>
-        <li>
-            <a href="{{ path('usuario_edit', { 'id': usuario.id }) }}">Editar</a>
-        </li>
-        <li>
+        <div class="btn-group" role="group">
+    
+            <a class="btn btn-info" href="{{ path('usuario_index') }}"><span class="glyphicon glyphicon-triangle-left"></span> Regresar</a>
+       
+            <a class="btn btn-success" href="{{ path('usuario_edit', { 'id': usuario.id }) }}">Editar</a>
+            <a class="btn btn-danger" href="{{ path('usuario_delete', { 'id': usuario.id }) }}">Eliminar</a>
+            {#
             {{ form_start(delete_form) }}
                 <input type="submit" value="Desactivar">
             {{ form_end(delete_form) }}
-        </li>
-    </ul>
+            #}
+            </div>
+    </div>
+
+        
 {% endblock %}

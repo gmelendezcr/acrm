@@ -1,24 +1,30 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="col-md-12 text-center">
+    <div class="col-md-10 text-center">
         <h2 class="sin-margin">
             Usuarios
         </h2>
-        <div class="clearfix capa-separador-1 border-bottom"></div>
+         <div class="clearfix capa-separador-1 border-bottom"></div>
         <div class="capa-separador-1"></div>
     </div>
+    <div class="col-md-2 text-right">
+        <a class="btn btn-success btn-block" href="{{ path('usuario_new') }}"><span class="glyphicon glyphicon-plus"></span> Agregar</a>
+         <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    
     <div class="col-md-12">
         <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
                         <th>Usuario</th>
                         <th>Nombres</th>
                         <th>Apellidos</th>
                         <th>Correo electrónico</th>
-                        <th>Activo</th>
-                        <th>Acción</th>
+                        <th class="text-center col-sm-1">Activo</th>
+                        <th class="text-center col-sm-3">Acción</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -28,22 +34,23 @@
                         <td>{{ usuario.nombres }}</td>
                         <td>{{ usuario.apellidos }}</td>
                         <td>{{ usuario.email }}</td>
-                        <td>
+                        <td class="text-center">
                             {% if usuario.enabled=='S' %}
                                 <span class="btn btn-success">Sí</span>
                             {% else %}
-                                <span class="btn btn-warning">No</span
+                                <span class="btn btn-success disabled">No</span
                             {% endif %}
                         </td>
-                        <td>
-                            <ul>
-                                <li>
-                                    <a class="btn btn-info" href="{{ path('usuario_show', { 'id': usuario.id }) }}">Mostrar</a>
-                                </li>
-                                <li>
-                                    <a href="{{ path('usuario_edit', { 'id': usuario.id }) }}">edit</a>
-                                </li>
-                            </ul>
+                        <td class="text-center">
+                             <div class="btn-group" role="group">
+                            
+                                    <a class="btn btn-info" href="{{ path('usuario_show', { 'id': usuario.id }) }}">Ver</a>
+                               
+                                    <a class="btn btn-success" href="{{ path('usuario_edit', { 'id': usuario.id }) }}">Editar</a>
+                                    
+                                    <a class="btn btn-danger" href="{{ path('usuario_delete', { 'id': usuario.id }) }}">Eliminar</a>
+                                    </div>
+                              
                         </td>
                     </tr>
                 {% endfor %}
@@ -52,9 +59,7 @@
         </div>
     </div>
 
-    <ul>
-        <li>
-            <a href="{{ path('usuario_new') }}">Agregar</a>
-        </li>
-    </ul>
+    
+            
+       
 {% endblock %}

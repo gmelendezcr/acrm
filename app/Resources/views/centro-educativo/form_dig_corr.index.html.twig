@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+     <div class="col-md-12 text-center">                                            
+        <h2 class="sin-margin">
+            Centros educativo digitar o corregir formulario
+        </h2>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    <div class="col-md-12">
+        <div class="header-control-general">
+            <form class="form-registro form-border">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="nombre">Centro educativo</label>
+                        <select class="form-control" id="departamentos" name="departamentos">
+                            <option>Seleccione uno</option>
+                            {% for ced in lista_ced %}
+                            <option>{{ ced.nbrCentroEducativo }}</option>
+                             {% endfor %}                             
+                        </select>                                
+                    </div>
+                     <div class="form-group">                                
+                    <label for="nombre">Lugar</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Digite el lugar">                                
+                </div>
+                <div class="form-group">                                
+                    <label for="nombre">Fecha</label>
+                    <div class='input-group date' id='divMiCalendario' data-date-format="dd-mm-yyyy" data-date="12-02-2012">
+                      <input type='text' id="txtFecha" class="form-control"  readonly/>
+                      <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                      </span>
+                  </div>                               
+                </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="nombre">Formulario</label>
+                        <select class="form-control" id="departamentos" name="departamentos">
+                            <option>Seleccione uno</option>
+                            {% for form in lista_form %}
+                            <option>{{ form.nbrFormulario }}</option>
+                             {% endfor %}                             
+                        </select>                                
+                    </div>
+                    <div class="form-group">
+                        <label for="nombre">Estado formulario</label>
+                        <select class="form-control" id="departamentos" name="departamentos">
+                            <option>Seleccione uno</option>
+                            {% for form_estado in lista_form_estado %}
+                            <option>{{ form_estado.nbrEstadoFormulario }}</option>
+                             {% endfor %}                             
+                        </select>                                
+                    </div>
+                </div>
+                <div class="col-sm-12 text-center">
+                <div class="form-group text-center"> 
+                    <button type="submit" class="btn btn-info btn-md"><span class="glyphicon glyphicon-th-list"></span> Cargar formulario</button>
+                </div>
+                </div>
+                <div class="clearfix"></div>
+            </form>
+      </div>
+    </div>
+{% endblock %}
