@@ -21,4 +21,4 @@ usuario_edit:
 usuario_delete:
     path:     /{id}/delete
     defaults: { _controller: "AcreditacionBundle:Usuario:delete" }
-    methods:  DELETE
+    methods:  [DELETE, GET]

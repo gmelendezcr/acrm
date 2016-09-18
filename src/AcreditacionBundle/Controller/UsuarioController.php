@@ -41,6 +41,10 @@ class UsuarioController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            //$request->get('usuario');
+            $us=$request->get('usuario');
+            $usuario->addRole($us['roles']['0']);
+            
             $em->persist($usuario);
             $em->flush();
 
@@ -98,14 +102,14 @@ class UsuarioController extends Controller
      */
     public function deleteAction(Request $request, Usuario $usuario)
     {
-        $form = $this->createDeleteForm($usuario);
-        $form->handleRequest($request);
+        //$form = $this->createDeleteForm($usuario);
+        //$form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        //if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($usuario);
             $em->flush();
-        }
+        //}
 
         return $this->redirectToRoute('usuario_index');
     }

@@ -7,6 +7,3 @@ pregunta_show:
     path:     /{id}/show
     defaults: { _controller: "AcreditacionBundle:Pregunta:show" }
     methods:  GET
-
-
-
