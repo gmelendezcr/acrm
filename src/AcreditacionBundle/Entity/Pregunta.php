@@ -104,7 +104,7 @@ class Pregunta
     /**
      * @var string
      *
-     * @ORM\Column(name="OPCION_OTRO_CAMPO_TEXTO", type="string", length=1, nullable=true, columnDefinition="CHAR(1) NULL CHECK (OPCION_OTRO IN ('S','N'))")
+     * @ORM\Column(name="OPCION_OTRO_CAMPO_TEXTO", type="string", length=1, nullable=true, columnDefinition="CHAR(1) NULL CHECK (OPCION_OTRO_CAMPO_TEXTO IN ('S','N'))")
      */
     private $opcionOtroCampoTexto;
 

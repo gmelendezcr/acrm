@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AcreditacionBundle\Entity\Seccion;
 use AcreditacionBundle\Entity\RespuestaPorFormularioPorCentroEducativo;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Seccion controller.
@@ -23,7 +24,24 @@ class SeccionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $seccions = $em->getRepository('AcreditacionBundle:Seccion')->findAll();
+        $session = new Session();
+        $idFormularioPorCentroEducativo=$session->get('idFormularioPorCentroEducativo');
+        $resFormulario=$em->createQueryBuilder()
+            ->select('f.idFormulario, f.nbrFormulario, c.nbrCentroEducativo')
+            ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'fce')
+            ->join('fce.idFormulario','f')
+            ->join('fce.idCentroEducativo','c')
+            ->where('fce.idFormularioPorCentroEducativo=:idFormularioPorCentroEducativo')
+                ->setParameter('idFormularioPorCentroEducativo',$idFormularioPorCentroEducativo)
+                    ->getQuery()->getSingleResult();
+        $idFormulario=$em->getRepository('AcreditacionBundle:Formulario')->find($resFormulario['idFormulario']);
+
+        $session->set('nbrCentroEducativo', $resFormulario['nbrCentroEducativo']);
+        $session->set('nbrFormulario', $resFormulario['nbrFormulario']);
+
+        $seccions = $em->getRepository('AcreditacionBundle:Seccion')->findBy(array(
+            'idFormulario' => $idFormulario,
+        ));
 
         return $this->render('seccion/index.html.twig', array(
             'seccions' => $seccions,
@@ -36,8 +54,9 @@ class SeccionController extends Controller
      */
     public function showAction(Seccion $seccion)
     {
-//este valor debe estar en sesión o venir como parte del formulario que se está llenando
-$idFormularioPorCentroEducativo=3;
+        $session = new Session();
+        $idFormularioPorCentroEducativo=$session->get('idFormularioPorCentroEducativo');
+
         $idSeccion=$seccion->getIdSeccion();
         $em = $this->getDoctrine()->getManager();
         $resps=$em->createQueryBuilder()
@@ -76,8 +95,9 @@ $idFormularioPorCentroEducativo=3;
      */
     public function guardarAction(Request $request)
     {
-//este valor debe estar en sesión o venir como parte del formulario que se está llenando
-$idFormularioPorCentroEducativo=3;
+        $session = new Session();
+        $idFormularioPorCentroEducativo=$session->get('idFormularioPorCentroEducativo');
+
         $idSeccion=$request->get('idSeccion');
         $em = $this->getDoctrine()->getManager();
         foreach($request->request->all() as $key => $value){

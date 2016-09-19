@@ -38,3 +38,10 @@ function checkForm(form){
   
     return true;
   }
+
+function digitarCorregirCargarFormulario(){
+  if($('#centrosEducativos').val()=='' || $('#formularios').val()=='' || $('#lugarAplicacion').val()=='' ||  $('#fechaAplicacion').val()==''){
+    return false;
+  }
+  return true;
+}

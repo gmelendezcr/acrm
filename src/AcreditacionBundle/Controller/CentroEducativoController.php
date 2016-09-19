@@ -4,7 +4,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AcreditacionBundle\Entity\Departamento;
 use AcreditacionBundle\Entity\Municipio;
 use AcreditacionBundle\Entity\CentroEducativo;
+use AcreditacionBundle\Entity\Formulario;
+use AcreditacionBundle\Entity\FormularioPorCentroEducativo;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class CentroEducativoController extends Controller{
     public function listaAction(){
@@ -77,12 +80,33 @@ class CentroEducativoController extends Controller{
         $em = $this->getDoctrine()->getEntityManager();
         $lista_ced = $em->getRepository('AcreditacionBundle:CentroEducativo')->findAll();
         $lista_form = $em->getRepository('AcreditacionBundle:Formulario')->findAll();
-        $lista_form_estado = $em->getRepository('AcreditacionBundle:EstadoFormulario')->findAll();
+        //$lista_form_estado = $em->getRepository('AcreditacionBundle:EstadoFormulario')->findAll();
         return $this->render('centro-educativo/form_dig_corr.index.html.twig',array(
         'lista_ced'=>$lista_ced,
         'lista_form'=>$lista_form,
-        'lista_form_estado'=>$lista_form_estado
+        //'lista_form_estado'=>$lista_form_estado
         ));
     }
 
+    public function digitarCorregirCargarAction(Request $request){
+        $idCentroEducativo=$request->get('centrosEducativos');
+        $idFormulario=$request->get('formularios');
+        $lugarAplicacion=$request->get('lugarAplicacion');
+        $fechaAplicacion=$request->get('fechaAplicacion');
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $formularioPorCentroEducativo=new FormularioPorCentroEducativo();
+        $formularioPorCentroEducativo->setIdCentroEducativo($em->getRepository('AcreditacionBundle:CentroEducativo')->find($idCentroEducativo));
+        $formularioPorCentroEducativo->setIdFormulario($em->getRepository('AcreditacionBundle:Formulario')->find($idFormulario));
+        $formularioPorCentroEducativo->setLugarAplicacion($lugarAplicacion);
+        $formularioPorCentroEducativo->setFechaAplicacion(new \DateTime($fechaAplicacion));
+        $formularioPorCentroEducativo->setIdUsuarioDigita($em->getRepository('AcreditacionBundle:Usuario')->find($this->getUser()->getId()));
+        $em->persist($formularioPorCentroEducativo);
+        $em->flush();
+
+        $session = new Session();
+        $session->set('idFormularioPorCentroEducativo', $formularioPorCentroEducativo->getIdFormularioPorCentroEducativo());
+
+        return $this->redirectToRoute('seccion_index');
+    }
 }

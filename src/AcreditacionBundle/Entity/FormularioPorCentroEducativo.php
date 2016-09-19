@@ -63,7 +63,7 @@ class FormularioPorCentroEducativo
      * @var int
      *
      * @ORM\ManyToOne(targetEntity="Usuario", inversedBy="formulariosPorCentroEducativoEntrevistados")
-     * @ORM\JoinColumn(name="ID_USUARIO_ENTREVISTA",referencedColumnName="username")
+     * @ORM\JoinColumn(name="ID_USUARIO_ENTREVISTA",referencedColumnName="id")
      */
     private $idUsuarioEntrevista;
 
@@ -71,7 +71,7 @@ class FormularioPorCentroEducativo
      * @var int
      *
      * @ORM\ManyToOne(targetEntity="Usuario", inversedBy="formulariosPorCentroEducativoDigitados")
-     * @ORM\JoinColumn(name="ID_USUARIO_DIGITA",referencedColumnName="username")
+     * @ORM\JoinColumn(name="ID_USUARIO_DIGITA",referencedColumnName="id")
      */
     private $idUsuarioDigita;
 
@@ -79,7 +79,7 @@ class FormularioPorCentroEducativo
      * @var int
      *
      * @ORM\ManyToOne(targetEntity="Usuario", inversedBy="formulariosPorCentroEducativoRevisados")
-     * @ORM\JoinColumn(name="ID_USUARIO_REVISA",referencedColumnName="username")
+     * @ORM\JoinColumn(name="ID_USUARIO_REVISA",referencedColumnName="id")
      */
     private $idUsuarioRevisa;
 
