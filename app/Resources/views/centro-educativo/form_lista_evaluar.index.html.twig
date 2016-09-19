@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+     <div class="col-md-12 text-center">                                            
+        <h2 class="sin-margin">
+            Lista de formularios aprobados y evaluados
+        </h2>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    <div class="col-md-12">
+              <div class="header-control-general">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover"> 
+                                <thead> 
+                                    <tr> 
+                                        <th class="col-sm-1">
+                                            Código
+                                        </th> 
+                                        <th class="col-sm-4">
+                                            Nombre del centro educativo
+                                        </th> 
+                                        <th class="col-sm-4">
+                                           Nombre de formulario
+                                        </th>
+                                        <th class="col-sm-2">
+                                            Digitador
+                                        </th>
+                                        <th class="col-sm-1 text-center">
+                                            Estado
+                                        </th>
+                                        <th class="col-sm-1 text-center">
+                                            Acción
+                                        </th>
+                                    </tr> 
+                                </thead> 
+                                <tbody>
+                                   
+                                    <tr> 
+                                        <td>
+                                            20066
+                                        </td> 
+                                        <td>
+                                            Liceo Cristiano Revendo Juan Bueno de Santa Ana
+                                        </td> 
+                                        <td>
+                                            INSTRUMENTO DE EVALUACIÓN INSTITUCIONAL DE CENTROS EDUCATIVOS PRIVADA PARVULARIA
+                                        </td>
+                                        <td>
+                                              Gerardo Meléndez
+                                        </td>
+                                        <td class="text-center">
+                                            Aprobado
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="" class="btn btn-success btn-block">Evaluar</a>
+                                            
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr> 
+                                        <td>
+                                            200667
+                                        </td> 
+                                        <td>
+                                            Liceo Cristiano Revendo Juan Bueno de San Salvador, Soyapango
+                                        </td> 
+                                        <td>
+                                            INSTRUMENTO DE EVALUACIÓN INSTITUCIONAL DE CENTROS EDUCATIVOS PRIVADOS BASICA Y MEDIA
+                                        </td>
+                                        <td>
+                                              José Soriano
+                                        </td>
+                                        <td class="text-center">
+                                          <span class="glyphicon glyphicon-ok btn btn-success" data-toggle="tooltip" data-placement="top" title="Aprobado"></span> Evaluado
+                                        </td>
+                                        <td class="text-center">
+                                          
+                                        </td>
+                                    </tr>
+                                    
+                                </tbody> 
+                            </table>
+                        </div>
+                        
+                    </div>
+        
+        
+        
+    </div>
+{% endblock %}

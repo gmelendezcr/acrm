@@ -31,3 +31,11 @@ centro_educativo_form_dig_corr_cargar:
     path:     /form-digitar-corregir-cargar
     defaults: { _controller: AcreditacionBundle:CentroEducativo:digitarCorregirCargar }
     methods:  [POST]
+centro_educativo_form_lista_revisar:
+    path:     /form-lista-revisar
+    defaults: { _controller: AcreditacionBundle:CentroEducativo:form_lista_revisar }
+    methods:  [GET]
+centro_educativo_form_lista_evaluar:
+    path:     /form-lista-evaluar
+    defaults: { _controller: AcreditacionBundle:CentroEducativo:form_lista_evaluar }
+    methods:  [GET]

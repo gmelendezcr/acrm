@@ -76,10 +76,9 @@
                                 <li><a href="{{path('centro_educativo_add')}}">Registrar</a></li>
                                 <li><a href="{{path('centro_educativo_lista')}}">Mantenimiento</a></li>
                                 <li><a href="{{path('centro_educativo_form_dig_corr')}}">Digitar o corregir formulario</a></li>
-                                <li><a href="">Revisar formulario</a></li>
-                                <li><a href="">Corregir formulario</a></li>
+                                <li><a href="{{path('centro_educativo_form_lista_revisar')}}">Revisar formulario</a></li>
                                 {% if is_granted('ROLE_ADMIN') %}
-                                <li><a href="">Evaluar formulario</a></li>
+                                <li><a href="{{path('centro_educativo_form_lista_evaluar')}}">Evaluar formulario</a></li>
                                 {% endif %}
                             </ul>
                         </li>

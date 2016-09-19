@@ -87,6 +87,22 @@ class CentroEducativoController extends Controller{
         //'lista_form_estado'=>$lista_form_estado
         ));
     }
+    public function form_lista_revisarAction(){
+        $em = $this->getDoctrine()->getEntityManager();
+        $lista = $em->getRepository('AcreditacionBundle:CentroEducativo')->findAll();
+        //var_dump($lista);
+        return $this->render('centro-educativo/form_lista_revisar.index.html.twig',array(
+            'lista'=>$lista    
+        ));
+    }
+    public function form_lista_evaluarAction(){
+        $em = $this->getDoctrine()->getEntityManager();
+        $lista = $em->getRepository('AcreditacionBundle:CentroEducativo')->findAll();
+        //var_dump($lista);
+        return $this->render('centro-educativo/form_lista_evaluar.index.html.twig',array(
+            'lista'=>$lista    
+        ));
+    }
 
     public function digitarCorregirCargarAction(Request $request){
         $idCentroEducativo=$request->get('centrosEducativos');

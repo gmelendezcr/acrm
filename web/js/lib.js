@@ -38,6 +38,10 @@ function checkForm(form){
   
     return true;
   }
+  
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 
 function digitarCorregirCargarFormulario(){
   if($('#centrosEducativos').val()=='' || $('#formularios').val()=='' || $('#lugarAplicacion').val()=='' ||  $('#fechaAplicacion').val()==''){
