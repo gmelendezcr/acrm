@@ -7,13 +7,20 @@
         <div class="clearfix capa-separador-1 border-bottom"></div>
         <div class="capa-separador-1"></div>
     </div>
-    <div>
-        Centro educativo: {{ app.session.get('nbrCentroEducativo') }}
-    </div>
-    <div>
-        Formulario: {{ app.session.get('nbrFormulario') }}
-    </div>
+    
     <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <tbody>
+                    <tr>
+                        <td class="col-sm-2 success">Centro educativo: </td><td clas="col-sm-10">{{ app.session.get('nbrCentroEducativo') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-2 success">Formulario: </td><td class="col-sm-10">{{ app.session.get('nbrFormulario') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
