@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="col-md-12 text-center">                                            
+        <h2 class="sin-margin">
+            Editar centro educativo
+        </h2>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    <div class="col-md-12">
+        {#"{{ cedu.nbrCentroEducativo ?? null }}#}
+        <div class="header-control-general">
+            <form class="form-registro form-border" method="{{ form.vars.method }}" action="{{ form.vars.action }}">
+                
+                <div class="form-group">
+                    {#{{ form_widget(form.idCentroEducativo) }}#}                                
+                    {{  form_label(form.codCentroEducativo)  }}
+                    {{ form_widget(form.codCentroEducativo, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite el código del centro educativo'}}) }}
+                    {{ form_errors(form.codCentroEducativo) }}                           
+                </div>
+                <div class="form-group">                                
+                    {{  form_label(form.nbrCentroEducativo)  }}
+                    {{ form_widget(form.nbrCentroEducativo, {'attr': {'class': 'form-control ', 'placeholder': 'Digite el  nombre'}}) }}
+                    {{ form_errors(form.nbrCentroEducativo) }}                           
+                </div>
+                <div class="form-group">                                
+                    {{  form_label(form.direccionCentroEducativo)  }}
+                    {{ form_widget(form.direccionCentroEducativo, {'attr': {'class': 'form-control ', 'placeholder': 'Digite la dirección'}}) }}
+                    {{ form_errors(form.direccionCentroEducativo) }}                           
+                </div>
+                <div class="form-group">                                
+                    {{  form_label(form.totalAlumnos)  }}
+                    {{ form_widget(form.totalAlumnos, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite el total de alumnos'}}) }}
+                    {{ form_errors(form.totalAlumnos) }}                           
+                </div>
+                <div class="form-group">                                
+                    {{ form_label(form.idMunicipio)  }}
+                    {{ form_widget(form.idMunicipio, {'attr': {'class': 'form-control '}}) }}
+                    {{ form_errors(form.idMunicipio) }}                           
+                </div>
+                <div class="form-group">                                
+                    {{ form_label(form.idJornadaCentroEducativo)  }}
+                    {{ form_widget(form.idJornadaCentroEducativo, {'attr': {'class': 'form-control input-3'}}) }}
+                    {{ form_errors(form.idJornadaCentroEducativo) }}                           
+                </div>
+                <div class="form-group">                                
+                    {{ form_label(form.idTamannoCentroEducativo)  }}
+                    {{ form_widget(form.idTamannoCentroEducativo, {'attr': {'class': 'form-control input-3'}}) }}
+                    {{ form_errors(form.idTamannoCentroEducativo) }}                           
+                </div>
+                <div class="form-group">                                
+                    {{ form_label(form.activo)  }}
+                    {{ form_widget(form.activo, {'attr': {'class': 'form-control input-3'}}) }}
+                    {{ form_errors(form.activo) }}                           
+                </div>
+                <div class="form-group">
+                    {{ form_widget(form.Guardar, {'attr': {'class': 'btn btn-success '}}) }} 
+                    
+                </div>
+            </form> 
+            
+        </div>
+       
+    </div>
+{% endblock %}

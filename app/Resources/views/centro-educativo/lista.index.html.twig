@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-     <div class="col-md-10 text-center">                                            
+    <div class="col-md-10 text-center">                                            
         <h2 class="sin-margin">
             Centros educativos
         </h2>
@@ -9,89 +9,111 @@
     </div>
     <div class="col-md-2 text-right">
         <a class="btn btn-success btn-block" href="{{ path('centro_educativo_add') }}"><span class="glyphicon glyphicon-plus"></span> Agregar</a>
-         <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
         <div class="capa-separador-1"></div>
     </div>
+    <div class="col-md-4 col-md-offset-8">
+        <form method="get" action="{{path('centro_educativo_buscar')}}">
+            <div class="input-group">
+                <input type="text" class="form-control" name="nbr" value="{{ nbr ?? null}}" placeholder="Digite su criterio de búsqueda">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Buscar</button>
+                </span>
+            </div>
+        </form>
+    </div>
     <div class="col-md-12">
-              <div class="header-control-general">
-                        <div class="col-md-3 col-md-offset-9">
-                        <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Buscar un centro educativo">
-                        <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">Buscar</button>
-                        </span>
-                        </div>
-                        </div>
-                        <div class="clearfix capa-separador-1"></div>
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover"> 
-                                <thead> 
-                                    <tr> 
-                                        <th class="col-sm-1">
-                                            Código
-                                        </th> 
-                                        <th class="col-sm-4">
-                                            Nombre
-                                        </th> 
-                                        <th class="col-sm-3">
-                                           Dirección
-                                        </th>
-                                        <th class="col-sm-3 text-center">
-                                            Acción
-                                        </th>
-                                    </tr> 
-                                </thead> 
-                                <tbody>
-                                    {%for item in lista %} 
-                                    <tr> 
-                                        <td>
-                                            {{item.CodCentroEducativo}}
-                                        </td> 
-                                        <td>
-                                            {{item.nbrCentroEducativo}}
-                                        </td> 
-                                        <td>
-                                            {{item.direccionCentroEducativo}}
-                                        </td>
-                                        <td class="text-center">
-                                            <div class="btn-group" role="group">
-                                                <a href='{{path('centro_educativo_editar', {'id':item.idCentroEducativo })}}' class='btn btn-success btn-sm'>
-                                                    <span class="glyphicon glyphicon-pencil"></span> Editar
-                                                </a>
-                                                <a href='login.php' class='btn btn-warning btn-sm'>
-                                                     Evaluadar
-                                                </a>
-                                                <a href='{{path('centro_educativo_borrar', { 'id': item.idCentroEducativo })}}' class='btn btn-danger btn-sm'>
-                                                     <span class="glyphicon glyphicon-trash"></span> Borrar
-                                                </a>
-                                                                                    
-                                            </div>
-                                        </td>
-                                    </tr> 
-                                    {%endfor%}
-                                </tbody> 
-                            </table>
-                        </div>
-                        <div class="col-md-3 col-md-offset-9">
-                            <nav aria-label="...">
-                            <ul class="pager">
-                                <li><a href="#">
-                                        <span class="glyphicon glyphicon-triangle-left"></span>
-                                        Anterior
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        Siguiente 
-                                        <span class="glyphicon glyphicon-triangle-right"></span>
-                                    </a>
-                                </li>
-                            </ul>
-                            </nav>
-                        </div>
-                    </div>
-        
-        
-        
+        <div class="header-control-general">
+                <div class="clearfix capa-separador-1"></div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover"> 
+                        <thead> 
+                            <tr> 
+                                <th class="col-sm-1 text-center">
+                                    Código
+                                </th> 
+                                <th class="col-sm-3">
+                                    Nombre
+                                </th> 
+                                <th class="col-sm-4">
+                                   Ubicación
+                                </th>
+                                <th class="col-sm-1 text-center">
+                                   # Alumnos
+                                </th>
+                                <th class="col-sm-1 text-center">
+                                   Jornada
+                                </th>
+                                <th class="col-sm-1 text-center">
+                                   Tamaño
+                                </th>
+                                <th class="col-sm-1 text-center">
+                                    Acción
+                                </th>
+                            </tr> 
+                        </thead> 
+                        <tbody>
+                            {%for item in lista %} 
+                                <tr> 
+                                    <td>
+                                        {#{{item.CodCentroEducativo}}#}
+                                        {{item.COD_CENTRO_EDUCATIVO}}
+                                    </td> 
+                                    <td>
+                                        {{item.NBR_CENTRO_EDUCATIVO}}
+                                    </td>
+                                    <td>
+                                        {{item.NBR_ZONA_GEOGRAFICA}}, 
+                                        {{item.NBR_DEPARTAMENTO}},
+                                        {{item.NBR_MUNICIPIO}}, 
+                                        {{item.DIRECCION_CENTRO_EDUCATIVO}}
+                                    </td>
+                                    <td class="text-center">
+                                        {#{{item.direccionCentroEducativo}}#}
+                                        {{item.TOTAL_ALUMNOS}}
+                                    </td>
+                                    <td class="text-center">
+                                        {#{{item.direccionCentroEducativo}}#}
+                                        {{item.NBR_JORNADA}}
+                                    </td>
+                                    <td class="text-center">
+                                        {#{{item.direccionCentroEducativo}}#}
+                                        {{item.NBR_TAMANNO}}
+                                    </td>
+                                    <td class="text-center">
+                                        {#<div class="btn-group" role="group">#}
+                                        <a href='{{path('centro_educativo_editar', {'id':item.ID_CENTRO_EDUCATIVO })}}' class='btn btn-success btn-sm btn-block'>
+                                            <span class="glyphicon glyphicon-pencil"></span> Editar
+                                        </a>
+                                        <a href='{{path('centro_educativo_cuotas', {'id':item.ID_CENTRO_EDUCATIVO })}}' class='btn btn-info btn-sm btn-block'>
+                                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Cuotas
+                                        </a>
+                                        <a  data-toggle="confirmation" data-title="Seguro?" href='{{path('centro_educativo_borrar', { 'id': item.ID_CENTRO_EDUCATIVO })}}' class='btn btn-danger btn-sm btn-block'>
+                                            <span class="glyphicon glyphicon-trash"></span> Borrar
+                                        </a>
+                                    </td>
+                                </tr> 
+                            {%endfor%}
+                        </tbody> 
+                    </table>
+                </div>
+                <div class="col-md-3 col-md-offset-9">
+                <nav aria-label="...">
+                    <ul class="pager">
+                        <li><a href="#">
+                            <span class="glyphicon glyphicon-triangle-left"></span>
+                                Anterior
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Siguiente 
+                                <span class="glyphicon glyphicon-triangle-right"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                </div>
+        </div>
     </div>
 {% endblock %}

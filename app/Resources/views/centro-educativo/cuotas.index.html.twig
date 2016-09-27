@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="col-md-10 text-center">                                            
+        <h2 class="sin-margin">
+            Cuotas
+        </h2>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    <div class="col-md-2 text-right">
+        <a class="btn btn-success btn-block" href="{{ path('centro_educativo_add') }}"><span class="glyphicon glyphicon-plus"></span> Agregar</a>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    <div class="clearfix"></div>
+        <div class="col-md-8">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                   <tbody>
+                        <tr>
+                            <td class="col-sm-3 text-right bg-success"><strong>Centro educativo</strong></td>
+                            <td>{{ce_show.nbrCentroEducativo}}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right bg-success"><strong>Año</strong></td>
+                            <td>{{anno}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <div class="col-md-4">
+        <form method="get" action="{{path('centro_educativo_cuotas', {'id':item.ID_CENTRO_EDUCATIVO })}}')}}">
+            <div class="input-group">
+                <input type="text" class="form-control" name="annio" value="{{ nbr ?? null}}" placeholder="Digite el año">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Buscar</button>
+                </span>
+            </div>
+        </form>
+    </div>
+    
+    <div class="col-md-12">
+        <div class="header-control-general">
+                <div class="clearfix capa-separador-1"></div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover"> 
+                        <thead> 
+                            <tr> 
+                                
+                                <th class="col-sm-3">
+                                    Grado
+                                </th> 
+                                <th class="col-sm-1">
+                                   Año
+                                </th>
+                                <th class="col-sm-2 text-center">
+                                   Matrícula
+                                </th>
+                                <th class="col-sm-1 text-center">
+                                   Cuota
+                                </th>
+                                
+                                <th class="col-sm-2 text-center">
+                                    Acción
+                                </th>
+                            </tr> 
+                        </thead> 
+                        <tbody>
+                            {%for item in lista %} 
+                                <tr> 
+                                    
+                                    <td>
+                                        {{item.nbrGradoEscolar}}                                        
+                                    </td>
+                                    <td>
+                                        {{item.anno}}
+                                    </td>
+                                    <td class="text-center">
+                                        $ {{item.matricula}}
+                                    </td>
+                                    <td class="text-center">
+                                        $ {{item.monto}}
+                                    </td>
+                                    
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                        <a href='' class='btn btn-success btn-sm '>
+                                            <span class="glyphicon glyphicon-pencil"></span> Editar
+                                        </a>
+                                        
+                                        <a  data-toggle="confirmation" data-title="Seguro?" href='' class='btn btn-danger btn-sm '>
+                                            <span class="glyphicon glyphicon-trash"></span> Borrar
+                                        </a>
+                                        </div>
+                                    </td>
+                                </tr> 
+                            {%endfor%}
+                        </tbody> 
+                    </table>
+                </div>
+                
+        </div>
+    </div>
+{% endblock %}

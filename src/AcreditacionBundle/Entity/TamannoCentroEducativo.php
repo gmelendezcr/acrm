@@ -167,4 +167,7 @@ class TamannoCentroEducativo
     {
         return $this->centrosEducativos;
     }
+     public function __toString(){
+        return $this->getNbrTamannoCentroEducativo() ;
+    }
 }

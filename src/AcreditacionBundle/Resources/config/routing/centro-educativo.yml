@@ -11,16 +11,19 @@ centro_educativo_guardar:
     path:     /agregar-centro-educativo-guardar
     defaults: { _controller: AcreditacionBundle:CentroEducativo:addguardar }
     methods:  [POST]
+centro_educativo_buscar:
+    path:     /buscar
+    defaults: { _controller: AcreditacionBundle:CentroEducativo:listanbr }
+    methods:  [GET]
 
 centro_educativo_borrar:
     path:     /{id}/borrar
     defaults: { _controller: AcreditacionBundle:CentroEducativo:borrar }
-    methods:  [GET]
-
+    methods:  [GET, POST]
 centro_educativo_editar:
     path:     /{id}/editar
-    defaults: { _controller: AcreditacionBundle:CentroEducativo:editar }
-    methods:  [GET]
+    defaults: { _controller: AcreditacionBundle:CentroEducativo:editarr }
+    methods:  [GET, POST]
 
 centro_educativo_form_dig_corr:
     path:     /form-digitar-corregir
@@ -38,4 +41,8 @@ centro_educativo_form_lista_revisar:
 centro_educativo_form_lista_evaluar:
     path:     /form-lista-evaluar
     defaults: { _controller: AcreditacionBundle:CentroEducativo:form_lista_evaluar }
+    methods:  [GET]
+centro_educativo_cuotas:
+    path:     /{id}/cuotas
+    defaults: { _controller: AcreditacionBundle:CentroEducativo:cuotas }
     methods:  [GET]

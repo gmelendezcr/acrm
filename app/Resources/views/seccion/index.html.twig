@@ -13,10 +13,13 @@
             <table class="table table-bordered table-hover">
                 <tbody>
                     <tr>
-                        <td class="col-sm-2 success">Centro educativo: </td><td clas="col-sm-10">{{ app.session.get('nbrCentroEducativo') }}</td>
+                        <td class="col-sm-2 success"><strong>Código:</strong> </td><td clas="col-sm-10"></td>
                     </tr>
                     <tr>
-                        <td class="col-sm-2 success">Formulario: </td><td class="col-sm-10">{{ app.session.get('nbrFormulario') }}</td>
+                        <td class="col-sm-2 success"><strong>Centro educativo:</strong> </td><td clas="col-sm-10">{{ app.session.get('nbrCentroEducativo') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-2 success"><strong>Formulario:</strong> </td><td class="col-sm-10">{{ app.session.get('nbrFormulario') }}</td>
                     </tr>
                 </tbody>
             </table>

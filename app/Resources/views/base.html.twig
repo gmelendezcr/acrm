@@ -75,6 +75,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="{{path('centro_educativo_add')}}">Registrar</a></li>
                                 <li><a href="{{path('centro_educativo_lista')}}">Mantenimiento</a></li>
+                                <li><a href="{{path('centro_educativo_lista')}}">Niveles educativos</a></li>
                                 <li><a href="{{path('centro_educativo_form_dig_corr')}}">Digitar o corregir formulario</a></li>
                                 <li><a href="{{path('centro_educativo_form_lista_revisar')}}">Revisar formulario</a></li>
                                 {% if is_granted('ROLE_ADMIN') %}
@@ -106,6 +107,7 @@
    {% block javascripts %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/bootstrap-confirmation.min.js') }}"></script>
         <script src="{{ asset('js/lib.js') }}"></script>
         <script src="{{ asset('js/moment.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
@@ -116,6 +118,11 @@
             pickTime: false
           });
       
+      $('[data-toggle="confirmation"]').confirmation({
+    href: function(elem){
+        return $(elem).attr('href');
+    }
+});
    </script>
    {% endblock %}
 </body>

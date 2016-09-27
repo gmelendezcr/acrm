@@ -198,4 +198,8 @@ class Municipio
     {
         return $this->centrosEducativos;
     }
+    
+    public function __toString(){
+        return $this->idDepartamento->getNbrDepartamento() . ' / ' . $this->nbrMunicipio;
+    }
 }

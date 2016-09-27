@@ -27,29 +27,31 @@
                     <label for="totol_alumnos">Total de alumnos</label>
                     <input type="text" class="form-control input-3" id="total_alumnos" name="total_alumnos"  placeholder="Digite el total de alumnos">                                
                 </div>
+                
                 <div class="form-group">                                
-                    <label for="departamentos">Departamentos</label>
-                    <select class="form-control input-3" id="departamentos" name="departamentos">
+                    <label for="departamentos">Municios por departamento y zona geográfica</label>
+                    <select class="form-control input-3" id="municipio" name="municipio">
                         <option>Seleccione uno</option>
-                        {% for departamento in departamentos %}
-                        <option>{{ departamento.nbrDepartamento }}
-                        
-                         {% endfor %}                             
-                    </select>                                
-                </div>
-                <div class="form-group">                                
-                    <label for="municipios">Municipios</label>
-                    <select class="form-control input-3" id="municipios" name="municipios">
-                        <option>Seleccione uno</option>
-                        {% for municipio in municipios %}
-                        <option value="{{municipio.idMunicipio}}">{{ municipio.nbrMunicipio }}
-                        
-                         {% endfor %}                             
+                        {% for zona in zonas %}
+                            <optgroup label="{{ zona.nbrZonaGeografica }}">
+                               {% for departamento in zona.departamentos %}
+                                   <optgroup label="-{{ departamento.nbrDepartamento }}">
+                                       {% for municipio in departamento.municipios %}
+                                            <option value="{{ municipio.IdMunicipio }}">
+                                                {{ municipio.nbrMunicipio }}
+                                            </option>
+                                        {% endfor %}
+                                    </optgroup>
+                               {% endfor %}
+                            </optgroup>
+                        {% endfor %}
+                         
+                         
                     </select>                                
                 </div>
                 <div class="form-group">                                
                     <label for="jornadas">Jornada</label>
-                    <select class="form-control input-3" id="jornadas" name="jornadas">
+                    <select class="form-control input-3" id="jornada" name="jornada">
                         <option>Seleccione una</option>
                         {% for jornada in jornadas %}
                         <option value="{{jornada.idJornadaCentroEducativo}}">{{ jornada.nbrJornadaCentroEducativo }}
@@ -58,7 +60,7 @@
                 </div>
                 <div class="form-group">                                
                     <label for="tamanno">Tamaño</label>
-                    <select class="form-control input-3" id="tamanno">
+                    <select class="form-control input-3" id="tamanno" name="tamanno">
                         <option>Seleccione uno</option>
                         {% for tamanno in tamannos %}
                         <option value="{{ tamanno.idTamannoCentroEducativo }}">{{ tamanno.nbrTamannoCentroEducativo }}

@@ -167,4 +167,7 @@ class JornadaCentroEducativo
     {
         return $this->centrosEducativos;
     }
+    public function __toString(){
+        return $this->getNbrJornadaCentroEducativo() ;
+    }
 }
