@@ -1,58 +1,11 @@
 <?php
-
 namespace AcreditacionBundle\Form;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-
-
-class CentroEducativoType extends AbstractType
-{
+class CentroEducativoType extends AbstractType{
     public function __construct($em){
-        //$this->em=$em;
-        /*$this->comboMun=array(
-            'choices' => array(
-                'X' => array('A' => '1','B' => '2',),
-                'Y' => array('B' => '3',),
-            ),
-            'choices_as_values' => true,
-        );*/
-        /*$resZona=$em->getRepository('AcreditacionBundle:ZonaGeografica')->findAll();
-        foreach($resZona as $zona){
-            $comboMun.='<optgroup label="' . $zona->getNbrZonaGeografica() . '">';
-            foreach($zona->getDepartamentos() as $departamento){
-                $comboMun.='<optgroup label="-' . $departamento->getNbrDepartamento() . '">';
-                foreach($departamento->getMunicipios() as $municipio){
-                    $comboMun.='<option value="' . $municipio->getNbrMunicipio() . '"></option>';
-                }
-                $comboMun.='</optgroup>';
-            }
-            $comboMun.='</optgroup>';
-        }*/
-        /*$resDepto=$em->getRepository('AcreditacionBundle:Departamento')->findAll();
-        $muni=array();
-        foreach($resDepto as $departamento){
-            $muni[$departamento->getNbrDepartamento()]=array();
-            foreach($departamento->getMunicipios() as $municipio){
-                $muni[$departamento->getNbrDepartamento()][$municipio->getNbrMunicipio()]=$municipio;
-            }
-        }*/
-        
-        /*
-        foreach($resZona as $zona){
-            $muni[$zona->getNbrZonaGeografica()]=array();
-            foreach($zona->getDepartamentos() as $departamento){
-                $muni[$zona->getNbrZonaGeografica()]['-' . $departamento->getNbrDepartamento()]=array();
-                foreach($departamento->getMunicipios() as $municipio){
-                    $muni[$zona->getNbrZonaGeografica()]['-' . $departamento->getNbrDepartamento()][$municipio->getNbrMunicipio()]=$municipio;
-                }
-            }
-        }
-        */
-        
         //Gerardo
         $resZona=$em->getRepository('AcreditacionBundle:ZonaGeografica')->findAll();
         $muni=array();
@@ -71,7 +24,6 @@ class CentroEducativoType extends AbstractType
             'label' => 'Municipio'
         );
         //Fin Gerardo
-        
         
         $resJornada=$em->getRepository('AcreditacionBundle:JornadaCentroEducativo')->findAll();
         //$jda=array();
@@ -99,58 +51,39 @@ class CentroEducativoType extends AbstractType
             'label' => 'Tamaño'
         );
     }
-    
-    
 
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
      
-public function buildForm(FormBuilderInterface $builder, array $options){
-    
-    
-    /*
-     ->add('idJornadaCentroEducativo', 'choice', array(
-                'label' => 'Select color',
-                'choices' => array(
-                    'Red color' => 'red',
-                    'Blue color' => 'blue',
-                    'Yellow color' => 'yellow'
-                ),
-                'data' => 'blue',
-                'choices_as_values' => true,
-            ))
-            
-            */
-            
-                  
- 
-      $builder 
-     
-      ->add('codCentroEducativo','text',array('label' => 'Código'))
-      ->add('nbrCentroEducativo', 'text',array('label' => 'Nombre'))
-      ->add('direccionCentroEducativo', 'text',array('label' => 'Dirección'))
-      ->add('totalAlumnos', 'text',array('label' => 'Total de alumnos'))
-      ->add('idMunicipio',null,$this->comboMun)
-      ->add('idJornadaCentroEducativo',null,$this->comboJda)
-      ->add('idTamannoCentroEducativo',null,$this->comboTnno)
-      ->add('activo', 'choice', array(
+    public function buildForm(FormBuilderInterface $builder, array $options){
+        /*Probando code*/
+         
+        /*Fin*/
+        
+        $estado = $builder->getData()->getActivo();
+        $builder
+        ->add('codCentroEducativo','text',array('label' => 'Código'))
+        ->add('nbrCentroEducativo', 'text',array('label' => 'Nombre'))
+        ->add('direccionCentroEducativo', 'text',array('label' => 'Dirección'))
+        ->add('totalAlumnos', 'text',array('label' => 'Total de alumnos'))
+        ->add('idMunicipio',null,$this->comboMun)
+        ->add('idJornadaCentroEducativo',null,$this->comboJda)
+        ->add('idTamannoCentroEducativo',null,$this->comboTnno)
+        ->add('activo', 'choice', 
+            array(
                 'label' => 'Estado',
                 'choices' => array(
                     'Activo' => 'S',
                     'Inactivo' => 'N'
-                    
                 ),
-                'data' => '1',
+                'data' =>$estado,
                 'choices_as_values' => true,
-            ))
-      ->add('Guardar', 'submit');
-      
-     
-      
-  } 
+            )
+        )
+          ->add('Guardar', 'submit');
+    }
   
-  public function getName() { return 'CentroEducativoType'; }
-  
+    public function getName() { return 'CentroEducativoType'; }
 }

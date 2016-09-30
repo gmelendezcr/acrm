@@ -12,8 +12,19 @@ class UsuarioType extends AbstractType
      * @param FormBuilderInterface $builder
      * @param array $options
      */
+     
+  
+    
+     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        
+        $permisos = array(
+        'ROLE_DIG'        => 'Digitador',
+        
+    );
+        
+        
         $builder
             ->add('username',null,array(
                 'label' =>'Usuario',
@@ -38,13 +49,17 @@ class UsuarioType extends AbstractType
                     'mapped' => true,
                     'options' => array(
                         'label' => false,
-                        'choices' => array('ROLE_USER' => 'Digitador', 'ROLE_ADMIN' => 'Evaluador'),
+                        'choices' => $permissions,
                         'multiple' => false,
                         'data' => 1
                     ),
                     
                     
             ));
+            
+            
+            
+          
         
     }
     

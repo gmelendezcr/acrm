@@ -30,7 +30,11 @@
                 <tbody>
                 {% for usuario in usuarios %}
                     <tr>
-                        <td>{{ usuario.username }}</td>
+                        <td>{{ usuario.username }}
+                        {#{{ usuario.groups|join(', ') }}#}
+                        
+                        
+                        </td>
                         <td>{{ usuario.nombres }}</td>
                         <td>{{ usuario.apellidos }}</td>
                         <td>{{ usuario.email }}</td>

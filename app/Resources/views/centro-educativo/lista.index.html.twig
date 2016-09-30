@@ -35,8 +35,11 @@
                                 <th class="col-sm-3">
                                     Nombre
                                 </th> 
-                                <th class="col-sm-4">
+                                <th class="col-sm-3">
                                    Ubicación
+                                </th>
+                                <th class="col-sm-1">
+                                   Activo
                                 </th>
                                 <th class="col-sm-1 text-center">
                                    # Alumnos
@@ -67,6 +70,13 @@
                                         {{item.NBR_DEPARTAMENTO}},
                                         {{item.NBR_MUNICIPIO}}, 
                                         {{item.DIRECCION_CENTRO_EDUCATIVO}}
+                                    </td>
+                                    <td class="text-center">
+                                        {% if item.ACTIVO=='S' %}
+                                            <span class="btn btn-success">Sí</span>
+                                        {% else %}
+                                            <span class="btn btn-success disabled">No</span
+                                        {% endif %}
                                     </td>
                                     <td class="text-center">
                                         {#{{item.direccionCentroEducativo}}#}

@@ -46,3 +46,19 @@ centro_educativo_cuotas:
     path:     /{id}/cuotas
     defaults: { _controller: AcreditacionBundle:CentroEducativo:cuotas }
     methods:  [GET]
+centro_educativo_cuota_form:
+    path:     /{id}/form-cuota
+    defaults: { _controller: AcreditacionBundle:CentroEducativo:form_cuota }
+    methods:  [GET]
+centro_educativo_cuota_guardar:
+    path:     /guardar-cuota
+    defaults: { _controller: AcreditacionBundle:CentroEducativo:guardarcuota }
+    methods:  [POST]
+centro_educativo_cuota_borrar:
+    path:     /{id}/{idcuota}/borrar-cuota
+    defaults: { _controller: AcreditacionBundle:CentroEducativo:borrar_cuota }
+    methods:  [GET, POST]
+centro_educativo_cuota_editar:
+    path:     /{idcuota}/editar-cuota
+    defaults: { _controller: AcreditacionBundle:CentroEducativo:editar_cuota }
+    methods:  [GET]

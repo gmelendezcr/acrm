@@ -217,4 +217,18 @@ class Usuario extends BaseUser
     {
         return $this->formulariosPorCentroEducativoRevisados;
     }
+    
+    
+//datos de prueba 
+/*public function getRoles() {
+    $role = $this->roles[0];
+    return $role;
+}*/
+/*
+public function setRoles($role) {
+    $this->setRoles(array($role));
+}
+  */  
+
+    
 }

@@ -228,4 +228,7 @@ class GradoEscolar
     {
         return $this->gradosEscolaresPorCentroEducativo;
     }
+     public function __toString(){
+        return $this->nbrGradoEscolar;
+    }
 }

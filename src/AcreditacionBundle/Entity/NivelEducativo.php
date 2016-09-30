@@ -167,4 +167,8 @@ class NivelEducativo
     {
         return $this->gradosEscolares;
     }
+   
+    public function __toString(){
+        return $this->nbrNivelEducativo;
+    }
 }

@@ -113,10 +113,21 @@
         <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap-datetimepicker.es.js') }}"></script>
         <script type="text/javascript">
-         $('#divMiCalendario').datetimepicker({
-            format: 'YYYY-MM-DD',
-            pickTime: false
-          });
+            $('#divMiCalendario').datetimepicker({
+                format: 'YYYY-MM-DD',
+                pickTime: false
+            });
+           
+            
+            $('#divanno').datetimepicker({
+                //inputs: $('#fechaAplicacion'),
+                format: 'YYYY',
+                //startView: 'years',
+                viewMode: 'years',
+                
+                minViewMode: 'years',
+                pickTime: false
+            });
       
       $('[data-toggle="confirmation"]').confirmation({
     href: function(elem){

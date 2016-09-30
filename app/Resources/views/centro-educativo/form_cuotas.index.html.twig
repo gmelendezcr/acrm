@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="col-md-12">                                            
+        <div class="table-responsive">
+            <h2 class="sin-margin text-center">
+                Registro de cuotas 
+            </h2>
+            <div class="capa-separador-1"></div>
+        <table class="table table-bordered">
+            <tbody> 
+                <tr>
+                    <td class="col-sm-2 bg-success text-right">
+                       <strong>
+                           Centro educativo:
+                       </strong>
+                    </td>
+                    <td>
+                        {{ce_show.nbrCentroEducativo}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    <div class="col-md-12">
+        <div class="header-control-general">
+            <form class="form-registro form-border" method="post" action="{{path('centro_educativo_cuota_guardar')}}">
+                <div class="form-group">
+                    <div class="form-group">                                
+                    <label for="departamentos">Grado</label>
+                    <input type="hidden" name="idce" id="idce" value="{{ce_show.IdCentroEducativo}}" />
+                    <select class="form-control input-3" id="grado" name="grado">
+                        <option>Seleccione uno</option>
+                        {% for nxg in nivelxgrado %}
+                            <optgroup label="{{ nxg.nbrNivelEducativo }}">
+                              
+                                       {% for grado in nxg.gradosEscolares %}
+                                            <option value="{{ grado.IdGradoEscolar }}">
+                                                {{ grado.nbrGradoEscolar }}
+                                            </option>
+                                        {% endfor %}
+                                   
+                              
+                            </optgroup>
+                        {% endfor %}
+                         
+                         
+                    </select>                                
+                </div>
+                    <div class = "input-group">
+                        <label for="matricula">Matrícula</label>
+                    </div>
+                    <div class = "input-group">
+                        <span class = "input-group-addon">$</span>
+                        <input type="text" class="form-control input-2" id="matricula" name="matricula" placeholder="Digite el costo de la matrícula">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class = "input-group">
+                        <label for="cuota">Cuota</label>
+                    </div>
+                    <div class = "input-group">
+                        <span class = "input-group-addon">$</span>
+                        <input type="text" class="form-control input-2" id="cuota" name="cuota" placeholder="Digite la cuota mensual">
+                    </div>
+                </div>
+                <div class="form-group">                                
+                    <label for="fechaAplicacion">Fecha</label>
+                    <div class='input-group date input-3' id='divanno'>
+                        <input type='text' id="anno" name="anno" class="form-control"  readonly/>
+                         <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                         </span>
+                    </div>                               
+                </div>
+                
+                <div class="form-group"> 
+                    <button type="submit" class="btn btn-success btn-md"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button>
+                </div>
+                
+                                                     
+            </form> 
+        </div>
+       
+    </div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="col-md-12">                                            
+        <div class="table-responsive">
+            <h2 class="sin-margin text-center">
+                Registro de cuotas 
+            </h2>
+            <div class="capa-separador-1"></div>
+            <table class="table table-bordered">
+                <tbody> 
+                    <tr>
+                        <td class="col-sm-2 bg-success text-right">
+                           <strong>
+                               Centro educativo:
+                           </strong>
+                        </td>
+                        <td>
+                            {#{{ce_show.nbrCentroEducativo}}#}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    <div class="col-md-12">
+        <div class="header-control-general">
+            <form class="form-registro form-border" method="post" action="">
+                <div class="form-group">
+                    {{  form_label(form.idGradoEscolarPorCentroEducativo)  }}
+                    {{ form_widget(form.idGradoEscolarPorCentroEducativo, {'attr': {'class': 'form-control input-3'}}) }}
+                    {{ form_errors(form.idGradoEscolarPorCentroEducativo) }}                           
+                </div>
+                <div class="form-group">
+                    {{  form_label(form.anno)  }}
+                    {{ form_widget(form.anno, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite el año'}}) }}
+                    {{ form_errors(form.anno) }}                           
+                </div>          
+            </form> 
+        </div>
+    </div>
+{% endblock %}

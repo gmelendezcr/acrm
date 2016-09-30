@@ -75,7 +75,48 @@ class UsuarioController extends Controller
      * Displays a form to edit an existing Usuario entity.
      *
      */
+     public function getRole() {
+    $role = $this->roles[0];
+    return $role;
+}
+
+public function setRole($role) {
+    $this->setRoles(array($role));
+}
+     
     public function editAction(Request $request, Usuario $usuario)
+    {
+       $request = $this->container->get('request');
+
+    //$formEditUser = $this->createForm(new ChangeUserRoleType());
+    $formEditUser = $this->createForm('AcreditacionBundle\Form\UsuarioType', $usuario);
+    $formEditUser->handleRequest($request);
+    if ($formEditUser->isValid()) {
+        $em = $this->getDoctrine()->getManager();
+      
+         $roles = $formEditUser->get('roles')->getData();
+         //$roles->addRole($roles['roles']['0']);
+        
+         
+            
+            $em->persist($roles);
+            $em->flush();
+         
+      
+    }
+    return $this->render('usuario/edit.html.twig', array(
+            'usuario' => $usuario,
+            'form' => $formEditUser->createView(),
+            
+        ));
+    
+    }
+    
+    
+    
+    /* copia editar usuario
+    
+      public function editAction(Request $request, Usuario $usuario)
     {
         $deleteForm = $this->createDeleteForm($usuario);
         $editForm = $this->createForm('AcreditacionBundle\Form\UsuarioType', $usuario);
@@ -94,7 +135,21 @@ class UsuarioController extends Controller
             'form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
-    }
+    }*/
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     /**
      * Deletes a Usuario entity.
