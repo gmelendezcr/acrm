@@ -198,4 +198,8 @@ class Departamento
     {
         return $this->municipios;
     }
+
+    public function __toString(){
+        return $this->nbrDepartamento;
+    }
 }

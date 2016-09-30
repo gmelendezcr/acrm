@@ -9,17 +9,31 @@
                 </tr>
                 <tr>
                     <td>
-                        <select class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control input-2' id='{{ id }}' name='{{ id }}' {{ maxLength }}>
+                        <input type='hidden' id='{{ id }}_hidden' name='{{ id }}_hidden' value='{{ ( respuestas[pregunta.idPregunta] is defined ? respuestas[pregunta.idPregunta] : null ) }}'>
+                        <select class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control input-2' id='{{ id }}' name='{{ id }}' {{ maxLength }} {{ ( pregunta.jsOnChange ? "onChange=\"" ~ pregunta.jsOnChange ~ "\"" : null )|raw }}>
                             {% for opcion in opciones %}
                                 {% if opcion %}
-                                    <option value='{{ opcion.codDetalleCatalogo }}'
-                                        {% if respuestas[pregunta.idPregunta] is defined and respuestas[pregunta.idPregunta]==opcion.codDetalleCatalogo %}
-                                            selected
-                                        {% endif %}
-                                    >{{ opcion.nbrDetalleCatalogo }}</option>
+                                    {% if respuestas[pregunta.idPregunta] is defined and respuestas[pregunta.idPregunta]==opcion.codDetalleCatalogo %}
+                                        {% set selected = 'selected' %}
+                                    {% else %}
+                                        {% set selected = '' %}
+                                    {% endif %}
+                                    <option value='{{ opcion.codDetalleCatalogo }}' {{ selected }}>{{ opcion.nbrDetalleCatalogo }}</option>
                                 {% endif %}
                             {% endfor %}
                         </select>
+                        {% if pregunta.jsCargar %}
+                            <script languaje='javascript'>
+                                setTimeout(function(){
+                                    {% if respuestas[pregunta.idPregunta] is defined %}
+                                        {% set selected = respuestas[pregunta.idPregunta] %}
+                                    {% else %}
+                                        {% set selected = '' %}
+                                    {% endif %}
+                                    {{ pregunta.jsCargar|replace({'selected': "'" ~ selected ~ "'"})|raw }}
+                                }, 1000);
+                            </script>
+                        {% endif %}
                     </td>
                 </tr>
             </tbody>

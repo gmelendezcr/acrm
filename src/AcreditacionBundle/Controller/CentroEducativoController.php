@@ -192,7 +192,31 @@ class CentroEducativoController extends Controller{
     /*Fin*/
     
     public function form_dig_corrAction(){
+        $session = new Session();
         $em = $this->getDoctrine()->getEntityManager();
+
+        $idFormularioPorCentroEducativo=$session->get('idFormularioPorCentroEducativo');
+        if($idFormularioPorCentroEducativo){
+            return $this->redirectToRoute('seccion_index');
+        }
+        else{
+            $forms=$em->createQueryBuilder()
+                ->select('f.idFormularioPorCentroEducativo')
+                ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'f')
+                ->join('f.idEstadoFormulario','e')
+                ->where('f.idUsuarioDigita=:idUsuarioDigita')
+                ->andWhere('e.codEstadoFormulario in (:codEstadoFormulario)')
+                ->orderBy('e.codEstadoFormulario','desc')
+                    ->setParameter('idUsuarioDigita',$this->getUser())
+                    ->setParameter('codEstadoFormulario',array('NU','DI'))
+                        ->getQuery()->getArrayResult();
+            if(is_array($forms) && isset($forms[0])){
+                $idFormularioPorCentroEducativo=$forms[0]['idFormularioPorCentroEducativo'];
+                $session->set('idFormularioPorCentroEducativo', $idFormularioPorCentroEducativo);
+                return $this->redirectToRoute('seccion_index');
+            }
+        }
+
         $lista_ced = $em->getRepository('AcreditacionBundle:CentroEducativo')->findAll();
         $lista_form = $em->getRepository('AcreditacionBundle:Formulario')->findAll();
         //$lista_form_estado = $em->getRepository('AcreditacionBundle:EstadoFormulario')->findAll();
@@ -205,7 +229,18 @@ class CentroEducativoController extends Controller{
     
     public function form_lista_revisarAction(){
         $em = $this->getDoctrine()->getEntityManager();
-        $lista = $em->getRepository('AcreditacionBundle:CentroEducativo')->findAll();
+        $lista=$em->createQueryBuilder()
+            ->select('fce.idFormularioPorCentroEducativo, c.codCentroEducativo, c.nbrCentroEducativo, c.direccionCentroEducativo,
+                f.codFormulario, f.nbrFormulario, u.nombres, u.apellidos, e.codEstadoFormulario, e.nbrEstadoFormulario')
+            ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'fce')
+            ->join('fce.idCentroEducativo','c')
+            ->join('fce.idFormulario','f')
+            ->join('fce.idEstadoFormulario','e')
+            ->join('fce.idUsuarioDigita','u')
+            ->andWhere('e.codEstadoFormulario in (:codEstadoFormulario)')
+            ->orderBy('e.codEstadoFormulario','desc')
+                ->setParameter('codEstadoFormulario',array('TE','AP'))
+                    ->getQuery()->getArrayResult();
         //var_dump($lista);
         return $this->render('centro-educativo/form_lista_revisar.index.html.twig',array(
             'lista'=>$lista    
@@ -234,7 +269,10 @@ class CentroEducativoController extends Controller{
         $formularioPorCentroEducativo->setIdFormulario($em->getRepository('AcreditacionBundle:Formulario')->find($idFormulario));
         $formularioPorCentroEducativo->setLugarAplicacion($lugarAplicacion);
         $formularioPorCentroEducativo->setFechaAplicacion(new \DateTime($fechaAplicacion));
-        $formularioPorCentroEducativo->setIdUsuarioDigita($em->getRepository('AcreditacionBundle:Usuario')->find($this->getUser()->getId()));
+        $formularioPorCentroEducativo->setIdUsuarioDigita($this->getUser());
+        $formularioPorCentroEducativo->setIdEstadoFormulario($em->getRepository('AcreditacionBundle:EstadoFormulario')->findOneBy(array(
+            'codEstadoFormulario' => 'NU',
+        )));
         $em->persist($formularioPorCentroEducativo);
         $em->flush();
 

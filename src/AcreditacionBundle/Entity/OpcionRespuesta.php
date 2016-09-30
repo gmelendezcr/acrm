@@ -60,6 +60,13 @@ class OpcionRespuesta
     /**
      * @var string
      *
+     * @ORM\Column(name="PONDERACION", type="decimal", precision=6, scale=2, nullable=true)
+     */
+    private $ponderacion;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="ACTIVO", type="string", length=1, columnDefinition="CHAR(1) NOT NULL DEFAULT 'S' CHECK (ACTIVO IN ('S','N'))")
      */
     private $activo;
@@ -201,6 +208,29 @@ class OpcionRespuesta
     public function getEncabezadoOpciones()
     {
         return $this->encabezadoOpciones;
+    }
+
+    /**
+     * Set ponderacion
+     *
+     * @param string $ponderacion
+     * @return OpcionRespuesta
+     */
+    public function setPonderacion($ponderacion)
+    {
+        $this->ponderacion = $ponderacion;
+
+        return $this;
+    }
+
+    /**
+     * Get ponderacion
+     *
+     * @return string
+     */
+    public function getPonderacion()
+    {
+        return $this->ponderacion;
     }
 
     /**

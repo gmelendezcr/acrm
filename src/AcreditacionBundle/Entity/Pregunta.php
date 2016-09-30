@@ -44,20 +44,26 @@ class Pregunta
     private $descripcionPregunta;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="JS_CARGAR", type="string", length=100, nullable=true)
+     */
+    private $jsCargar;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="JS_ON_CHANGE", type="string", length=100, nullable=true)
+     */
+    private $jsOnChange;
+
+    /**
      * @var int
      *
      * @ORM\ManyToOne(targetEntity="TipoPregunta", inversedBy="preguntas")
      * @ORM\JoinColumn(name="ID_TIPO_PREGUNTA",referencedColumnName="ID_TIPO_PREGUNTA")
      */
     private $idTipoPregunta;
-
-    /**
-     * @var int
-     *
-     * @ORM\ManyToOne(targetEntity="Catalogo", inversedBy="preguntas")
-     * @ORM\JoinColumn(name="ID_CATALOGO",referencedColumnName="ID_CATALOGO")
-     */
-    private $idCatalogo;
 
     /**
      * @var int
@@ -341,6 +347,52 @@ class Pregunta
     }
 
     /**
+     * Set jsCargar
+     *
+     * @param string $jsCargar
+     * @return Pregunta
+     */
+    public function setJsCargar($jsCargar)
+    {
+        $this->jsCargar = $jsCargar;
+
+        return $this;
+    }
+
+    /**
+     * Get jsCargar
+     *
+     * @return string
+     */
+    public function getJsCargar()
+    {
+        return $this->jsCargar;
+    }
+
+    /**
+     * Set jsOnChange
+     *
+     * @param string $jsOnChange
+     * @return Pregunta
+     */
+    public function setJsOnChange($jsOnChange)
+    {
+        $this->jsOnChange = $jsOnChange;
+
+        return $this;
+    }
+
+    /**
+     * Get jsOnChange
+     *
+     * @return string
+     */
+    public function getJsOnChange()
+    {
+        return $this->jsOnChange;
+    }
+
+    /**
      * Set idTipoPregunta
      *
      * @param  \AcreditacionBundle\Entity\TipoPregunta $idTipoPregunta
@@ -361,30 +413,6 @@ class Pregunta
     public function getIdTipoPregunta()
     {
         return $this->idTipoPregunta;
-    }
-
-
-    /**
-     * Set idCatalogo
-     *
-     * @param  \AcreditacionBundle\Entity\Catalogo $idCatalogo
-     * @return Pregunta
-     */
-    public function setIdCatalogo(\AcreditacionBundle\Entity\Catalogo $idCatalogo)
-    {
-        $this->idCatalogo = $idCatalogo;
-
-        return $this;
-    }
-
-    /**
-     * Get idCatalogo
-     *
-     * @return \AcreditacionBundle\Entity\Catalogo
-     */
-    public function getIdCatalogo()
-    {
-        return $this->idCatalogo;
     }
 
     /**
@@ -782,7 +810,7 @@ class Pregunta
      * Set ponderacion
      *
      * @param string $ponderacion
-     * @return borrar
+     * @return Pregunta
      */
     public function setPonderacion($ponderacion)
     {
@@ -805,7 +833,7 @@ class Pregunta
      * Set valorEsperado
      *
      * @param string $valorEsperado
-     * @return borrar
+     * @return Pregunta
      */
     public function setValorEsperado($valorEsperado)
     {
@@ -828,7 +856,7 @@ class Pregunta
      * Set idPreguntaCastiga
      *
      * @param integer $idPreguntaCastiga
-     * @return borrar
+     * @return Pregunta
      */
     public function setIdPreguntaCastiga($idPreguntaCastiga)
     {
@@ -851,7 +879,7 @@ class Pregunta
      * Set ponderacionCastiga
      *
      * @param string $ponderacionCastiga
-     * @return borrar
+     * @return Pregunta
      */
     public function setPonderacionCastiga($ponderacionCastiga)
     {
@@ -874,7 +902,7 @@ class Pregunta
      * Set ponderacionMaxima
      *
      * @param string $ponderacionMaxima
-     * @return borrar
+     * @return Pregunta
      */
     public function setPonderacionMaxima($ponderacionMaxima)
     {
@@ -897,7 +925,7 @@ class Pregunta
      * Set formulaPonderacion
      *
      * @param string $formulaPonderacion
-     * @return borrar
+     * @return Pregunta
      */
     public function setFormulaPonderacion($formulaPonderacion)
     {

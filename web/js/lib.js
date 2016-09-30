@@ -51,3 +51,32 @@ function digitarCorregirCargarFormulario(){
   }
   return true;
 }
+
+function cargarDepartamentos(comboDepartamento,selected,comboMunicipio,municipioHidden){
+  $.ajax({
+    method: 'GET',
+    url: '/app_dev.php/departamento/comboDepartamento',
+    success: function(html){
+      comboDepartamento.html(html);
+      comboDepartamento.val(selected);
+      if(!comboMunicipio.val() && municipioHidden.val()){
+        cargarMunicipios(comboDepartamento.val(),comboMunicipio,municipioHidden.val());
+      }
+    }
+  });
+}
+
+function cargarMunicipios(idDepartamento,comboMunicipio,selected){
+  $.ajax({
+    method: 'POST',
+    url: '/app_dev.php/municipio/comboMunicipio',
+    data: {
+      'idDepartamento': idDepartamento,
+      'idMunicipio': selected
+    },
+    success: function(html){
+      comboMunicipio.html(html);
+      comboMunicipio.val(selected);
+    }
+  });
+}

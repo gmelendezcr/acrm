@@ -24,7 +24,10 @@
                         </td>
                     {% endif %}
                 </tr>
+                {% set sumaColumnas = '' %}
+                {% set subTotalColumnaId = "total_" ~ pregunta.idTipoPregunta.codTipoPregunta ~ "_" ~ pregunta.idPregunta %}
                 {% for subPregunta in pregunta.subPreguntas %}
+                    {% set subId = "idFila_idColumna" ~ subPregunta.idPregunta %}
                     {% if subPregunta.encabezadoSubPreguntas %}
                         <tr>
                             <td colspan={{ colspanDescripcion + 1 }}>
@@ -39,6 +42,16 @@
                             </td>
                         {% endif %}
                         {% include 'pregunta/showAsForm.html.twig' with {'pregunta': subPregunta, 'respuestas': respuestas} %}
+                        {% if pregunta.totalesColumnas == 'S' %}
+                            {% set sumaColumnas = sumaColumnas ~ "$('#" ~ subTotalColumnaId ~ "_S').val(
+                                ($.isNumeric($('#" ~ subTotalColumnaId ~ "_S').val())?parseFloat($('#" ~ subTotalColumnaId ~ "_S').val()):0)+
+                                ($('#" ~ subId ~ "_S').prop('checked')?1:0)
+                            ); " %}
+                            {% set sumaColumnas = sumaColumnas ~ "$('#" ~ subTotalColumnaId ~ "_N').val(
+                                ($.isNumeric($('#" ~ subTotalColumnaId ~ "_N').val())?parseFloat($('#" ~ subTotalColumnaId ~ "_N').val()):0)+
+                                ($('#" ~ subId ~ "_N').prop('checked')?1:0)
+                            ); " %}
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 {% if pregunta.totalesColumnas == 'S' %}
@@ -47,12 +60,25 @@
                             Total
                         </td>
                         <td>
-                            <input type='text' id='total_{{ pregunta.idTipoPregunta.codTipoPregunta }}_{{ pregunta.idPregunta }}_si' readonly>
-                            <input type='text' id='total_{{ pregunta.idTipoPregunta.codTipoPregunta }}_{{ pregunta.idPregunta }}_no' readonly>
+                            <input type='text' id='{{ subTotalColumnaId }}_S' readonly>
+                            <input type='text' id='{{ subTotalColumnaId }}_N' readonly>
                         </td>
                     </tr>
                 {% endif %}
             </tbody>
         </table>
+        {% if pregunta.totalesColumnas == 'S' %}
+            <script languaje='javascript'>
+                function calcularTotalesPregunta{{ pregunta.idTipoPregunta.codTipoPregunta ~ pregunta.idPregunta }}(control){
+                    if(control && control.attr('type')=='text' && !$.isNumeric(control.val())){
+                        control.val('');
+                    }
+                    $('#{{ subTotalColumnaId }}_S').val(0);
+                    $('#{{ subTotalColumnaId }}_N').val(0);
+                    {{ sumaColumnas|raw }}
+                }
+                setTimeout(function(){ calcularTotalesPregunta{{ pregunta.idTipoPregunta.codTipoPregunta ~ pregunta.idPregunta }}(null); }, 1000);
+            </script>
+        {% endif %}
     </div>
 </div>

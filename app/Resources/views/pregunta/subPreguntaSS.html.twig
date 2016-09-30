@@ -1,6 +1,11 @@
 <td>
     {{ pregunta.descripcionPregunta }}
 </td>
+{% if pregunta.idPreguntaPadre.totalesFilas == 'S' or pregunta.idPreguntaPadre.totalesColumnas == 'S' %}
+    {% set onChange = 'calcularTotalesPregunta' ~ pregunta.idPreguntaPadre.idTipoPregunta.codTipoPregunta ~ pregunta.idPreguntaPadre.idPregunta ~ '($(this));' %}
+{% else %}
+    {% set onChange = '' %}
+{% endif %}
 <td class="col-xs-2">
     {% for opcion in opciones %}
         {% if opcion.texto %}
@@ -10,8 +15,7 @@
                 {% set checked = '' %}
             {% endif %}
             <label class="checkbox-inline btn btn-info">
-            <input type='radio' class='subPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}'
-                value='{{ opcion.codigo }}' {{ checked }}> {{ opcion.texto }}
+            <input type='radio' class='subPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}_{{ opcion.codigo }}' name='{{ id }}' onChange='{{ onChange }}' value='{{ opcion.codigo }}' {{ checked }}> {{ opcion.texto }}
                 </label>
         {% endif %}
     {% endfor %}

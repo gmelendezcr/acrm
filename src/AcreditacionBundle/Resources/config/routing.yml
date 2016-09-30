@@ -1,3 +1,11 @@
+departamento:
+    resource: "@AcreditacionBundle/Resources/config/routing/departamento.yml"
+    prefix:   /departamento
+
+municipio:
+    resource: "@AcreditacionBundle/Resources/config/routing/municipio.yml"
+    prefix:   /municipio
+
 acreditacion_pregunta:
     resource: "@AcreditacionBundle/Resources/config/routing/pregunta.yml"
     prefix:   /pregunta

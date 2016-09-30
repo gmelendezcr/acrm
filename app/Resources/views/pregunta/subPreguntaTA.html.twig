@@ -7,7 +7,7 @@
     </div>
 {% endif %}
 {% if pregunta.idPreguntaPadre.totalesFilas == 'S' or pregunta.idPreguntaPadre.totalesColumnas == 'S' %}
-    {% set onChange = 'calcularTotalesPregunta' ~ pregunta.idPreguntaPadre.idTipoPregunta.codTipoPregunta ~ pregunta.idPreguntaPadre.idPregunta ~ '();' %}
+    {% set onChange = 'calcularTotalesPregunta' ~ pregunta.idPreguntaPadre.idTipoPregunta.codTipoPregunta ~ pregunta.idPreguntaPadre.idPregunta ~ '($(this));' %}
 {% else %}
     {% set onChange = '' %}
 {% endif %}

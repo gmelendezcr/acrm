@@ -1,0 +1,4 @@
+combo_departamento:
+    path:     /comboDepartamento
+    defaults: { _controller: "AcreditacionBundle:Departamento:comboDepartamento" }
+    methods:  GET

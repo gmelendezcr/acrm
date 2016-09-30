@@ -23,9 +23,9 @@
                         </th>
                     {% endif %}
                 </tr>
-                {% set sumaFila, sumaFilas, ceroColumnas, sumaColumnas, existePreguntaSiNo = '', '', '', '', false %}
+                {% set sumaFila, sumaFila2, sumaFilas, ceroColumnas, sumaColumnas, existePreguntaSiNo = '', '', '', '', '', false %}
                 {% for fila in columnaFija.opcionesRespuesta %}
-                    {% set sumaFila, ceroColumnas = '', '' %}
+                    {% set sumaFila, sumaFila2, ceroColumnas = '', '', '' %}
                     {% if fila.encabezadoOpciones %}
                         <tr>
                             <th colspan={{ pregunta.subPreguntas|length + (pregunta.totalesFilas == 'S' or pregunta.totalesColumnas == 'S' ? 1 : 0) }}>
@@ -38,32 +38,55 @@
                             {{ fila.descripcionOpcionRespuesta }}
                         </th>
                         {% for subPregunta in pregunta.subPreguntas %}
+                            {% set subId = "idFila" ~ fila.idOpcionRespuesta ~ "_idColumna" ~ subPregunta.idPregunta %}
                             {% if subPregunta.idTipoPregunta.codTipoPregunta == 'SN' %}
                                 {% set existePreguntaSiNo = true %}
                             {% endif %}
                             {% if subPregunta.idTipoPregunta.codTipoPregunta != 'CF' %}
                                 <td>
                                     {% include 'pregunta/showAsForm.html.twig' with {'pregunta': subPregunta, 'respuestas': respuestas, 'idFila': fila.idOpcionRespuesta} %}
-                                    {% set sumaFila = sumaFila ~ "+parseInt($('#idFila" ~ fila.idOpcionRespuesta ~ "_idColumna" ~ subPregunta.idPregunta ~ "').val())" %}
-                                    {% set ceroColumnas = ceroColumnas ~ "$('#subtotalColumna_" ~ subPregunta.idPregunta ~ "').val(0); " %}
-                                    {% set sumaColumnas = sumaColumnas ~ "$('#subtotalColumna_" ~ subPregunta.idPregunta ~ "').val(parseInt($('#subtotalColumna_" ~ subPregunta.idPregunta ~ "').val())+parseInt($('#idFila" ~ fila.idOpcionRespuesta ~ "_idColumna" ~ subPregunta.idPregunta ~ "').val())); " %}
+                                    {% if pregunta.totalesFilas == 'S' %}
+                                        {% if subPregunta.idTipoPregunta.codTipoPregunta == 'TA' %}
+                                            {% set sumaFila = sumaFila ~ "+($.isNumeric($('#" ~ subId ~ "').val())?parseFloat($('#" ~ subId ~ "').val()):0)" %}
+                                        {% elseif subPregunta.idTipoPregunta.codTipoPregunta == 'SN' %}
+                                            {% set sumaFila = sumaFila ~ "+($('#" ~ subId ~ "_S').prop('checked')?1:0)" %}
+                                            {% set sumaFila2 = sumaFila2 ~ "+($('#" ~ subId ~ "_N').prop('checked')?1:0)" %}
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if pregunta.totalesColumnas == 'S' %}
+                                        {% set subTotalColumnaId = "subtotalColumna_" ~ subPregunta.idPregunta %}
+                                        {% set ceroColumnas = ceroColumnas ~ "$('#" ~ subTotalColumnaId ~ "').val(0); " %}
+                                        {% if subPregunta.idTipoPregunta.codTipoPregunta == 'TA' %}
+                                            {% set sumaColumnas = sumaColumnas ~ "$('#" ~ subTotalColumnaId ~ "').val(
+                                                ($.isNumeric($('#" ~ subTotalColumnaId ~ "').val())?parseFloat($('#" ~ subTotalColumnaId ~ "').val()):0)+
+                                                ($.isNumeric($('#" ~ subId ~ "').val())?parseFloat($('#" ~ subId ~ "').val()):0)
+                                            ); " %}
+                                        {% elseif subPregunta.idTipoPregunta.codTipoPregunta == 'SN' %}
+                                            {% set sumaColumnas = sumaColumnas ~ "$('#" ~ subTotalColumnaId ~ "').val(
+                                                ($.isNumeric($('#" ~ subTotalColumnaId ~ "').val())?parseFloat($('#" ~ subTotalColumnaId ~ "').val()):0)+
+                                                ($('#" ~ subId ~ "_S').prop('checked')?1:0)
+                                            ); " %}
+                                        {% endif %}
+                                    {% endif %}
                                 </td>
                             {% endif %}
                         {% endfor %}
                         {% if pregunta.totalesFilas == 'S' %}
                             <td>
                                 {% if existePreguntaSiNo %}
+                                    {% set sumaFila = "$('#subtotalFila_" ~ fila.idOpcionRespuesta ~ "_si').val(0" ~ sumaFila ~ "); " %}
+                                    {% set sumaFila2 = "$('#subtotalFila_" ~ fila.idOpcionRespuesta ~ "_no').val(0" ~ sumaFila2 ~ "); " %}
                                     <input class="form-control" type='text' id='subtotalFila_{{ fila.idOpcionRespuesta }}_si' readonly>
                                     <input class="form-control" type='text' id='subtotalFila_{{ fila.idOpcionRespuesta }}_no' readonly>
                                 {% else %}
+                                    {% set sumaFila = "$('#subtotalFila_" ~ fila.idOpcionRespuesta ~ "').val(0" ~ sumaFila ~ "); " %}
                                     <input class="form-control" type='text' id='subtotalFila_{{ fila.idOpcionRespuesta }}' readonly>
                                 {% endif %}
-                                {% set sumaFila = "$('#subtotalFila_" ~ fila.idOpcionRespuesta ~ "').val(0" ~ sumaFila ~ "); " %}
+                                {% set sumaFilas = sumaFilas ~ sumaFila ~ sumaFila2 %}
                                 {% set ceroColumnas = ceroColumnas ~ "$('#total_" ~ pregunta.idTipoPregunta.codTipoPregunta ~ '_' ~ pregunta.idPregunta ~ "').val(0); " %}
                             </td>
                         {% endif %}
                     </tr>
-                    {% set sumaFilas = sumaFilas ~ sumaFila %}
                 {% endfor %}
                 {% if pregunta.totalesColumnas == 'S' %}
                     <tr>
@@ -74,7 +97,9 @@
                             {% if subPregunta.idTipoPregunta.codTipoPregunta != 'CF' %}
                                 <td>
                                     <input class="form-control" type='text' id='subtotalColumna_{{ subPregunta.idPregunta }}' readonly>
-                                    {% set sumaColumnas = sumaColumnas ~ "$('#total_" ~ pregunta.idTipoPregunta.codTipoPregunta ~ '_' ~ pregunta.idPregunta ~ "').val(parseInt($('#total_" ~ pregunta.idTipoPregunta.codTipoPregunta ~ '_' ~ pregunta.idPregunta ~ "').val())+parseInt($('#subtotalColumna_" ~ subPregunta.idPregunta ~ "').val())); " %}
+                                    {% if pregunta.totalesFilas == 'S' %}
+                                        {% set sumaColumnas = sumaColumnas ~ "$('#total_" ~ pregunta.idTipoPregunta.codTipoPregunta ~ '_' ~ pregunta.idPregunta ~ "').val(parseInt($('#total_" ~ pregunta.idTipoPregunta.codTipoPregunta ~ '_' ~ pregunta.idPregunta ~ "').val())+parseInt($('#subtotalColumna_" ~ subPregunta.idPregunta ~ "').val())); " %}
+                                    {% endif %}
                                 </td>
                             {% endif %}
                         {% endfor %}
@@ -89,14 +114,19 @@
         </table>
         {% if pregunta.totalesFilas == 'S' or pregunta.totalesColumnas == 'S' %}
             <script languaje='javascript'>
-                function calcularTotalesPregunta{{ pregunta.idTipoPregunta.codTipoPregunta ~ pregunta.idPregunta }}(){
-                    {% autoescape false %}
-                        {{ sumaFilas }}
-                        {{ ceroColumnas }}
-                        {{ sumaColumnas }}
-                    {% endautoescape %}
+                function calcularTotalesPregunta{{ pregunta.idTipoPregunta.codTipoPregunta ~ pregunta.idPregunta }}(control){
+                    if(control && control.attr('type')=='text' && !$.isNumeric(control.val())){
+                        control.val('');
+                    }
+                    {% if pregunta.totalesFilas == 'S' %}
+                        {{ sumaFilas|raw }}
+                    {% endif %}
+                    {% if pregunta.totalesColumnas == 'S' %}
+                        {{ ceroColumnas|raw }}
+                        {{ sumaColumnas|raw }}
+                    {% endif %}
                 }
-                setTimeout(function(){ calcularTotalesPregunta{{ pregunta.idTipoPregunta.codTipoPregunta ~ pregunta.idPregunta }}(); }, 1000);
+                setTimeout(function(){ calcularTotalesPregunta{{ pregunta.idTipoPregunta.codTipoPregunta ~ pregunta.idPregunta }}(null); }, 1000);
             </script>
         {% endif %}
     </div>

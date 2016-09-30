@@ -14,10 +14,10 @@
                                 <input type='checkbox' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica'
                                 id='{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica_{{ pregunta.idPregunta }}'
                                 name='{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica_{{ pregunta.idPregunta }}'
-                                onClick="$('#{{ id }}').prop('disabled',!$('#{{ id }}').prop('disabled'));"> {{ pregunta.opcionNoAplicaTexto }}
+                                onClick="$('#{{ id }}').prop('disabled',!$('#{{ id }}').prop('disabled')); if($(this).prop('checked')){ $('#{{ id }}').val(''); }"> {{ pregunta.opcionNoAplicaTexto }}
                             </label>
                             {% endif %}
-                            <textarea class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control' id='{{ id }}' name='{{ id }}' {{ maxLength }}>{{ respuestas[pregunta.idPregunta] ?? null }}</textarea>
+                            <textarea class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control' id='{{ id }}' name='{{ id }}' {{ maxLength }} {{ regExp|raw }} {{ (regExp ? "onBlur=\"if(!$('#" ~ id ~ "').val().match($('#" ~ id ~ "').attr('regExp'))){ $('#" ~ id ~ "').addClass('noValido'); } else { $('#" ~ id ~ "').removeClass('noValido'); }\";" : '')|raw }}>{{ respuestas[pregunta.idPregunta] ?? null }}</textarea>
                     </td>
                 </tr>
             </tbody>

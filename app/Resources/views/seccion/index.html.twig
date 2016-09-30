@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block body %}
+    <!--
     <div class="col-md-12 text-center">                                            
         <h2 class="sin-margin">
             Secciones
@@ -7,13 +8,14 @@
         <div class="clearfix capa-separador-1 border-bottom"></div>
         <div class="capa-separador-1"></div>
     </div>
+    -->
     
     <div class="col-md-12">
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
                 <tbody>
                     <tr>
-                        <td class="col-sm-2 success"><strong>Código:</strong> </td><td clas="col-sm-10"></td>
+                        <td class="col-sm-2 success"><strong>Código:</strong> </td><td clas="col-sm-10">{{ app.session.get('codCentroEducativo') }}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-2 success"><strong>Centro educativo:</strong> </td><td clas="col-sm-10">{{ app.session.get('nbrCentroEducativo') }}</td>
@@ -51,7 +53,14 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <a class="btn btn-info" href="{{ path('seccion_show', { 'id': seccion.idSeccion }) }}">Mostrar</a>
+                                {% if soloLectura %}
+                                    <form id="mostrarSeccion{{ seccion.idSeccion }}" action="{{ path('seccion_index') }}" method="post">
+voy! falta el form por post
+                                        <input type="hidden" name="idSeccionRevisar" value="{{ seccion.idSeccion }}">
+                                    </form>
+                                {% else %}
+                                    <a class="btn btn-info" href="{{ path('seccion_show', { 'id': seccion.idSeccion }) }}">Mostrar</a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
@@ -59,4 +68,9 @@
             </table>
         </div>
     </div>
+    <form id="secciones" method="POST" action="{{ path('seccion_terminar') }}">
+        <div class="col-md-12 text-right">
+            <input type="submit" name="Terminar" value="Terminar" class="btn btn-success">
+        </div>
+    </form>
 {% endblock %}

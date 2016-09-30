@@ -34,51 +34,41 @@
                                     </tr> 
                                 </thead> 
                                 <tbody>
-                                   
-                                    <tr> 
-                                        <td>
-                                            20066
-                                        </td> 
-                                        <td>
-                                            Liceo Cristiano Revendo Juan Bueno de Santa Ana
-                                        </td> 
-                                        <td>
-                                            INSTRUMENTO DE EVALUACIÓN INSTITUCIONAL DE CENTROS EDUCATIVOS PRIVADA PARVULARIA
-                                        </td>
-                                        <td>
-                                              Gerardo Meléndez
-                                        </td>
-                                        <td class="text-center">
-                                            Terminado
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="" class="btn btn-success btn-block">Aprobar</a>
-                                            <a href="" class="btn btn-warning btn-block">Rechazar</a>
-                                            <a href=""  class="btn btn-info btn-block">Mostrar</a>
-                                        </td>
-                                    </tr>
-                                    
-                                    <tr> 
-                                        <td>
-                                            200667
-                                        </td> 
-                                        <td>
-                                            Liceo Cristiano Revendo Juan Bueno de San Salvador, Soyapango
-                                        </td> 
-                                        <td>
-                                            INSTRUMENTO DE EVALUACIÓN INSTITUCIONAL DE CENTROS EDUCATIVOS PRIVADOS BASICA Y MEDIA
-                                        </td>
-                                        <td>
-                                              José Soriano
-                                        </td>
-                                        <td class="text-center">
-                                          <span class="glyphicon glyphicon-ok btn btn-success" data-toggle="tooltip" data-placement="top" title="Aprobado"></span> Aprobado
-                                        </td>
-                                        <td class="text-center">
-                                          
-                                        </td>
-                                    </tr>
-                                    
+
+                                    {% for form in lista %}
+                                        <tr> 
+                                            <td>
+                                                {{ form.codCentroEducativo }}
+                                            </td> 
+                                            <td>
+                                                {{ form.nbrCentroEducativo ~ (form.direccionCentroEducativo ? ', ' ~ form.direccionCentroEducativo : null) }}
+                                            </td> 
+                                            <td>
+                                                {{ form.nbrFormulario }}
+                                            </td>
+                                            <td>
+                                                {{ form.nombres ~ ' ' ~ form.apellidos }}
+                                            </td>
+                                            <td class="text-center">
+                                                {% if form.codEstadoFormulario == 'TE' %}
+                                                    {{ form.nbrEstadoFormulario }}
+                                                {% elseif form.codEstadoFormulario == 'AP' %}
+                                                    <span class="glyphicon glyphicon-ok btn btn-success" data-toggle="tooltip" data-placement="top" title="Aprobado"></span> Aprobado
+                                                {% endif %}
+                                            </td>
+                                            <td class="text-center">
+                                                <form id="mostrarSecciones{{ form.idFormularioPorCentroEducativo }}" action="{{ path('seccion_index') }}" method="post">
+                                                    <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ form.idFormularioPorCentroEducativo }}">
+                                                </form>
+                                                <a href="#" onClick="$('#mostrarSecciones{{ form.idFormularioPorCentroEducativo }}').submit();" class="btn btn-info btn-block">Mostrar</a>
+                                                {% if form.codEstadoFormulario == 'TE' %}
+                                                    <a href="" class="btn btn-success btn-block">Aprobar</a>
+                                                    <a href="" class="btn btn-warning btn-block">Rechazar</a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+
                                 </tbody> 
                             </table>
                         </div>

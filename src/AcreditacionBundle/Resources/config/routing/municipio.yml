@@ -1,0 +1,4 @@
+combo_municipio:
+    path:     /comboMunicipio
+    defaults: { _controller: "AcreditacionBundle:Municipio:comboMunicipio" }
+    methods:  POST

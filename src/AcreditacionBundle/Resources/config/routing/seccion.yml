@@ -1,7 +1,7 @@
 seccion_index:
     path:     /
     defaults: { _controller: "AcreditacionBundle:Seccion:index" }
-    methods:  GET
+    methods:  GET|POST
 
 seccion_show:
     path:     /{id}/show
@@ -11,4 +11,9 @@ seccion_show:
 seccion_guardar:
     path:     /guardar
     defaults: { _controller: "AcreditacionBundle:Seccion:guardar" }
+    methods:  POST
+
+seccion_terminar:
+    path:     /terminar
+    defaults: { _controller: "AcreditacionBundle:Seccion:terminar" }
     methods:  POST

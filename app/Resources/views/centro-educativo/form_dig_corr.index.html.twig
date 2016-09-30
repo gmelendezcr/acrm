@@ -16,7 +16,7 @@
                         <select class="form-control" id="centrosEducativos" name="centrosEducativos">
                             <option>Seleccione uno</option>
                             {% for ced in lista_ced %}
-                            <option value="{{ ced.idCentroEducativo }}">{{ ced.nbrCentroEducativo }}</option>
+                            <option value="{{ ced.idCentroEducativo }}">{{ ced.codCentroEducativo ~ ' ' ~ ced.nbrCentroEducativo }}</option>
                              {% endfor %}                             
                         </select>                                
                     </div>
@@ -31,7 +31,7 @@
                         <select class="form-control" id="formularios" name="formularios">
                             <option>Seleccione uno</option>
                             {% for form in lista_form %}
-                            <option value="{{ form.idFormulario }}">{{ form.nbrFormulario }}</option>
+                            <option value="{{ form.idFormulario }}">{{ form.codFormulario ~ ' ' ~ form.nbrFormulario }}</option>
                              {% endfor %}                             
                         </select>                                
                     </div>

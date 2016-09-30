@@ -4,6 +4,7 @@
 
 
 
+{% set regExp = null %}
 {% set opciones = null %}
 {% set maxLength = null %}
 {% set datePicker = null %}
@@ -14,6 +15,9 @@
 
 
 
+{% if pregunta.textoMascara %}
+    {% set regExp = "regExp='" ~ pregunta.textoMascara ~ "'" %}
+{% endif %}
 {% if pregunta.textoLongitudMaxima %}
     {% set maxLength = "maxlength=" ~ pregunta.textoLongitudMaxima %}
 {% endif %}
@@ -27,9 +31,6 @@
     {% set opciones = opcionesSiNo %}
 
 {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'CA' %}
-
-    {% set opciones = pregunta.idCatalogo.detallesCatalogo|merge(pregunta.opcionOtro ?
-        [{'codDetalleCatalogo': pregunta.opcionOtroTexto, 'nbrDetalleCatalogo': pregunta.opcionOtroTexto}] : []) %}
 
 {% elseif pregunta.idTipoPregunta.codTipoPregunta == 'FE' %}
 
@@ -86,9 +87,15 @@
     {% set vars = {
         'pregunta': pregunta, 'id': id,
         'opciones': opciones ?? null,
-        'colspanDescripcion': colspanDescripcion ?? 1, 'maxLength': maxLength ?? null, 'datePicker': datePicker ?? '',
+        'colspanDescripcion': colspanDescripcion ?? 1, 'js': pregunta.js ?? null, 'regExp': regExp ?? null, 'maxLength': maxLength ?? null, 'datePicker': datePicker ?? '',
         'idFila': idFila ?? null, 'numerarSubPreguntas': numerarSubPreguntas ?? null
     } %}
+
+    {#
+    {{ pregunta.codPregunta ? 'código: ' ~ pregunta.codPregunta : pregunta.descripcionPregunta }}
+    <b>ponderación:</b> {% if ponderaciones[pregunta.idPregunta] is defined and ponderaciones[pregunta.idPregunta] is not iterable %} {{ ponderaciones[pregunta.idPregunta] }} {% endif %}
+    <br />
+    #}
 
     {% include 'pregunta/' ~ (pregunta.idPreguntaPadre ? 'sub' : 'tipo') ~ 'Pregunta' ~ 
         tipoPreguntaTwig ?? pregunta.idTipoPregunta.codTipoPregunta ~ '.html.twig' with vars %}

@@ -48,23 +48,9 @@ class RespuestaPorFormularioPorCentroEducativo
     /**
      * @var string
      *
-     * @ORM\Column(name="VALOR_RESPUESTA", type="string", length=5000)
+     * @ORM\Column(name="VALOR_RESPUESTA", type="string", length=5000, nullable=true)
      */
     private $valorRespuesta;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="OPCION_OTRO", type="string", length=1, nullable=true)
-     */
-    private $opcionOtro;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="OPCION_NO_APLICA", type="string", length=1, nullable=true)
-     */
-    private $opcionNoAplica;
 
     /**
      * @var string
@@ -181,52 +167,6 @@ class RespuestaPorFormularioPorCentroEducativo
     public function getValorRespuesta()
     {
         return $this->valorRespuesta;
-    }
-
-    /**
-     * Set opcionOtro
-     *
-     * @param string $opcionOtro
-     * @return RespuestaPorFormularioPorCentroEducativo
-     */
-    public function setOpcionOtro($opcionOtro)
-    {
-        $this->opcionOtro = $opcionOtro;
-
-        return $this;
-    }
-
-    /**
-     * Get opcionOtro
-     *
-     * @return string 
-     */
-    public function getOpcionOtro()
-    {
-        return $this->opcionOtro;
-    }
-
-    /**
-     * Set opcionNoAplica
-     *
-     * @param string $opcionNoAplica
-     * @return RespuestaPorFormularioPorCentroEducativo
-     */
-    public function setOpcionNoAplica($opcionNoAplica)
-    {
-        $this->opcionNoAplica = $opcionNoAplica;
-
-        return $this;
-    }
-
-    /**
-     * Get opcionNoAplica
-     *
-     * @return string 
-     */
-    public function getOpcionNoAplica()
-    {
-        return $this->opcionNoAplica;
     }
 
     /**
