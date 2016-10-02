@@ -44,11 +44,11 @@
                     </label>
                 </div>
                 <div class="form-group">
-                    {{ form_label(form.roles[0]) }}
-                    {{ form_widget(form.roles[0]) }}
-                    {% if form.roles[1] is defined %}
-                        {% do form.roles[1].setRendered %}
-                    {% endif %}
+                    {#{{ form_label(form.roles[0]) }}#}
+                    {#{{ form_widget(form.roles[0]) }}#}
+                    {#{% if form.roles[1] is defined %}#}
+                        {#{% do form.roles[1].setRendered %}#}
+                    {#{% endif %}#}
                 </div>
                     {{ form_widget(form) }}
                     {% block guardar %}

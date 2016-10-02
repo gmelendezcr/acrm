@@ -47,7 +47,7 @@ class CentroEducativoController extends Controller{
         //Consulta diferentes criterios
         $res=$em->createQueryBuilder()
         ->select('ce.idCentroEducativo as ID_CENTRO_EDUCATIVO, ce.codCentroEducativo as COD_CENTRO_EDUCATIVO, ce.nbrCentroEducativo as NBR_CENTRO_EDUCATIVO,
-        ce.direccionCentroEducativo as DIRECCION_CENTRO_EDUCATIVO, ce.totalAlumnos as TOTAL_ALUMNOS, 
+        ce.direccionCentroEducativo as DIRECCION_CENTRO_EDUCATIVO, ce.totalAlumnos as TOTAL_ALUMNOS, ce.activo as ACTIVO,
         zg.nbrZonaGeografica as NBR_ZONA_GEOGRAFICA,
         depto.nbrDepartamento as NBR_DEPARTAMENTO, 
         mpio.nbrMunicipio as NBR_MUNICIPIO,
@@ -249,8 +249,18 @@ class CentroEducativoController extends Controller{
     
     public function form_lista_evaluarAction(){
         $em = $this->getDoctrine()->getEntityManager();
-        $lista = $em->getRepository('AcreditacionBundle:CentroEducativo')->findAll();
-        //var_dump($lista);
+        $lista=$em->createQueryBuilder()
+        ->select('fce.idFormularioPorCentroEducativo, c.codCentroEducativo, c.nbrCentroEducativo, c.direccionCentroEducativo,
+        f.codFormulario, f.nbrFormulario, u.nombres, u.apellidos, e.codEstadoFormulario, e.nbrEstadoFormulario')
+        ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'fce')
+            ->join('fce.idCentroEducativo','c')
+            ->join('fce.idFormulario','f')
+            ->join('fce.idEstadoFormulario','e')
+            ->join('fce.idUsuarioDigita','u')
+                ->andWhere('e.codEstadoFormulario in (:codEstadoFormulario)')
+                ->setParameter('codEstadoFormulario',array('TE','AP'))
+                ->orderBy('e.codEstadoFormulario','desc')
+                ->getQuery()->getArrayResult();
         return $this->render('centro-educativo/form_lista_evaluar.index.html.twig',array(
             'lista'=>$lista    
         ));
@@ -412,21 +422,46 @@ class CentroEducativoController extends Controller{
     }
     
     //Editar
-    public function editar_cuotaAction(Request $request,  $idcuota){
+    public function editar_cuotaAction(Request $request,  $id, $idcuota){
         if (!$idcuota) {
             throw $this->createNotFoundException('No se encuentra el ID = '.$idcuota);
         }  
         $em = $this->getDoctrine()->getManager();
         
         $entity = $em->getRepository('AcreditacionBundle:CuotaAnualPorGradoEscolarPorCentroEducativo')->find($idcuota);
+        $ce_show = $em->getRepository('AcreditacionBundle:CentroEducativo')->find($id);
+        //$ce_show=$ce_show->getnbrCentroEducativo();
         
         if (!$entity) {
             throw $this->createNotFoundException('Unable to and Userentity.'); 
         }
         $editForm = $this->createForm(new CuotaAnualPorGradoEscolarPorCentroEducativoType($em), $entity);
+         $editForm->handleRequest($request);
+         if ($editForm->isSubmitted()) {
+            $matricula = $editForm->get('matricula')->getData();
+            
+            $monto = $editForm->get('monto')->getData();
+            
+            $anno = $editForm->get('anno')->getData();
+            
+            $entity->setMatricula($matricula);
+            $entity->setMonto($monto);
+            $entity->setAnno($anno);
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($entity);
+            $em->flush();
+            return $this->redirectToRoute('centro_educativo_cuotas', array(
+                'id'=>$id,
+                'anno'=>$anno
+                ));
+        }
+        
+        
+        
        return $this->render('centro-educativo/form_cuotas_edit.index.html.twig', 
             array(
-                
+                'ce_show'=>$ce_show,    
                 'form' => $editForm->createView(),
             ));
     }

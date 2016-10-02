@@ -152,5 +152,7 @@ class CuotaAnualPorGradoEscolarPorCentroEducativo
     {
         return $this->monto;
     }
- 
+ public function __toString(){
+        return $this->idGradoEscolarPorCentroEducativo;
+    }
 }

@@ -4,11 +4,21 @@
     <div class="col-md-12">                                            
         <div class="table-responsive">
             <h2 class="sin-margin text-center">
-                Registro de cuotas 
+                Registrar cuota 
             </h2>
             <div class="capa-separador-1"></div>
         <table class="table table-bordered">
-            <tbody> 
+            <tbody>
+                <tr>
+                    <td class="col-sm-2 bg-success text-right">
+                       <strong>
+                           Código:
+                       </strong>
+                    </td>
+                    <td>
+                        {{ce_show.codCentroEducativo}}
+                    </td>
+                </tr> 
                 <tr>
                     <td class="col-sm-2 bg-success text-right">
                        <strong>
@@ -70,7 +80,7 @@
                 <div class="form-group">                                
                     <label for="fechaAplicacion">Fecha</label>
                     <div class='input-group date input-3' id='divanno'>
-                        <input type='text' id="anno" name="anno" class="form-control"  readonly/>
+                        <input type='text' id="anno" name="anno" class="form-control" placeholder="Digite el año"/>
                          <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                          </span>
                     </div>                               

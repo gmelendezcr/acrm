@@ -70,7 +70,9 @@ voy! falta el form por post
     </div>
     <form id="secciones" method="POST" action="{{ path('seccion_terminar') }}">
         <div class="col-md-12 text-right">
-            <input type="submit" name="Terminar" value="Terminar" class="btn btn-success">
+            <button  data-toggle="confirmation" data-title="Seguro?" type="submit" name="Terminar" value="Terminar" class="btn btn-success">
+                <span class="glyphicon glyphicon-share-alt"></span> Terminar
+            </button>
         </div>
     </form>
 {% endblock %}

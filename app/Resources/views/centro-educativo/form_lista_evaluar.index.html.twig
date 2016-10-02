@@ -77,7 +77,37 @@
                                           
                                         </td>
                                     </tr>
-                                    
+                                    {% for form in lista %}
+                                        <tr> 
+                                        <td>
+                                            {{ form.codCentroEducativo }}
+                                        </td> 
+                                        <td>
+                                            {{ form.nbrCentroEducativo ~ (form.direccionCentroEducativo ? ', ' ~ form.direccionCentroEducativo : null) }}
+                                        </td> 
+                                        <td>
+                                            {{ form.nbrFormulario }}
+                                        </td>
+                                        <td>
+                                            {{ form.nombres ~ ' ' ~ form.apellidos }}
+                                        </td>
+                                        <td class="text-center">
+                                            {% if form.codEstadoFormulario == 'AP' %}
+                                                {{ form.nbrEstadoFormulario }}
+                                            {% elseif form.codEstadoFormulario == 'CA' %}
+                                                <span class="glyphicon glyphicon-ok btn btn-success" data-toggle="tooltip" data-placement="top" title="{{ form.nbrEstadoFormulario }}"></span> {{ form.nbrEstadoFormulario }}
+                                            {% endif %}
+                                            {#<span class="glyphicon glyphicon-ok btn btn-success" data-toggle="tooltip" data-placement="top" title="Aprobado"></span> Evaluado#}
+                                        </td>
+                                        <td class="text-center">
+                                            {% if form.codEstadoFormulario == 'AP' %}
+                                                 <a href="" class="btn btn-success btn-block disabled">Calificar</a>
+                                            {% else %}
+                                                <a href="" class="btn btn-success btn-block disable">Calificar</a>
+                                          {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
                                 </tbody> 
                             </table>
                         </div>

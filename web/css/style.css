@@ -2,7 +2,31 @@ body{
     margin-top: 155px;
 }
 
+/*
+--------------------------------------------------------------------------------
+> Control de logo
+--------------------------------------------------------------------------------
+*/
 
+.logo{
+    float:left;
+    width:180px;
+    height:60px;
+}
+.logo-text{
+    float:left;
+    width:300px;
+    height:60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.header-control {
+    padding:  20px 0 4px;
+    position: relative;
+}
 .header-control-login {
     padding: 35px 0;
     position: relative;
@@ -266,6 +290,26 @@ color:#204d74 !important;
     display: none;
 }
 @media (max-width: 767px) {
+    .logo{
+        float:inherit !important;
+        width:180px;
+        height:60px;
+        display: none;
+    }
+    .logo-text{
+        float:inherit !important;
+        width:100%;
+        height:inherit !important;
+        display: inherit !important;
+        align-items: inherit !important;
+        justify-content:inherit !important;
+        text-align: center;
+    }
+    .logo-text h3{
+        font-size: 20px;
+    }
+    
+    
     /*Activo solo para dispositivos móviles y tablets*/    
     .dispositivo-movil {
         display: block;

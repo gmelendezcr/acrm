@@ -84,7 +84,7 @@ public function setRole($role) {
     $this->setRoles(array($role));
 }
      
-    public function editAction(Request $request, Usuario $usuario)
+   /* public function editAction(Request $request, Usuario $usuario)
     {
        $request = $this->container->get('request');
 
@@ -112,9 +112,9 @@ public function setRole($role) {
     
     }
     
+    */
     
-    
-    /* copia editar usuario
+    /* copia editar usuario*/
     
       public function editAction(Request $request, Usuario $usuario)
     {
@@ -127,7 +127,8 @@ public function setRole($role) {
             $em->persist($usuario);
             $em->flush();
 
-            return $this->redirectToRoute('usuario_edit', array('id' => $usuario->getId()));
+            return $this->redirectToRoute('usuario_index');
+           
         }
 
         return $this->render('usuario/edit.html.twig', array(
@@ -135,7 +136,7 @@ public function setRole($role) {
             'form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
-    }*/
+    }
     
     
     

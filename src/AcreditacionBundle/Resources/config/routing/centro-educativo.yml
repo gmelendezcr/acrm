@@ -59,6 +59,6 @@ centro_educativo_cuota_borrar:
     defaults: { _controller: AcreditacionBundle:CentroEducativo:borrar_cuota }
     methods:  [GET, POST]
 centro_educativo_cuota_editar:
-    path:     /{idcuota}/editar-cuota
+    path:     /{id}/{idcuota}/editar-cuota
     defaults: { _controller: AcreditacionBundle:CentroEducativo:editar_cuota }
-    methods:  [GET]
+    methods:  [GET, POST]
