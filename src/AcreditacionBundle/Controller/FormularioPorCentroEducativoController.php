@@ -31,6 +31,7 @@ class FormularioPorCentroEducativoController extends Controller
             'idFormularioPorCentroEducativo' => $idFormularioPorCentroEducativoRevisar,
             'idPregunta' => $idPregunta,
         ));
+        $nuevoRevisar='';
         if($respuestaPorFormularioPorCentroEducativo){
             $revisar=$respuestaPorFormularioPorCentroEducativo->getRevisar();
             if($revisar=='S'){

@@ -4,11 +4,21 @@
     <div class="col-md-12">                                            
         <div class="table-responsive">
             <h2 class="sin-margin text-center">
-                Registro de cuotas 
+                Editar cuota 
             </h2>
             <div class="capa-separador-1"></div>
-            <table class="table table-bordered">
-                <tbody> 
+            <table class="table table-bordered table-hover">
+                <tbody>
+                    <tr>
+                        <td class="col-sm-2 bg-success text-right">
+                           <strong>
+                               Código:
+                           </strong>
+                        </td>
+                        <td>
+                            {{ce_show.codCentroEducativo}}
+                        </td>
+                    </tr>
                     <tr>
                         <td class="col-sm-2 bg-success text-right">
                            <strong>
@@ -16,7 +26,7 @@
                            </strong>
                         </td>
                         <td>
-                            {#{{ce_show.nbrCentroEducativo}}#}
+                            {{ce_show.nbrCentroEducativo}}
                         </td>
                     </tr>
                 </tbody>
@@ -27,17 +37,47 @@
     </div>
     <div class="col-md-12">
         <div class="header-control-general">
-            <form class="form-registro form-border" method="post" action="">
+            <form class="form-registro form-border" method="{{ form.vars.method }}" action="{{ form.vars.action }}">
                 <div class="form-group">
-                    {{  form_label(form.idGradoEscolarPorCentroEducativo)  }}
-                    {{ form_widget(form.idGradoEscolarPorCentroEducativo, {'attr': {'class': 'form-control input-3'}}) }}
-                    {{ form_errors(form.idGradoEscolarPorCentroEducativo) }}                           
+                    <div class = "input-group">
+                        <label for="matricula">{{  form_label(form.idGradoEscolarPorCentroEducativo)  }}</label>
+                    </div>
+                    <div class = "input-group">
+                        {{ form_widget(form.idGradoEscolarPorCentroEducativo) }}
+                        {{ form_errors(form.idGradoEscolarPorCentroEducativo) }}                       
+                    </div>
                 </div>
                 <div class="form-group">
+                    <div class = "input-group">
+                        <label for="matricula">{{  form_label(form.matricula)  }}</label>
+                    </div>
+                    <div class = "input-group">
+                        <span class = "input-group-addon">$</span>
+                        {{ form_widget(form.matricula, {'attr': {'class': 'form-control input-2', 'placeholder': 'Digite el costo de la matrícula'}}) }}
+                        {{ form_errors(form.matricula) }}                       
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class = "input-group">
+                        <label for="matricula">{{  form_label(form.monto)  }}</label>
+                    </div>
+                    <div class = "input-group">
+                        <span class = "input-group-addon">$</span>
+                        {{ form_widget(form.monto, {'attr': {'class': 'form-control input-2', 'placeholder': 'Digite la cuota mensual'}}) }}
+                        {{ form_errors(form.monto) }}                       
+                    </div>
+                </div>
+                <div class="form-group">                                
                     {{  form_label(form.anno)  }}
-                    {{ form_widget(form.anno, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite el año'}}) }}
-                    {{ form_errors(form.anno) }}                           
-                </div>          
+                    <div class='input-group date input-3' id='divanno'>
+                        {{ form_widget(form.anno, {'attr': {'class': 'form-control', 'placeholder': 'Digite el año', 'id':'anno'}}) }}
+                         <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                         </span>
+                    </div>                               
+                </div>
+                  <div class="form-group"> 
+                    <button type="submit" class="btn btn-success btn-md"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button>
+                </div>        
             </form> 
         </div>
     </div>

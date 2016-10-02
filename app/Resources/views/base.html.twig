@@ -21,12 +21,17 @@
     <body>
     <!--Inicia menú-->
     <div class="container-fluid sin-padding navbar-fixed-top">
-        <div class="header-control-page fondo-2 text-color-1">
+        <div class="header-control fondo-2 text-color-1">
             <div class="container">
                 <div class="col-md-8">
-                    <h2 class="sin-margin">
-                        Sistema de Acreditación
-                    </h2>            
+                    <div class="logo">
+                        <img src="{{ asset('images/logo.png') }}" />
+                    </div>
+                    <div class="logo-text">
+                        <h3 class="sin-margin">
+                            Sistema de Acreditación
+                        </h3>    
+                    </div>
                 </div>
                 <div class="col-md-4 text-right z-index-1">
                     <div class="btn-group">
@@ -75,7 +80,6 @@
                             <ul class="dropdown-menu">
                                 <li><a href="{{path('centro_educativo_add')}}">Registrar</a></li>
                                 <li><a href="{{path('centro_educativo_lista')}}">Mantenimiento</a></li>
-                                <li><a href="{{path('centro_educativo_lista')}}">Niveles educativos</a></li>
                                 <li><a href="{{path('centro_educativo_form_dig_corr')}}">Digitar o corregir formulario</a></li>
                                 <li><a href="{{path('centro_educativo_form_lista_revisar')}}">Revisar formulario</a></li>
                                 {% if is_granted('ROLE_ADMIN') %}
@@ -113,9 +117,11 @@
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap-confirmation.min.js') }}"></script>
         <script src="{{ asset('js/lib.js') }}"></script>
+        
         <script src="{{ asset('js/moment.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap-datetimepicker.es.js') }}"></script>
+        
         <script type="text/javascript">
             $('#divMiCalendario').datetimepicker({
                 format: 'YYYY-MM-DD',
@@ -127,9 +133,9 @@
                 //inputs: $('#fechaAplicacion'),
                 format: 'YYYY',
                 //startView: 'years',
-                viewMode: 'years',
+                viewMode: 'year',
                 
-                minViewMode: 'years',
+                minViewMode: 'year',
                 pickTime: false
             });
       

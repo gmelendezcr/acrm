@@ -1,5 +1,23 @@
 {% extends 'base.html.twig' %}
     {% block body %}
+    
+        <div class="col-md-10 text-center">                                            
+        <strong>
+            Usted está trabajando en el:<br /> {{ app.session.get('nbrFormulario') }}
+        </strong>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    <div class="col-md-2 text-right">
+        <a class="btn btn-info" href="{{ path('seccion_index') }}"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    <div class="clearfix"></div>
+    
+    
+    
+    
         <div class="col-md-12">
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
@@ -58,7 +76,7 @@
                     <div class="col-md-12 text-right">
                         <input type="hidden" name="idSeccion" value="{{ seccion.idSeccion }}">
                         {% if not idFormularioPorCentroEducativoRevisar %}
-                            <input type="submit" name="Guardar" value="Guardar" class="btn btn-success">
+                            <button type="submit" value="Guardar" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button>
                         {% endif %}
                     </div>
             </form>

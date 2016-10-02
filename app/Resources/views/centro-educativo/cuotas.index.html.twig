@@ -93,7 +93,7 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group" role="group">
-                                    <a href='{{path('centro_educativo_cuota_editar', {'idcuota':item.idCuotaAnualPorGradoEscolarPorCentroEducativo })}}' class='btn btn-success btn-sm '>
+                                    <a href='{{path('centro_educativo_cuota_editar',  {'id':ce_show.idCentroEducativo,'idcuota':item.idCuotaAnualPorGradoEscolarPorCentroEducativo })}}' class='btn btn-success btn-sm '>
                                         <span class="glyphicon glyphicon-pencil"></span> Editar
                                     </a>
                                     <a  data-toggle="confirmation" data-title="Seguro?" href='{{path('centro_educativo_cuota_borrar', {'id':ce_show.idCentroEducativo,'idcuota':item.idCuotaAnualPorGradoEscolarPorCentroEducativo })}}' class='btn btn-danger btn-sm '>

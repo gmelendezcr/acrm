@@ -178,8 +178,9 @@ class SeccionController extends Controller
         )));
         $em->persist($formularioPorCentroEducativo);
         $em->flush();
-
-        return $this->redirectToRoute('seccion_show', array('id' => $idSeccion));
+        return $this->redirectToRoute('seccion_index');
+        //return $this->redirectToRoute('seccion_show', array('id' => $idSeccion));
+        
     }
 
     public function terminarAction(Request $request)
