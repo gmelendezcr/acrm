@@ -94,10 +94,10 @@ function marcarRevisar(control,idFormularioPorCentroEducativoRevisar,idPregunta,
     },
     success: function(html){
       if(html=='S'){
-        control.addClass('revisar');
+        control.addClass('revisar-item');
       }
       else{
-        control.removeClass('revisar');
+        control.removeClass('revisar-item');
       }
     }
   });

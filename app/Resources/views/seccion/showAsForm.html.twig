@@ -61,9 +61,9 @@
                                 {% set onClickRevisar = '' %}
                             {% endif %}
                             {% if revisar[pregunta.idPregunta] is defined %}
-                                {% set classRevisar = 'class="revisar"' %}
+                                {% set classRevisar = 'class="revisar-alerta revisar"' %}
                             {% else %}
-                                {% set classRevisar = '' %}
+                                {% set classRevisar = 'class="revisar-alerta"' %}
                             {% endif %}
                             {% set btRevisar = '<span ' ~ onClickRevisar ~ ' ' ~ classRevisar ~ '>[Revisar]</span>' %}
                         {% else %}
