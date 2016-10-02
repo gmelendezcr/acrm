@@ -18,6 +18,10 @@ acreditacion_centro_educativo:
     resource: "@AcreditacionBundle/Resources/config/routing/centro-educativo.yml"
     prefix:   /lista-centros-educativos
 
+formulario_por_centro:
+    resource: "@AcreditacionBundle/Resources/config/routing/formulario-centro-educativo.yml"
+    prefix:   /formularioPorCentro
+
 acreditacion_homepage:
     path:     /
     defaults: { _controller: AcreditacionBundle:Default:inicio }

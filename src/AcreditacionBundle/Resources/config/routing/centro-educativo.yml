@@ -42,6 +42,10 @@ centro_educativo_form_lista_evaluar:
     path:     /form-lista-evaluar
     defaults: { _controller: AcreditacionBundle:CentroEducativo:form_lista_evaluar }
     methods:  [GET]
+centro_educativo_respuesta_revisar:
+    path:     /respuestaRevisar
+    defaults: { _controller: AcreditacionBundle:CentroEducativo:respuestaRevisar }
+    methods:  [POST]
 centro_educativo_cuotas:
     path:     /{id}/cuotas
     defaults: { _controller: AcreditacionBundle:CentroEducativo:cuotas }

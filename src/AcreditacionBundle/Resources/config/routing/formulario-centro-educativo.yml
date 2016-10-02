@@ -1,0 +1,4 @@
+respuesta_revisar:
+    path:     /respuestaRevisar
+    defaults: { _controller: AcreditacionBundle:FormularioPorCentroEducativo:respuestaRevisar }
+    methods:  [POST]

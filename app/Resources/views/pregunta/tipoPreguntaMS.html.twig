@@ -17,7 +17,7 @@
                                     {% endif %}
                                     <label class="checkbox-inline btn btn-info">
                                         <input type='radio' class='subPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}'
-                                        value='{{ opcion.codigo }}' {{ checked }}> {{ opcion.texto }}
+                                        value='{{ opcion.codigo }}' {{ checked }} {{ disabled }}> {{ opcion.texto }}
                                     </label>
                                 {% endif %}
                             {% endfor %}
@@ -41,7 +41,7 @@
                                 {{ loop.index }}
                             </td>
                         {% endif %}
-                        {% include 'pregunta/showAsForm.html.twig' with {'pregunta': subPregunta, 'respuestas': respuestas} %}
+                        {% include 'pregunta/showAsForm.html.twig' with {'pregunta': subPregunta} %}
                         {% if pregunta.totalesColumnas == 'S' %}
                             {% set sumaColumnas = sumaColumnas ~ "$('#" ~ subTotalColumnaId ~ "_S').val(
                                 ($.isNumeric($('#" ~ subTotalColumnaId ~ "_S').val())?parseFloat($('#" ~ subTotalColumnaId ~ "_S').val()):0)+

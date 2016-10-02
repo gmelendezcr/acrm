@@ -11,26 +11,28 @@
                     <td>
                         {% for opcion in opciones %}
                             {% if opcion.texto %}
-                            <label class="checkbox-inline btn  btn-info">
-                                <input type='radio' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}'
-                                value='{{ opcion.codigo }}'
-                                    {% if pregunta.opcionOtroCampoTexto == 'S' %}
-                                        {% if opcion.codigo == 'O' %}
-                                            onClick="$('#{{ id }}_Texto').prop('disabled',!$(this).prop('checked'));"
-                                        {% else %}
-                                            onClick="$('#{{ id }}_Texto').prop('disabled',true);"
-                                        {% endif %}
+                                {% set onClick = '' %}
+                                {% if pregunta.opcionOtroCampoTexto == 'S' %}
+                                    {% if opcion.codigo == 'O' %}
+                                        {% set onClick = "$('\#{{ id }}_Texto').prop('disabled',!$(this).prop('checked'));" %}
+                                    {% else %}
+                                        {% set onClick = "$('\#{{ id }}_Texto').prop('disabled',true);" %}
                                     {% endif %}
-                                    {% if respuestas[pregunta.idPregunta] is defined and respuestas[pregunta.idPregunta]==opcion.codigo %}
-                                        checked
-                                    {% endif %}
-                                > {{ opcion.texto }}
+                                {% endif %}
+                                {% if respuestas[pregunta.idPregunta] is defined and respuestas[pregunta.idPregunta]==opcion.codigo %}
+                                    {% set checked = 'checked' %}
+                                {% else %}
+                                    {% set checked = '' %}
+                                {% endif %}
+                                <label class="checkbox-inline btn  btn-info">
+                                    <input type='radio' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' value='{{ opcion.codigo }}' {{ onClick }} {{ checked }} {{ disabled }}> {{ opcion.texto }}
                                 </label>
                             {% endif %}
                         {% endfor %}
                         {% if pregunta.opcionOtroCampoTexto == 'S' %}
-                            <input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}Texto form-control' id='{{ id }}_Texto' name='{{ id }}_Texto' {{ maxLength }} disabled>
+                            <input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}Texto form-control' id='{{ id }}_Texto' name='{{ id }}_Texto' {{ maxLength }} {{ disabled }}>
                         {% endif %}
+                        {{ btRevisar|raw }}
                     </td>
                 </tr>
             </tbody>

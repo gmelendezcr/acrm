@@ -11,15 +11,15 @@
                     <td>
                         {% for opcion in opciones %}
                             {% if opcion.codOpcionRespuesta %}
-                            <label class="checkbox-inline btn btn-info">
-                                <input type='radio' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}'
-                                value='{{ opcion.codOpcionRespuesta }}'
-                                    {% if respuestas[pregunta.idPregunta] is defined and respuestas[pregunta.idPregunta]==opcion.codOpcionRespuesta %}
-                                        checked
-                                    {% endif %}
-                                > {{ opcion.descripcionOpcionRespuesta }}
-                            </label>
-                        {% endif %}
+                                {% if respuestas[pregunta.idPregunta] is defined and respuestas[pregunta.idPregunta]==opcion.codOpcionRespuesta %}
+                                    {% set checked = 'checked' %}
+                                {% else %}
+                                    {% set checked = '' %}
+                                {% endif %}
+                                <label class="checkbox-inline btn btn-info">
+                                    <input type='radio' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' value='{{ opcion.codOpcionRespuesta }}' {{ checked }} {{ disabled }}> {{ opcion.descripcionOpcionRespuesta }}
+                                </label>
+                            {% endif %}
                         {% endfor %}
                     </td>
                 </tr>

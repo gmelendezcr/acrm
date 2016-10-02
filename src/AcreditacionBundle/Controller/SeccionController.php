@@ -28,11 +28,11 @@ class SeccionController extends Controller
         $session = new Session();
         $idFormularioPorCentroEducativo=$request->get('idFormularioPorCentroEducativoRevisar');
         if($idFormularioPorCentroEducativo){
-            $soloLectura=true;
+            $idFormularioPorCentroEducativoRevisar=$idFormularioPorCentroEducativo;
         }
         else{
+            $idFormularioPorCentroEducativoRevisar=null;
             $idFormularioPorCentroEducativo=$session->get('idFormularioPorCentroEducativo');
-            $soloLectura=false;
         }
         if(!$idFormularioPorCentroEducativo){
             return $this->redirectToRoute('homepage');
@@ -58,7 +58,7 @@ class SeccionController extends Controller
 
         return $this->render('seccion/index.html.twig', array(
             'seccions' => $seccions,
-            'soloLectura' => $soloLectura,
+            'idFormularioPorCentroEducativoRevisar' => $idFormularioPorCentroEducativoRevisar,
         ));
     }
 
@@ -66,15 +66,20 @@ class SeccionController extends Controller
      * Finds and displays a Seccion entity.
      *
      */
-    public function showAction(Seccion $seccion)
+    public function showAction(Seccion $seccion, Request $request)
     {
         $session = new Session();
         $idFormularioPorCentroEducativo=$session->get('idFormularioPorCentroEducativo');
 
+        $idFormularioPorCentroEducativoRevisar=$request->get('idFormularioPorCentroEducativoRevisar');
+        if($idFormularioPorCentroEducativoRevisar){
+            $idFormularioPorCentroEducativo=$idFormularioPorCentroEducativoRevisar;
+        }
+
         $idSeccion=$seccion->getIdSeccion();
         $em = $this->getDoctrine()->getManager();
         $resps=$em->createQueryBuilder()
-            ->select('p.idPregunta, t.codTipoPregunta, pp.idPregunta as idPreguntaPadre, ore.idOpcionRespuesta, rfc.valorRespuesta, rfc.ponderacionGanada')
+            ->select('p.idPregunta, t.codTipoPregunta, pp.idPregunta as idPreguntaPadre, ore.idOpcionRespuesta, rfc.revisar, rfc.valorRespuesta, rfc.ponderacionGanada')
             ->from('AcreditacionBundle:RespuestaPorFormularioPorCentroEducativo', 'rfc')
             ->join('rfc.idPregunta','p')
             ->join('p.idSeccion','s')
@@ -86,23 +91,30 @@ class SeccionController extends Controller
                 ->setParameter('idFormularioPorCentroEducativo',$em->getRepository('AcreditacionBundle:FormularioPorCentroEducativo')->find($idFormularioPorCentroEducativo))
                 ->setParameter('idSeccion',$em->getRepository('AcreditacionBundle:Seccion')->find($idSeccion))
                     ->getQuery()->getResult();
-        $respuestas=$ponderaciones=array();
+        $respuestas=$revisar=$ponderaciones=array();
         foreach($resps as $resp){
             if($resp['idPreguntaPadre'] && $resp['idOpcionRespuesta']){
                 $respuestas[$resp['idPregunta']][$resp['idOpcionRespuesta']]=$resp['valorRespuesta'];
                 $ponderaciones[$resp['idPregunta']][$resp['idOpcionRespuesta']]=$resp['ponderacionGanada'];
+                if($resp['revisar']=='S'){
+                    $revisar[$resp['idPregunta']][$resp['idOpcionRespuesta']]=true;
+                }
             }
             else{
                 $respuestas[$resp['idPregunta']]=$resp['valorRespuesta'];
                 $ponderaciones[$resp['idPregunta']]=$resp['ponderacionGanada'];
+                if($resp['revisar']=='S'){
+                    $revisar[$resp['idPregunta']]=true;
+                }
             }
         }
-//var_dump($respuestas);
 
         return $this->render('seccion/showAsForm.html.twig', array(
             'seccion' => $seccion,
             'respuestas' => $respuestas,
+            'revisar' => $revisar,
             'ponderaciones' => $ponderaciones,
+            'idFormularioPorCentroEducativoRevisar' => $idFormularioPorCentroEducativoRevisar,
         ));
     }
 
@@ -177,11 +189,17 @@ class SeccionController extends Controller
 
         $idFormularioPorCentroEducativo=$session->get('idFormularioPorCentroEducativo');
         $formularioPorCentroEducativo=$em->getRepository('AcreditacionBundle:FormularioPorCentroEducativo')->find($idFormularioPorCentroEducativo);
-        $formularioPorCentroEducativo->setIdEstadoFormulario($em->getRepository('AcreditacionBundle:EstadoFormulario')->findOneBy(array(
-            'codEstadoFormulario' => 'TE',
-        )));
-        $em->persist($formularioPorCentroEducativo);
-        $em->flush();
+        $codEstadoFormulario=$formularioPorCentroEducativo->getIdEstadoFormulario()->getCodEstadoFormulario();
+        if(in_array($codEstadoFormulario,array('DI','CO'))){
+            $formularioPorCentroEducativo->setIdEstadoFormulario($em->getRepository('AcreditacionBundle:EstadoFormulario')->findOneBy(array(
+                'codEstadoFormulario' => 'TE',
+            )));
+            $em->persist($formularioPorCentroEducativo);
+            $em->flush();
+        }
+        else{
+            $session->getFlashBag()->add('error','El estado del formulario no es correcto para terminarlo.');
+        }
         $session->remove('idFormularioPorCentroEducativo');
 
         return $this->redirectToRoute('centro_educativo_form_dig_corr');

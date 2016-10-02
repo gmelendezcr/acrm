@@ -10,7 +10,7 @@
                 <tr>
                     <td>
                         <input type='hidden' id='{{ id }}_hidden' name='{{ id }}_hidden' value='{{ ( respuestas[pregunta.idPregunta] is defined ? respuestas[pregunta.idPregunta] : null ) }}'>
-                        <select class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control input-2' id='{{ id }}' name='{{ id }}' {{ maxLength }} {{ ( pregunta.jsOnChange ? "onChange=\"" ~ pregunta.jsOnChange ~ "\"" : null )|raw }}>
+                        <select class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control input-2' id='{{ id }}' name='{{ id }}' {{ maxLength }} {{ ( pregunta.jsOnChange ? "onChange=\"" ~ pregunta.jsOnChange ~ "\"" : null )|raw }} {{ disabled }}>
                             {% for opcion in opciones %}
                                 {% if opcion %}
                                     {% if respuestas[pregunta.idPregunta] is defined and respuestas[pregunta.idPregunta]==opcion.codDetalleCatalogo %}
@@ -34,6 +34,7 @@
                                 }, 1000);
                             </script>
                         {% endif %}
+                        {{ btRevisar|raw }}
                     </td>
                 </tr>
             </tbody>

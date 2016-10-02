@@ -89,8 +89,12 @@
             </div>
         </nav>
     </div>
-    <!-fin menú-->
-    <div class="container">
+    <!--fin menú-->
+    {% for flash_message in app.session.flashBag.get('error') %}
+        <div class="flash-error">
+            {{ flash_message }}
+        </div>
+    {% endfor %}    <div class="container">
         <div class="row">
            {% block body %}{% endblock %}
         </div>

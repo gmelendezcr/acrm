@@ -52,10 +52,12 @@ function digitarCorregirCargarFormulario(){
   return true;
 }
 
+var appSf='/app_dev.php';
+
 function cargarDepartamentos(comboDepartamento,selected,comboMunicipio,municipioHidden){
   $.ajax({
     method: 'GET',
-    url: '/app_dev.php/departamento/comboDepartamento',
+    url: appSf + '/departamento/comboDepartamento',
     success: function(html){
       comboDepartamento.html(html);
       comboDepartamento.val(selected);
@@ -69,7 +71,7 @@ function cargarDepartamentos(comboDepartamento,selected,comboMunicipio,municipio
 function cargarMunicipios(idDepartamento,comboMunicipio,selected){
   $.ajax({
     method: 'POST',
-    url: '/app_dev.php/municipio/comboMunicipio',
+    url: appSf + '/municipio/comboMunicipio',
     data: {
       'idDepartamento': idDepartamento,
       'idMunicipio': selected
@@ -77,6 +79,25 @@ function cargarMunicipios(idDepartamento,comboMunicipio,selected){
     success: function(html){
       comboMunicipio.html(html);
       comboMunicipio.val(selected);
+    }
+  });
+}
+
+function marcarRevisar(control,idFormularioPorCentroEducativoRevisar,idPregunta){
+  $.ajax({
+    method: 'POST',
+    url: appSf + '/formularioPorCentro/respuestaRevisar',
+    data: {
+      'idFormularioPorCentroEducativoRevisar': idFormularioPorCentroEducativoRevisar,
+      'idPregunta': idPregunta
+    },
+    success: function(html){
+      if(html=='S'){
+        control.addClass('revisar');
+      }
+      else{
+        control.removeClass('revisar');
+      }
     }
   });
 }

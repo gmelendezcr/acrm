@@ -53,13 +53,13 @@
                                 {% endif %}
                             </td>
                             <td>
-                                {% if soloLectura %}
-                                    <form id="mostrarSeccion{{ seccion.idSeccion }}" action="{{ path('seccion_index') }}" method="post">
-voy! falta el form por post
-                                        <input type="hidden" name="idSeccionRevisar" value="{{ seccion.idSeccion }}">
-                                    </form>
-                                {% else %}
+                                {% if not idFormularioPorCentroEducativoRevisar %}
                                     <a class="btn btn-info" href="{{ path('seccion_show', { 'id': seccion.idSeccion }) }}">Mostrar</a>
+                                {% else %}
+                                    <form id="mostrarSeccion{{ seccion.idSeccion }}" action="{{ path('seccion_show', { 'id': seccion.idSeccion }) }}" method="post">
+                                        <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ idFormularioPorCentroEducativoRevisar }}">
+                                    </form>
+                                    <a class="btn btn-info" href="#" onClick="$('#mostrarSeccion{{ seccion.idSeccion }}').submit();">Mostrar</a>
                                 {% endif %}
                             </td>
                         </tr>
@@ -70,7 +70,12 @@ voy! falta el form por post
     </div>
     <form id="secciones" method="POST" action="{{ path('seccion_terminar') }}">
         <div class="col-md-12 text-right">
-            <input type="submit" name="Terminar" value="Terminar" class="btn btn-success">
+            {% if not idFormularioPorCentroEducativoRevisar %}
+                <input type="submit" name="Terminar" value="Terminar" class="btn btn-success">
+            {% else %}
+                <input type="submit" name="Aprobar" value="Aprobar" class="btn btn-success">
+                <input type="submit" name="Rechazar" value="Rechazar" class="btn btn-warning">
+            {% endif %}
         </div>
     </form>
 {% endblock %}

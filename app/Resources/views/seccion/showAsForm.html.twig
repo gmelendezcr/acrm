@@ -16,17 +16,50 @@
                     </tbody>
                 </table>
             </div>
+            {% if idFormularioPorCentroEducativoRevisar %}
+                <form id="mostrarSecciones{{ idFormularioPorCentroEducativoRevisar }}" action="{{ path('seccion_index') }}" method="post">
+                    <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ idFormularioPorCentroEducativoRevisar }}">
+                </form>
+            {% endif %}
             <form id="seccion{{ seccion.idSeccion }}" method="POST" action="{{ path('seccion_guardar') }}">
-                <div class="col-md-2 col-md-offset-10 text-right"><a class="btn btn-info" href="{{ path('seccion_index') }}"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a></div>
+                <div class="col-md-2 col-md-offset-10 text-right">
+                    {% if not idFormularioPorCentroEducativoRevisar %}
+                        <a class="btn btn-info" href="{{ path('seccion_index') }}"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
+                    {% else %}
+                        <a class="btn btn-info" href="#" onClick="$('#mostrarSecciones{{ idFormularioPorCentroEducativoRevisar }}').submit();"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
+                    {% endif %}
+                </div>
                     <div class="clearfix capa-separador-1"></div>
+                    {% if idFormularioPorCentroEducativoRevisar %}
+                        {% set readonly, disabled = 'readonly', 'disabled' %}
+                    {% else %}
+                        {% set readonly, disabled = '', '' %}
+                    {% endif %}
                     {% for pregunta in seccion.preguntas %}
+                        {% if idFormularioPorCentroEducativoRevisar or revisar[pregunta.idPregunta] is defined %}
+                            {% if idFormularioPorCentroEducativoRevisar %}
+                                {% set onClickRevisar = 'onClick="marcarRevisar($(this),' ~ idFormularioPorCentroEducativoRevisar ~ ',' ~ pregunta.idPregunta ~ ');"' %}
+                            {% else %}
+                                {% set onClickRevisar = '' %}
+                            {% endif %}
+                            {% if revisar[pregunta.idPregunta] is defined %}
+                                {% set classRevisar = 'class="revisar"' %}
+                            {% else %}
+                                {% set classRevisar = '' %}
+                            {% endif %}
+                            {% set btRevisar = '<span ' ~ onClickRevisar ~ ' ' ~ classRevisar ~ '>[Revisar]</span>' %}
+                        {% else %}
+                            {% set btRevisar = '' %}
+                        {% endif %}
                         {% if not pregunta.idPreguntaPadre %}
-                            {% include 'pregunta/showAsForm.html.twig' with {'pregunta': pregunta, 'respuestas': respuestas, 'ponderaciones': ponderaciones} %}
+                            {% include 'pregunta/showAsForm.html.twig' with {'pregunta': pregunta, 'respuestas': respuestas, 'ponderaciones': ponderaciones, 'idFormularioPorCentroEducativoRevisar': idFormularioPorCentroEducativoRevisar} %}
                         {% endif %}
                     {% endfor %}
                     <div class="col-md-12 text-right">
                         <input type="hidden" name="idSeccion" value="{{ seccion.idSeccion }}">
-                        <input type="submit" name="Guardar" value="Guardar" class="btn btn-success">
+                        {% if not idFormularioPorCentroEducativoRevisar %}
+                            <input type="submit" name="Guardar" value="Guardar" class="btn btn-success">
+                        {% endif %}
                     </div>
             </form>
         </div>
