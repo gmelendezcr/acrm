@@ -36,6 +36,21 @@
                         </tr>
                     {% endif %}
                     <tr>
+                        {% if idFormularioPorCentroEducativoRevisar or revisar[subPregunta.idPregunta] is defined %}
+                            {% if idFormularioPorCentroEducativoRevisar %}
+                                {% set onClickRevisar = 'onClick="marcarRevisar($(this),' ~ idFormularioPorCentroEducativoRevisar ~ ',' ~ subPregunta.idPregunta ~ ');"' %}
+                            {% else %}
+                                {% set onClickRevisar = '' %}
+                            {% endif %}
+                            {% if revisar[subPregunta.idPregunta] is defined %}
+                                {% set classRevisar = 'class="revisar"' %}
+                            {% else %}
+                                {% set classRevisar = '' %}
+                            {% endif %}
+                            {% set btRevisar = '<span ' ~ onClickRevisar ~ ' ' ~ classRevisar ~ '>[Revisar]</span>' %}
+                        {% else %}
+                            {% set btRevisar = '' %}
+                        {% endif %}
                         {% if numerarSubPreguntas == 'S' %}
                             <td>
                                 {{ loop.index }}

@@ -44,6 +44,21 @@
                             {% endif %}
                             {% if subPregunta.idTipoPregunta.codTipoPregunta != 'CF' %}
                                 <td>
+                                    {% if idFormularioPorCentroEducativoRevisar or revisar[subPregunta.idPregunta][fila.idOpcionRespuesta] is defined %}
+                                        {% if idFormularioPorCentroEducativoRevisar %}
+                                            {% set onClickRevisar = 'onClick="marcarRevisar($(this),' ~ idFormularioPorCentroEducativoRevisar ~ ',' ~ subPregunta.idPregunta ~ ',' ~ fila.idOpcionRespuesta ~ ');"' %}
+                                        {% else %}
+                                            {% set onClickRevisar = '' %}
+                                        {% endif %}
+                                        {% if revisar[subPregunta.idPregunta][fila.idOpcionRespuesta] is defined %}
+                                            {% set classRevisar = 'class="revisar"' %}
+                                        {% else %}
+                                            {% set classRevisar = '' %}
+                                        {% endif %}
+                                        {% set btRevisar = '<span ' ~ onClickRevisar ~ ' ' ~ classRevisar ~ '>[Revisar]</span>' %}
+                                    {% else %}
+                                        {% set btRevisar = '' %}
+                                    {% endif %}
                                     {% include 'pregunta/showAsForm.html.twig' with {'pregunta': subPregunta, 'idFila': fila.idOpcionRespuesta} %}
                                     {% if pregunta.totalesFilas == 'S' %}
                                         {% if subPregunta.idTipoPregunta.codTipoPregunta == 'TA' %}

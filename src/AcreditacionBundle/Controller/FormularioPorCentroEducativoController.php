@@ -26,12 +26,13 @@ class FormularioPorCentroEducativoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $idFormularioPorCentroEducativoRevisar=$request->get('idFormularioPorCentroEducativoRevisar');
         $idPregunta=$request->get('idPregunta');
+        $idOpcionRespuesta=$request->get('idOpcionRespuesta');
 
         $respuestaPorFormularioPorCentroEducativo=$em->getRepository('AcreditacionBundle:RespuestaPorFormularioPorCentroEducativo')->findOneBy(array(
             'idFormularioPorCentroEducativo' => $idFormularioPorCentroEducativoRevisar,
             'idPregunta' => $idPregunta,
+            'idOpcionRespuesta' => ($idOpcionRespuesta?$idOpcionRespuesta:null),
         ));
-        $nuevoRevisar='';
         if($respuestaPorFormularioPorCentroEducativo){
             $revisar=$respuestaPorFormularioPorCentroEducativo->getRevisar();
             if($revisar=='S'){
@@ -41,9 +42,22 @@ class FormularioPorCentroEducativoController extends Controller
                 $nuevoRevisar='S';
             }
             $respuestaPorFormularioPorCentroEducativo->setRevisar($nuevoRevisar);
-            $em->persist($respuestaPorFormularioPorCentroEducativo);
-            $em->flush();
         }
+        else{
+            $nuevoRevisar='S';
+            $respuestaPorFormularioPorCentroEducativo=new respuestaPorFormularioPorCentroEducativo();
+            $respuestaPorFormularioPorCentroEducativo->setIdFormularioPorCentroEducativo(
+                $em->getRepository('AcreditacionBundle:FormularioPorCentroEducativo')->find($idFormularioPorCentroEducativoRevisar));
+            $respuestaPorFormularioPorCentroEducativo->setIdPregunta(
+                $em->getRepository('AcreditacionBundle:Pregunta')->find($idPregunta));
+            if($idOpcionRespuesta){
+                $respuestaPorFormularioPorCentroEducativo->setIdOpcionRespuesta(
+                    $em->getRepository('AcreditacionBundle:OpcionRespuesta')->find($idOpcionRespuesta));
+            }
+            $respuestaPorFormularioPorCentroEducativo->setRevisar($nuevoRevisar);
+        }
+        $em->persist($respuestaPorFormularioPorCentroEducativo);
+        $em->flush();
 
         return new Response($nuevoRevisar);
     }

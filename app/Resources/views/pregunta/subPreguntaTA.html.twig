@@ -17,3 +17,4 @@
     {% set value = '' %}
 {% endif %}
 <input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control' id='{{ id }}' name='{{ id }}' {{ maxLength }} onChange='{{ onChange }}' value='{{ value }}' {{ readonly }}>
+{{ btRevisar|raw }}

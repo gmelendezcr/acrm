@@ -83,13 +83,14 @@ function cargarMunicipios(idDepartamento,comboMunicipio,selected){
   });
 }
 
-function marcarRevisar(control,idFormularioPorCentroEducativoRevisar,idPregunta){
+function marcarRevisar(control,idFormularioPorCentroEducativoRevisar,idPregunta,idOpcionRespuesta=null){
   $.ajax({
     method: 'POST',
     url: appSf + '/formularioPorCentro/respuestaRevisar',
     data: {
       'idFormularioPorCentroEducativoRevisar': idFormularioPorCentroEducativoRevisar,
-      'idPregunta': idPregunta
+      'idPregunta': idPregunta,
+      'idOpcionRespuesta': idOpcionRespuesta
     },
     success: function(html){
       if(html=='S'){

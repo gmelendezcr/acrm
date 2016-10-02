@@ -57,7 +57,6 @@
                                                 {% endif %}
                                             </td>
                                             <td class="text-center">
-{{ form.idFormularioPorCentroEducativo }}
                                                 <form id="mostrarSecciones{{ form.idFormularioPorCentroEducativo }}" action="{{ path('seccion_index') }}" method="post">
                                                     <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ form.idFormularioPorCentroEducativo }}">
                                                 </form>
