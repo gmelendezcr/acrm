@@ -91,11 +91,11 @@
         'idFila': idFila ?? null, 'numerarSubPreguntas': numerarSubPreguntas ?? null
     } %}
 
-    {#
+{#
     {{ pregunta.codPregunta ? 'código: ' ~ pregunta.codPregunta : pregunta.descripcionPregunta }}
-    <b>ponderación:</b> {% if ponderaciones[pregunta.idPregunta] is defined and ponderaciones[pregunta.idPregunta] is not iterable %} {{ ponderaciones[pregunta.idPregunta] }} {% endif %}
+    <b>ponderación:</b> {% if puntuaciones[pregunta.idPregunta] is defined and puntuaciones[pregunta.idPregunta] is not iterable %} {{ puntuaciones[pregunta.idPregunta] }} {% endif %}
     <br />
-    #}
+#}
 
     {% include 'pregunta/' ~ (pregunta.idPreguntaPadre ? 'sub' : 'tipo') ~ 'Pregunta' ~ 
         tipoPreguntaTwig ?? pregunta.idTipoPregunta.codTipoPregunta ~ '.html.twig' with vars %}

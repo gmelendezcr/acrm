@@ -1,5 +1,6 @@
 <div class="col-md-12">
     <div class="table-responsive">
+        {{ btPuntuacion|raw }}
         <table class="table table-bordered">
             <tbody>
                 <tr class="bg-info">
@@ -21,6 +22,8 @@
                                     </label>
                                 {% endif %}
                             {% endfor %}
+                            {{ btRevisar|raw }}
+                            {{ btPuntuacion|raw }}
                         </td>
                     {% endif %}
                 </tr>
@@ -53,6 +56,24 @@
                         {% else %}
                             {% set btRevisar = '' %}
                         {% endif %}
+
+                        {% if estadoFormularioPorCentroEducativo == 'CA' and ( subPregunta.ponderacionMaxima or subPregunta.ponderacion ) %}
+                            {% if puntuaciones[subPregunta.idPregunta] is not defined %}
+                                {% set puntuacion = 0.00 %}
+                            {% else %}
+                                {% set puntuacion = puntuaciones[subPregunta.idPregunta] %}
+                            {% endif %}
+                            {% set puntuacionPreg = ( subPregunta.ponderacionMaxima ? subPregunta.ponderacionMaxima : subPregunta.ponderacion ) %}
+                            {% if puntuacion < puntuacionPreg %}
+                                {% set clasePuntuacion = 'puntuacion-baja' %}
+                            {% else %}
+                                {% set clasePuntuacion = 'puntuacion-completa' %}
+                            {% endif %}
+                            {% set btPuntuacion = '<span class="puntuacion ' ~ clasePuntuacion ~ '">[' ~ puntuacion|number_format(2) ~ ' / ' ~ puntuacionPreg|number_format(2) ~ ' puntos]</span>' %}
+                        {% else %}
+                            {% set btPuntuacion = '' %}
+                        {% endif %}
+
                         {% if numerarSubPreguntas == 'S' %}
                             <td>
                                 {{ loop.index }}

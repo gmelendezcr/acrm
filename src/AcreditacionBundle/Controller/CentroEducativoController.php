@@ -208,7 +208,7 @@ class CentroEducativoController extends Controller{
                 ->andWhere('e.codEstadoFormulario in (:codEstadoFormulario)')
                 ->orderBy('e.codEstadoFormulario','desc')
                     ->setParameter('idUsuarioDigita',$this->getUser())
-                    ->setParameter('codEstadoFormulario',array('NU','DI'))
+                    ->setParameter('codEstadoFormulario',array('NU','DI','RE','CO'))
                         ->getQuery()->getArrayResult();
             if(is_array($forms) && isset($forms[0])){
                 $idFormularioPorCentroEducativo=$forms[0]['idFormularioPorCentroEducativo'];
@@ -258,7 +258,7 @@ class CentroEducativoController extends Controller{
             ->join('fce.idEstadoFormulario','e')
             ->join('fce.idUsuarioDigita','u')
                 ->andWhere('e.codEstadoFormulario in (:codEstadoFormulario)')
-                ->setParameter('codEstadoFormulario',array('CA','AP'))
+                ->setParameter('codEstadoFormulario',array('AP','CA'))
                 ->orderBy('e.codEstadoFormulario','desc')
                 ->getQuery()->getArrayResult();
         return $this->render('centro-educativo/form_lista_evaluar.index.html.twig',array(

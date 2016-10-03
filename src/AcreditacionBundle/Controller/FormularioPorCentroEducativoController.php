@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 
+use Doctrine\ORM\Query\ResultSetMapping;
+
 /**
  * FormularioPorCentroEducativo controller.
  *
@@ -28,37 +30,54 @@ class FormularioPorCentroEducativoController extends Controller
         $idPregunta=$request->get('idPregunta');
         $idOpcionRespuesta=$request->get('idOpcionRespuesta');
 
-        $respuestaPorFormularioPorCentroEducativo=$em->getRepository('AcreditacionBundle:RespuestaPorFormularioPorCentroEducativo')->findOneBy(array(
-            'idFormularioPorCentroEducativo' => $idFormularioPorCentroEducativoRevisar,
-            'idPregunta' => $idPregunta,
-            'idOpcionRespuesta' => ($idOpcionRespuesta?$idOpcionRespuesta:null),
-        ));
-        if($respuestaPorFormularioPorCentroEducativo){
-            $revisar=$respuestaPorFormularioPorCentroEducativo->getRevisar();
-            if($revisar=='S'){
-                $nuevoRevisar='N';
+        $nuevoRevisar='';
+        $formularioPorCentroEducativo=$em->getRepository('AcreditacionBundle:FormularioPorCentroEducativo')->find($idFormularioPorCentroEducativoRevisar);
+        if($formularioPorCentroEducativo->getIdEstadoFormulario()->getCodEstadoFormulario()=='TE'){
+
+            $respuestaPorFormularioPorCentroEducativo=$em->getRepository('AcreditacionBundle:RespuestaPorFormularioPorCentroEducativo')->findOneBy(array(
+                'idFormularioPorCentroEducativo' => $idFormularioPorCentroEducativoRevisar,
+                'idPregunta' => $idPregunta,
+                'idOpcionRespuesta' => ($idOpcionRespuesta?$idOpcionRespuesta:null),
+            ));
+            if($respuestaPorFormularioPorCentroEducativo){
+                $revisar=$respuestaPorFormularioPorCentroEducativo->getRevisar();
+                if($revisar=='S'){
+                    $nuevoRevisar='N';
+                }
+                else{
+                    $nuevoRevisar='S';
+                }
+                $respuestaPorFormularioPorCentroEducativo->setRevisar($nuevoRevisar);
             }
             else{
                 $nuevoRevisar='S';
+                $respuestaPorFormularioPorCentroEducativo=new respuestaPorFormularioPorCentroEducativo();
+                $respuestaPorFormularioPorCentroEducativo->setIdFormularioPorCentroEducativo($formularioPorCentroEducativo);
+                $respuestaPorFormularioPorCentroEducativo->setIdPregunta(
+                    $em->getRepository('AcreditacionBundle:Pregunta')->find($idPregunta));
+                if($idOpcionRespuesta){
+                    $respuestaPorFormularioPorCentroEducativo->setIdOpcionRespuesta(
+                        $em->getRepository('AcreditacionBundle:OpcionRespuesta')->find($idOpcionRespuesta));
+                }
+                $respuestaPorFormularioPorCentroEducativo->setRevisar($nuevoRevisar);
             }
-            $respuestaPorFormularioPorCentroEducativo->setRevisar($nuevoRevisar);
+            $em->persist($respuestaPorFormularioPorCentroEducativo);
+            $em->flush();
+
         }
-        else{
-            $nuevoRevisar='S';
-            $respuestaPorFormularioPorCentroEducativo=new respuestaPorFormularioPorCentroEducativo();
-            $respuestaPorFormularioPorCentroEducativo->setIdFormularioPorCentroEducativo(
-                $em->getRepository('AcreditacionBundle:FormularioPorCentroEducativo')->find($idFormularioPorCentroEducativoRevisar));
-            $respuestaPorFormularioPorCentroEducativo->setIdPregunta(
-                $em->getRepository('AcreditacionBundle:Pregunta')->find($idPregunta));
-            if($idOpcionRespuesta){
-                $respuestaPorFormularioPorCentroEducativo->setIdOpcionRespuesta(
-                    $em->getRepository('AcreditacionBundle:OpcionRespuesta')->find($idOpcionRespuesta));
-            }
-            $respuestaPorFormularioPorCentroEducativo->setRevisar($nuevoRevisar);
-        }
-        $em->persist($respuestaPorFormularioPorCentroEducativo);
-        $em->flush();
 
         return new Response($nuevoRevisar);
+    }
+
+    public function calificarAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $idFormularioPorCentroEducativo=$request->get('idFormularioPorCentroEducativo');
+
+        $em->getConnection()
+            ->prepare("CALL CALIFICAR_FORMULARIO ($idFormularioPorCentroEducativo)")
+                ->execute();
+
+        return $this->redirectToRoute('centro_educativo_form_lista_evaluar');
     }
 }

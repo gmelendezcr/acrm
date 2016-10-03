@@ -58,8 +58,9 @@
                         {% set readonly, disabled = '', '' %}
                     {% endif %}
                     {% for pregunta in seccion.preguntas %}
+
                         {% if idFormularioPorCentroEducativoRevisar or revisar[pregunta.idPregunta] is defined %}
-                            {% if idFormularioPorCentroEducativoRevisar %}
+                            {% if idFormularioPorCentroEducativoRevisar and estadoFormularioPorCentroEducativo == 'TE' %}
                                 {% set onClickRevisar = 'onClick="marcarRevisar($(this),' ~ idFormularioPorCentroEducativoRevisar ~ ',' ~ pregunta.idPregunta ~ ');"' %}
                             {% else %}
                                 {% set onClickRevisar = '' %}
@@ -75,9 +76,28 @@
                         {% else %}
                             {% set btRevisar = '' %}
                         {% endif %}
-                        {% if not pregunta.idPreguntaPadre %}
-                            {% include 'pregunta/showAsForm.html.twig' with {'pregunta': pregunta, 'respuestas': respuestas, 'ponderaciones': ponderaciones, 'idFormularioPorCentroEducativoRevisar': idFormularioPorCentroEducativoRevisar} %}
+
+                        {% if estadoFormularioPorCentroEducativo == 'CA' and ( pregunta.ponderacionMaxima or pregunta.ponderacion ) %}
+                            {% if puntuaciones[pregunta.idPregunta] is not defined %}
+                                {% set puntuacion = 0.00 %}
+                            {% else %}
+                                {% set puntuacion = puntuaciones[pregunta.idPregunta] %}
+                            {% endif %}
+                            {% set puntuacionPreg = ( pregunta.ponderacionMaxima ? pregunta.ponderacionMaxima : pregunta.ponderacion ) %}
+                            {% if puntuacion < puntuacionPreg %}
+                                {% set clasePuntuacion = 'puntuacion-baja' %}
+                            {% else %}
+                                {% set clasePuntuacion = 'puntuacion-completa' %}
+                            {% endif %}
+                            {% set btPuntuacion = '<span class="puntuacion ' ~ clasePuntuacion ~ '">[' ~ puntuacion|number_format(2) ~ ' / ' ~ puntuacionPreg|number_format(2) ~ ' puntos]</span>' %}
+                        {% else %}
+                            {% set btPuntuacion = '' %}
                         {% endif %}
+
+                        {% if not pregunta.idPreguntaPadre %}
+                            {% include 'pregunta/showAsForm.html.twig' with {'pregunta': pregunta, 'respuestas': respuestas, 'puntuaciones': puntuaciones, 'idFormularioPorCentroEducativoRevisar': idFormularioPorCentroEducativoRevisar} %}
+                        {% endif %}
+
                     {% endfor %}
                     <div class="col-md-12 text-right">
                         <input type="hidden" name="idSeccion" value="{{ seccion.idSeccion }}">

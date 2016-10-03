@@ -20,7 +20,7 @@
                                 Nombre del centro educativo
                             </th> 
                             <th class="col-sm-4">
-                                Nombre de formulario
+                               Nombre de formulario
                             </th>
                             <th class="col-sm-2">
                                 Digitador
@@ -57,17 +57,24 @@
                                     {#<span class="glyphicon glyphicon-ok btn btn-success" data-toggle="tooltip" data-placement="top" title="Aprobado"></span> Evaluado#}
                                 </td>
                                 <td class="text-center">
+                                    <form id="mostrarSecciones{{ form.idFormularioPorCentroEducativo }}" action="{{ path('seccion_index') }}" method="post">
+                                        <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ form.idFormularioPorCentroEducativo }}">
+                                    </form>
+                                    <a href="#" onClick="$('#mostrarSecciones{{ form.idFormularioPorCentroEducativo }}').submit();" class="btn btn-info btn-block">Mostrar</a>
                                     {% if form.codEstadoFormulario == 'AP' %}
-                                        <a href="" class="btn btn-success btn-block">Calificar</a>
+                                        <form id="calificar" method="POST" action="{{ path('formulario_calificar') }}">
+                                            <input type="hidden" name="idFormularioPorCentroEducativo" value="{{ form.idFormularioPorCentroEducativo }}">
+                                        </form>
+                                        <a href="#" onClick="$('#calificar').submit();" class="btn btn-success btn-block">Calificar</a>
                                     {% else %}
-                                        <a href="" class="btn btn-success btn-block disabled" data-toggle="tooltip">Calificar</a>
+                                        <!--<a href="" class="btn btn-success btn-block disabled">Calificar</a>-->
                                     {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}
                     </tbody> 
                 </table>
-            </div>
+            </div>            
         </div>
     </div>
 {% endblock %}

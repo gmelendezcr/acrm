@@ -362,3 +362,15 @@ color:#204d74 !important;
     vertical-align: baseline;
     white-space: nowrap;
 }
+
+.puntuacion{
+    border-style: solid;
+}
+
+.puntuacion-baja{
+    background-color: red;
+}
+
+.puntuacion-completa{
+    background-color: lightgreen;
+}

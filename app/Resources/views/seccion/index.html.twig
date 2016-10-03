@@ -9,7 +9,6 @@
         <div class="capa-separador-1"></div>
     </div>
     -->
-    
     <div class="col-md-12">
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
@@ -68,16 +67,21 @@
             </table>
         </div>
     </div>
-    <form id="secciones" method="POST" action="{{ path('seccion_terminar') }}">
-        <div class="col-md-12 text-right">
-            {% if not idFormularioPorCentroEducativoRevisar %}
+    {% if not idFormularioPorCentroEducativoRevisar and ( estadoFormularioPorCentroEducativo == 'DI' or estadoFormularioPorCentroEducativo == 'CO' ) %}
+        <form id="secciones" method="POST" action="{{ path('seccion_terminar') }}">
+            <div class="col-md-12 text-right">
                 <button  data-toggle="confirmation" data-title="Seguro?" type="submit" name="Terminar" value="Terminar" class="btn btn-success">
                     <span class="glyphicon glyphicon-share-alt"></span> Terminar
                 </button>
-            {% else %}
+            </div>
+        </form>
+    {% elseif estadoFormularioPorCentroEducativo == 'TE' %}
+        <form id="secciones" method="POST" action="{{ path('seccion_aprobar_rechazar') }}">
+            <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ idFormularioPorCentroEducativoRevisar }}">
+            <div class="col-md-12 text-right">
                 <input type="submit" name="Aprobar" value="Aprobar" class="btn btn-success">
                 <input type="submit" name="Rechazar" value="Rechazar" class="btn btn-warning">
-            {% endif %}
-        </div>
-    </form>
+            </div>
+        </form>
+    {% endif %}
 {% endblock %}

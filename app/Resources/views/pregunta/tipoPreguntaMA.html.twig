@@ -1,5 +1,6 @@
 <div class="col-md-12">
     <div class="table-responsive">
+        {{ btPuntuacion|raw }}
         <table class="table table-bordered">
             <tbody>
                 <tr class="bg-info">
@@ -61,6 +62,7 @@
                                     {% else %}
                                         {% set btRevisar = '' %}
                                     {% endif %}
+
                                     {% include 'pregunta/showAsForm.html.twig' with {'pregunta': subPregunta, 'idFila': fila.idOpcionRespuesta} %}
                                     {% if pregunta.totalesFilas == 'S' %}
                                         {% if subPregunta.idTipoPregunta.codTipoPregunta == 'TA' %}
@@ -70,6 +72,7 @@
                                             {% set sumaFila2 = sumaFila2 ~ "+($('#" ~ subId ~ "_N').prop('checked')?1:0)" %}
                                         {% endif %}
                                     {% endif %}
+
                                     {% if pregunta.totalesColumnas == 'S' %}
                                         {% set subTotalColumnaId = "subtotalColumna_" ~ subPregunta.idPregunta %}
                                         {% set ceroColumnas = ceroColumnas ~ "$('#" ~ subTotalColumnaId ~ "').val(0); " %}
@@ -85,6 +88,7 @@
                                             ); " %}
                                         {% endif %}
                                     {% endif %}
+
                                 </td>
                             {% endif %}
                         {% endfor %}

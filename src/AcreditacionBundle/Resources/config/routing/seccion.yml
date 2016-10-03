@@ -17,3 +17,8 @@ seccion_terminar:
     path:     /terminar
     defaults: { _controller: "AcreditacionBundle:Seccion:terminar" }
     methods:  POST
+
+seccion_aprobar_rechazar:
+    path:     /aprobarRechazar
+    defaults: { _controller: "AcreditacionBundle:Seccion:aprobarRechazar" }
+    methods:  POST
