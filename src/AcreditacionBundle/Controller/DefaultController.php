@@ -27,6 +27,30 @@ class DefaultController extends Controller{
         }
     }
     public function inicioAction(){
-        return $this->render('default/inicio.index.html.twig');
+        
+        
+        /*
+    ----------------------------------------------------------------------------
+    -> Portada sistema
+    ----------------------------------------------------------------------------
+    */
+  
+        $em = $this->getDoctrine()->getEntityManager();
+        $lista=$em->createQueryBuilder()
+        ->select('fce.idFormularioPorCentroEducativo, c.codCentroEducativo, c.nbrCentroEducativo, c.direccionCentroEducativo,
+        f.codFormulario, f.nbrFormulario, u.nombres, u.apellidos, e.codEstadoFormulario, e.nbrEstadoFormulario')
+        ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'fce')
+            ->join('fce.idCentroEducativo','c')
+            ->join('fce.idFormulario','f')
+            ->join('fce.idEstadoFormulario','e')
+            ->join('fce.idUsuarioDigita','u')
+                ->andWhere('e.codEstadoFormulario in (:codEstadoFormulario)')
+                ->setParameter('codEstadoFormulario',array('AP'))
+                ->orderBy('e.codEstadoFormulario','desc')
+                ->setMaxResults('5')
+                ->getQuery()->getArrayResult();
+                return $this->render('default/inicio.index.html.twig',array(
+                'lista'=>$lista    
+        ));
     }
 }

@@ -1,13 +1,105 @@
 {% extends 'base.html.twig' %}
 {% block body %}
     <div class="col-md-12">
-        <div class="header-control-page">
-            <div class="jumbotron text-center">
+        <div class="header-control">
+            <div class="jumbotron text-center sin-margin-bottom">
                 <h2>
                     Bienvenido, {{ app.user.nombres }} 
                 </h2>
                 <div class="clearfix"></div>
             </div>
+        </div>
+        <div class="clearfix capa-separador-1"></div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Últimos formularios aprobados
+           </div> 
+           <div class="panel-body">
+               <p>Aquí encontrará los últimos 5 registros de de formularios aprobados y esperando ser revisado/calificado</p> 
+           </div>
+           <div class="table-responsive">
+               <table class="table table-hover table-striped">
+                    <thead> 
+                        <tr>
+                            <th class="col-xs-3">
+                                Centro educativo
+                            </th> 
+                            <th class="col-xs-5">
+                                Formulario
+                            </th> 
+                            <th class="col-xs-2">
+                                Digitado
+                            </th> 
+                            <th class="col-xs-2">
+                                Acción
+                            </th> 
+                        </tr> 
+                    </thead> 
+                    <tbody> 
+                        {%for item in lista %} 
+                        <tr> 
+                            <td>
+                                {{item.nbrCentroEducativo}}
+                            </td> 
+                            <td>
+                                {{item.nbrFormulario}}
+                            </td> 
+                            <td>
+                                {{item.nombres}}
+                            </td>
+                            <td>
+                                <form id="mostrarSecciones{{ item.idFormularioPorCentroEducativo }}" action="{{ path('seccion_index') }}" method="post">
+                                    <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ item.idFormularioPorCentroEducativo }}">
+                                </form>
+                                <a href="#" onClick="$('#mostrarSecciones{{ item.idFormularioPorCentroEducativo }}').submit();" class="btn btn-info btn-block">Mostrar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody> 
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                Últimos formularios calificados
+           </div> 
+           <div class="panel-body">
+               <p> </p> 
+           </div> 
+           <table class="table">
+                <thead> 
+                    <tr>
+                        <th>
+                            Centro educativo
+                        </th> 
+                        <th>
+                            Código formulario
+                        </th> 
+                        <th>
+                            Digitado
+                        </th> 
+                    </tr> 
+                </thead> 
+                <tbody> 
+                    <tr> 
+                        <td>
+                            --
+                        </td> 
+                        <td>
+                            ---
+                        </td> 
+                        <td>
+                            ---
+                        </td> 
+                    </tr> 
+                </tbody> 
+            </table> 
         </div>
     </div>
 {% endblock %}

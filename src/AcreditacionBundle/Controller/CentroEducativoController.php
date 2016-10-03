@@ -258,7 +258,7 @@ class CentroEducativoController extends Controller{
             ->join('fce.idEstadoFormulario','e')
             ->join('fce.idUsuarioDigita','u')
                 ->andWhere('e.codEstadoFormulario in (:codEstadoFormulario)')
-                ->setParameter('codEstadoFormulario',array('TE','AP'))
+                ->setParameter('codEstadoFormulario',array('CA','AP'))
                 ->orderBy('e.codEstadoFormulario','desc')
                 ->getQuery()->getArrayResult();
         return $this->render('centro-educativo/form_lista_evaluar.index.html.twig',array(

@@ -199,7 +199,10 @@ class SeccionController extends Controller
             $em->flush();
         }
         else{
-            $session->getFlashBag()->add('error','El estado del formulario no es correcto para terminarlo.');
+            $session->getFlashBag()->add('error','
+            
+                El estado del formulario no es correcto para terminarlo.
+            ');
         }
         $session->remove('idFormularioPorCentroEducativo');
 

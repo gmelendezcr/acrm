@@ -38,13 +38,15 @@ class CuotaAnualPorGradoEscolarPorCentroEducativoType extends AbstractType{
     
     //
      $res_nivel=$em->getRepository('AcreditacionBundle:NivelEducativo')->findAll();
-        //$nxg=array();
+        $nxg=array();
+         
         foreach($res_nivel as $item){
             $nxg[$item->getNbrNivelEducativo()]=array();
             foreach($item->getGradosEscolares() as $grado){
-                $nxg[$grado->getNbrGradoEscolar()]=array();
                     $nxg[$item->getNbrNivelEducativo()][$grado->getNbrGradoEscolar()]=$grado;
+                    
             }
+           
         }
         //var_dump($nxg);
         $this->comboNG=array(
@@ -52,6 +54,13 @@ class CuotaAnualPorGradoEscolarPorCentroEducativoType extends AbstractType{
             'choices_as_values' => true,
             'label' => 'Grados'
         );
+        
+        
+        
+    
+ 
+        
+        
         ///////////////////////////////////////////////
     //var_dump( $this->comboNG);
     
@@ -80,9 +89,8 @@ class CuotaAnualPorGradoEscolarPorCentroEducativoType extends AbstractType{
         ->add('matricula','text',array('label' => 'Matrícula'))
         ->add('monto','text',array('label' => 'Cuota'))
         ->add('anno','text',array('label' => 'Año'))
-        //->add('idGradoEscolarPorCentroEducativo',null,$this->comboNG);
-        ->add('idGradoEscolarPorCentroEducativo','choice',$this->comboNG
-        );
+        ->add('idGradoEscolarPorCentroEducativo',null,$this->comboNG);
+        //->add('idGradoEscolarPorCentroEducativo','choice',$this->comboNG );
     }
     public function getName() { return 'CuotaAnualPorGradoEscolarPorCentroEducativoType'; }
 }

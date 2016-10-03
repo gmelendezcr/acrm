@@ -94,11 +94,20 @@ function marcarRevisar(control,idFormularioPorCentroEducativoRevisar,idPregunta,
     },
     success: function(html){
       if(html=='S'){
-        control.addClass('revisar-item');
+        control.removeClass('label-success');
+        control.addClass('label-warning');
+      }else if(html=='N'){
+        control.addClass('label-success');
+        control.removeClass('label-warning');
       }
       else{
-        control.removeClass('revisar-item');
+        //control.removeClass('label-success');
       }
     }
   });
 }
+
+
+$("#warning-alert").fadeTo(3000, 6000).slideUp(6000, function(){
+    $("#warning-alert").slideUp(6000);
+});

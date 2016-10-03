@@ -51,9 +51,11 @@
                                             {% set onClickRevisar = '' %}
                                         {% endif %}
                                         {% if revisar[subPregunta.idPregunta][fila.idOpcionRespuesta] is defined %}
-                                            {% set classRevisar = 'class="revisar-alerta revisar-item"' %}
+                                           {# {% set classRevisar = 'class="revisar-alerta revisar-item"' %}#}
+                                           {% set classRevisar = 'class="cursor label label-warning"' %}
                                         {% else %}
-                                            {% set classRevisar = 'class="revisar-alerta"' %}
+                                            {#{% set classRevisar = 'class="revisar-alerta"' %}#}
+                                            {% set classRevisar = 'class="cursor label label-success"' %}
                                         {% endif %}
                                         {% set btRevisar = '<span ' ~ onClickRevisar ~ ' ' ~ classRevisar ~ '>[Revisar]</span>' %}
                                     {% else %}

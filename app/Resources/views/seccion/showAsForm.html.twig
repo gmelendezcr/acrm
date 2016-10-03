@@ -9,7 +9,11 @@
         <div class="capa-separador-1"></div>
     </div>
     <div class="col-md-2 text-right">
-        <a class="btn btn-info" href="{{ path('seccion_index') }}"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
+        {% if not idFormularioPorCentroEducativoRevisar %}
+                        <a class="btn btn-info" href="{{ path('seccion_index') }}"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
+                    {% else %}
+                        <a class="btn btn-info" href="#" onClick="$('#mostrarSecciones{{ idFormularioPorCentroEducativoRevisar }}').submit();"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
+                    {% endif %}
         <div class="clearfix capa-separador-1 border-bottom"></div>
         <div class="capa-separador-1"></div>
     </div>
@@ -40,13 +44,13 @@
                 </form>
             {% endif %}
             <form id="seccion{{ seccion.idSeccion }}" method="POST" action="{{ path('seccion_guardar') }}">
-                <div class="col-md-2 col-md-offset-10 text-right">
+                {#<div class="col-md-2 col-md-offset-10 text-right">
                     {% if not idFormularioPorCentroEducativoRevisar %}
                         <a class="btn btn-info" href="{{ path('seccion_index') }}"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
                     {% else %}
                         <a class="btn btn-info" href="#" onClick="$('#mostrarSecciones{{ idFormularioPorCentroEducativoRevisar }}').submit();"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
                     {% endif %}
-                </div>
+                </div>#}
                     <div class="clearfix capa-separador-1"></div>
                     {% if idFormularioPorCentroEducativoRevisar %}
                         {% set readonly, disabled = 'readonly', 'disabled' %}
@@ -61,9 +65,11 @@
                                 {% set onClickRevisar = '' %}
                             {% endif %}
                             {% if revisar[pregunta.idPregunta] is defined %}
-                                {% set classRevisar = 'class="revisar-alerta revisar"' %}
+                                {#{% set classRevisar = 'class="revisar-alerta revisar"' %}#}
+                                {% set classRevisar = 'class="cursor label label-warning"' %}
                             {% else %}
-                                {% set classRevisar = 'class="revisar-alerta"' %}
+                                {#{% set classRevisar = 'class="revisar-alerta"' %}#}
+                                {% set classRevisar = 'class="cursor label label-success"' %}
                             {% endif %}
                             {% set btRevisar = '<span ' ~ onClickRevisar ~ ' ' ~ classRevisar ~ '>[Revisar]</span>' %}
                         {% else %}
