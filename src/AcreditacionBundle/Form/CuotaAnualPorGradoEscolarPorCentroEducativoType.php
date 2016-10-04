@@ -88,8 +88,8 @@ class CuotaAnualPorGradoEscolarPorCentroEducativoType extends AbstractType{
         $builder
         ->add('matricula','text',array('label' => 'Matrícula'))
         ->add('monto','text',array('label' => 'Cuota'))
-        ->add('anno','text',array('label' => 'Año'))
-        ->add('idGradoEscolarPorCentroEducativo',null,$this->comboNG);
+        ->add('anno','text',array('label' => 'Año'));
+        //->add('idGradoEscolarPorCentroEducativo',null,$this->comboNG);
         //->add('idGradoEscolarPorCentroEducativo','choice',$this->comboNG );
     }
     public function getName() { return 'CuotaAnualPorGradoEscolarPorCentroEducativoType'; }
