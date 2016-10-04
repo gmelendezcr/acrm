@@ -12,26 +12,20 @@
         <div class="clearfix capa-separador-1"></div>
     </div>
     
-    <div class="col-md-8">
+    <div class="col-md-4">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                Últimos formularios aprobados
+                Formularios pendientes de calificar
            </div> 
-           <div class="panel-body">
-               <p>Aquí encontrará los últimos 5 registros de de formularios aprobados y esperando ser revisado/calificado</p> 
-           </div>
+           <!--<div class="panel-body">
+               <p>Aquí encontrará los últimos 5 registros de de formularios aprobados esperando ser calificados</p> 
+           </div>-->
            <div class="table-responsive">
                <table class="table table-hover table-striped">
                     <thead> 
                         <tr>
-                            <th class="col-xs-3">
+                            <th class="col-xs-10">
                                 Centro educativo
-                            </th> 
-                            <th class="col-xs-5">
-                                Formulario
-                            </th> 
-                            <th class="col-xs-2">
-                                Digitado
                             </th> 
                             <th class="col-xs-2">
                                 Acción
@@ -42,14 +36,10 @@
                         {%for item in lista %} 
                         <tr> 
                             <td>
-                                {{item.nbrCentroEducativo}}
+                               {{item.codFormulario}} - {{item.nbrCentroEducativo}}
                             </td> 
-                            <td>
-                                {{item.nbrFormulario}}
-                            </td> 
-                            <td>
-                                {{item.nombres}}
-                            </td>
+                            
+                           
                             <td>
                                 <form id="mostrarSecciones{{ item.idFormularioPorCentroEducativo }}" action="{{ path('seccion_index') }}" method="post">
                                     <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ item.idFormularioPorCentroEducativo }}">
@@ -65,25 +55,21 @@
     </div>
     
     <div class="col-md-4">
-        <div class="panel panel-success">
+        <div class="panel panel-primary">
             <div class="panel-heading">
-                Últimos formularios calificados
+               Formularios pendientes de revisar
            </div> 
-           <div class="panel-body">
+           <!--<div class="panel-body">
                <p> </p> 
-           </div> 
+           </div>--> 
            <table class="table">
                 <thead> 
                     <tr>
                         <th>
                             Centro educativo
                         </th> 
-                        <th>
-                            Código formulario
-                        </th> 
-                        <th>
-                            Digitado
-                        </th> 
+                       
+                        
                     </tr> 
                 </thead> 
                 <tbody> 
@@ -91,11 +77,34 @@
                         <td>
                             --
                         </td> 
+                        
+                    </tr> 
+                </tbody> 
+            </table> 
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+              Formularios en digitación o corrección
+           </div> 
+           <!--<div class="panel-body">
+               <p> </p> 
+           </div>--> 
+           <table class="table">
+                <thead> 
+                    <tr>
+                        <th>
+                            Centro educativo
+                        </th> 
+                       
+                    </tr> 
+                </thead> 
+                <tbody> 
+                    <tr> 
                         <td>
-                            ---
-                        </td> 
-                        <td>
-                            ---
+                            --
                         </td> 
                     </tr> 
                 </tbody> 

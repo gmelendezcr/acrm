@@ -49,8 +49,10 @@ class DefaultController extends Controller{
                 ->orderBy('e.codEstadoFormulario','desc')
                 ->setMaxResults('5')
                 ->getQuery()->getArrayResult();
+                $num_form=count($lista);
                 return $this->render('default/inicio.index.html.twig',array(
-                'lista'=>$lista    
+                'lista'=>$lista,
+                'num_form'=>$num_form
         ));
     }
 }

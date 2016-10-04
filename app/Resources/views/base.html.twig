@@ -34,6 +34,13 @@
                     </div>
                 </div>
                 <div class="col-md-4 text-right z-index-1">
+                    {#<div class="btn-group">
+                        {% if num_form==1%}
+                            <a href="" class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Hay formularios pendientes de calificar">
+                                <span class="glyphicon glyphicon-bell"></span>
+                            </a>
+                        {%endif%}
+                    </div>#}
                     <div class="btn-group">
                         <button type="button" class="btn btn-warning">
                             {% if is_granted('IS_AUTHENTICATED_FULLY') or is_granted('IS_AUTHENTICATED_REMEMBERED') %}
@@ -93,8 +100,8 @@
         </nav>
     </div>
     <!--fin menú-->
-    <!--Alertas-->
     
+    <!--Alertas-->
     {% for flash_message in app.session.flashBag.get('error') %}
     <div class="container" id="warning-alert">
         <div class="row">
@@ -108,8 +115,8 @@
         </div>
     </div>
     {% endfor %}
-    
     <!--Fin alertas-->
+    
     <div class="container">
         <div class="row">
            {% block body %}{% endblock %}

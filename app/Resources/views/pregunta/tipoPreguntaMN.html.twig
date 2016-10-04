@@ -44,11 +44,11 @@
                                 {% endif %}
                                 {% set puntuacionPreg = ( subPregunta.ponderacionMaxima ? subPregunta.ponderacionMaxima : subPregunta.ponderacion ) %}
                                 {% if puntuacion < puntuacionPreg %}
-                                    {% set clasePuntuacion = 'puntuacion-baja' %}
+                                    {% set clasePuntuacion = 'label-warning' %}
                                 {% else %}
-                                    {% set clasePuntuacion = 'puntuacion-completa' %}
+                                    {% set clasePuntuacion = 'label-success' %}
                                 {% endif %}
-                                {% set btPuntuacion = '<span class="puntuacion ' ~ clasePuntuacion ~ '">[' ~ puntuacion|number_format(2) ~ ' / ' ~ puntuacionPreg|number_format(2) ~ ' puntos]</span>' %}
+                                {% set btPuntuacion = '<span class="label ' ~ clasePuntuacion ~ '">[' ~ puntuacion|number_format(2) ~ ' / ' ~ puntuacionPreg|number_format(2) ~ ' puntos]</span>' %}
                             {% else %}
                                 {% set btPuntuacion = '' %}
                             {% endif %}
