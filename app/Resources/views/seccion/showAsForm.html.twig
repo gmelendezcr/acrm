@@ -59,7 +59,7 @@
                     {% endif %}
                     {% for pregunta in seccion.preguntas %}
 
-                        {% if idFormularioPorCentroEducativoRevisar or revisar[pregunta.idPregunta] is defined %}
+                        {% if estadoFormularioPorCentroEducativo in ['RE','CO','TE','AP'] and ( idFormularioPorCentroEducativoRevisar or revisar[pregunta.idPregunta] is defined ) %}
                             {% if idFormularioPorCentroEducativoRevisar and estadoFormularioPorCentroEducativo == 'TE' %}
                                 {% set onClickRevisar = 'onClick="marcarRevisar($(this),' ~ idFormularioPorCentroEducativoRevisar ~ ',' ~ pregunta.idPregunta ~ ');"' %}
                             {% else %}

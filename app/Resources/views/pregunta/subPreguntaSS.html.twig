@@ -20,5 +20,7 @@
         {% endif %}
     {% endfor %}
     {{ btRevisar|raw }}
-    {{ btPuntuacion|raw }}
+    {% if pregunta.ponderacionMaxima or pregunta.ponderacion %}
+        {{ btPuntuacion|raw }}
+    {% endif %}
 </td>

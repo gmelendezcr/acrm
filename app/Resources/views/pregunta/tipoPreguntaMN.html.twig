@@ -18,7 +18,7 @@
                     {% endif %}
                     {% if subPregunta.idTipoPregunta.codTipoPregunta == 'SM' %}
                         <td>
-                            {% if idFormularioPorCentroEducativoRevisar or revisar[subPregunta.idPregunta] is defined %}
+                            {% if estadoFormularioPorCentroEducativo in ['RE','CO','TE','AP'] and ( idFormularioPorCentroEducativoRevisar or revisar[subPregunta.idPregunta] is defined ) %}
                                 {% if idFormularioPorCentroEducativoRevisar %}
                                     {% set onClickRevisar = 'onClick="marcarRevisar($(this),' ~ idFormularioPorCentroEducativoRevisar ~ ',' ~ subPregunta.idPregunta ~ ');"' %}
                                 {% else %}
