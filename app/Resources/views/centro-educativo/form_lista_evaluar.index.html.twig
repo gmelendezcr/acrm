@@ -52,7 +52,11 @@
                                     {% if form.codEstadoFormulario == 'AP' %}
                                         {{ form.nbrEstadoFormulario }}
                                     {% elseif form.codEstadoFormulario == 'CA' %}
-                                        <span class="glyphicon glyphicon-ok btn btn-success" data-toggle="tooltip" data-placement="top" title="{{ form.nbrEstadoFormulario }}"></span> {{ form.nbrEstadoFormulario }}
+                                    <span class="label label-success">
+                                        <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="top" title="{{ form.nbrEstadoFormulario }}"></span>
+                                    </span> 
+                                    {{ form.nbrEstadoFormulario }}
+
                                     {% endif %}
                                     {#<span class="glyphicon glyphicon-ok btn btn-success" data-toggle="tooltip" data-placement="top" title="Aprobado"></span> Evaluado#}
                                 </td>

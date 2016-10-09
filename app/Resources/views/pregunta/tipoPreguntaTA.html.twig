@@ -1,6 +1,6 @@
 <div class="col-md-12">
     <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered table-criterio">
             <tbody>
                 <tr class="bg-info">
                     <th>
@@ -10,7 +10,7 @@
                 <tr>
                     <td>
                         {% if pregunta.opcionNoAplica %}
-                            <label class="btn btn-info">
+                            <label class="btn btn-info btn-xs">
                                 <input type='checkbox' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica'
                                 id='{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica_{{ pregunta.idPregunta }}'
                                 name='{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica_{{ pregunta.idPregunta }}'

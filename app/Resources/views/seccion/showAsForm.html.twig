@@ -1,27 +1,22 @@
 {% extends 'base.html.twig' %}
     {% block body %}
-    
         <div class="col-md-10 text-center">                                            
-        <strong>
-            Usted está trabajando en el:<br /> {{ app.session.get('nbrFormulario') }}
-        </strong>
-        <div class="clearfix capa-separador-1 border-bottom"></div>
-        <div class="capa-separador-1"></div>
-    </div>
-    <div class="col-md-2 text-right">
-        {% if not idFormularioPorCentroEducativoRevisar %}
-                        <a class="btn btn-info" href="{{ path('seccion_index') }}"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
-                    {% else %}
-                        <a class="btn btn-info" href="#" onClick="$('#mostrarSecciones{{ idFormularioPorCentroEducativoRevisar }}').submit();"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
-                    {% endif %}
-        <div class="clearfix capa-separador-1 border-bottom"></div>
-        <div class="capa-separador-1"></div>
-    </div>
-    <div class="clearfix"></div>
-    
-    
-    
-    
+            <strong>
+                Usted está trabajando en el:<br /> {{ app.session.get('nbrFormulario') }}
+            </strong>
+            <div class="clearfix capa-separador-1 border-bottom"></div>
+            <div class="capa-separador-1"></div>
+        </div>
+        <div class="col-md-2 text-right">
+            {% if not idFormularioPorCentroEducativoRevisar %}
+                <a class="btn btn-info" href="{{ path('seccion_index') }}"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
+            {% else %}
+                <a class="btn btn-info" href="#" onClick="$('#mostrarSecciones{{ idFormularioPorCentroEducativoRevisar }}').submit();"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
+            {% endif %}
+            <div class="clearfix capa-separador-1 border-bottom"></div>
+            <div class="capa-separador-1"></div>
+        </div>
+        <div class="clearfix"></div>
         <div class="col-md-12">
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
@@ -38,73 +33,69 @@
                     </tbody>
                 </table>
             </div>
-            {% if idFormularioPorCentroEducativoRevisar %}
-                <form id="mostrarSecciones{{ idFormularioPorCentroEducativoRevisar }}" action="{{ path('seccion_index') }}" method="post">
-                    <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ idFormularioPorCentroEducativoRevisar }}">
-                </form>
-            {% endif %}
-            <form id="seccion{{ seccion.idSeccion }}" method="POST" action="{{ path('seccion_guardar') }}">
-                {#<div class="col-md-2 col-md-offset-10 text-right">
-                    {% if not idFormularioPorCentroEducativoRevisar %}
-                        <a class="btn btn-info" href="{{ path('seccion_index') }}"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
-                    {% else %}
-                        <a class="btn btn-info" href="#" onClick="$('#mostrarSecciones{{ idFormularioPorCentroEducativoRevisar }}').submit();"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
-                    {% endif %}
-                </div>#}
-                    <div class="clearfix capa-separador-1"></div>
-                    {% if idFormularioPorCentroEducativoRevisar %}
-                        {% set readonly, disabled = 'readonly', 'disabled' %}
-                    {% else %}
-                        {% set readonly, disabled = '', '' %}
-                    {% endif %}
-                    {% for pregunta in seccion.preguntas %}
-
-                        {% if estadoFormularioPorCentroEducativo in ['RE','CO','TE','AP'] and ( idFormularioPorCentroEducativoRevisar or revisar[pregunta.idPregunta] is defined ) %}
-                            {% if idFormularioPorCentroEducativoRevisar and estadoFormularioPorCentroEducativo == 'TE' %}
-                                {% set onClickRevisar = 'onClick="marcarRevisar($(this),' ~ idFormularioPorCentroEducativoRevisar ~ ',' ~ pregunta.idPregunta ~ ');"' %}
-                            {% else %}
-                                {% set onClickRevisar = '' %}
-                            {% endif %}
-                            {% if revisar[pregunta.idPregunta] is defined %}
-                                {#{% set classRevisar = 'class="revisar-alerta revisar"' %}#}
-                                {% set classRevisar = 'class="cursor label label-warning"' %}
-                            {% else %}
-                                {#{% set classRevisar = 'class="revisar-alerta"' %}#}
-                                {% set classRevisar = 'class="cursor label label-success"' %}
-                            {% endif %}
-                            {% set btRevisar = '<span ' ~ onClickRevisar ~ ' ' ~ classRevisar ~ '>[Revisar]</span>' %}
-                        {% else %}
-                            {% set btRevisar = '' %}
-                        {% endif %}
-
-                        {% if estadoFormularioPorCentroEducativo == 'CA' and ( pregunta.ponderacionMaxima or pregunta.ponderacion ) %}
-                            {% if puntuaciones[pregunta.idPregunta] is not defined %}
-                                {% set puntuacion = 0.00 %}
-                            {% else %}
-                                {% set puntuacion = puntuaciones[pregunta.idPregunta] %}
-                            {% endif %}
-                            {% set puntuacionPreg = ( pregunta.ponderacionMaxima ? pregunta.ponderacionMaxima : pregunta.ponderacion ) %}
-                            {% if puntuacion < puntuacionPreg %}
-                                {% set clasePuntuacion = 'label-warning' %}
-                            {% else %}
-                                {% set clasePuntuacion = 'label-success' %}
-                            {% endif %}
-                            {% set btPuntuacion = '<span data-toggle="tooltip" data-placement="top" title="[' ~ puntuacion|number_format(2) ~ ' / ' ~ puntuacionPreg|number_format(2) ~ ' puntos]" class="label ' ~ clasePuntuacion ~ '">[' ~ puntuacion|number_format(2) ~ ' / ' ~ puntuacionPreg|number_format(2) ~ ' puntos]</span>' %}
-                        {% else %}
-                            {% set btPuntuacion = '' %}
-                        {% endif %}
-
-                        {% if not pregunta.idPreguntaPadre %}
-                            {% include 'pregunta/showAsForm.html.twig' with {'pregunta': pregunta, 'respuestas': respuestas, 'puntuaciones': puntuaciones, 'idFormularioPorCentroEducativoRevisar': idFormularioPorCentroEducativoRevisar} %}
-                        {% endif %}
-
-                    {% endfor %}
-                    <div class="col-md-12 text-right">
-                        <input type="hidden" name="idSeccion" value="{{ seccion.idSeccion }}">
-                        {% if not idFormularioPorCentroEducativoRevisar %}
-                            <button type="submit" value="Guardar" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button>
-                        {% endif %}
-                    </div>
-            </form>
         </div>
+        {% if idFormularioPorCentroEducativoRevisar %}
+            <form id="mostrarSecciones{{ idFormularioPorCentroEducativoRevisar }}" action="{{ path('seccion_index') }}" method="post">
+                <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ idFormularioPorCentroEducativoRevisar }}">
+            </form>
+        {% endif %}
+        <form id="seccion{{ seccion.idSeccion }}" method="POST" action="{{ path('seccion_guardar') }}">
+            {#<div class="col-md-2 col-md-offset-10 text-right">
+                {% if not idFormularioPorCentroEducativoRevisar %}
+                    <a class="btn btn-info" href="{{ path('seccion_index') }}"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
+                {% else %}
+                    <a class="btn btn-info" href="#" onClick="$('#mostrarSecciones{{ idFormularioPorCentroEducativoRevisar }}').submit();"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
+                {% endif %}
+            </div>#}
+            <div class="clearfix capa-separador-1"></div>
+            {% if idFormularioPorCentroEducativoRevisar %}
+                {% set readonly, disabled = 'readonly', 'disabled' %}
+            {% else %}
+                {% set readonly, disabled = '', '' %}
+            {% endif %}
+            {% for pregunta in seccion.preguntas %}
+                {% if estadoFormularioPorCentroEducativo in ['RE','CO','TE','AP'] and ( idFormularioPorCentroEducativoRevisar or revisar[pregunta.idPregunta] is defined ) %}
+                    {% if idFormularioPorCentroEducativoRevisar and estadoFormularioPorCentroEducativo == 'TE' %}
+                        {% set onClickRevisar = 'onClick="marcarRevisar($(this),' ~ idFormularioPorCentroEducativoRevisar ~ ',' ~ pregunta.idPregunta ~ ');"' %}
+                    {% else %}
+                        {% set onClickRevisar = '' %}
+                    {% endif %}
+                    {% if revisar[pregunta.idPregunta] is defined %}
+                        {#{% set classRevisar = 'class="revisar-alerta revisar"' %}#}
+                        {% set classRevisar = 'class="cursor label label-warning"' %}
+                    {% else %}
+                        {#{% set classRevisar = 'class="revisar-alerta"' %}#}
+                        {% set classRevisar = 'class="cursor label label-success"' %}
+                    {% endif %}
+                    {% set btRevisar = '<span ' ~ onClickRevisar ~ ' ' ~ classRevisar ~ '>[Revisar]</span>' %}
+                {% else %}
+                    {% set btRevisar = '' %}
+                {% endif %}
+                {% if estadoFormularioPorCentroEducativo == 'CA' and ( pregunta.ponderacionMaxima or pregunta.ponderacion ) %}
+                    {% if puntuaciones[pregunta.idPregunta] is not defined %}
+                        {% set puntuacion = 0.00 %}
+                    {% else %}
+                        {% set puntuacion = puntuaciones[pregunta.idPregunta] %}
+                    {% endif %}
+                    {% set puntuacionPreg = ( pregunta.ponderacionMaxima ? pregunta.ponderacionMaxima : pregunta.ponderacion ) %}
+                    {% if puntuacion < puntuacionPreg %}
+                        {% set clasePuntuacion = 'label-warning' %}
+                    {% else %}
+                        {% set clasePuntuacion = 'label-success' %}
+                    {% endif %}
+                    {% set btPuntuacion = '<span data-toggle="tooltip" data-placement="top" title="[' ~ puntuacion|number_format(2) ~ ' / ' ~ puntuacionPreg|number_format(2) ~ ' puntos]" class="label ' ~ clasePuntuacion ~ '">[' ~ puntuacion|number_format(2) ~ ' / ' ~ puntuacionPreg|number_format(2) ~ ' puntos]</span>' %}
+                {% else %}
+                    {% set btPuntuacion = '' %}
+                {% endif %}
+                {% if not pregunta.idPreguntaPadre %}
+                    {% include 'pregunta/showAsForm.html.twig' with {'pregunta': pregunta, 'respuestas': respuestas, 'puntuaciones': puntuaciones, 'idFormularioPorCentroEducativoRevisar': idFormularioPorCentroEducativoRevisar} %}
+                {% endif %}
+            {% endfor %}
+            <div class="col-md-12 text-right">
+                <input type="hidden" name="idSeccion" value="{{ seccion.idSeccion }}">
+                {% if not idFormularioPorCentroEducativoRevisar %}
+                    <button type="submit" value="Guardar" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button>
+                {% endif %}
+            </div>
+        </form>
     {% endblock %}

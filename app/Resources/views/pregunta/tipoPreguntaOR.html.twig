@@ -1,6 +1,6 @@
 <div class="col-md-12">
     <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered table-criterio">
             <tbody>
                 <tr class="bg-info">
                     <th>
@@ -8,7 +8,7 @@
                     </th>
                 </tr>
                 <tr>
-                    <td>
+                    <td class="text-left">
                         {% for opcion in opciones %}
                             {% if opcion.codOpcionRespuesta %}
                                 {% if respuestas[pregunta.idPregunta] is defined and respuestas[pregunta.idPregunta]==opcion.codOpcionRespuesta %}
@@ -16,8 +16,8 @@
                                 {% else %}
                                     {% set checked = '' %}
                                 {% endif %}
-                                <label class="checkbox-inline btn btn-info">
-                                    <input type='radio' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' value='{{ opcion.codOpcionRespuesta }}' {{ checked }} {{ disabled }}> {{ opcion.descripcionOpcionRespuesta }}
+                                <label class="checkbox-inline btn btn-info btn-xs">
+                                    <input type='radio' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' value='{{ opcion.codOpcionRespuesta }}' {{ checked }} {{ disabled }}>{{ opcion.descripcionOpcionRespuesta }}
                                 </label>
                             {% endif %}
                         {% endfor %}

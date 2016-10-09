@@ -1,6 +1,6 @@
 <div class="col-md-12">
     <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered table-criterio">
             <tbody>
                 <tr class="bg-info">
                     <th>
@@ -24,8 +24,8 @@
                                 {% else %}
                                     {% set checked = '' %}
                                 {% endif %}
-                                <label class="checkbox-inline btn  btn-info">
-                                    <input type='radio' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' value='{{ opcion.codigo }}' {{ onClick }} {{ checked }} {{ disabled }}> {{ opcion.texto }}
+                                <label class="checkbox-inline btn  btn-info btn-xs">
+                                    <input type='radio' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' value='{{ opcion.codigo }}' {{ onClick }} {{ checked }} {{ disabled }}>{{ opcion.texto }}
                                 </label>
                             {% endif %}
                         {% endfor %}

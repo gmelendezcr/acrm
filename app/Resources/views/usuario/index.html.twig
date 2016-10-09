@@ -40,9 +40,9 @@
                         <td>{{ usuario.email }}</td>
                         <td class="text-center">
                             {% if usuario.enabled=='S' %}
-                                <span class="btn btn-success">Sí</span>
+                                <span class="label label-success">Sí</span>
                             {% else %}
-                                <span class="btn btn-success disabled">No</span
+                                <span class="label label-default">No</span
                             {% endif %}
                         </td>
                         <td class="text-center">
@@ -52,7 +52,7 @@
                                
                                     <a class="btn btn-success" href="{{ path('usuario_edit', { 'id': usuario.id }) }}">Editar</a>
                                     
-                                    <a class="btn btn-danger" href="{{ path('usuario_delete', { 'id': usuario.id }) }}">Eliminar</a>
+                                    <a data-toggle="confirmation" data-title="Seguro?" class="btn btn-danger" href="{{ path('usuario_delete', { 'id': usuario.id }) }}">Eliminar</a>
                                     </div>
                               
                         </td>

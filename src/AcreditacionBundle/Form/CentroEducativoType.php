@@ -81,8 +81,8 @@ class CentroEducativoType extends AbstractType{
                 'data' =>$estado,
                 'choices_as_values' => true,
             )
-        )
-          ->add('Guardar', 'submit');
+        );
+          
     }
   
     public function getName() { return 'CentroEducativoType'; }

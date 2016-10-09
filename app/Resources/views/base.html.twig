@@ -8,7 +8,7 @@
         {% block stylesheets %}
             <link href="{{ asset('css/bootstrap.min.css') }}" type="text/css" rel="stylesheet" />
             <link href="{{ asset('css/style.css') }}" type="text/css" rel="stylesheet" />
-            <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" type="text/css" rel="stylesheet" />
+            <link href="{{ asset('css/bootstrap-datetimepicker.css') }}" type="text/css" rel="stylesheet" />
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -44,8 +44,10 @@
                     <div class="btn-group">
                         <button type="button" class="btn btn-warning">
                             {% if is_granted('IS_AUTHENTICATED_FULLY') or is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                                 Hola, {{ app.user.nombres }}
                             {% else %}
+                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                                 Hola
                             {% endif %}
                         </button>
@@ -76,14 +78,14 @@
                     <ul class="nav navbar-nav">
                         <li><a href="{{path('acreditacion_homepage')}}">Inicio</a></li>                            
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Usuarios <span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Usuarios <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ path('usuario_new') }}">Registrar</a></li>
                                 <li><a href="{{ path('usuario_index') }}">Mantenimiento</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Centros educativos <span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Centros educativos <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{path('centro_educativo_add')}}">Registrar</a></li>
                                 <li><a href="{{path('centro_educativo_lista')}}">Mantenimiento</a></li>
@@ -92,6 +94,12 @@
                                 {% if is_granted('ROLE_ADMIN') %}
                                     <li><a href="{{path('centro_educativo_form_lista_evaluar')}}">Evaluar formulario</a></li>
                                 {% endif %}
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-indent-left" aria-hidden="true"></span> Reportes <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="">Cualitativo</a></li>
                             </ul>
                         </li>
                     </ul>            
@@ -119,7 +127,9 @@
     
     <div class="container">
         <div class="row">
-           {% block body %}{% endblock %}
+            <div class="col-md-12">
+               {% block body %}{% endblock %}
+           </div>
         </div>
     </div>
     <div class="container">
@@ -134,12 +144,39 @@
    {% block javascripts %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap-confirmation.min.js') }}"></script>
         <script src="{{ asset('js/lib.js') }}"></script>
+        <script>
+            $('[data-toggle="confirmation"]').confirmation({
+                href: function(elem){
+                    return $(elem).attr('href');
+                }
+            });
+        </script>
+        <script src="{{ asset('js/moment-with-locales.js') }}"></script>
+        <script src="{{ asset('js/bootstrap-datetimepicker.js') }}"></script>
+        <script type="text/javascript">
+            $(function () {
+                $('#fecha_annio').datetimepicker({
+                    viewMode: 'years',
+                    locale: 'es',   
+                    format: 'YYYY'
+                });                  
+                $('#fecha').datetimepicker({
+                    locale: 'es',
+                    format: 'DD-MM-YYYY'
+                });
+            });
+        </script>
+
         
+        
+        <!--
         <script src="{{ asset('js/moment.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap-datetimepicker.es.js') }}"></script>
+        
         
         <script type="text/javascript">
             $('#divMiCalendario').datetimepicker({
@@ -163,7 +200,7 @@
         return $(elem).attr('href');
     }
 });
-   </script>
+   </script>-->
    {% endblock %}
 </body>
 </html>

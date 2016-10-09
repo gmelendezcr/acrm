@@ -374,3 +374,14 @@ color:#204d74 !important;
 .puntuacion-completa{
     background-color: lightgreen;
 }
+
+/*
+Control de td de tabla
+*/
+
+.table-criterio td , th{
+    padding:5px !important;
+}
+.table-criterio  .checkbox-inline + .checkbox-inline, .radio-inline + .radio-inline{
+    margin-left: 0px !important;
+}

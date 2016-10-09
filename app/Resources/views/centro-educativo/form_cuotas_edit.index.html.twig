@@ -61,14 +61,20 @@
                 </div>
                 <div class="form-group">                                
                     {{  form_label(form.anno)  }}
-                    <div class='input-group date input-3' id='divanno'>
+                    <div class='input-group date input-3' id='fecha_annio'>
                         {{ form_widget(form.anno, {'attr': {'class': 'form-control', 'placeholder': 'Digite el año', 'id':'anno'}}) }}
                          <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                          </span>
                     </div>                               
                 </div>
                   <div class="form-group"> 
+                  <div class="btn-group" role="group">
+                        <a class="btn btn-info" href="{{path('centro_educativo_cuotas', {'id':ce_show.idCentroEducativo})}}">
+                            <span class="glyphicon glyphicon-triangle-left"></span> 
+                            Regresar
+                        </a>
                     <button type="submit" class="btn btn-success btn-md"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button>
+                    </div>
                 </div>        
             </form> 
         </div>

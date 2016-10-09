@@ -1,7 +1,7 @@
 <div class="col-md-12">
     <div class="table-responsive">
         {{ btPuntuacion|raw }}
-        <table class="table table-bordered">
+        <table class="table table-bordered table-criterio">
             <tbody>
                 <tr class="bg-info">
                     <th colspan={{ pregunta.subPreguntas|length + (pregunta.totalesFilas == 'S' or pregunta.totalesColumnas == 'S' ? 1 : 0) }}>
@@ -93,7 +93,7 @@
                             {% endif %}
                         {% endfor %}
                         {% if pregunta.totalesFilas == 'S' %}
-                            <td>
+                            <td class="text-center">
                                 {% if existePreguntaSiNo %}
                                     {% set sumaFila = "$('#subtotalFila_" ~ fila.idOpcionRespuesta ~ "_si').val(0" ~ sumaFila ~ "); " %}
                                     {% set sumaFila2 = "$('#subtotalFila_" ~ fila.idOpcionRespuesta ~ "_no').val(0" ~ sumaFila2 ~ "); " %}

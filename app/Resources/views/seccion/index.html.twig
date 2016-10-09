@@ -9,6 +9,22 @@
         <div class="capa-separador-1"></div>
     </div>
     -->
+    <div class="col-md-10 text-center">                                            
+        <strong>
+            Usted está trabajando en el:<br /> {{ app.session.get('nbrFormulario') }}
+        </strong>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    <div class="col-md-2 text-right">
+           <!--Validar roles-->
+                <a class="btn btn-info" href="{{path('centro_educativo_form_lista_evaluar')}}"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
+           <!--fin-->
+            <div class="clearfix capa-separador-1 border-bottom"></div>
+            <div class="capa-separador-1"></div>
+        </div>
+    
+    <div class="clearfix"></div>
     <div class="col-md-12">
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
@@ -46,9 +62,9 @@
                             <td>{{ seccion.descripcionSeccion }}</td>
                             <td class="text-center">
                                 {% if seccion.activo=='S' %}
-                                    <span class="btn btn-success">Sí</span>
+                                    <span class="label label-success">Sí</span>
                                 {% else %}
-                                    <span class="btn btn-warning">No</span
+                                    <span class="label label-default">No</span
                                 {% endif %}
                             </td>
                             <td>
@@ -79,8 +95,10 @@
         <form id="secciones" method="POST" action="{{ path('seccion_aprobar_rechazar') }}">
             <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ idFormularioPorCentroEducativoRevisar }}">
             <div class="col-md-12 text-right">
-                <input type="submit" name="Aprobar" value="Aprobar" class="btn btn-success">
-                <input type="submit" name="Rechazar" value="Rechazar" class="btn btn-warning">
+                <div class="btn-group" role="group" aria-label="accion">
+                    <button type="submit" name="Aprobar" value="Aprobar" class="btn btn-success" data-toggle="confirmation" data-title="Seguro?"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Aprobar</button>
+                    <button type="submit" name="Rechazar" value="Rechazar" class="btn btn-warning" data-toggle="confirmation" data-title="Seguro?"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> Rechazar</button>
+                </div>
             </div>
         </form>
     {% endif %}

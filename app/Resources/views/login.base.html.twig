@@ -26,6 +26,38 @@
     {% block javascripts %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
+        <script>
+            $( document ).ready( function () {
+            $( "#form_validar_login" ).validate( {
+	          rules: {
+	              _username: "required",
+		      _password: "required",
+		    },
+		    messages: {
+	            _username: "Nombre de usuario es requerido",
+	            _password: "Por favor digite el su clave de acceso",
+		    },
+		    errorElement: "em",
+		    errorPlacement: function ( error, element ) {
+	          // Add the `help-block` class to the error element
+	          error.addClass( "help-block" );
+
+		      if ( element.prop( "type" ) === "checkbox" ) {
+		        error.insertAfter( element.parent( "label" ) );
+	          } else {
+		           // error.insertAfter( element );
+		      }
+		    },
+		    highlight: function ( element, errorClass, validClass ) {
+		      $( element ).parents( ".form-group" ).addClass( "has-error" ).removeClass( "has-success" );
+		    },
+		    unhighlight: function (element, errorClass, validClass) {
+			    $( element ).parents( ".form-group" ).addClass( "has-success" ).removeClass( "has-error" );
+		    }
+	        });
+        });
+        </script>
    {% endblock %}
 </body>
 </html>

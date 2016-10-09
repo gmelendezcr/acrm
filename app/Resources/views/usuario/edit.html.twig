@@ -5,6 +5,28 @@
 {% endblock %}
 
 {% block guardar %}
+
+
+{# {% if app.user.hasRole('ROLE_VIEW_GEOLOC_DATA') %}
+    do something 
+    
+{% endif %}
+
+
+
+  Roles : {{ dump(app.user.getRoles()) }}
+is_granted('ROLE_SUPER_ADMIN') : {{ dump(is_granted('ROLE_ADMIN')) }}
+is_granted('VIEW_GEOLOC_DATA') : {{ dump(is_granted('ROLE_ADMIN')) }}
+#}
+
+<div class="input-group" role="group">
+<select>
+{% for role in app.user.roles %}
+    <option value="{{ role }}">{{ role }}</option>
+    {% endfor %}
+</select>
+</div>
+
     <div class="btn-group" role="group">
         <a class="btn btn-info" href="{{ path('usuario_index') }}">
             <span class="glyphicon glyphicon-triangle-left"></span> 

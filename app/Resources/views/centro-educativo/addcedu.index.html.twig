@@ -10,7 +10,7 @@
     </div>
     <div class="col-md-12">
         <div class="header-control-general">
-            <form class="form-registro form-border" method="post" action="{{ path('centro_educativo_guardar') }}">
+            <form class="form-registro form-border" method="post" action="{{ path('centro_educativo_guardar') }}" id="form_validar">
                 <div class="form-group">                                
                     <label for="codigo">Código</label>
                     <input type="text" class="form-control input-3" id="codigo" name="codigo" value="{{ codigo ?? null }}" placeholder="Digite el código">                                
@@ -31,7 +31,7 @@
                 <div class="form-group">                                
                     <label for="departamentos">Municios por departamento y zona geográfica</label>
                     <select class="form-control input-3" id="municipio" name="municipio">
-                        <option>Seleccione uno</option>
+                        <option value="0">Seleccione uno</option>
                         {% for zona in zonas %}
                             <optgroup label="{{ zona.nbrZonaGeografica }}">
                                {% for departamento in zona.departamentos %}
@@ -52,7 +52,7 @@
                 <div class="form-group">                                
                     <label for="jornadas">Jornada</label>
                     <select class="form-control input-3" id="jornada" name="jornada">
-                        <option>Seleccione una</option>
+                        <option value="0">Seleccione una</option>
                         {% for jornada in jornadas %}
                         <option value="{{jornada.idJornadaCentroEducativo}}">{{ jornada.nbrJornadaCentroEducativo }}
                          {% endfor %}                             
@@ -61,14 +61,20 @@
                 <div class="form-group">                                
                     <label for="tamanno">Tamaño</label>
                     <select class="form-control input-3" id="tamanno" name="tamanno">
-                        <option>Seleccione uno</option>
+                        <option value="0">Seleccione uno</option>
                         {% for tamanno in tamannos %}
                         <option value="{{ tamanno.idTamannoCentroEducativo }}">{{ tamanno.nbrTamannoCentroEducativo }}
                          {% endfor %}                             
                     </select>                                
                 </div>
-                <div class="form-group"> 
+                <div class="form-group">
+                    <div class="btn-group" role="group">
+                        <a class="btn btn-info" href="{{ path('centro_educativo_lista') }}">
+                            <span class="glyphicon glyphicon-triangle-left"></span> 
+                            Regresar
+                        </a>
                     <button type="submit" class="btn btn-success btn-md"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button>
+                    </div>
                 </div>
             </form>
         </div> 

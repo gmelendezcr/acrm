@@ -19,11 +19,21 @@ class UsuarioType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         
+ 
+        
+        
         $permisos = array(
         'ROLE_DIG'        => 'Digitador',
         
     );
     
+     $permissions = array(
+             'ROLE_USER'        => 'Digitador',
+             'ROLE_CONSULT'     => 'Corrector',
+             'ROLE_SUPER_ADMIN' => 'Calificador'
+         );
+
+        
     /*->add('roles', null, array(
                     'type' => 'choice',
                     'label' => 'Roles',
@@ -37,7 +47,7 @@ class UsuarioType extends AbstractType
                     
                     
             ));*/
-        
+       
         
         $builder
             ->add('username',null,array(
@@ -55,7 +65,8 @@ class UsuarioType extends AbstractType
             ))
             ->add('enabled',null,array(
                 'label' =>'Activo',
-            ));
+            ))
+            ->add('roles');
             
             
             

@@ -5,8 +5,8 @@
         {% else %}
             {% set checked = '' %}
         {% endif %}
-        <label class="checkbox-inline btn btn-info">
-            <input type='radio' class='subPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' value='{{ opcion.codOpcionRespuesta }}' {{ checked }} {{ disabled }}> {{ opcion.descripcionOpcionRespuesta }}
+        <label class="checkbox-inline btn btn-info btn-xs">
+            <input type='radio' class='subPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' value='{{ opcion.codOpcionRespuesta }}' {{ checked }} {{ disabled }}>{{ opcion.descripcionOpcionRespuesta }}
         </label>
     {% endif %}
 {% endfor %}

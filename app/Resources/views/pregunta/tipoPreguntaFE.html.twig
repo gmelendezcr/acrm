@@ -1,6 +1,6 @@
 <div class="col-md-12">
     <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered table-criterio">
             <tbody>
                 <tr class="bg-info">
                     <th>
@@ -15,11 +15,14 @@
                             name='{{ pregunta.idTipoPregunta.codTipoPregunta }}NoAplica_{{ pregunta.idPregunta }}'
                             onClick="$('#{{ id }}').prop('disabled',!$('#{{ id }}').prop('disabled'));">{{ pregunta.opcionNoAplicaTexto }}
                         {% endif %}
-                        <div class="input-group input-3">
+                        <div class="input-group input-3" id="fecha">
                             <input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control' id='{{ id }}' name='{{ id }}' {{ maxLength }} value="{{ respuestas[pregunta.idPregunta] ?? null }}" {{ readonly }}>
-                            <span class="input-group-addon">
+                            {#<span class="input-group-addon">
                                 {{ datePicker }}
-                            </span>
+                            </span>#}
+                            <span class="input-group-addon cursor">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                             </span>
                         </div>
                         {{ btRevisar|raw }}
                     </td>

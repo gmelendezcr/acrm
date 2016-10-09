@@ -1,14 +1,18 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <div class="col-md-9 text-center">                                            
+    <div class="col-md-8 text-center">                                            
         <h2 class="sin-margin">
             Cuotas
         </h2>
         <div class="clearfix capa-separador-1 border-bottom"></div>
         <div class="capa-separador-1"></div>
     </div>
-    <div class="col-md-3 text-right">
+    <div class="col-md-4 text-right">
         <div class="btn-group" role="group">
+            <a class="btn btn-info" href="{{ path('centro_educativo_lista') }}">
+                            <span class="glyphicon glyphicon-triangle-left"></span> 
+                            Regresar
+                        </a>
             <a href='' class='btn btn-success  '>
                 <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span> Cargar archivo
             </a>
@@ -23,8 +27,12 @@
     <div class="clearfix"></div>
     <div class="col-md-8">
         <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-hover">
                <tbody>
+                   <tr>
+                        <td class="col-sm-3 text-right bg-success"><strong>Código</strong></td>
+                        <td>{{ce_show.codCentroEducativo}}</td>
+                    </tr>
                     <tr>
                         <td class="col-sm-3 text-right bg-success"><strong>Centro educativo</strong></td>
                         <td>{{ce_show.nbrCentroEducativo}}</td>

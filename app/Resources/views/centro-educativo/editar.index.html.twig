@@ -11,12 +11,12 @@
     <div class="col-md-12">
         {#"{{ cedu.nbrCentroEducativo ?? null }}#}
         <div class="header-control-general">
-            <form class="form-registro form-border" method="{{ form.vars.method }}" action="{{ form.vars.action }}">
+            <form class="form-registro form-border" method="{{ form.vars.method }}" action="{{ form.vars.action }}" id="form_validar_editar">
                 
                 <div class="form-group">
                     {#{{ form_widget(form.idCentroEducativo) }}#}                                
                     {{  form_label(form.codCentroEducativo)  }}
-                    {{ form_widget(form.codCentroEducativo, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite el código del centro educativo'}}) }}
+                    {{ form_widget(form.codCentroEducativo, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite el código del centro educativo','name':'codigo'}}) }}
                     {{ form_errors(form.codCentroEducativo) }}                           
                 </div>
                 <div class="form-group">                                
@@ -55,8 +55,13 @@
                     {{ form_errors(form.activo) }}                           
                 </div>
                 <div class="form-group">
-                    {{ form_widget(form.Guardar, {'attr': {'class': 'btn btn-success '}}) }} 
-                    
+                    <div class="btn-group" role="group">
+                        <a class="btn btn-info" href="{{ path('centro_educativo_lista') }}">
+                            <span class="glyphicon glyphicon-triangle-left"></span> 
+                            Regresar
+                        </a>
+                    <button type="submit" class="btn btn-success btn-md"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button>
+                    </div>
                 </div>
             </form> 
             

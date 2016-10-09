@@ -116,11 +116,21 @@ public function setRole($role) {
     
     /* copia editar usuario*/
     
-      public function editAction(Request $request, Usuario $usuario)
-    {
+      public function editAction(Request $request, Usuario $usuario){
+        //$rl=array('roles' => $this->container->getParameter('security.role_hierarchy.roles'));
+        //var_dump($a);
+        //--$em = $this->getDoctrine()->getManager();
+        //--$edit_user = $em->getRepository('AcreditacionBundle:Usuario')->find($usuario);
+      
+        
+        
+        
+        //var_dump($edit_user);
         $deleteForm = $this->createDeleteForm($usuario);
         $editForm = $this->createForm('AcreditacionBundle\Form\UsuarioType', $usuario);
         $editForm->handleRequest($request);
+        //$userManager = $this->get('fos_user.user_manager');
+        //$user = $userManager->findUserBy(['id' => 1]);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();

@@ -308,12 +308,34 @@ class CentroEducativoController extends Controller{
         }else{
             $anno=date('Y');
         }
+        $centro_escolar_id= $ce_show->getIdCentroEducativo();
+       
+        
+        $idselector=$em->createQueryBuilder()
+        ->select('gece.idGradoEscolarPorCentroEducativo')->distinct()
+        ->from('AcreditacionBundle:GradoEscolarPorCentroEducativo', 'gece')
+            ->where('gece.idCentroEducativo = :id')
+            ->setParameter('id', $centro_escolar_id)
+            ->setMaxResults('1')
+            ->getQuery()
+            ->getResult();
+            $grado_escolar_ce_id= (int)$idselector[0]['idGradoEscolarPorCentroEducativo'];
+           //var_dump($idselector); 
+            
+        //$grado_escolar_ce_id= $idselector->getIdGradoEscolarPorCentroEducativo();
+        
+        
         $resanno=$em->createQueryBuilder()
         ->select('cagece.anno')->distinct()
         ->from('AcreditacionBundle:CuotaAnualPorGradoEscolarPorCentroEducativo', 'cagece')
+            ->where('cagece.idGradoEscolarPorCentroEducativo = :id')
             ->orderBy('cagece.anno', 'DESC')
+            ->setParameter('id', $grado_escolar_ce_id)
             ->getQuery()
             ->getResult();
+        
+        
+        
             
         $res=$em->createQueryBuilder()
         ->select(
