@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="col-md-10 text-center">                                            
+        <h2 class="sin-margin">
+            Observaciones
+        </h2>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    <div class="col-md-2 text-right">
+        <div class="btn-group" role="group">
+            <a class="btn btn-info" href="{{ path('centro_educativo_form_lista_evaluar') }}">
+                <span class="glyphicon glyphicon-triangle-left"></span> 
+                Regresar
+            </a>
+        </div>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+               <tbody>
+                   <tr>
+                        <td class="col-sm-3 text-right bg-success"><strong>Código</strong></td>
+                        <td>{{criterio[0].codCentroEducativo}}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-3 text-right bg-success"><strong>Centro educativo</strong></td>
+                        <td>{{criterio[0].nbrCentroEducativo}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="header-control-general">
+            <div class="clearfix capa-separador-1"></div>
+            <form class="form-border" method="post" action="{{path('centro_educativo_criterio_observaciones_guardar')}}" >
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped"> 
+                        <tbody>
+                            {% for item in criterio %}
+                            
+                            <tr>
+                                <td class="col-sm-3 text-right ">
+                                    {{ item.nbrSeccion}}
+                                    <input type="hidden" name="idFormularioPorCentroEducativo" value="{{item.idFormularioPorCentroEducativo}}" />
+                                    
+                                </td>
+                                <td>
+                                    {{item.observacion}}
+                                </td>
+                            </tr>
+                            
+                            {% endfor %}
+                            
+                        </tbody> 
+                    </table>
+                </div>
+                <div class="clearfix"></div>
+            </form>
+        </div>
+        </div>
+    </div>
+{% endblock %}

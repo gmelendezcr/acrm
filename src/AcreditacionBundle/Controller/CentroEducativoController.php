@@ -8,6 +8,7 @@ use AcreditacionBundle\Entity\CuotaAnualPorGradoEscolarPorCentroEducativo;
 use AcreditacionBundle\Entity\GradoEscolarPorCentroEducativo;
 use AcreditacionBundle\Entity\Formulario;
 use AcreditacionBundle\Entity\FormularioPorCentroEducativo;
+use AcreditacionBundle\Entity\SeccionPorFormularioPorCentroEducativo;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use AcreditacionBundle\Form\CentroEducativoType;
@@ -250,8 +251,9 @@ class CentroEducativoController extends Controller{
     public function form_lista_evaluarAction(){
         $em = $this->getDoctrine()->getEntityManager();
         $lista=$em->createQueryBuilder()
-        ->select('fce.idFormularioPorCentroEducativo, c.codCentroEducativo, c.nbrCentroEducativo, c.direccionCentroEducativo,
-        f.codFormulario, f.nbrFormulario, u.nombres, u.apellidos, e.codEstadoFormulario, e.nbrEstadoFormulario')
+        ->select('fce.idFormularioPorCentroEducativo,  fce.estadoCriterioCentroEducativo,
+        c.idCentroEducativo, c.codCentroEducativo, c.nbrCentroEducativo, c.direccionCentroEducativo,
+        f.idFormulario,f.codFormulario, f.nbrFormulario, u.nombres, u.apellidos, e.codEstadoFormulario, e.nbrEstadoFormulario')
         ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'fce')
             ->join('fce.idCentroEducativo','c')
             ->join('fce.idFormulario','f')
@@ -488,5 +490,215 @@ class CentroEducativoController extends Controller{
             ));
     }
     /*Fin*/
+    
+    
+    
+    
+     /*
+    ----------------------------------------------------------------------------
+    Gestión de observaciones de criterios por centro educativo
+    ----------------------------------------------------------------------------    
+    */
+    //Lista
+    public function observacionesAction(Request $request, $id,$form){
+        $em = $this->getDoctrine()->getManager();
+        $criterio=$em->createQueryBuilder()
+        ->select('
+            f_x_ce.idFormularioPorCentroEducativo,
+            ce.codCentroEducativo,
+            ce.nbrCentroEducativo,
+            form.nbrFormulario,
+            secc.idSeccion,
+            secc.nbrSeccion
+        ')
+        ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'f_x_ce')
+            ->join('f_x_ce.idCentroEducativo','ce')
+            ->join('f_x_ce.idFormulario','form')
+            ->join('form.secciones','secc')
+            ->where('ce.idCentroEducativo = :id')
+                ->andWhere('exists (
+                        select 1
+                        from AcreditacionBundle:Pregunta p
+                        where p.ponderacionMaxima is not null
+                        and p.idSeccion=secc.idSeccion
+                    )')
+                ->andWhere('form.idFormulario = :idform')
+                ->setParameter('id', $id)
+                ->setParameter('idform', $form)
+                ->getQuery()->getResult();
+                
+        //var_dump($criterio);
+        //exit();
+        
+        
+        return $this->render('centro-educativo/observaciones.index.html.twig',array(
+            'criterio'=>$criterio,
+            'debug'=>true
+        ));
+    }
+    
+    
+    //Guardar
+    public function observaciones_guardarAction(Request $request){
+        $em = $this->getDoctrine()->getEntityManager();
+        $btn_accion= $request->get('btn_guardar');
+   
+        
+        $idFormularioPorCentroEducativo=$request->get('idFormularioPorCentroEducativo');
+        $idFormularioPorCentroEducativo = $em->getRepository('AcreditacionBundle:FormularioPorCentroEducativo')->find($idFormularioPorCentroEducativo);
+        
+       $estado="TER";
+        if($btn_accion=="borrador"){
+            $estado="EDIT";
+        }
+          
+       
+        $idFormularioPorCentroEducativo->setestadoCriterioCentroEducativo($estado);
+        $em->persist($idFormularioPorCentroEducativo);
+           
+        
+        
+        $g_observacion=$request->get('g_observacion');
+        $idSecccion=$request->get('idSeccion');
+        foreach ($g_observacion as $idseccion=> $g) {
+            $idseccion = $em->getRepository('AcreditacionBundle:Seccion')->find($idseccion);
+            $form=new SeccionPorFormularioPorCentroEducativo();
+            $form->setidFormularioPorCentroEducativo($idFormularioPorCentroEducativo);
+            $form->setobservacion($g);
+            $form->setidSeccion($idseccion);
+            $em->persist($form);
+        }
+       
+      
+       
+                $em->flush();
+        return $this->redirectToRoute('centro_educativo_form_lista_evaluar');
+        
+    }
+    
+    
+    public function observaciones_verAction(Request $request, $id,$form){
+        
+       
+       $em = $this->getDoctrine()->getManager();
+        $criterio=$em->createQueryBuilder()
+        ->select('
+            f_x_ce.idFormularioPorCentroEducativo,
+            ce.codCentroEducativo,
+            ce.nbrCentroEducativo,
+            sec_form_ce.observacion,
+            form.nbrFormulario,
+            secc.idSeccion,
+            secc.nbrSeccion,
+            form.idFormulario
+            
+        ')
+        ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'f_x_ce')
+            ->join('f_x_ce.idCentroEducativo','ce')
+            ->join('f_x_ce.seccionesPorFormularioPorCentroEducativo','sec_form_ce')
+            ->join('f_x_ce.idFormulario','form')
+            //->join('form.secciones','secc')
+            ->join('sec_form_ce.idSeccion','secc')
+            ->where('ce.idCentroEducativo = :id')
+                ->andWhere('exists (
+                        select 1
+                        from AcreditacionBundle:Pregunta p
+                        where p.ponderacionMaxima is not null
+                        and p.idSeccion=secc.idSeccion
+                    )')
+                ->andWhere('form.idFormulario = :idform')
+                ->setParameter('id', $id)
+                ->setParameter('idform', $form)
+                //->groupBy('secc.idSeccion')
+                ->getQuery()->getResult();
+                
+        //var_dump($criterio);
+        //exit();
+        
+        
+        return $this->render('centro-educativo/observaciones_ver.index.html.twig',array(
+            'criterio'=>$criterio,
+            'debug'=>true
+        ));
+    }
+    
+    //Editar
+    public function observaciones_editarAction(Request $request, $id,$form){
+    $em = $this->getDoctrine()->getManager();
+    $criterio=$em->createQueryBuilder()
+    ->select(
+    '
+        f_x_ce.idFormularioPorCentroEducativo,
+        ce.codCentroEducativo,
+        ce.nbrCentroEducativo,
+        sec_form_ce.idSeccionPorFormularioPorCentroEducativo,
+        sec_form_ce.observacion,
+        form.nbrFormulario,
+        secc.idSeccion,
+        secc.nbrSeccion,
+        form.idFormulario
+    '
+    )
+    ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'f_x_ce')
+        ->join('f_x_ce.idCentroEducativo','ce')
+        ->join('f_x_ce.seccionesPorFormularioPorCentroEducativo','sec_form_ce')
+        ->join('f_x_ce.idFormulario','form')
+        //->join('form.secciones','secc')
+        ->join('sec_form_ce.idSeccion','secc')
+        ->where('ce.idCentroEducativo = :id')
+            ->andWhere('exists (
+                select 1
+                from AcreditacionBundle:Pregunta p
+                    where p.ponderacionMaxima is not null
+                        and p.idSeccion=secc.idSeccion
+            )')
+            ->andWhere('form.idFormulario = :idform')
+            ->setParameter('id', $id)
+            ->setParameter('idform', $form)
+            //->groupBy('secc.idSeccion')
+            ->getQuery()->getResult();
+        return $this->render('centro-educativo/observaciones_editar.index.html.twig',array(
+            'criterio'=>$criterio,
+            'debug'=>true
+        ));
+    }
+    
+    
+    //Guardar editar
+     public function observaciones_editar_guardarAction(Request $request){
+        $em = $this->getDoctrine()->getEntityManager();
+        $btn_accion= $request->get('btn_guardar');
+        $idFormularioPorCentroEducativo=$request->get('idFormularioPorCentroEducativo');
+     
+        $idFormularioPorCentroEducativo = $em->getRepository('AcreditacionBundle:FormularioPorCentroEducativo')->find($idFormularioPorCentroEducativo);
+        $estado="TER";
+        if($btn_accion=="borrador"){
+            $estado="EDIT";
+        }
+        $idFormularioPorCentroEducativo->setestadoCriterioCentroEducativo($estado);
+        $em->persist($idFormularioPorCentroEducativo);
+           
+        
+        
+        $g_observacion=$request->get('g_observacion');
+        $idSecccion=$request->get('idSeccion');
+        foreach ($g_observacion as $idseccion=> $g) {
+            
+           
+            $idseccion = $em->getRepository('AcreditacionBundle:SeccionPorFormularioPorCentroEducativo')->find($idseccion);
+            //$form=new SeccionPorFormularioPorCentroEducativo();
+            //$idseccion->setidFormularioPorCentroEducativo($idFormularioPorCentroEducativo);
+            $idseccion->setobservacion($g);
+           
+            $em->persist($idseccion);
+        }
+       
+      
+       
+                $em->flush();
+        return $this->redirectToRoute('centro_educativo_form_lista_evaluar');
+        
+    }
+    
     
 }

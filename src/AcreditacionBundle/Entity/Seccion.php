@@ -62,6 +62,11 @@ class Seccion
      */
     private $preguntas;
 
+    /**
+     * @ORM\OneToMany(targetEntity="SeccionPorFormularioPorCentroEducativo",mappedBy="idSeccion")
+     */
+    private $seccionesPorFormularioPorCentroEducativo;
+
 
 
     /**
@@ -228,5 +233,38 @@ class Seccion
     public function getPreguntas()
     {
         return $this->preguntas;
+    }
+
+    /**
+     * Add seccionesPorFormularioPorCentroEducativo
+     *
+     * @param \AcreditacionBundle\Entity\SeccionPorFormularioPorCentroEducativo $seccionesPorFormularioPorCentroEducativo
+     * @return Seccion
+     */
+    public function addSeccionesPorFormularioPorCentroEducativo(\AcreditacionBundle\Entity\SeccionPorFormularioPorCentroEducativo $seccionesPorFormularioPorCentroEducativo)
+    {
+        $this->seccionesPorFormularioPorCentroEducativo[] = $seccionesPorFormularioPorCentroEducativo;
+
+        return $this;
+    }
+
+    /**
+     * Remove seccionesPorFormularioPorCentroEducativo
+     *
+     * @param \AcreditacionBundle\Entity\SeccionPorFormularioPorCentroEducativo $seccionesPorFormularioPorCentroEducativo
+     */
+    public function removeSeccionesPorFormularioPorCentroEducativo(\AcreditacionBundle\Entity\SeccionPorFormularioPorCentroEducativo $seccionesPorFormularioPorCentroEducativo)
+    {
+        $this->seccionesPorFormularioPorCentroEducativo->removeElement($seccionesPorFormularioPorCentroEducativo);
+    }
+
+    /**
+     * Get seccionesPorFormularioPorCentroEducativo
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeccionesPorFormularioPorCentroEducativo()
+    {
+        return $this->seccionesPorFormularioPorCentroEducativo;
     }
 }

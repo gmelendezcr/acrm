@@ -89,11 +89,23 @@ class FormularioPorCentroEducativo
      * @ORM\Column(name="OBSERVACIONES", type="string", length=255, nullable=true)
      */
     private $observaciones;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ESTADO_CRITERIO_CENTRO_EDUCATIVO", type="string", length=5, nullable=false)
+     */
+    private $estadoCriterioCentroEducativo;
 
     /**
      * @ORM\OneToMany(targetEntity="RespuestaPorFormularioPorCentroEducativo",mappedBy="idFormularioPorCentroEducativo")
      */
     private $respuestasPorFormularioPorCentroEducativo;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SeccionPorFormularioPorCentroEducativo",mappedBy="idFormularioPorCentroEducativo")
+     */
+    private $seccionesPorFormularioPorCentroEducativo;
 
 
 
@@ -321,6 +333,29 @@ class FormularioPorCentroEducativo
     {
         return $this->observaciones;
     }
+    
+    /**
+     * Set estadoCriterioCentroEducativo
+     *
+     * @param string $estadoCriterioCentroEducativo
+     * @return FormularioPorCentroEducativo
+     */
+    public function setEstadoCriterioCentroEducativo($estadoCriterioCentroEducativo)
+    {
+        $this->estadoCriterioCentroEducativo = $estadoCriterioCentroEducativo;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCriterioCentroEducativo
+     *
+     * @return string 
+     */
+    public function getEstadoCriterioCentroEducativo()
+    {
+        return $this->estadoCriterioCentroEducativo;
+    }
 
     /**
      * Add respuestasPorFormularioPorCentroEducativo
@@ -353,5 +388,38 @@ class FormularioPorCentroEducativo
     public function getRespuestasPorFormularioPorCentroEducativo()
     {
         return $this->respuestasPorFormularioPorCentroEducativo;
+    }
+
+    /**
+     * Add seccionesPorFormularioPorCentroEducativo
+     *
+     * @param \AcreditacionBundle\Entity\SeccionPorFormularioPorCentroEducativo $seccionesPorFormularioPorCentroEducativo
+     * @return FormularioPorCentroEducativo
+     */
+    public function addSeccionesPorFormularioPorCentroEducativo(\AcreditacionBundle\Entity\SeccionPorFormularioPorCentroEducativo $seccionesPorFormularioPorCentroEducativo)
+    {
+        $this->seccionesPorFormularioPorCentroEducativo[] = $seccionesPorFormularioPorCentroEducativo;
+
+        return $this;
+    }
+
+    /**
+     * Remove seccionesPorFormularioPorCentroEducativo
+     *
+     * @param \AcreditacionBundle\Entity\SeccionPorFormularioPorCentroEducativo $seccionesPorFormularioPorCentroEducativo
+     */
+    public function removeSeccionesPorFormularioPorCentroEducativo(\AcreditacionBundle\Entity\SeccionPorFormularioPorCentroEducativo $seccionesPorFormularioPorCentroEducativo)
+    {
+        $this->seccionesPorFormularioPorCentroEducativo->removeElement($seccionesPorFormularioPorCentroEducativo);
+    }
+
+    /**
+     * Get seccionesPorFormularioPorCentroEducativo
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeccionesPorFormularioPorCentroEducativo()
+    {
+        return $this->seccionesPorFormularioPorCentroEducativo;
     }
 }

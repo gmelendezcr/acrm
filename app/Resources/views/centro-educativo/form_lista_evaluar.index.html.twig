@@ -19,7 +19,7 @@
                             <th class="col-sm-4">
                                 Nombre del centro educativo
                             </th> 
-                            <th class="col-sm-4">
+                            <th class="col-sm-3">
                                Nombre de formulario
                             </th>
                             <th class="col-sm-2">
@@ -61,10 +61,33 @@
                                     {#<span class="glyphicon glyphicon-ok btn btn-success" data-toggle="tooltip" data-placement="top" title="Aprobado"></span> Evaluado#}
                                 </td>
                                 <td class="text-center">
+                                    
                                     <form id="mostrarSecciones{{ form.idFormularioPorCentroEducativo }}" action="{{ path('seccion_index') }}" method="post">
                                         <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ form.idFormularioPorCentroEducativo }}">
                                     </form>
+                                    
+                                    {% if form.codEstadoFormulario == 'CA' %}
+                                    {% if form.estadoCriterioCentroEducativo=='TER' %}
+                                    <a href="{{path('centro_educativo_criterio_observaciones_ver',{'id':form.idCentroEducativo,'form':form.idFormulario})}}" class="btn btn-success btn-block">
+                                       <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Observción
+                                    </a>
+                                    
+                                    {% elseif form.estadoCriterioCentroEducativo=='EDIT'%}
+                                    
+                                    <a href="{{path('centro_educativo_criterio_observaciones_editar',{'id':form.idCentroEducativo,'form':form.idFormulario})}}" class="btn btn-success btn-block">
+                                       <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Observción
+                                    </a>
+                                    {% else %}
+                                    <a href="{{path('centro_educativo_criterio_observaciones',{'id':form.idCentroEducativo,'form':form.idFormulario})}}" class="btn btn-success btn-block">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Observción
+                                    </a>
+                                    {% endif %}
+                                    
+                                    {% endif %}
                                     <a href="#" onClick="$('#mostrarSecciones{{ form.idFormularioPorCentroEducativo }}').submit();" class="btn btn-info btn-block">Mostrar</a>
+                                    
+                                    
+                                    
                                     {% if form.codEstadoFormulario == 'AP' %}
                                         <form id="calificar" method="POST" action="{{ path('formulario_calificar') }}">
                                             <input type="hidden" name="idFormularioPorCentroEducativo" value="{{ form.idFormularioPorCentroEducativo }}">
