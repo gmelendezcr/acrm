@@ -107,6 +107,15 @@ class FormularioPorCentroEducativo
      */
     private $seccionesPorFormularioPorCentroEducativo;
 
+    /**
+     * @ORM\OneToMany(targetEntity="ViewFormularioPorCentroEducativoSeccionPonderacion",mappedBy="idFormularioPorCentroEducativo")
+     */
+    private $formulariosPorCentroEducativoSeccionPonderacion;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ViewFormularioPorCentroEducativoIndicadorPonderacion",mappedBy="idFormularioPorCentroEducativo")
+     */
+    private $formulariosPorCentroEducativoIndicadorPonderacion;
 
 
     /**
@@ -115,6 +124,7 @@ class FormularioPorCentroEducativo
     public function __construct()
     {
         $this->respuestasPorFormularioPorCentroEducativo = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formulariosPorCentroEducativoSeccionPonderacion = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -404,6 +414,19 @@ class FormularioPorCentroEducativo
     }
 
     /**
+     * Add formulariosPorCentroEducativoSeccionPonderacion
+     *
+     * @param \AcreditacionBundle\Entity\ViewFormularioPorCentroEducativoSeccionPonderacion $formulariosPorCentroEducativoSeccionPonderacion
+     * @return FormularioPorCentroEducativo
+     */
+    public function addFormulariosPorCentroEducativoSeccionPonderacion(\AcreditacionBundle\Entity\ViewFormularioPorCentroEducativoSeccionPonderacion $formulariosPorCentroEducativoSeccionPonderacion)
+    {
+        $this->formulariosPorCentroEducativoSeccionPonderacion[] = $formulariosPorCentroEducativoSeccionPonderacion;
+
+        return $this;
+    }
+
+    /**
      * Remove seccionesPorFormularioPorCentroEducativo
      *
      * @param \AcreditacionBundle\Entity\SeccionPorFormularioPorCentroEducativo $seccionesPorFormularioPorCentroEducativo
@@ -421,5 +444,58 @@ class FormularioPorCentroEducativo
     public function getSeccionesPorFormularioPorCentroEducativo()
     {
         return $this->seccionesPorFormularioPorCentroEducativo;
+    }
+
+    /**
+     * Remove formulariosPorCentroEducativoSeccionPonderacion
+     *
+     * @param \AcreditacionBundle\Entity\ViewFormularioPorCentroEducativoSeccionPonderacion $formulariosPorCentroEducativoSeccionPonderacion
+     */
+    public function removeFormulariosPorCentroEducativoSeccionPonderacion(\AcreditacionBundle\Entity\ViewFormularioPorCentroEducativoSeccionPonderacion $formulariosPorCentroEducativoSeccionPonderacion)
+    {
+        $this->formulariosPorCentroEducativoSeccionPonderacion->removeElement($formulariosPorCentroEducativoSeccionPonderacion);
+    }
+
+    /**
+     * Get formulariosPorCentroEducativoSeccionPonderacion
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormulariosPorCentroEducativoSeccionPonderacion()
+    {
+        return $this->formulariosPorCentroEducativoSeccionPonderacion;
+    }
+
+    /**
+     * Add formulariosPorCentroEducativoIndicadorPonderacion
+     *
+     * @param \AcreditacionBundle\Entity\ViewFormularioPorCentroEducativoIndicadorPonderacion $formulariosPorCentroEducativoIndicadorPonderacion
+     * @return FormularioPorCentroEducativo
+     */
+    public function addFormulariosPorCentroEducativoIndicadorPonderacion(\AcreditacionBundle\Entity\ViewFormularioPorCentroEducativoIndicadorPonderacion $formulariosPorCentroEducativoIndicadorPonderacion)
+    {
+        $this->formulariosPorCentroEducativoIndicadorPonderacion[] = $formulariosPorCentroEducativoIndicadorPonderacion;
+
+        return $this;
+    }
+
+    /**
+     * Remove formulariosPorCentroEducativoIndicadorPonderacion
+     *
+     * @param \AcreditacionBundle\Entity\ViewFormularioPorCentroEducativoIndicadorPonderacion $formulariosPorCentroEducativoIndicadorPonderacion
+     */
+    public function removeFormulariosPorCentroEducativoIndicadorPonderacion(\AcreditacionBundle\Entity\ViewFormularioPorCentroEducativoIndicadorPonderacion $formulariosPorCentroEducativoIndicadorPonderacion)
+    {
+        $this->formulariosPorCentroEducativoIndicadorPonderacion->removeElement($formulariosPorCentroEducativoIndicadorPonderacion);
+    }
+
+    /**
+     * Get formulariosPorCentroEducativoIndicadorPonderacion
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormulariosPorCentroEducativoIndicadorPonderacion()
+    {
+        return $this->formulariosPorCentroEducativoIndicadorPonderacion;
     }
 }

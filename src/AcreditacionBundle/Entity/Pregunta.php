@@ -30,6 +30,14 @@ class Pregunta
     private $idSeccion;
 
     /**
+     * @var int
+     *
+     * @ORM\ManyToOne(targetEntity="Indicador", inversedBy="preguntas")
+     * @ORM\JoinColumn(name="ID_INDICADOR",referencedColumnName="ID_INDICADOR")
+     */
+    private $idIndicador;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="COD_PREGUNTA", type="string", length=20)
@@ -298,6 +306,29 @@ class Pregunta
     public function getIdSeccion()
     {
         return $this->idSeccion;
+    }
+
+    /**
+     * Set idIndicador
+     *
+     * @param  \AcreditacionBundle\Entity\Indicador $idIndicador
+     * @return Pregunta
+     */
+    public function setIdIndicador(\AcreditacionBundle\Entity\Indicador $idIndicador)
+    {
+        $this->idIndicador = $idIndicador;
+
+        return $this;
+    }
+
+    /**
+     * Get idIndicador
+     *
+     * @return \AcreditacionBundle\Entity\Indicador
+     */
+    public function getIdIndicador()
+    {
+        return $this->idIndicador;
     }
 
     /**

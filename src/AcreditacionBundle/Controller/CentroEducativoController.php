@@ -490,10 +490,7 @@ class CentroEducativoController extends Controller{
             ));
     }
     /*Fin*/
-    
-    
-    
-    
+
      /*
     ----------------------------------------------------------------------------
     Gestión de observaciones de criterios por centro educativo
@@ -700,5 +697,241 @@ class CentroEducativoController extends Controller{
         
     }
     
-    
+    public function informeCuantitativoAction(Request $request)
+    {
+        $anio=$request->get('anio');
+        $idCentroEducativo=$request->get('idCentroEducativo');
+///falta enviarle parámetros por POST
+///falta enviarle parámetros por POST
+///falta enviarle parámetros por POST
+$anio=2016;
+$anio=2016;
+$anio=2016;
+$idCentroEducativo=2118;
+$idCentroEducativo=2118;
+$idCentroEducativo=2118;
+
+        $em = $this->getDoctrine()->getManager();
+        $pdfObj=$this->get("white_october.tcpdf")->create();
+
+        $pdfObj->setHeaderType('newLogoHeader');
+        $pdfObj->setFooterType('simpleFooter');
+        $pdfObj->startPageGroup();
+        $pdfObj->AddPage();
+        $pdfObj->MultiCell($pdfObj->getWorkAreaWidth(),$pdfObj->getLineHeight(),'RESULTADOS DE LA EVALUACIÓN EXTERNA PARA LA ACREDITACIÓN INSTITUCIONAL DE CENTROS EDUCATIVOS PRIVADOS AÑO ' . $anio,0,'C');
+        $pdfObj->newLine();
+        $pdfObj->SetFontSize(9);
+
+        $centroEducativo=$em->createQueryBuilder()
+            ->distinct()
+            ->select('c.codCentroEducativo, c.nbrCentroEducativo, m.nbrMunicipio, d.nbrDepartamento')
+            ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'f')
+            ->join('f.idCentroEducativo','c')
+            ->join('c.idMunicipio','m')
+            ->join('m.idDepartamento','d')
+            ->where('f.idCentroEducativo=:idCentroEducativo')
+            ->andWhere('f.fechaAplicacion between :fechaIni and :fechaFin')
+                ->setParameter('idCentroEducativo',$idCentroEducativo)
+                ->setParameter('fechaIni',$anio . '-1-1')
+                ->setParameter('fechaFin',$anio . '-12-31')
+                    ->getQuery()->getSingleResult();
+
+        $pdfObj->dataTable(array(
+                array('title' => '','border' => 1,'width' => 25,),
+                array('title' => '','border' => 1,),
+            ),array(
+                array(
+                    'Centro educativo:',
+                    $centroEducativo['nbrCentroEducativo'],
+                ),
+                array(
+                    'Código:',
+                    $centroEducativo['codCentroEducativo'],
+                ),
+                array(
+                    'Departamento:',
+                    $centroEducativo['nbrDepartamento'],
+                ),
+                array(
+                    'Municipio:',
+                    $centroEducativo['nbrMunicipio'],
+                ),
+            ),array(),false);
+        $pdfObj->newLine();
+
+        $puntosPorCriterio=$em->createQueryBuilder()
+            ->select('s.idSeccion, s.nbrSeccion, sum(p.ponderacionMaxima)/100 as ponderacionMaxima')
+            ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'fce')
+            ->join('fce.idFormulario','f')
+            ->join('f.secciones','s')
+            ->join('s.preguntas','p')
+            ->where('fce.idCentroEducativo=:idCentroEducativo')
+            ->andWhere('exists (
+                select 1
+                from AcreditacionBundle:Pregunta p2
+                where p2.ponderacionMaxima is not null
+                and p2.idSeccion=s.idSeccion
+            )')
+            ->groupBy('s.idSeccion, s.nbrSeccion')
+                ->setParameter('idCentroEducativo',$idCentroEducativo)
+                    ->getQuery()->getResult();
+
+        $puntosPorCriterioData=array();
+        $tot1=$tot2=$tot3=0;
+        foreach ($puntosPorCriterio as $puntoPorCriterio) {
+            $ponderacionObtenida=$em->createQueryBuilder()
+                ->select('avg(v.ponderacionGanada)/100 as ponderacionGanada')
+                ->from('AcreditacionBundle:ViewFormularioPorCentroEducativoSeccionPonderacion', 'v')
+                ->join('v.idFormularioPorCentroEducativo','f')
+                ->where('f.idCentroEducativo=:idCentroEducativo')
+                ->andWhere('v.idSeccion=:idSeccion')
+                    ->setParameter('idCentroEducativo',$idCentroEducativo)
+                    ->setParameter('idSeccion',$puntoPorCriterio['idSeccion'])
+                        ->getQuery()->getSingleResult();
+            $puntosPorCriterioData[]=array(
+                $puntoPorCriterio['nbrSeccion'],
+                number_format(round($puntoPorCriterio['ponderacionMaxima'],2),2),
+                number_format(round($ponderacionObtenida['ponderacionGanada'],2),2),
+                number_format(round($puntoPorCriterio['ponderacionMaxima'] - $ponderacionObtenida['ponderacionGanada'],2),2),
+            );
+            $tot1+=round($puntoPorCriterio['ponderacionMaxima'],2);
+            $tot2+=round($ponderacionObtenida['ponderacionGanada'],2);
+            $tot3+=round($puntoPorCriterio['ponderacionMaxima'] - $ponderacionObtenida['ponderacionGanada'],2);
+        }
+        $puntosPorCriterioData[]=array(
+            'Resultado de evaluación',
+            number_format($tot1,2),
+            number_format($tot2,2),
+            number_format($tot3,2),
+        );
+        $pdfObj->dataTable(array(
+                array('title' => 'CRITERIOS PROMEDIADOS BÁSICA, MEDIA Y PARVULARIA','border' => 1,'width' => 50,),
+                array('title' => 'Puntuación global esperada','border' => 1,),
+                array('title' => 'Puntuación global obtenida','border' => 1,),
+                array('title' => 'Diferencia','border' => 1,),
+            ),$puntosPorCriterioData,array());
+        $pdfObj->newLine();
+        $resultado=$tot2;
+
+        $primerFormulario=true;
+        $formularios=$em->createQueryBuilder()
+            ->select('f.codFormulario, f.nbrFormulario')
+            ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'fce')
+            ->join('fce.idFormulario','f')
+            ->where('fce.idCentroEducativo=:idCentroEducativo')
+            ->orderBy('f.codFormulario')
+                ->setParameter('idCentroEducativo',$idCentroEducativo)
+                ->getQuery()->getResult();
+
+        foreach ($formularios as $formulario) {
+
+            if(!$primerFormulario){
+                $pdfObj->AddPage();
+                $pdfObj->dataTable(array(
+                        array('title' => '','border' => 1,'width' => 25,),
+                        array('title' => '','border' => 1,),
+                    ),array(
+                        array(
+                            'Centro educativo:',
+                            $centroEducativo['nbrCentroEducativo'],
+                        ),
+                        array(
+                            'Código:',
+                            $centroEducativo['codCentroEducativo'],
+                        ),
+                        array(
+                            'Departamento:',
+                            $centroEducativo['nbrDepartamento'],
+                        ),
+                        array(
+                            'Municipio:',
+                            $centroEducativo['nbrMunicipio'],
+                        ),
+                    ),array(),false);
+                $pdfObj->newLine();                
+            }
+            $primerFormulario=false;
+
+            reset($puntosPorCriterio);
+            foreach ($puntosPorCriterio as $criterio) {
+
+                $pdfObj->MultiCell($pdfObj->getWorkAreaWidth(),$pdfObj->getLineHeight(),$criterio['nbrSeccion'] . "\n" . $formulario['nbrFormulario'],0,'C');
+                $pdfObj->newLine();
+
+                $puntosPorIndicador=$em->createQueryBuilder()
+                    ->select('i.idIndicador, i.nbrIndicador, sum(p.ponderacionMaxima)/100 as ponderacionMaxima')
+                    ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'fce')
+                    ->join('fce.idFormulario','f')
+                    ->join('f.secciones','s')
+                    ->join('s.preguntas','p')
+                    ->join('p.idIndicador','i')
+                    ->where('fce.idCentroEducativo=:idCentroEducativo')
+                    ->andWhere('f.codFormulario=:codFormulario')
+                    ->andWhere('p.idSeccion=:idSeccion')
+                    ->groupBy('i.idIndicador, i.nbrIndicador')
+                        ->setParameter('idCentroEducativo',$idCentroEducativo)
+                        ->setParameter('codFormulario',$formulario['codFormulario'])
+                        ->setParameter('idSeccion',$criterio['idSeccion'])
+                            ->getQuery()->getResult();
+
+                $puntosPorIndicadorData=array();
+                $tot1=$tot2=$tot3=0;
+                foreach ($puntosPorIndicador as $puntoPorIndicador) {
+                    $ponderacionObtenida=$em->createQueryBuilder()
+                        ->select('avg(v.ponderacionGanada)/100 as ponderacionGanada')
+                        ->from('AcreditacionBundle:ViewFormularioPorCentroEducativoIndicadorPonderacion', 'v')
+                        ->join('v.idFormularioPorCentroEducativo','f')
+                        ->where('f.idCentroEducativo=:idCentroEducativo')
+                        ->andWhere('v.idIndicador=:idIndicador')
+                            ->setParameter('idCentroEducativo',$idCentroEducativo)
+                            ->setParameter('idIndicador',$puntoPorIndicador['idIndicador'])
+                                ->getQuery()->getSingleResult();
+                    $puntosPorIndicadorData[]=array(
+                        $puntoPorIndicador['nbrIndicador'],
+                        number_format(round($puntoPorIndicador['ponderacionMaxima'],2),2),
+                        number_format(round($ponderacionObtenida['ponderacionGanada'],2),2),
+                        number_format(round($puntoPorIndicador['ponderacionMaxima'] - $ponderacionObtenida['ponderacionGanada'],2),2),
+                    );
+                    $tot1+=round($puntoPorIndicador['ponderacionMaxima'],2);
+                    $tot2+=round($ponderacionObtenida['ponderacionGanada'],2);
+                    $tot3+=round($puntoPorIndicador['ponderacionMaxima'] - $ponderacionObtenida['ponderacionGanada'],2);
+                }
+                $puntosPorIndicadorData[]=array(
+                    'Resultado de evaluación',
+                    number_format($tot1,2),
+                    number_format($tot2,2),
+                    number_format($tot3,2),
+                );
+                $pdfObj->dataTable(array(
+                        array('title' => 'INDICADORES','border' => 1,'width' => 50,),
+                        array('title' => 'Puntuación global esperada','border' => 1,),
+                        array('title' => 'Puntuación global obtenida','border' => 1,),
+                        array('title' => 'Diferencia','border' => 1,),
+                    ),$puntosPorIndicadorData,array());
+                $pdfObj->newLine();
+
+            }
+        }
+
+        $margins=$pdfObj->getMargins();
+        $col1=60;
+        $col2=20;
+        $pdfObj->setX($margins['left']+($pdfObj->getWorkAreaWidth()-$col1-$col2)/2);
+        $pdfObj->MultiCell($col1,2*$pdfObj->getLineHeight(),'RESULTADO DE ACREDITACIÓN INSTITUCIONAL',1,'C',
+            false,0,'','',true,0,false,true,2*$pdfObj->getLineHeight(),'M'
+            );
+        $pdfObj->SetFontSize(14);
+        $pdfObj->MultiCell($col2,2*$pdfObj->getLineHeight(),$resultado,1,'C',
+            false,1,'','',true,0,false,true,2*$pdfObj->getLineHeight(),'M'
+            );
+        $pdfObj->newLine(2);
+
+        $pdfObj->SetFontSize(9);
+        $pdfObj->MultiCell($pdfObj->getWorkAreaWidth()/2,$pdfObj->getLineHeight(),'Lic. Renzo Uriel Valencia Arana
+Director Nacional de Gestión Educativa',0,'C',false,0);
+        $pdfObj->MultiCell($pdfObj->getWorkAreaWidth()/2,$pdfObj->getLineHeight(),'Lic. Juan Carlos Arteaga Mena
+Jefe Departamento de Acreditación Institucional',0,'C');
+
+        $pdfObj->Output("informeCuantitativo-" . $centroEducativo['codCentroEducativo'] . "-$anio.pdf", 'I');
+    }
 }

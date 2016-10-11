@@ -67,6 +67,10 @@ class Seccion
      */
     private $seccionesPorFormularioPorCentroEducativo;
 
+    /**
+     * @ORM\OneToMany(targetEntity="ViewFormularioPorCentroEducativoSeccionPonderacion",mappedBy="idSeccion")
+     */
+    private $formulariosPorCentroEducativoSeccionPonderacion;
 
 
     /**
@@ -75,6 +79,7 @@ class Seccion
     public function __construct()
     {
         $this->preguntas = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formulariosPorCentroEducativoSeccionPonderacion = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -249,6 +254,19 @@ class Seccion
     }
 
     /**
+     * Add formulariosPorCentroEducativoSeccionPonderacion
+     *
+     * @param \AcreditacionBundle\Entity\ViewFormularioPorCentroEducativoSeccionPonderacion $formulariosPorCentroEducativoSeccionPonderacion
+     * @return Seccion
+     */
+    public function addFormulariosPorCentroEducativoSeccionPonderacion(\AcreditacionBundle\Entity\ViewFormularioPorCentroEducativoSeccionPonderacion $formulariosPorCentroEducativoSeccionPonderacion)
+    {
+        $this->formulariosPorCentroEducativoSeccionPonderacion[] = $formulariosPorCentroEducativoSeccionPonderacion;
+
+        return $this;
+    }
+
+    /**
      * Remove seccionesPorFormularioPorCentroEducativo
      *
      * @param \AcreditacionBundle\Entity\SeccionPorFormularioPorCentroEducativo $seccionesPorFormularioPorCentroEducativo
@@ -266,5 +284,25 @@ class Seccion
     public function getSeccionesPorFormularioPorCentroEducativo()
     {
         return $this->seccionesPorFormularioPorCentroEducativo;
+    }
+
+    /**
+     * Remove formulariosPorCentroEducativoSeccionPonderacion
+     *
+     * @param \AcreditacionBundle\Entity\ViewFormularioPorCentroEducativoSeccionPonderacion $formulariosPorCentroEducativoSeccionPonderacion
+     */
+    public function removeFormulariosPorCentroEducativoSeccionPonderacion(\AcreditacionBundle\Entity\ViewFormularioPorCentroEducativoSeccionPonderacion $formulariosPorCentroEducativoSeccionPonderacion)
+    {
+        $this->formulariosPorCentroEducativoSeccionPonderacion->removeElement($formulariosPorCentroEducativoSeccionPonderacion);
+    }
+
+    /**
+     * Get formulariosPorCentroEducativoSeccionPonderacion
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormulariosPorCentroEducativoSeccionPonderacion()
+    {
+        return $this->formulariosPorCentroEducativoSeccionPonderacion;
     }
 }

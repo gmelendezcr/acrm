@@ -86,3 +86,7 @@ centro_educativo_criterio_observaciones_editar_guardar:
     path:     /editar-guardar-observaciones
     defaults: { _controller: AcreditacionBundle:CentroEducativo:observaciones_editar_guardar }
     methods:  [POST]
+centro_educativo_informe_cuantitativo:
+    path:     /informeCuantitativo
+    defaults: { _controller: AcreditacionBundle:CentroEducativo:informeCuantitativo }
+    methods:  [GET]
