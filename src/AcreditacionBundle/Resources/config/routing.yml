@@ -2,6 +2,10 @@ departamento:
     resource: "@AcreditacionBundle/Resources/config/routing/departamento.yml"
     prefix:   /departamento
 
+reporte:
+    resource: "@AcreditacionBundle/Resources/config/routing/reportes.yml"
+    prefix:   /reporte
+
 municipio:
     resource: "@AcreditacionBundle/Resources/config/routing/municipio.yml"
     prefix:   /municipio

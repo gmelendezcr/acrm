@@ -227,8 +227,8 @@ function cargarDepartamentos(comboDepartamento,selected,comboMunicipio,municipio
     success: function(html){
       comboDepartamento.html(html);
       comboDepartamento.val(selected);
-      if(!comboMunicipio.val() && municipioHidden.val()){
-        cargarMunicipios(comboDepartamento.val(),comboMunicipio,municipioHidden.val());
+      if(!comboMunicipio.val() && (municipioHidden==null || municipioHidden.val())){
+        cargarMunicipios(comboDepartamento.val(),comboMunicipio,(municipioHidden?municipioHidden.val():null));
       }
     }
   });
@@ -277,3 +277,9 @@ function marcarRevisar(control,idFormularioPorCentroEducativoRevisar,idPregunta,
 $("#warning-alert").fadeTo(3000, 6000).slideUp(6000, function(){
     $("#warning-alert").slideUp(6000);
 });
+
+
+
+
+
+  

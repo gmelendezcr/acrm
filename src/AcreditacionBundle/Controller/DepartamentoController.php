@@ -23,7 +23,7 @@ class DepartamentoController extends Controller
             ->select('d.idDepartamento, d.codDepartamento, d.nbrDepartamento')
             ->from('AcreditacionBundle:Departamento', 'd')
                 ->getQuery()->getResult();
-        $depHtml='';
+        $depHtml='<option value="">Seleccione uno</option>';
         foreach($deps as $dep) {
             $depHtml.="<option value='" . $dep['idDepartamento'] . "'>" . $dep['codDepartamento'] . ' - ' . $dep['nbrDepartamento'] . "</option>";
         }

@@ -1,0 +1,17 @@
+reporte_cuantitativo_cualitativo:
+    path:     /cuantitativo-cuantitativo
+    defaults: { _controller: AcreditacionBundle:Reportes:cuantitativo_cualitativo }
+    methods:  [GET]
+
+reporte_x_estado:
+    path:     /por-estado
+    defaults: { _controller: AcreditacionBundle:Reportes:estado }
+    methods:  [GET]
+reporte_x_zona:
+    path:     /por-zona
+    defaults: { _controller: AcreditacionBundle:Reportes:zona }
+    methods:  [GET]
+reporte_x_rango_fecha:
+    path:     /por-zona
+    defaults: { _controller: AcreditacionBundle:Reportes:zona }
+    methods:  [GET]

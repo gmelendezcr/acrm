@@ -1,0 +1,21 @@
+<div class="form-group">
+    <label for="departamento">
+        Departamento
+    </label>
+    <select class="form-control input-1" id="departamento" name="departamento" onchange="cargarMunicipios($(this).val(),$('#municipio'),'');">
+                                 
+    </select>                                
+</div>
+<div class="form-group">
+    <label for="municipio">
+        Municipio
+    </label>
+    <select class="form-control input-1" id="municipio" name="municipio">
+                                  
+    </select>                                
+</div>
+<script language="javascript">
+    setTimeout(function(){
+        cargarDepartamentos($('#departamento'),'',$('#municipio'),null);
+    }, 1000);
+</script>

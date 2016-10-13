@@ -99,7 +99,10 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-indent-left" aria-hidden="true"></span> Reportes <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="">Cualitativo</a></li>
+                                <li><a href="{{path('reporte_cuantitativo_cualitativo')}}">Cuantitativo y Cualitativo</a></li>
+                                <li><a href="{{path('reporte_x_estado')}}">Por Estado</a></li>
+                                <li><a href="{{path('reporte_x_zona')}}">Etado actual de acreditación</a></li>
+                                <li><a href="{{path('reporte_x_rango_fecha')}}">Por rango de años</a></li>
                             </ul>
                         </li>
                     </ul>            
@@ -162,10 +165,27 @@
                     viewMode: 'years',
                     locale: 'es',   
                     format: 'YYYY'
-                });                  
+                });
                 $('#fecha').datetimepicker({
                     locale: 'es',
                     format: 'DD-MM-YYYY'
+                });
+                $('#fecha_annio1').datetimepicker({
+                    viewMode: 'years',
+                    locale: 'es',   
+                    format: 'YYYY'
+                });
+                $('#fecha_annio2').datetimepicker({
+                    viewMode: 'years',
+                    locale: 'es',   
+                    format: 'YYYY',
+                    useCurrent: false
+                });
+                $("#fecha_annio1").on("dp.change", function (e) {
+                $('#fecha_annio2').data("DateTimePicker").minDate(e.date);
+                });
+                $("#fecha_annio2").on("dp.change", function (e) {
+                $('#fecha_annio1').data("DateTimePicker").maxDate(e.date);
                 });
             });
         </script>

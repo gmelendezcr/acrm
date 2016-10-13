@@ -26,7 +26,7 @@ class MunicipioController extends Controller
             ->where('d.idDepartamento=:idDepartamento')
                 ->setParameter('idDepartamento',$idDepartamento)
                     ->getQuery()->getResult();
-        $munHtml='';
+        $munHtml='<option value="">Seleccione uno</option>';
         foreach($muns as $mun) {
             $munHtml.="<option value='" . $mun['idMunicipio'] . "' " . ($mun['codMunicipio']==$idMunicipio?'selected':'') . ">" . $mun['codMunicipio'] . ' ' . $mun['nbrMunicipio'] . "</option>";
         }
