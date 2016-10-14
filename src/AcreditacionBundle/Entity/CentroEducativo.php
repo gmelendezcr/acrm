@@ -91,12 +91,19 @@ class CentroEducativo
     private $formulariosPorCentroEducativo;
 
     /**
+     * @ORM\OneToMany(targetEntity="Acreditacion",mappedBy="idCentroEducativo")
+     */
+    private $acreditaciones;
+
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->gradosEscolaresPorCentroEducativo = new \Doctrine\Common\Collections\ArrayCollection();
         $this->formulariosPorCentroEducativo = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->acreditaciones = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -357,5 +364,38 @@ class CentroEducativo
     public function getFormulariosPorCentroEducativo()
     {
         return $this->formulariosPorCentroEducativo;
+    }
+
+    /**
+     * Add acreditaciones
+     *
+     * @param \AcreditacionBundle\Entity\Acreditacion $acreditaciones
+     * @return CentroEducativo
+     */
+    public function addAcreditaciones(\AcreditacionBundle\Entity\Acreditacion $acreditaciones)
+    {
+        $this->acreditaciones[] = $acreditaciones;
+
+        return $this;
+    }
+
+    /**
+     * Remove acreditaciones
+     *
+     * @param \AcreditacionBundle\Entity\Acreditacion $acreditaciones
+     */
+    public function removeAcreditaciones(\AcreditacionBundle\Entity\Acreditacion $acreditaciones)
+    {
+        $this->acreditaciones->removeElement($acreditaciones);
+    }
+
+    /**
+     * Get acreditaciones
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAcreditaciones()
+    {
+        return $this->acreditaciones;
     }
 }

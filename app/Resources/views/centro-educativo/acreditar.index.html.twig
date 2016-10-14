@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+     <div class="col-md-12 text-center">
+        <h2 class="sin-margin">
+            Lista de formularios por dictaminar
+        </h2>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    <div class="col-md-12">
+        <div class="header-control-general">
+            <form id="registrarAcreditacion" method="POST" action="{{ path('centro_educativo_acreditacion_acreditar') }}">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-1">
+                                    Código
+                                </th>
+                                <th class="col-sm-4">
+                                    Nombre del centro educativo
+                                </th>
+                                <th class="col-sm-1 text-center">
+                                    Puntuación parvularia
+                                </th>
+                                <th class="col-sm-1 text-center">
+                                    Puntuación básica y media
+                                </th>
+                                <th class="col-sm-1 text-center">
+                                    Puntuación promedio
+                                </th>
+                                <th class="col-sm-2">
+                                    Estado
+                                </th>
+                                <th class="col-sm-1 text-center">
+                                    Acción
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% set validacion = '' %}
+                            {% for centroEducativo in centrosEducativos %}
+                                <tr>
+                                    <td>
+                                        {{ centroEducativo.codCentroEducativo }}
+                                    </td>
+                                    <td>
+                                        {{ centroEducativo.nbrCentroEducativo ~ (centroEducativo.direccionCentroEducativo ? ', ' ~ centroEducativo.direccionCentroEducativo : null) }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ centroEducativo.puntuacionParvularia is defined ? centroEducativo.puntuacionParvularia|number_format(2) : null }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ centroEducativo.puntuacionBasica is defined ? centroEducativo.puntuacionBasica|number_format(2) : null }}
+                                    </td>
+                                    <td class="text-center">
+                                        {% set promedio = (((centroEducativo.puntuacionParvularia is defined ? centroEducativo.puntuacionParvularia : 0) +
+                                            (centroEducativo.puntuacionBasica is defined ? centroEducativo.puntuacionBasica : 0)) /
+                                            ((centroEducativo.puntuacionParvularia is defined ? 1 : 0) + (centroEducativo.puntuacionBasica is defined ? 1 : 0))) %}
+                                        {{ promedio|number_format(2) }}
+                                    </td>
+                                    <td>
+                                        {% if centroEducativo.codEstadoFormulario == 'CA' %}
+                                            <span class="label label-success">
+                                                <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="top" title="{{ centroEducativo.nbrEstadoFormulario }}"></span>
+                                            </span> 
+                                        {% else %}
+                                            <span class="label label-success">
+                                                <span class="glyphicon glyphicon-tags" data-toggle="tooltip" data-placement="top" title="{{ centroEducativo.nbrEstadoFormulario }}"></span>
+                                            </span> 
+                                        {% endif %}
+                                        {{ centroEducativo.nbrEstadoFormulario }}
+                                    </td>
+                                    <td class="text-center">
+                                        {% set validacion = validacion ~ " || $('#dictamen" ~ centroEducativo.idCentroEducativo ~ "').prop('checked')" %}
+                                        {% if promedio < 6 or ( promedio >= 6 and promedio <= 8 ) %}
+                                            <label class="checkbox-inline btn btn-info btn-xs">
+                                                <input type='radio' id='dictamen{{ centroEducativo.idCentroEducativo }}' name='dictamen{{ centroEducativo.idCentroEducativo }}' value='NA' >No acreditado
+                                                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                            </label>
+                                        {% endif %}
+                                        <label class="checkbox-inline btn btn-info btn-xs">
+                                            <input type='radio' id='dictamen{{ centroEducativo.idCentroEducativo }}' name='dictamen{{ centroEducativo.idCentroEducativo }}' value='AO' >Acreditado con observaciones
+                                            <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
+                                        </label>
+                                        {% if ( promedio >= 6 and promedio <= 8 ) or promedio > 8 %}
+                                            <label class="checkbox-inline btn btn-info btn-xs">
+                                                <input type='radio' id='dictamen{{ centroEducativo.idCentroEducativo }}' name='dictamen{{ centroEducativo.idCentroEducativo }}' value='AC' >Acreditado
+                                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                            </label>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4">
+                <div class="form-group">                                
+                    <label for="fechaInicio">Fecha de inicio</label>
+                    <div class='input-group date' id='fecha'>
+                        <input type='text' id="fechaInicio" name="fechaInicio" class="form-control" placeholder="Digite la fecha, ejem: 06-10-2016" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                </div>
+                <div class="col-sm-4"></div>
+                <div class="col-sm-12 text-center">
+                    <div class="form-group text-center"> 
+                        <button type="submit" class="btn btn-info btn-md" onClick="return validarRegistrarAcreditacion();"><span class="glyphicon glyphicon-save-file"></span> Registrar acreditación</button>
+                    </div>
+                </div>
+            </form>
+            <script type="text/javascript">
+                function validarRegistrarAcreditacion(){
+                    if((false{{ validacion|raw }}) && $('#fechaInicio').val()!=''){
+                        return true;
+                    }
+                    return false;
+                }
+            </script>
+        </div>
+    </div>
+{% endblock %}

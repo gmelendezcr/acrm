@@ -16,6 +16,11 @@
 		private $headerTitle;
 		private $workAreaWidth;
 		private $lineHeight=6;
+		private $colorFondoEncabezado=array(255, 255, 153);
+		private $filasZebra=false;
+		private $colorFilasZebra=array(null,array(168, 184, 217));
+		private $colorearTotales=false;
+		private $colorTotales=array(0, 0, 255);
 
 
 		public function getCompanyLogo(){
@@ -44,6 +49,22 @@
 
 		public function getCompanyAdminGroupName(){
 			return $this->companyAdminGroupName;
+		}
+
+		public function setFilasZebra($filasZebra){
+	    	$this->filasZebra = $filasZebra;
+		}
+
+		public function getFilasZebra(){
+	    	return $this->filasZebra;
+		}
+
+		public function setColorearTotales($colorearTotales){
+	    	$this->colorearTotales = $colorearTotales;
+		}
+
+		public function getColorearTotales(){
+	    	return $this->colorearTotales;
 		}
 
 		public function __construct($orientation='P',$units='mm',$pageSize='Letter'){
@@ -130,14 +151,26 @@ Departamento de Acreditación Institucional', null, 'C');
 					$this->SetY($this->GetY() + 2);
 					$this->line($this->GetX(),$this->GetY(),$this->GetX() + $this->workAreaWidth,$this->GetY());
 					break;
+				case 'diplomaHeader':
+					$margins=$this->getMargins();
+					$this->Image('/images/diplomaFondoSuperior.png',$this->GetX()-$margins['left'],$this->GetY()-$margins['top'],$this->GetPageWidth()+$margins['left']+$margins['right'],150);
+					$this->Image('/images/escudoElSalvadorSombra.png',$this->GetX(),$this->GetY(),30);
+					$this->Image('/images/logoMinedSombra.png',$this->GetX()+202,$this->GetY(),47);
+					$this->SetFontSize(24);
+					$this->SetX(($this->GetPageWidth()/2)-125);
+					$this->MultiCell(250, $this->lineHeight, 'El MINISTERIO DE EDUCACIÓN', 0, 'C');
+					$this->SetFontSize(18);
+					$this->SetX(($this->GetPageWidth()/2)-125);
+					$this->MultiCell(250, $this->lineHeight, 'DE LA REPÚBLICA DE EL SALVADOR', 0, 'C');
+					break;
 				default:
 					break;
 			}
 		}
 
 		public function AddPage($orientation='', $format='', $keepmargins=false, $tocpage=false){
-			parent::AddPage($orientation='', $format='', $keepmargins=false, $tocpage=false);
-			if($this->headerTypeChange){
+			parent::AddPage($orientation, $format, $keepmargins, $tocpage);
+			if($this->headerTypeChange || !$this->workAreaWidth){
 		        $margins=$this->getMargins();
 		        $this->workAreaWidth=$this->GetPageWidth() - $margins['left'] - $margins['right'];
 		        $this->headerTypeChange=false;
@@ -180,6 +213,18 @@ Departamento de Acreditación Institucional', null, 'C');
 					break;
 				case 'infoFooter':
 					$this->MultiCell($this->getWorkAreaWidth(),$this->getLineHeight(),"Edificios A, Plan Maestro, Centro de Gobierno, Alameda Juan Pablo II y calle Guadalupe, " . $this->getCompanyLocation() . ".\nTeléfonos: +(503) 2592-2000, +(503) 2592-2122, +(503) 2592-3117 - Correo electrónico: educacion@mined.gob.sv",0,'C');
+					break;
+				case 'imageFooter':
+					$x=$this->GetX();
+					$y=$this->GetY();
+					$margins=$this->getMargins();
+					$this->Image('/images/footer.png',$this->GetX()-$margins['left'],$this->GetY(),$this->getWorkAreaWidth()+$margins['left']+$margins['right'],20);
+					$this->SetXY($x,$y);
+					$this->MultiCell($this->getWorkAreaWidth(),$this->getLineHeight(),'Pág. '.$this->getAliasNumPage() . '/' . $this->getPageGroupAlias(),0,'C');
+					break;
+				case 'diplomaFooter':
+					$margins=$this->getMargins();
+					$this->Image('/images/footer.png',$this->GetX()-$margins['left'],$this->GetY()-60,$this->getWorkAreaWidth()+$margins['left']+$margins['right'],60+20);
 					break;
 				default:
 					break;
@@ -245,7 +290,9 @@ Departamento de Acreditación Institucional', null, 'C');
 			$maxHeightHeader*=1.05;
 			if($this->GetY()+$extraHeaderHeight+$maxHeightHeader>$this->getPageHeight()-$margins['bottom'])
 				$this->AddPage();
+			$idxRow=0;
 			$firstRow=true;
+			$totalRows=count($rows);
 			foreach($rows as $row){
 				$maxHeightRow=(isset($columns[$key]['height'])?$columns[$key]['height']:0);
 				foreach($row as $key => $value){
@@ -277,10 +324,10 @@ Departamento de Acreditación Institucional', null, 'C');
 							if(!isset($differentHeader['background']) || $differentHeader['background']===true)
 								$this->SetFillColor(125, 166, 71);
 							else
-								$this->SetFillColor(255, 255, 153);
+								$this->SetFillColorArray($this->colorFondoEncabezado);
 							$this->MultiCell($this->getWorkAreaWidth(),$this->getLineHeight(),$differentHeader['text'],1,'C',1,1);
 						}
-						$this->SetFillColor(255, 255, 153);
+						$this->SetFillColorArray($this->colorFondoEncabezado);
 						reset($columns);
 						foreach($columns as $key => $column){
 							$this->MultiCell($column['realWidth'],$maxHeightHeader,$column['title'],(isset($column['headerBorder'])?$column['headerBorder']:1),'C',(isset($column['headerFill'])?$column['headerFill']:1),0);
@@ -295,28 +342,38 @@ Departamento de Acreditación Institucional', null, 'C');
 				foreach($row as $key => $value){
 					if(isset($columns[$key]['style']) || (is_array($value) && isset($value['style'])))
 						$this->SetFont(null,(isset($value['style'])?$value['style']:$columns[$key]['style']));
+					$fill=0;
+					if($this->getColorearTotales() && ($idxRow+1)==$totalRows){
+						$this->SetFillColorArray($this->colorTotales);
+						$fill=1;
+					}
+					elseif($this->getFilasZebra() && $this->colorFilasZebra[$idxRow%2]){
+						$this->SetFillColorArray($this->colorFilasZebra[$idxRow%2]);
+						$fill=1;
+					}
 					if(is_array($value)){
-						if(isset($value['fill'])){
-							$this->SetFillColor($value['fill'][0],$value['fill'][1],$value['fill'][2]);
-							$fill=1;
+						if(!$this->getColorearTotales() && !$this->getFilasZebra()){
+							if(isset($value['fill'])){
+								$this->SetFillColor($value['fill'][0],$value['fill'][1],$value['fill'][2]);
+								$fill=1;
+							}
 						}
-						else
-							$fill=0;
 						$this->MultiCell($columns[$key]['realWidth'],$maxHeightRow,$value['text'],(isset($value['border'])?$value['border']:(isset($columns[$key]['border'])?$columns[$key]['border']:1)),(isset($value['align'])?$value['align']:$columns[$key]['align']),$fill,0);
 					}
 					else{
-						if(isset($columns[$key]['fill'])){
-							$this->SetFillColor($columns[$key]['fill'][0],$columns[$key]['fill'][1],$columns[$key]['fill'][2]);
-							$fill=1;
+						if(!$this->getColorearTotales() && !$this->getFilasZebra()){
+							if(isset($columns[$key]['fill'])){
+								$this->SetFillColor($columns[$key]['fill'][0],$columns[$key]['fill'][1],$columns[$key]['fill'][2]);
+								$fill=1;
+							}
 						}
-						else
-							$fill=0;
 						$this->MultiCell($columns[$key]['realWidth'],$maxHeightRow,$value,(isset($columns[$key]['border'])?$columns[$key]['border']:1),$columns[$key]['align'],$fill,0);
 					}
 					if(isset($columns[$key]['style']) || (is_array($value) && isset($value['style'])))
 						$this->SetFont(null,'');
 				}
 				$this->SetY($this->GetY() + $maxHeightRow);
+				$idxRow++;
 			}
 		}
 
