@@ -12,6 +12,10 @@ reporte_x_zona:
     defaults: { _controller: AcreditacionBundle:Reportes:zona }
     methods:  [GET]
 reporte_x_rango_fecha:
-    path:     /por-zona
+    path:     /por-rango-fecha
     defaults: { _controller: AcreditacionBundle:Reportes:zona }
+    methods:  [GET]
+reporte_x_prueba:
+    path:     /prueba
+    defaults: { _controller: AcreditacionBundle:Reportes:prueba }
     methods:  [GET]
