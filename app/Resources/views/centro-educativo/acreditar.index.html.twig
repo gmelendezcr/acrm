@@ -72,22 +72,24 @@
                                         {{ centroEducativo.nbrEstadoFormulario }}
                                     </td>
                                     <td class="text-center">
-                                        {% set validacion = validacion ~ " || $('#dictamen" ~ centroEducativo.idCentroEducativo ~ "').prop('checked')" %}
-                                        {% if promedio < 6 or ( promedio >= 6 and promedio <= 8 ) %}
+                                        {% set validacion = validacion ~ " || $('#dictamen" ~ centroEducativo.idCentroEducativo ~ ":checked').val()!=undefined" %}
+                                        {% if centroEducativo.codEstadoFormulario == 'CA' %}
+                                            {% if promedio < 6 or ( promedio >= 6 and promedio <= 8 ) %}
+                                                <label class="checkbox-inline btn btn-info btn-xs">
+                                                    <input type='radio' id='dictamen{{ centroEducativo.idCentroEducativo }}' name='dictamen{{ centroEducativo.idCentroEducativo }}' value='NA' >No acreditado
+                                                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                                </label>
+                                            {% endif %}
                                             <label class="checkbox-inline btn btn-info btn-xs">
-                                                <input type='radio' id='dictamen{{ centroEducativo.idCentroEducativo }}' name='dictamen{{ centroEducativo.idCentroEducativo }}' value='NA' >No acreditado
-                                                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                                <input type='radio' id='dictamen{{ centroEducativo.idCentroEducativo }}' name='dictamen{{ centroEducativo.idCentroEducativo }}' value='AO' >Acreditado con observaciones
+                                                <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
                                             </label>
-                                        {% endif %}
-                                        <label class="checkbox-inline btn btn-info btn-xs">
-                                            <input type='radio' id='dictamen{{ centroEducativo.idCentroEducativo }}' name='dictamen{{ centroEducativo.idCentroEducativo }}' value='AO' >Acreditado con observaciones
-                                            <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
-                                        </label>
-                                        {% if ( promedio >= 6 and promedio <= 8 ) or promedio > 8 %}
-                                            <label class="checkbox-inline btn btn-info btn-xs">
-                                                <input type='radio' id='dictamen{{ centroEducativo.idCentroEducativo }}' name='dictamen{{ centroEducativo.idCentroEducativo }}' value='AC' >Acreditado
-                                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                            </label>
+                                            {% if ( promedio >= 6 and promedio <= 8 ) or promedio > 8 %}
+                                                <label class="checkbox-inline btn btn-info btn-xs">
+                                                    <input type='radio' id='dictamen{{ centroEducativo.idCentroEducativo }}' name='dictamen{{ centroEducativo.idCentroEducativo }}' value='AC' >Acreditado
+                                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                                </label>
+                                            {% endif %}
                                         {% endif %}
                                     </td>
                                 </tr>

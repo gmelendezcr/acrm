@@ -23,3 +23,31 @@ reporte_generar_estado_actual_cedu:
     path:     /reporte-estado-actual-centro-educativo
     defaults: { _controller: AcreditacionBundle:Reportes:pdf_estado_actual_cedu }
     methods:  [POST]
+centro_educativo_informe_cuantitativo:
+    path:     /informeCuantitativo
+    defaults: { _controller: AcreditacionBundle:Reportes:informeCuantitativo }
+    ###debe ser post
+    ###debe ser post
+    ###debe ser post
+    methods:  [GET]
+centro_educativo_informe_cualitativo:
+    path:     /informeCualitativo
+    defaults: { _controller: AcreditacionBundle:Reportes:informeCualitativo }
+    ###debe ser post
+    ###debe ser post
+    ###debe ser post
+    methods:  [GET]
+centro_educativo_diploma:
+    path:     /diploma
+    defaults: { _controller: AcreditacionBundle:Reportes:diploma }
+    ###debe ser post
+    ###debe ser post
+    ###debe ser post
+    methods:  [GET]
+centro_educativo_estadisticoGeneral:
+    path:     /estadisticoGeneral
+    defaults: { _controller: AcreditacionBundle:Reportes:estadisticoGeneral }
+    ###debe ser post
+    ###debe ser post
+    ###debe ser post
+    methods:  [GET]

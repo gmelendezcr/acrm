@@ -94,20 +94,6 @@ centro_educativo_criterio_observaciones_editar_guardar:
     path:     /editar-guardar-observaciones
     defaults: { _controller: AcreditacionBundle:CentroEducativo:observaciones_editar_guardar }
     methods:  [POST]
-centro_educativo_informe_cuantitativo:
-    path:     /informeCuantitativo
-    defaults: { _controller: AcreditacionBundle:CentroEducativo:informeCuantitativo }
-    ###debe ser post
-    ###debe ser post
-    ###debe ser post
-    methods:  [GET]
-centro_educativo_informe_cualitativo:
-    path:     /informeCualitativo
-    defaults: { _controller: AcreditacionBundle:CentroEducativo:informeCualitativo }
-    ###debe ser post
-    ###debe ser post
-    ###debe ser post
-    methods:  [GET]
 centro_educativo_registrar_acreditacion:
     path:     /registrarAcreditacion
     defaults: { _controller: AcreditacionBundle:CentroEducativo:registrarAcreditacion }
@@ -116,10 +102,3 @@ centro_educativo_acreditacion_acreditar:
     path:     /acreditar
     defaults: { _controller: AcreditacionBundle:CentroEducativo:acreditar }
     methods:  [POST]
-centro_educativo_diploma:
-    path:     /diploma
-    defaults: { _controller: AcreditacionBundle:CentroEducativo:diploma }
-    ###debe ser post
-    ###debe ser post
-    ###debe ser post
-    methods:  [GET]

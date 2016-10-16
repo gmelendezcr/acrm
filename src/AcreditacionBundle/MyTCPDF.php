@@ -162,6 +162,14 @@ Departamento de Acreditación Institucional', null, 'C');
 					$this->SetFontSize(18);
 					$this->SetX(($this->GetPageWidth()/2)-125);
 					$this->MultiCell(250, $this->lineHeight, 'DE LA REPÚBLICA DE EL SALVADOR', 0, 'C');
+					$x=$this->GetX();
+					$y=$this->GetY();
+					$this->SetX(0);
+					$this->SetY(200);
+					$margins=$this->getMargins();
+					$this->Image('/images/footer.png',$this->GetX()-$margins['left'],$this->GetY()-60,$this->GetPageWidth()+$margins['left']+$margins['right'],60+20);
+					$this->SetX($x);
+					$this->SetY($y);
 					break;
 				default:
 					break;
@@ -221,10 +229,6 @@ Departamento de Acreditación Institucional', null, 'C');
 					$this->Image('/images/footer.png',$this->GetX()-$margins['left'],$this->GetY(),$this->getWorkAreaWidth()+$margins['left']+$margins['right'],20);
 					$this->SetXY($x,$y);
 					$this->MultiCell($this->getWorkAreaWidth(),$this->getLineHeight(),'Pág. '.$this->getAliasNumPage() . '/' . $this->getPageGroupAlias(),0,'C');
-					break;
-				case 'diplomaFooter':
-					$margins=$this->getMargins();
-					$this->Image('/images/footer.png',$this->GetX()-$margins['left'],$this->GetY()-60,$this->getWorkAreaWidth()+$margins['left']+$margins['right'],60+20);
 					break;
 				default:
 					break;
