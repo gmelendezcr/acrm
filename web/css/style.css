@@ -385,3 +385,14 @@ Control de td de tabla
 .table-criterio  .checkbox-inline + .checkbox-inline, .radio-inline + .radio-inline{
     margin-left: 0px !important;
 }
+
+
+/*
+--------------------------------------------------------------------------------
+> Control de íconos
+--------------------------------------------------------------------------------
+*/
+.icon-lg{
+    font-size: 50px !important;
+}
+

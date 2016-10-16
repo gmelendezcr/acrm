@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="col-md-12">
+        <h2 class="sin-margin text-center">
+            Cargar cuotas desde archivo
+        </h2>
+        <div class="capa-separador-1"></div>
+        <div class="table-responsive">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-sm-2 bg-success text-right">
+                       <strong>
+                           Código:
+                       </strong>
+                    </td>
+                    <td>
+                        {{ce_show.codCentroEducativo}}
+                    </td>
+                </tr> 
+                <tr>
+                    <td class="col-sm-2 bg-success text-right">
+                       <strong>
+                           Centro educativo:
+                       </strong>
+                    </td>
+                    <td>
+                        {{ce_show.nbrCentroEducativo}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    <div class="col-md-12">
+        <div class="header-control-general">
+            <form class="form-registro form-border" method="post"  id="form_archivo" enctype="multipart/form-data">
+                
+                <label class="btn btn-default btn-file btn-block btn-lg">
+                    <div class="icon-lg"><span class="glyphicon glyphicon-cloud-upload"></span></div>
+			        <span>
+			            Seleccionar archivo
+		            </span>
+		            <input type="file" style="display: none;" name="archivo" value="" onchange='$("#upload-file-info").html($(this).val());'>
+		            <!--<input type="file" style="display: none;" value="" onchange="upload_archivo();" id="archivo">-->
+                </label>
+                <div class="capa-separador-1"></div>
+                <span class='label label-info col-lg-12 ' id="upload-file-info"></span>
+               <div class="capa-separador-1"></div>
+            </form>
+            <div id="respuesta"></div>
+        </div>
+        
+        
+        
+       
+    </div>
+    <style>
+        .btn-file {
+        position: relative;
+        overflow: hidden;
+    }
+    .btn-file input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        min-height: 100%;
+        font-size: 100px;
+        text-align: right;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        outline: none;
+        background: white;
+        cursor: inherit;
+        display: block;
+    }
+    </style>
+{% endblock %}

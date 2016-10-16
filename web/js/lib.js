@@ -249,6 +249,7 @@ function cargarMunicipios(idDepartamento,comboMunicipio,selected){
   });
 }
 
+
 function marcarRevisar(control,idFormularioPorCentroEducativoRevisar,idPregunta,idOpcionRespuesta=null){
   $.ajax({
     method: 'POST',
@@ -279,7 +280,54 @@ $("#warning-alert").fadeTo(3000, 6000).slideUp(6000, function(){
 });
 
 
-
+	/*function upload_archivo(){//Funcion encargada de enviar el archivo via AJAX
+				$(".upload-msg").text('Cargando...');
+				var inputFile = document.getElementById("archivo");
+				var idCEDU = document.getElementById("archivo");
+				var file = inputFile.files[0];
+				var idCEDU = idCEDU;
+				var data = new FormData();
+				data.append('archivo',file);
+				
+				/*jQuery.each($('#fileToUpload')[0].files, function(i, file) {
+					data.append('file'+i, file);
+				});*/
+							
+		/*		$.ajax({
+					url: "upload.php",        // Url to which the request is send
+					type: "POST",             // Type of request to be send, called as method
+					data: data, 			  // Data sent to server, a set of key/value pairs (i.e. form fields and values)
+					contentType: false,       // The content type used when sending data to the server.
+					cache: false,             // To unable request pages to be cached
+					processData:false,        // To send DOMDocument or non processed data file it is set to false
+					success: function(data)   // A function to be called if request succeeds
+					{
+						$(".upload-msg").html(data);
+						window.setTimeout(function() {
+						$(".alert-dismissible").fadeTo(500, 0).slideUp(500, function(){
+						$(this).remove();
+						});	}, 5000);
+					}
+				});
+				
+			}*/
+	
+	$(function(){
+        $("input[name='archivo']").on("change", function(){
+            var formData = new FormData($("#formulario")[0]);
+            $.ajax({
+                url: appSf + '/lista-centros-educativos/archivo-cuota-cargar',
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(datos)
+                {
+                    $("#respuesta").html(datos);
+                }
+            });
+        });
+     });
 
 
   

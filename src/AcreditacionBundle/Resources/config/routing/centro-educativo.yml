@@ -66,6 +66,14 @@ centro_educativo_cuota_editar:
     path:     /{id}/{idcuota}/editar-cuota
     defaults: { _controller: AcreditacionBundle:CentroEducativo:editar_cuota }
     methods:  [GET, POST]
+centro_educativo_cuota_form_archivo:
+    path:     /{id}/archivo-cuota
+    defaults: { _controller: AcreditacionBundle:CentroEducativo:formCuotaArchivo }
+    methods:  [GET]
+centro_educativo_cuota_form_archivo_cargar:
+    path:     /archivo-cuota-cargar
+    defaults: { _controller: AcreditacionBundle:CentroEducativo:formCuotaArchivoCargar }
+    methods:  [POST]
 centro_educativo_criterio_observaciones:
     path:     /{id}/{form}/observaciones
     defaults: { _controller: AcreditacionBundle:CentroEducativo:observaciones }

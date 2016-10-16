@@ -1,0 +1,15 @@
+<div class="form-group">
+    <label for="estado_acred">
+        Estado
+    </label>
+    <select class="form-control input-1" id="estado_acred" name="estado_acred">
+        <option>
+            Seleccione uno
+        </option>
+        {% for lea in lista_estado_acred %}
+            <option value="{{ lea.codEstadoAcreditacion }}">
+                {{ lea.codEstadoAcreditacion ~ ' ' ~ lea.nbrEstadoAcreditacion }}
+            </option>
+        {% endfor %}                             
+    </select>                                
+</div>

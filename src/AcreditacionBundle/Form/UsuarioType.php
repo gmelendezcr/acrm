@@ -66,20 +66,7 @@ class UsuarioType extends AbstractType
             ->add('enabled',null,array(
                 'label' =>'Activo',
             ));
-            //->add('roles');
-            /*->add('roles', null, array(
-                    'type' => 'choice',
-                    'label' => 'Roles',
-                    'mapped' => true,
-                    'options' => array(
-                        'label' => false,
-                        'choices' => $permissions,
-                        'multiple' => false,
-                        'data' => ''
-                    ),
-                    
-                    
-            ));*/
+            
             
             
             

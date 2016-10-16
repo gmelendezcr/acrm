@@ -15,7 +15,11 @@ reporte_x_rango_fecha:
     path:     /por-rango-fecha
     defaults: { _controller: AcreditacionBundle:Reportes:zona }
     methods:  [GET]
-reporte_x_prueba:
-    path:     /prueba
-    defaults: { _controller: AcreditacionBundle:Reportes:prueba }
+reporte_form_estado_actual_cedu:
+    path:     /formulario-actual-centro-educativo
+    defaults: { _controller: AcreditacionBundle:Reportes:form_estado_actual_cedu }
     methods:  [GET]
+reporte_generar_estado_actual_cedu:
+    path:     /reporte-estado-actual-centro-educativo
+    defaults: { _controller: AcreditacionBundle:Reportes:pdf_estado_actual_cedu }
+    methods:  [POST]

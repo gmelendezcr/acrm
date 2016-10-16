@@ -68,6 +68,14 @@ class ReportesController extends Controller{
     
     
     
+    public function form_estado_actual_ceduAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $lista_estado_acred = $em->getRepository('AcreditacionBundle:EstadoAcreditacion')->findAll();
+         return $this->render('reportes/formReporte.EstadoCEDU.html.twig',array(
+            'lista_estado_acred'         =>$lista_estado_acred
+        ));
+        
+    }
     
     
     
@@ -75,22 +83,16 @@ class ReportesController extends Controller{
     
     
     
-public function pruebaAction(Request $request){
-    $anio=$request->get('anio');
-    $idCentroEducativo=$request->get('idCentroEducativo');
-    ///falta enviarle parámetros por POST
-    ///falta enviarle parámetros por POST
-    ///falta enviarle parámetros por POST
-    $anio=2016;
-    $anio=2016;
-    $anio=2016;
-    $idCentroEducativo=2118;
-    $idCentroEducativo=2118;
-    $idCentroEducativo=2118;
-
+    
+    
+    
+public function pdf_estado_actual_ceduAction(Request $request){
+    $estado_acred=$request->get('estado_acred');
+     $fecha=$request->get('fecha');
+     $fechaRef=new \DateTime($fecha);
+     
     $em = $this->getDoctrine()->getManager();
     $pdfObj=$this->get("white_october.tcpdf")->create();
-
     $pdfObj->setHeaderType('newLogoHeader');
     $pdfObj->setFooterType('simpleFooter');
     $pdfObj->startPageGroup();
@@ -98,100 +100,222 @@ public function pruebaAction(Request $request){
     $pdfObj->MultiCell($pdfObj->getWorkAreaWidth(),$pdfObj->getLineHeight(),'Listado de centros educativos por estado actual',0,'C');
     $pdfObj->newLine();
     $pdfObj->SetFontSize(9);
-
-    $centroEducativo=$em->createQueryBuilder()
-    ->distinct()
-    ->select('c.codCentroEducativo, c.nbrCentroEducativo, c.direccionCentroEducativo,
-    m.nbrMunicipio, 
-    d.nbrDepartamento')
-    ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'f')
-        ->join('f.idCentroEducativo','c')
-        ->join('c.idMunicipio','m')
+    $msj="";
+    if($estado_acred=="AC"){
+        $msj="Lista de acreditados y acreditados con observaciones";
+        //acreditados
+        $lista_cedu=$em->createQueryBuilder()
+        ->select('ce.codCentroEducativo, ce.nbrCentroEducativo, ce.direccionCentroEducativo,
+        d.nbrDepartamento,
+        m.nbrMunicipio,
+        acred.fechaInicio,
+        acred.fechaFin
+        
+        ')
+        ->from('AcreditacionBundle:CentroEducativo', 'ce')
+        ->join('ce.acreditaciones','acred' )
+        ->join('ce.idMunicipio','m')
         ->join('m.idDepartamento','d')
-            //->where('f.idCentroEducativo=:idCentroEducativo')
-            //->andWhere('f.fechaAplicacion between :fechaIni and :fechaFin')
-                //->setParameter('idCentroEducativo',$idCentroEducativo)
-                //->setParameter('fechaIni',$anio . '-1-1')
-                //->setParameter('fechaFin',$anio . '-12-31')
-                ->getQuery()->getResult();
+            ->where('exists (
+                select 1
+                    from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
+                        where a.fechaInicio<=:fechaRef
+                            and a.fechaFin>=:fechaRef
+                            and e.codEstadoAcreditacion in (\'AC\',\'AO\')
+                            and a.idEstadoAcreditacion=e.idEstadoAcreditacion
+                            and a.idCentroEducativo=ce.idCentroEducativo
+            )')
+        ->setParameter('fechaRef',$fechaRef)
+        ->getQuery()->getResult();
+  
+   }elseif($estado_acred=="VD"){
+       $msj="Lista de vencidos";
+        $lista_cedu=$em->createQueryBuilder()
+        ->select('ce.codCentroEducativo, ce.nbrCentroEducativo, ce.direccionCentroEducativo,
+        d.nbrDepartamento,
+        m.nbrMunicipio,
+        acred.fechaInicio,
+        acred.fechaFin')
+        ->from('AcreditacionBundle:CentroEducativo', 'ce')
+        ->join('ce.acreditaciones','acred' )
+        ->join('ce.idMunicipio','m')
+        ->join('m.idDepartamento','d')
+        ->where('exists (
+            select 1
+            from AcreditacionBundle:Acreditacion a1, AcreditacionBundle:EstadoAcreditacion e1
+                where e1.codEstadoAcreditacion in (\'AC\',\'AO\')
+                and a1.idEstadoAcreditacion=e1.idEstadoAcreditacion
+                and a1.idCentroEducativo=ce.idCentroEducativo
+        )')
+        ->andWhere('not exists (
+            select 1
+            from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
+                where a.fechaInicio<=:fechaRef
+                and a.fechaFin>=:fechaRef
+                and e.codEstadoAcreditacion in (\'AC\',\'AO\')
+                and a.idEstadoAcreditacion=e.idEstadoAcreditacion
+                and a.idCentroEducativo=ce.idCentroEducativo
+        )')
+        ->setParameter('fechaRef',$fechaRef)
+        ->getQuery()->getResult();   
+   }else{
+        $msj="Lista por vencer";
+       $lista_cedu=$em->createQueryBuilder()
+        ->select('ce.codCentroEducativo, ce.nbrCentroEducativo, ce.direccionCentroEducativo,
+        d.nbrDepartamento,
+        m.nbrMunicipio,
+        acred.fechaInicio,
+        acred.fechaFin')
+        ->from('AcreditacionBundle:CentroEducativo', 'ce')
+        ->join('ce.acreditaciones','acred' )
+        ->join('ce.idMunicipio','m')
+        ->join('m.idDepartamento','d')
+        ->where('exists (
+            select 1
+            from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
+            where a.fechaInicio<=:fechaActual
+            and a.fechaFin>=:fechaActual
+            and e.codEstadoAcreditacion in (\'AC\',\'AO\')
+            and a.idEstadoAcreditacion=e.idEstadoAcreditacion
+            and a.idCentroEducativo=ce.idCentroEducativo
+        )')
+        ->andWhere('not exists (
+            select 1
+            from AcreditacionBundle:Acreditacion a1, AcreditacionBundle:EstadoAcreditacion e1
+            where a1.fechaInicio<=:fechaRef
+            and a1.fechaFin>=:fechaRef
+            and e1.codEstadoAcreditacion in (\'AC\',\'AO\')
+            and a1.idEstadoAcreditacion=e1.idEstadoAcreditacion
+            and a1.idCentroEducativo=ce.idCentroEducativo
+        )')
+        ->setParameter('fechaRef',$fechaRef)
+        ->setParameter('fechaActual',new \DateTime()) //hoy
+        ->getQuery()->getResult();
+   }
 
     
     
     $html = '
-    
-    <style>
-   table{
-        color: #003300;
-        font-family: helvetica;
-        font-size: 8pt;
-        background-color: #ccffcc;
-    }
-    table, td, th {
-    border: 1px solid #ccc;
-    text-align: left;
-}
-    td{
-        padding:5px;
-    }
-     td.second {
-        background-color: #ccffcc;
-    }
-    
-  
-    </style>
-    
-    
-    
-    <table border="0" cellpadding="4" cellpacing="4" style="">
-        <tr bgcolor="#ccc" valign="middle">
-            <th width="10%" valign="middle"><strong>Código</strong></th>
-            <th width="30%"><strong>Nombre</strong></th>
-            <th width="30%"><strong>Ubicación</strong></th>
-            <th width="15%"><strong>Fecha inicial</strong></th>
-            <th width="15%"><strong>Fecha vencimiento</strong></th>
-        </tr>
-        ';
- foreach ($centroEducativo as $cd) {
-    $html .='<tr>
-    <td>'.$cd["codCentroEducativo"].'</td>
-    <td>'.$cd["nbrCentroEducativo"].'</td>
-    <td>'.$cd["nbrDepartamento"].', '.$cd["nbrMunicipio"].', '.$cd["direccionCentroEducativo"].'</td>
-    <td></td>
-    <td></td>
-    </tr>';
-
-
+        <style>
+            table{
+                color: #003300;
+                font-family: helvetica;
+                font-size: 8pt;
+                background-color: #ccffcc;
+            }
+            table, td, th {
+                border: 1px solid #CDCDCD;
+                text-align: left;
+            }
+            td{
+                padding:5px;
+            }
+            td.second {
+                background-color: #ccffcc;
+            }
+        </style>
+        
+        <table border="0" cellpadding="4" cellpacing="4" style="">
+            <tr>
+                <th colspan="5" align="center">'.$msj.'</th>
+            </tr>
+            <tr bgcolor="#ccc" valign="middle">
+                <th width="10%" valign="middle" rowspan="2"><br /><strong>Código</strong></th>
+                <th width="30%" rowspan="2"><br /><strong>Nombre</strong></th>
+                <th width="30%" rowspan="2"><br /><strong>Ubicación</strong></th>
+                <th width="30%" colspan="2" align="center"><strong>Fecha</strong></th>
+            </tr>
+            <tr bgcolor="#ccc" valign="middle">
+                <th width="15%" align="center"><strong>Inicial</strong></th>
+                <th width="15%" align="center"><strong>Vencimiento</strong></th>
+            </tr>
+    ';
+foreach ($lista_cedu as $cd) {
+    $html .='
+        <tr>
+            <td>'.$cd["codCentroEducativo"].'</td>
+            <td>'.$cd["nbrCentroEducativo"].'</td>
+            <td>'.$cd["nbrDepartamento"].','.$cd["nbrMunicipio"].''.$cd["direccionCentroEducativo"].'</td>
+            <td align="center">'.$cd["fechaInicio"]->format('d-m-Y').'</td>
+            <td align="center">'.$cd["fechaFin"]->format('d-m-Y').'</td>
+        </tr>';
 }
     $html .='</table>';
-    //var_dump($centroEducativo);
-   // foreach ($centroEducativo as $cd) {
-     //  var_dump($cd);
-       //exit();
     
-   /* $pdfObj->dataTable(array(
-        array('title' => '','border' => 1,'width' => 25,),
-        array('title' => '','border' => 1,),
-    ),array(
-        array(
-            'Centro educativo:',
-            $centroEducativo['nbrCentroEducativo'],
-        ),
-        array(
-            'Código:',
-        $centroEducativo['codCentroEducativo'],
-        ),
-        array(
-            'Departamento:',
-            $centroEducativo['nbrDepartamento'],
-        ),
-        array(
-            'Municipio:',
-            $centroEducativo['nbrMunicipio'],
-        ),
-    ),array(),false);
-    */
-    //}
 
+
+
+
+/*
+$fechaRef=new \DateTime('2022-10-14');
+
+//acreditados
+$acreditados=$em->createQueryBuilder()
+    ->select('ce.codCentroEducativo, ce.nbrCentroEducativo')
+    ->from('AcreditacionBundle:CentroEducativo', 'ce')
+    ->where('exists (
+        select 1
+        from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
+        where a.fechaInicio<=:fechaRef
+        and a.fechaFin>=:fechaRef
+        and e.codEstadoAcreditacion in (\'AC\',\'AO\')
+        and a.idEstadoAcreditacion=e.idEstadoAcreditacion
+        and a.idCentroEducativo=ce.idCentroEducativo
+    )')
+        ->setParameter('fechaRef',$fechaRef)
+        ->getQuery()->getResult();
+
+//vencidos
+$vencidos=$em->createQueryBuilder()
+    ->select('ce.codCentroEducativo, ce.nbrCentroEducativo')
+    ->from('AcreditacionBundle:CentroEducativo', 'ce')
+    ->where('exists (
+        select 1
+        from AcreditacionBundle:Acreditacion a1, AcreditacionBundle:EstadoAcreditacion e1
+        where e1.codEstadoAcreditacion in (\'AC\',\'AO\')
+        and a1.idEstadoAcreditacion=e1.idEstadoAcreditacion
+        and a1.idCentroEducativo=ce.idCentroEducativo
+    )')
+    ->andWhere('not exists (
+        select 1
+        from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
+        where a.fechaInicio<=:fechaRef
+        and a.fechaFin>=:fechaRef
+        and e.codEstadoAcreditacion in (\'AC\',\'AO\')
+        and a.idEstadoAcreditacion=e.idEstadoAcreditacion
+        and a.idCentroEducativo=ce.idCentroEducativo
+    )')
+        ->setParameter('fechaRef',$fechaRef)
+        ->getQuery()->getResult();
+
+//por vencer
+$porVencer=$em->createQueryBuilder()
+    ->select('ce.codCentroEducativo, ce.nbrCentroEducativo')
+    ->from('AcreditacionBundle:CentroEducativo', 'ce')
+    ->where('exists (
+        select 1
+        from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
+        where a.fechaInicio<=:fechaActual
+        and a.fechaFin>=:fechaActual
+        and e.codEstadoAcreditacion in (\'AC\',\'AO\')
+        and a.idEstadoAcreditacion=e.idEstadoAcreditacion
+        and a.idCentroEducativo=ce.idCentroEducativo
+    )')
+    ->andWhere('not exists (
+        select 1
+        from AcreditacionBundle:Acreditacion a1, AcreditacionBundle:EstadoAcreditacion e1
+        where a1.fechaInicio<=:fechaRef
+        and a1.fechaFin>=:fechaRef
+        and e1.codEstadoAcreditacion in (\'AC\',\'AO\')
+        and a1.idEstadoAcreditacion=e1.idEstadoAcreditacion
+        and a1.idCentroEducativo=ce.idCentroEducativo
+    )')
+        ->setParameter('fechaRef',$fechaRef)
+        ->setParameter('fechaActual',new \DateTime()) //hoy
+        ->getQuery()->getResult();
+
+//var_dump($porVencer);
+*/
         
 
       

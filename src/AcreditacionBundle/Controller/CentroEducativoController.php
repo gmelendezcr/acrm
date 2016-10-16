@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use AcreditacionBundle\Form\CentroEducativoType;
 use AcreditacionBundle\Form\CuotaAnualPorGradoEscolarPorCentroEducativoType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 
@@ -312,33 +313,29 @@ class CentroEducativoController extends Controller{
             $anno=date('Y');
         }
         $centro_escolar_id= $ce_show->getIdCentroEducativo();
-       
         
         $idselector=$em->createQueryBuilder()
-        ->select('gece.idGradoEscolarPorCentroEducativo')->distinct()
+        ->distinct()
+        ->select('gece.idGradoEscolarPorCentroEducativo')
         ->from('AcreditacionBundle:GradoEscolarPorCentroEducativo', 'gece')
             ->where('gece.idCentroEducativo = :id')
             ->setParameter('id', $centro_escolar_id)
             ->setMaxResults('1')
             ->getQuery()
             ->getResult();
-            $grado_escolar_ce_id= (int)$idselector[0]['idGradoEscolarPorCentroEducativo'];
-           //var_dump($idselector); 
-            
-        //$grado_escolar_ce_id= $idselector->getIdGradoEscolarPorCentroEducativo();
-        
-        
-        $resanno=$em->createQueryBuilder()
-        ->select('cagece.anno')->distinct()
-        ->from('AcreditacionBundle:CuotaAnualPorGradoEscolarPorCentroEducativo', 'cagece')
+         
+        $resanno=array();
+        if((isset( $idselector)) && (!empty( $idselector))){
+            $grado_escolar_ce_id= $idselector[0]['idGradoEscolarPorCentroEducativo'];
+             $resanno=$em->createQueryBuilder()
+            ->select('cagece.anno')->distinct()
+            ->from('AcreditacionBundle:CuotaAnualPorGradoEscolarPorCentroEducativo', 'cagece')
             ->where('cagece.idGradoEscolarPorCentroEducativo = :id')
             ->orderBy('cagece.anno', 'DESC')
             ->setParameter('id', $grado_escolar_ce_id)
             ->getQuery()
             ->getResult();
-        
-        
-        
+        }
             
         $res=$em->createQueryBuilder()
         ->select(
@@ -356,8 +353,7 @@ class CentroEducativoController extends Controller{
                 ->setParameter('id', $id)
                 ->setParameter('anno', $anno)
                 ->getQuery()->getResult();
-                //var_dump($res);
-         
+                
         return $this->render('centro-educativo/cuotas.index.html.twig',array(
             'lista'=>$res,
             'ce_show'=>$ce_show,
@@ -481,15 +477,32 @@ class CentroEducativoController extends Controller{
                 'anno'=>$anno
                 ));
         }
-        
-        
-        
-       return $this->render('centro-educativo/form_cuotas_edit.index.html.twig', 
+        return $this->render('centro-educativo/form_cuotas_edit.index.html.twig', 
             array(
                 'ce_show'=>$ce_show,    
                 'form' => $editForm->createView(),
             ));
     }
+    
+    //Cuota centro educativo por archivo
+    public function formCuotaArchivoAction(Request $request,  $id){
+        $em = $this->getDoctrine()->getManager();
+        $ce_show = $em->getRepository('AcreditacionBundle:CentroEducativo')->find($id);
+        
+        return $this->render('centro-educativo/form_cuotas_archivo.index.html.twig',
+            array(
+                'ce_show'=>$ce_show
+            )
+        );
+    }
+    
+    public function formCuotaArchivoCargarAction(Request $request){
+        //$em = $this->getDoctrine()->getManager();
+     
+        
+       
+    }
+    
     /*Fin*/
 
      /*

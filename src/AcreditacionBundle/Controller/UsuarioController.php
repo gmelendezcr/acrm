@@ -35,6 +35,7 @@ class UsuarioController extends Controller
      */
     public function newAction(Request $request)
     {
+        
         $usuario = new Usuario();
         $form = $this->createForm('AcreditacionBundle\Form\UsuarioType', $usuario);
         $form->handleRequest($request);
@@ -43,8 +44,9 @@ class UsuarioController extends Controller
             $em = $this->getDoctrine()->getManager();
             //$request->get('usuario');
             $us=$request->get('usuario');
-            $usuario->addRole($us['roles']['0']);
-            
+            //$usuario->addRole($us['roles']['0']);
+            $roles=$request->get('roles');
+            $usuario->addRole($roles);
             $em->persist($usuario);
             $em->flush();
 
