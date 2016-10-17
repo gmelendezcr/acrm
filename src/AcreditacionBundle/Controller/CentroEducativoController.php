@@ -488,7 +488,6 @@ class CentroEducativoController extends Controller{
     public function formCuotaArchivoAction(Request $request,  $id){
         $em = $this->getDoctrine()->getManager();
         $ce_show = $em->getRepository('AcreditacionBundle:CentroEducativo')->find($id);
-        
         return $this->render('centro-educativo/form_cuotas_archivo.index.html.twig',
             array(
                 'ce_show'=>$ce_show

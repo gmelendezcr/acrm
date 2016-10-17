@@ -51,3 +51,11 @@ centro_educativo_estadisticoGeneral:
     ###debe ser post
     ###debe ser post
     methods:  [GET]
+consulta_publica_form:
+    path:     /consulta-publica
+    defaults: { _controller: AcreditacionBundle:Reportes:ConsultaPublica}
+    methods:  [GET]
+consulta_publica_form_buscar:
+    path: /consulta-publica-reporte
+    defaults: { _controller: AcreditacionBundle:Reportes:ConsultaPublicaBuscar}
+    methods:  [POST]

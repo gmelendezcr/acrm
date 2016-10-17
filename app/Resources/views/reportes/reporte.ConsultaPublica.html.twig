@@ -1,0 +1,38 @@
+{% extends 'basePublico.html.twig' %}
+{% block body %}
+{% if lista_cedu!=null%}
+    <div class="header-control-general">
+        <div class="clearfix capa-separador-1"></div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover"> 
+                <thead> 
+                    <tr class="bg-info"> 
+                        <th class="col-sm-1 text-center">
+                            Código
+                        </th> 
+                        <th class="col-sm-5">
+                            Nombre
+                        </th> 
+                        <th class="col-sm-4">
+                           Ubicación
+                        </th>
+                        <th class="col-sm-2 align-center">
+                          Estado
+                        </th>
+                    </tr> 
+                </thead> 
+                <tbody>
+                    {%for cedu in lista_cedu %} 
+                        <tr> 
+                            <td>{{cedu.codCentroEducativo}}</td>
+                            <td>{{cedu.nbrCentroEducativo}}</td>
+                            <td>{{cedu.nbrDepartamento}}, {{cedu.nbrMunicipio}},{{cedu.direccionCentroEducativo}}</td>
+                            <td class="align-center">{{cedu.estado}}</td>
+                        </tr> 
+                    {%endfor%}
+                </tbody> 
+            </table>
+        </div>
+    </div>
+{%endif%}
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="col-md-12 text-center">                                            
+        <h2 class="sin-margin">
+            Consulta pública
+        </h2>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    
+    <div class="col-md-12">
+        <div class="header-control-general">
+            <div class="clearfix capa-separador-1"></div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover"> 
+                    <thead> 
+                        <tr class="bg-info"> 
+                            <th class="col-sm-1 text-center">
+                                Código
+                            </th> 
+                            <th class="col-sm-5">
+                                Nombre
+                            </th> 
+                            <th class="col-sm-4">
+                               Ubicación
+                            </th>
+                            <th class="col-sm-2">
+                              Estado
+                            </th>
+                        </tr> 
+                        </thead> 
+                        <tbody>
+                            {%for cedu in lista_cedu %} 
+                                <tr> 
+                                   <td>{{cedu.codCentroEducativo}}</td>
+                                   <td>{{cedu.nbrCentroEducativo}}</td>
+                                   <td>{{cedu.nbrDepartamento}}, {{cedu.nbrMunicipio}},{{cedu.direccionCentroEducativo}}</td>
+                                   <td>{{cedu.nbrEstadoAcreditacion}}</td>
+                                </tr> 
+                            {%endfor%}
+                        </tbody> 
+                    </table>
+                </div>
+        </div>
+    </div>    
+    
+{% endblock %}

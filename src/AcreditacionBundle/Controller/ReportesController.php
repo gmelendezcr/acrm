@@ -17,7 +17,134 @@ use AcreditacionBundle\Form\CuotaAnualPorGradoEscolarPorCentroEducativoType;
 
 
 class ReportesController extends Controller{
+    public function ConsultaPublicaAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+    
+    $criterio_buscar=$request->get('criterio');
+    if((isset($criterio_buscar)) && (!empty($criterio_buscar))){
+    $criterio="%".$criterio_buscar."%";
+    $lista_cedu=$em->createQueryBuilder()
+    ->select('
+            ce.codCentroEducativo, ce.nbrCentroEducativo, ce.direccionCentroEducativo,
+            d.nbrDepartamento,
+            m.nbrMunicipio,
+            
+           
+            case
+                when not exists (
+                    select 1
+                    from AcreditacionBundle:Acreditacion a
+                        where a.idCentroEducativo=ce.idCentroEducativo
+                ) then \'No evaluado\'
+                
+                when exists (
+                    select 1
+                    from AcreditacionBundle:Acreditacion a1, AcreditacionBundle:EstadoAcreditacion e
+                        where a1.fechaInicio<=:fechaRef
+                            and a1.fechaFin>=:fechaRef
+                            and e.codEstadoAcreditacion in (\'AC\',\'AO\')
+                            and a1.idEstadoAcreditacion=e.idEstadoAcreditacion
+                            and a1.idCentroEducativo=ce.idCentroEducativo
+                ) then \'Acreditado\'
+                
+                when exists (
+                    select 1
+                    from AcreditacionBundle:Acreditacion a2, AcreditacionBundle:EstadoAcreditacion e2
+                        where a2.fechaInicio<=:fechaRef
+                            and a2.fechaFin>=:fechaRef
+                            and e2.codEstadoAcreditacion in (\'NA\')
+                            and a2.idEstadoAcreditacion=e2.idEstadoAcreditacion
+                            and a2.idCentroEducativo=ce.idCentroEducativo    
+                    
+                ) then \'No acreditado\'
+                
+                when exists (
+                select 1
+                    from AcreditacionBundle:Acreditacion a3, AcreditacionBundle:EstadoAcreditacion e3
+                        where a3.fechaFin<:fechaRef
+                            and e3.codEstadoAcreditacion in (\'AC\',\'AO\')
+                            and a3.idEstadoAcreditacion=e3.idEstadoAcreditacion
+                            and a3.idCentroEducativo=ce.idCentroEducativo
+                
+                ) then \'Vencido\'
 
+                
+                else
+                \'\'
+            end as estado
+        ')
+        ->from('AcreditacionBundle:CentroEducativo', 'ce')
+        //->join('ce.acreditaciones','acred' )
+        ->join('ce.idMunicipio','m')
+        ->join('m.idDepartamento','d')
+        ->where('ce.nbrCentroEducativo like :nbr')
+        ->orWhere('ce.codCentroEducativo like :nbr')
+            /*->andwhere('exists (
+                select 1
+                    from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
+                        where a.fechaInicio<=:fechaRef
+                            and a.fechaFin>=:fechaRef
+                            and e.codEstadoAcreditacion in (\'AC\',\'AO\')
+                            and a.idEstadoAcreditacion=e.idEstadoAcreditacion
+                            and a.idCentroEducativo=ce.idCentroEducativo
+            )')*/
+        
+        ->setParameter('nbr', $criterio)
+        ->setParameter('fechaRef', new \DateTime())
+        ->getQuery()->getResult();
+    }else{
+        $lista_cedu=array();
+    }
+        //var_dump($lista_cedu); 
+        
+        return $this->render('reportes/reporte.ConsultaPublica.html.twig',
+            array(
+                'lista_cedu'=>$lista_cedu,
+                'criterio'=>$criterio_buscar,
+            ));
+    }
+     public function ConsultaPublicaBuscarAction(Request $request){
+    
+    $em = $this->getDoctrine()->getManager();
+    
+    $criterio=$request->get('criterio');
+    $criterio="%".$criterio."%";
+    $lista_cedu=$em->createQueryBuilder()
+    ->select('
+            ce.codCentroEducativo, ce.nbrCentroEducativo, ce.direccionCentroEducativo,
+            d.nbrDepartamento,
+            m.nbrMunicipio,
+            acred.fechaInicio,
+            acred.fechaFin,
+            est.nbrEstadoAcreditacion
+        ')
+        ->from('AcreditacionBundle:CentroEducativo', 'ce')
+        ->join('ce.acreditaciones','acred' )
+        ->join('acred.idEstadoAcreditacion','est' )
+        ->join('ce.idMunicipio','m')
+        ->join('m.idDepartamento','d')
+        ->where('ce.nbrCentroEducativo like :nbr')
+            ->andwhere('exists (
+                select 1
+                    from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
+                        where a.fechaInicio<=:fechaRef
+                            and a.fechaFin>=:fechaRef
+                            and e.codEstadoAcreditacion in (\'AC\',\'AO\')
+                            and a.idEstadoAcreditacion=e.idEstadoAcreditacion
+                            and a.idCentroEducativo=ce.idCentroEducativo
+            )')
+        
+        ->setParameter('nbr', $criterio)
+        ->setParameter('fechaRef', new \DateTime())
+        ->getQuery()->getResult();
+        //var_dump($lista_cedu); 
+         
+        return $this->render('reportes/reporte.ConsultaPublicaReporte.html.twig',
+            array(
+                'lista_cedu'=>$lista_cedu
+            )
+        );
+    }
 
     public function cuantitativo_cualitativoAction(Request $request){
         $em = $this->getDoctrine()->getManager();

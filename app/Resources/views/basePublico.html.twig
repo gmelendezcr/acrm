@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Sistema de Acreditación{% endblock %}</title>
+        {% block stylesheets %}
+            <link href="{{ asset('css/bootstrap.min.css') }}" type="text/css" rel="stylesheet" />
+            <link href="{{ asset('css/stylePublico.css') }}" type="text/css" rel="stylesheet" />
+        {% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+            <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="container-fluid sin-padding navbar-fixed-top">
+            <div class="header-control fondo-2 text-color-1">
+                <div class="container">
+                    <div class="col-md-12">
+                        <div class="logo">
+                            <img src="{{ asset('images/logo.png') }}" />
+                        </div>
+                        <div class="logo-text">
+                            <h3 class="sin-margin">
+                                Sistema de Acreditación
+                            </h3>
+                            MINISTERIO DE EDUCACIÓN
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 text-center fondo-3">
+                <div class="capa-separador-1"></div>                                         
+                <strong class="sin-margin">
+                    Consulta pública
+                </strong>
+                <div class="clearfix capa-separador-1"></div>
+                <div class="capa-separador-1"></div>
+            </div>
+            <div class="col-md-12 fondo-4">
+                <div class="header-control-general">
+                    <form class="form-consulta form-border" method="get" action="{{path('consulta_publica_form')}}" id="form_publico">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <input type="text" name="criterio" id="criterio" class="form-control" value="{{ criterio ?? null}}" placeholder="Digite el código o nombre del centro educativo">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span> Buscar</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                   {% block body %}{% endblock %}
+               </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="capa-separador-1"></div>
+            <div class="col-md-12 text-right text-color-2 border-top">
+                <div class="header-control-footer">
+                    Sistema de Acreditación <br />               
+                    V 1.0
+                </div>
+            </div>
+        </div>
+        {% block javascripts %}
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
+            <script src="{{ asset('js/libPublico.js') }}"></script>
+       {% endblock %}
+    </body>
+</html>
