@@ -11,7 +11,7 @@
     
     <div class="col-md-12">
         <div class="header-control-general">
-            <form class="form-registro form-border" method="post" action="">
+            <form class="form-registro form-border" method="post" action="{{ path('reporte_estadisticoGeneral') }}" target="_blank">
                 <div class="col-sm-6">
                     {% include 'reportes/anno.html.twig' %}
                     {% include 'reportes/zona.reporte.html.twig' %}
@@ -21,6 +21,7 @@
                 <div class="col-sm-6">
                     {% include 'reportes/estado.reporte.html.twig'%}
                     {% include 'reportes/departamento.municipio.html.twig'%}
+                    {% include 'reportes/tipo.reporte.html.twig' with {'opciones': ['estadistico','listado']} %}
                     {% include 'reportes/formato.reporte.html.twig'%}
                 </div>
                 <div class="col-sm-12 text-center">

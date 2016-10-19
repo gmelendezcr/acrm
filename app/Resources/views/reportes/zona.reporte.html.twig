@@ -3,14 +3,11 @@
        Zona
     </label>
     <select class="form-control input-1" id="zona" name="zona">
-        <option>
+        <option value="">
             Seleccione una
         </option>
-        <option value="urbana">
-            Urbana
-        </option>
-        <option value="rural">
-            Rural
-        </option>
+        {% for zona in lista_zona %}
+            <option value="{{ zona.idZonaCentroEducativo }}">{{ zona.nbrZonaCentroEducativo }}</option>
+        {% endfor %}
     </select>                                
 </div>

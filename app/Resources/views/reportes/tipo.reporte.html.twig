@@ -3,14 +3,17 @@
        Tipo de reporte
     </label>
     <select class="form-control input-1" id="t_reporte" name="t_reporte">
-        <option>
-            Seleccione uno
-        </option>
-        <option value="cuantitativo">
-            Cuantitativo
-        </option>
-        <option value="cualitativo">
-            Cualitativo
-        </option>
+        {% if opciones is defined %}
+            {% for opcion in opciones %}
+                <option value="{{ opcion|replace({' ': '_'}) }}">{{ opcion|capitalize }}</option>
+            {% endfor %}
+        {% else %}
+            <option value="cuantitativo">
+                Cuantitativo
+            </option>
+            <option value="cualitativo">
+                Cualitativo
+            </option>
+        {% endif %}
     </select>                                
 </div>

@@ -252,8 +252,10 @@ class CentroEducativoController extends Controller{
     
     public function form_lista_evaluarAction(){
         $em = $this->getDoctrine()->getEntityManager();
+        $em->getConfiguration()
+            ->addCustomDatetimeFunction('YEAR', 'AcreditacionBundle\DQL\YearFunction');
         $lista=$em->createQueryBuilder()
-        ->select('fce.idFormularioPorCentroEducativo,  fce.estadoCriterioCentroEducativo,
+        ->select('fce.idFormularioPorCentroEducativo,  fce.estadoCriterioCentroEducativo, YEAR(fce.fechaAplicacion) as fechaAplicacion,
         c.idCentroEducativo, c.codCentroEducativo, c.nbrCentroEducativo, c.direccionCentroEducativo,
         f.idFormulario,f.codFormulario, f.nbrFormulario, u.nombres, u.apellidos, e.codEstadoFormulario, e.nbrEstadoFormulario')
         ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'fce')
@@ -713,9 +715,30 @@ class CentroEducativoController extends Controller{
     public function registrarAcreditacionAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
+        $em->getConfiguration()
+            ->addCustomDatetimeFunction('YEAR', 'AcreditacionBundle\DQL\YearFunction');
 
         $formulariosCalificados=$em->createQueryBuilder()
-            ->select('fce.idFormularioPorCentroEducativo, c.idCentroEducativo, c.codCentroEducativo, c.nbrCentroEducativo, c.direccionCentroEducativo, f.codFormulario, f.nbrFormulario, e.codEstadoFormulario, e.nbrEstadoFormulario, sum(v.ponderacionGanada)/100 as ponderacionGanada')
+            ->select('fce.idFormularioPorCentroEducativo, c.idCentroEducativo, c.codCentroEducativo, c.nbrCentroEducativo, c.direccionCentroEducativo, f.codFormulario, f.nbrFormulario, e.codEstadoFormulario, e.nbrEstadoFormulario, sum(v.ponderacionGanada)/100 as ponderacionGanada,
+                case
+                    when e.codEstadoFormulario=\'DC\' and exists (
+                        select 1
+                        from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion ea
+                        where YEAR(a.fechaRegistro)=YEAR(fce.fechaAplicacion)
+                        and ea.codEstadoAcreditacion in (\'AC\',\'AO\')
+                        and a.idEstadoAcreditacion=ea.idEstadoAcreditacion
+                        and a.idCentroEducativo=c.idCentroEducativo
+                    ) then \'A\'
+                    when e.codEstadoFormulario=\'DC\' and exists (
+                        select 1
+                        from AcreditacionBundle:Acreditacion a2, AcreditacionBundle:EstadoAcreditacion ea2
+                        where YEAR(a2.fechaRegistro)=YEAR(fce.fechaAplicacion)
+                        and ea2.codEstadoAcreditacion = \'NA\'
+                        and a2.idEstadoAcreditacion=ea2.idEstadoAcreditacion
+                        and a2.idCentroEducativo=c.idCentroEducativo
+                    ) then \'N\'
+                    else \'\'
+                end as acreditado, YEAR(fce.fechaAplicacion) as fechaAplicacion')
             ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'fce')
             ->join('fce.formulariosPorCentroEducativoSeccionPonderacion','v')
             ->join('fce.idCentroEducativo','c')

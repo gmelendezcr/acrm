@@ -157,36 +157,52 @@ class ReportesController extends Controller{
     public function estadoAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $lista_tamanno = $em->getRepository('AcreditacionBundle:TamannoCentroEducativo')->findAll();
-        $lista_departamento = $em->getRepository('AcreditacionBundle:Departamento')->findAll();
-        $lista_municipio = $em->getRepository('AcreditacionBundle:Municipio')->findAll();
+        //$lista_departamento = $em->getRepository('AcreditacionBundle:Departamento')->findAll();
+        //$lista_municipio = $em->getRepository('AcreditacionBundle:Municipio')->findAll();
+        $lista_zona = $em->getRepository('AcreditacionBundle:ZonaCentroEducativo')->findAll();
+        $lista_modalidad = $em->getRepository('AcreditacionBundle:ModalidadCentroEducativo')->findAll();
+        $lista_estado_acred = $em->getRepository('AcreditacionBundle:EstadoAcreditacion')->findAll();
         return $this->render('reportes/reporte.Estado.html.twig',array(
             'lista_tamanno'         =>$lista_tamanno,
-            'lista_departamento'    =>$lista_departamento,
-            'lista_municipio'       =>$lista_municipio
+            //'lista_departamento'    =>$lista_departamento,
+            //'lista_municipio'       =>$lista_municipio,
+            'lista_zona'            =>$lista_zona,
+            'lista_modalidad'       =>$lista_modalidad,
+            'lista_estado_acred'    =>$lista_estado_acred,
         ));
     }
     
     public function zonaAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $lista_tamanno = $em->getRepository('AcreditacionBundle:TamannoCentroEducativo')->findAll();
-        $lista_departamento = $em->getRepository('AcreditacionBundle:Departamento')->findAll();
-        $lista_municipio = $em->getRepository('AcreditacionBundle:Municipio')->findAll();
+        //$lista_departamento = $em->getRepository('AcreditacionBundle:Departamento')->findAll();
+        //$lista_municipio = $em->getRepository('AcreditacionBundle:Municipio')->findAll();
+        $lista_zona = $em->getRepository('AcreditacionBundle:ZonaCentroEducativo')->findAll();
+        $lista_modalidad = $em->getRepository('AcreditacionBundle:ModalidadCentroEducativo')->findAll();
+        $lista_estado_acred = $em->getRepository('AcreditacionBundle:EstadoAcreditacion')->findAll();
         return $this->render('reportes/reporte.Zona.html.twig',array(
             'lista_tamanno'         =>$lista_tamanno,
-            'lista_departamento'    =>$lista_departamento,
-            'lista_municipio'       =>$lista_municipio
+            //'lista_departamento'    =>$lista_departamento,
+            //'lista_municipio'       =>$lista_municipio,
+            'lista_zona'            =>$lista_zona,
+            'lista_modalidad'       =>$lista_modalidad,
+            'lista_estado_acred'    =>$lista_estado_acred,
         ));
     }
     
     public function rango_fechaAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $lista_tamanno = $em->getRepository('AcreditacionBundle:TamannoCentroEducativo')->findAll();
-        $lista_departamento = $em->getRepository('AcreditacionBundle:Departamento')->findAll();
-        $lista_municipio = $em->getRepository('AcreditacionBundle:Municipio')->findAll();
+        //$lista_departamento = $em->getRepository('AcreditacionBundle:Departamento')->findAll();
+        //$lista_municipio = $em->getRepository('AcreditacionBundle:Municipio')->findAll();
+        $lista_zona = $em->getRepository('AcreditacionBundle:ZonaCentroEducativo')->findAll();
+        $lista_modalidad = $em->getRepository('AcreditacionBundle:ModalidadCentroEducativo')->findAll();
         return $this->render('reportes/reporte.RangoFecha.html.twig',array(
             'lista_tamanno'         =>$lista_tamanno,
-            'lista_departamento'    =>$lista_departamento,
-            'lista_municipio'       =>$lista_municipio
+            //'lista_departamento'    =>$lista_departamento,
+            //'lista_municipio'       =>$lista_municipio,
+            'lista_zona'            =>$lista_zona,
+            'lista_modalidad'       =>$lista_modalidad,
         ));
     }
     
@@ -197,9 +213,9 @@ class ReportesController extends Controller{
     
     public function form_estado_actual_ceduAction(Request $request){
         $em = $this->getDoctrine()->getManager();
-        $lista_estado_acred = $em->getRepository('AcreditacionBundle:EstadoAcreditacion')->findAll();
+        //$lista_estado_acred = $em->getRepository('AcreditacionBundle:EstadoAcreditacion')->findAll();
          return $this->render('reportes/formReporte.EstadoCEDU.html.twig',array(
-            'lista_estado_acred'         =>$lista_estado_acred
+            //'lista_estado_acred'         =>$lista_estado_acred
         ));
         
     }
@@ -505,8 +521,8 @@ $pdfObj->lastPage();
             ->where('fce.idCentroEducativo=:idCentroEducativo')
             ->andWhere('fce.fechaAplicacion between :fechaIni and :fechaFin')
                 ->setParameter('idCentroEducativo',$idCentroEducativo)
-                ->setParameter('fechaIni',$anio . '-1-1')
-                ->setParameter('fechaFin',$anio . '-12-31')
+                ->setParameter('fechaIni',new \DateTime($anio . '-1-1'))
+                ->setParameter('fechaFin',new \DateTime($anio . '-12-31'))
                     ->getQuery()->getSingleResult();
 
         $this->informacionGeneralCentro();
@@ -514,21 +530,9 @@ $pdfObj->lastPage();
     
     public function informeCuantitativoAction(Request $request)
     {
-        $anio=$request->get('anio');
-        $idCentroEducativo=$request->get('idCentroEducativo');
+        $anio=$request->get('anno');
+        $idCentroEducativo=$request->get('centrosEducativo');
         $versionParaCoordinador=$request->get('versionParaCoordinador');
-///falta enviarle parámetros por POST
-///falta enviarle parámetros por POST
-///falta enviarle parámetros por POST
-$anio=2016;
-$anio=2016;
-$anio=2016;
-$idCentroEducativo=2118;
-$idCentroEducativo=2118;
-$idCentroEducativo=2118;
-$versionParaCoordinador=1;
-$versionParaCoordinador=1;
-$versionParaCoordinador=1;
 
         $em = $this->getDoctrine()->getManager();
         $this->pdfObj=$this->get("white_october.tcpdf")->create();
@@ -551,8 +555,8 @@ $versionParaCoordinador=1;
             )')
             ->groupBy('s.idSeccion, s.nbrSeccion')
                 ->setParameter('idCentroEducativo',$idCentroEducativo)
-                ->setParameter('fechaIni',$anio . '-1-1')
-                ->setParameter('fechaFin',$anio . '-12-31')
+                ->setParameter('fechaIni',new \DateTime($anio . '-1-1'))
+                ->setParameter('fechaFin',new \DateTime($anio . '-12-31'))
                     ->getQuery()->getResult();
 
         $puntosPorCriterioData=array();
@@ -567,8 +571,8 @@ $versionParaCoordinador=1;
                 ->andWhere('v.idSeccion=:idSeccion')
                     ->setParameter('idCentroEducativo',$idCentroEducativo)
                     ->setParameter('idSeccion',$puntoPorCriterio['idSeccion'])
-                    ->setParameter('fechaIni',$anio . '-1-1')
-                    ->setParameter('fechaFin',$anio . '-12-31')
+                    ->setParameter('fechaIni',new \DateTime($anio . '-1-1'))
+                    ->setParameter('fechaFin',new \DateTime($anio . '-12-31'))
                         ->getQuery()->getSingleResult();
             if(!$versionParaCoordinador || $puntoPorCriterio['ponderacionMaxima'] - $ponderacionObtenida['ponderacionGanada']>0){
                 $puntosPorCriterioData[]=array(
@@ -606,8 +610,8 @@ $versionParaCoordinador=1;
             ->andWhere('fce.fechaAplicacion between :fechaIni and :fechaFin')
             ->orderBy('f.codFormulario')
                 ->setParameter('idCentroEducativo',$idCentroEducativo)
-                ->setParameter('fechaIni',$anio . '-1-1')
-                ->setParameter('fechaFin',$anio . '-12-31')
+                ->setParameter('fechaIni',new \DateTime($anio . '-1-1'))
+                ->setParameter('fechaFin',new \DateTime($anio . '-12-31'))
                 ->getQuery()->getResult();
 
         $primerFormulario=true;
@@ -637,8 +641,8 @@ $versionParaCoordinador=1;
                         ->setParameter('idCentroEducativo',$idCentroEducativo)
                         ->setParameter('codFormulario',$formulario['codFormulario'])
                         ->setParameter('idSeccion',$criterio['idSeccion'])
-                        ->setParameter('fechaIni',$anio . '-1-1')
-                        ->setParameter('fechaFin',$anio . '-12-31')
+                        ->setParameter('fechaIni',new \DateTime($anio . '-1-1'))
+                        ->setParameter('fechaFin',new \DateTime($anio . '-12-31'))
                             ->getQuery()->getResult();
 
                 $mostrarCriterio=false;
@@ -654,8 +658,8 @@ $versionParaCoordinador=1;
                         ->andWhere('fce.fechaAplicacion between :fechaIni and :fechaFin')
                             ->setParameter('idCentroEducativo',$idCentroEducativo)
                             ->setParameter('idIndicador',$puntoPorIndicador['idIndicador'])
-                            ->setParameter('fechaIni',$anio . '-1-1')
-                            ->setParameter('fechaFin',$anio . '-12-31')
+                            ->setParameter('fechaIni',new \DateTime($anio . '-1-1'))
+                            ->setParameter('fechaFin',new \DateTime($anio . '-12-31'))
                                 ->getQuery()->getSingleResult();
                     if(!$versionParaCoordinador || $puntoPorIndicador['ponderacionMaxima'] - $ponderacionObtenida['ponderacionGanada']>0){
                         $puntosPorIndicadorData[]=array(
@@ -708,8 +712,8 @@ $versionParaCoordinador=1;
                         ->setParameter('codSeccion',$codSeccion)
                         ->setParameter('idCentroEducativo',$idCentroEducativo)
                         ->setParameter('codFormulario',$formulario['codFormulario'])
-                        ->setParameter('fechaIni',$anio . '-1-1')
-                        ->setParameter('fechaFin',$anio . '-12-31')
+                        ->setParameter('fechaIni',new \DateTime($anio . '-1-1'))
+                        ->setParameter('fechaFin',new \DateTime($anio . '-12-31'))
                             ->getQuery()->getResult();
 
                 $observacionesArr=array();
@@ -750,10 +754,8 @@ $versionParaCoordinador=1;
             $this->pdfObj->newLine(2);
 
             $this->pdfObj->SetFontSize(9);
-            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth()/2,$this->pdfObj->getLineHeight(),'Lic. Renzo Uriel Valencia Arana
-Director Nacional de Gestión Educativa',0,'C',false,0);
-            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth()/2,$this->pdfObj->getLineHeight(),'Lic. Juan Carlos Arteaga Mena
-Jefe Departamento de Acreditación Institucional',0,'C');
+            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth()/2,$this->pdfObj->getLineHeight(),$this->pdfObj->getAutoridad('directorGestion'),0,'C',false,0);
+            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth()/2,$this->pdfObj->getLineHeight(),$this->pdfObj->getAutoridad('jefeAcreditacion'),0,'C');
         }
 
         $this->pdfObj->Output("informeCuantitativo-" . $this->centroEducativo['codCentroEducativo'] . "-$anio.pdf", 'I');
@@ -761,17 +763,8 @@ Jefe Departamento de Acreditación Institucional',0,'C');
 
     public function informeCualitativoAction(Request $request)
     {
-        $anio=$request->get('anio');
-        $idCentroEducativo=$request->get('idCentroEducativo');
-///falta enviarle parámetros por POST
-///falta enviarle parámetros por POST
-///falta enviarle parámetros por POST
-$anio=2016;
-$anio=2016;
-$anio=2016;
-$idCentroEducativo=2118;
-$idCentroEducativo=2118;
-$idCentroEducativo=2118;
+        $anio=$request->get('anno');
+        $idCentroEducativo=$request->get('centrosEducativo');
 
         $em = $this->getDoctrine()->getManager();
         $this->pdfObj=$this->get("white_october.tcpdf")->create();
@@ -787,8 +780,8 @@ $idCentroEducativo=2118;
             ->andWhere('fce.fechaAplicacion between :fechaIni and :fechaFin')
             ->orderBy('f.codFormulario')
                 ->setParameter('idCentroEducativo',$idCentroEducativo)
-                ->setParameter('fechaIni',$anio . '-1-1')
-                ->setParameter('fechaFin',$anio . '-12-31')
+                ->setParameter('fechaIni',new \DateTime($anio . '-1-1'))
+                ->setParameter('fechaFin',new \DateTime($anio . '-12-31'))
                 ->getQuery()->getResult();
 
         $primerFormulario=true;
@@ -821,8 +814,8 @@ $idCentroEducativo=2118;
                 ->orderBy('s.codSeccion')
                     ->setParameter('idCentroEducativo',$idCentroEducativo)
                     ->setParameter('codFormulario',$formulario['codFormulario'])
-                    ->setParameter('fechaIni',$anio . '-1-1')
-                    ->setParameter('fechaFin',$anio . '-12-31')
+                    ->setParameter('fechaIni',new \DateTime($anio . '-1-1'))
+                    ->setParameter('fechaFin',new \DateTime($anio . '-12-31'))
                     ->getQuery()->getResult();
 
             $arrCriterios=array();
@@ -863,15 +856,6 @@ $idCentroEducativo=2118;
     {
         $anio=$request->get('anio');
         $idCentroEducativo=$request->get('idCentroEducativo');
-///falta enviarle parámetros por POST
-///falta enviarle parámetros por POST
-///falta enviarle parámetros por POST
-$anio=2016;
-$anio=2016;
-$anio=2016;
-$idCentroEducativo=2118;
-$idCentroEducativo=2118;
-$idCentroEducativo=2118;
 
         $em = $this->getDoctrine()->getManager();
         $this->pdfObj=$this->get("white_october.tcpdf")->create();
@@ -884,8 +868,8 @@ $idCentroEducativo=2118;
             ->where('ce.idCentroEducativo=:idCentroEducativo')
             ->andWhere('a.fechaInicio between :fechaIni and :fechaFin')
                 ->setParameter('idCentroEducativo',$idCentroEducativo)
-                ->setParameter('fechaIni',$anio . '-1-1')
-                ->setParameter('fechaFin',$anio . '-12-31')
+                ->setParameter('fechaIni',new \DateTime($anio . '-1-1'))
+                ->setParameter('fechaFin',new \DateTime($anio . '-12-31'))
                 ->getQuery()->getSingleResult();
 
         $this->pdfObj->setHeaderType('diplomaHeader');
@@ -928,36 +912,81 @@ $idCentroEducativo=2118;
         $y=$this->pdfObj->GetY()+20;
         $this->pdfObj->SetXY($x,$y);
 $this->pdfObj->setTextShadow(array('enabled' => true, 'depth_w' => 0.4, 'depth_h' => 0.4, 'color' => array(255,255,255)));
-        $this->pdfObj->MultiCell(90, $this->pdfObj->getLineHeight(), 'Carlos Mauricio Canjura Linares
-Ministro de Educación', 0, 'C');
+        $this->pdfObj->MultiCell(90, $this->pdfObj->getLineHeight(), $this->pdfObj->getAutoridad('ministro','ST'), 0, 'C');
         $this->pdfObj->SetXY($x+92,$y);
-        $this->pdfObj->MultiCell(90, $this->pdfObj->getLineHeight(), 'Francisco Humberto Castaneda Monterrosa
-Viceministro de Educación', 0, 'C');
+        $this->pdfObj->MultiCell(90, $this->pdfObj->getLineHeight(), $this->pdfObj->getAutoridad('viceMinistro','ST'), 0, 'C');
         $this->pdfObj->SetXY($x+2*92,$y);
-        $this->pdfObj->MultiCell(90, $this->pdfObj->getLineHeight(), 'Renzo Uriel Valencia Arana
-Director Nacional de Gestión Educativa', 0, 'C');
+        $this->pdfObj->MultiCell(90, $this->pdfObj->getLineHeight(), $this->pdfObj->getAutoridad('directorGestion','ST'), 0, 'C');
 
         $this->pdfObj->Output("diploma-" . $centroEducativo['codCentroEducativo'] . "-$anio.pdf", 'I');
 
     }
 
-    public function estadisticoGeneralAction(Request $request)
+    public function noAcreditadoAction(Request $request)
     {
         $anio=$request->get('anio');
-        $idMunicipio=$request->get('idMunicipio');
-        $listado=$request->get('listado');
-///falta enviarle parámetros por POST
-///falta enviarle parámetros por POST
-///falta enviarle parámetros por POST
-//$anio=2016;
-//$anio=2016;
-//$anio=2016;
-//$idMunicipio=5;
-//$idMunicipio=5;
-//$idMunicipio=5;
-$listado=1;
-$listado=1;
-$listado=1;
+        $idCentroEducativo=$request->get('idCentroEducativo');
+
+        $em = $this->getDoctrine()->getManager();
+        $this->pdfObj=$this->get("white_october.tcpdf")->create();
+
+        $centroEducativo=$em->createQueryBuilder()
+            ->select('ce.codCentroEducativo, ce.nbrCentroEducativo, ce.direccionCentroEducativo, m.nbrMunicipio, d.nbrDepartamento')
+            ->from('AcreditacionBundle:CentroEducativo', 'ce')
+            ->join('ce.idMunicipio','m')
+            ->join('m.idDepartamento','d')
+            ->join('ce.acreditaciones','a')
+            ->join('a.idEstadoAcreditacion','e')
+            ->where('ce.idCentroEducativo=:idCentroEducativo')
+            ->andWhere('a.fechaInicio between :fechaIni and :fechaFin')
+                ->setParameter('idCentroEducativo',$idCentroEducativo)
+                ->setParameter('fechaIni',new \DateTime($anio . '-1-1'))
+                ->setParameter('fechaFin',new \DateTime($anio . '-12-31'))
+                ->getQuery()->getSingleResult();
+
+        $this->pdfObj->setHeaderType('newLogoHeader');
+        $this->pdfObj->startPageGroup();
+        $this->pdfObj->AddPage();
+
+        $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'DIRECCIÓN NACIONAL DE GESTIÓN EDUCATIVA
+GERENCIA DE ACREDITACIÓN INSTITUCIONAL Y PRESUPUESTO ESCOLAR
+MINISTERIO DE EDUCACIÓN',0,'C');
+        $this->pdfObj->newLine();
+
+        $this->pdfObj->SetFont(null,'B');
+        $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'CONSIDERANDO:',0,'L');
+        $this->pdfObj->SetFont(null,'');
+        $this->pdfObj->newLine();
+
+        $this->pdfObj->writeHTMLCell($this->pdfObj->getWorkAreaWidth()+10, $this->pdfObj->getLineHeight(),$this->pdfObj->GetX()-10,$this->pdfObj->GetY(), '
+            <ol type="I">
+                <li align="justified">Que de conformidad al Art. 57 de La Constitución de la República, los centros de enseñanza Privados están sujetos a reglamentación e inspección del Estado; en consecuencia, compete al Ministerio de Educación, según el Art.38 literales 8 y 27 del  Reglamento Interno del Órgano Ejecutivo, controlar y supervisar los centros Oficiales y Privados de educación, así como regular y supervisar su creación, funcionamiento y nominación;</li>
+                <br>
+                <li align="justified">En relación a lo anterior y lo dispuesto en el Art. 80 de La Ley General de Educación, compete a este Ministerio establecer los lineamientos de creación y funcionamiento de los Centros Privados de Educación, en cuanto a su Organización Académica y Administrativa, Recursos Físicos y Financieros y el Personal Docente Calificado para el buen funcionamiento de los mismos;</li>
+                <br>
+                <li align="justified">Que conforme a lo establecido en el Instructivo y Manual Para la Acreditación de Centros Educativos Privados, los centros que cumplan con los requisitos legales y alcancen una calificación menor de 6.5 en el proceso de evaluación, se calificaran como Centros Educativos Privados No Acreditados, otorgándoles un permiso transitorio de dos años, periodo por el cual deberán superar las observaciones planteadas.</li>
+                <br>
+                <li align="justified">Por lo tanto el ' . $centroEducativo['nbrCentroEducativo'] . ', con código de infraestructura número veinte mil ciento noventa y nueve, ubicada en ' . $centroEducativo['direccionCentroEducativo'] . ', Municipio de ' . $centroEducativo['nbrMunicipio'] . ', Departamento de ' . $centroEducativo['nbrDepartamento'] . '. En los noventa días posteriores a la entrega de resultados, deberán presentar un plan de mejoramiento institucional, en el que detallen las áreas a mejorar, actividades a realizar, recursos resultados esperados y tiempo de ejecución.</li>
+                <br>
+                <li align="justified">Si transcurrido el permiso transitorio de dos años, no superan las observaciones planteadas, el Ministerio de Educación iniciará el proceso legal que establece el artículo 101 de la Ley General de Educación.</li>
+            </ol>', 0, 1, false, true, 'L');
+        $this->pdfObj->newLine(3);
+
+        $this->pdfObj->MultiCell(80,$this->pdfObj->getLineHeight(),$this->pdfObj->getAutoridad('directorGestion'),'T','L');
+
+        $this->pdfObj->Output("noAcreditado-" . $centroEducativo['codCentroEducativo'] . "-$anio.pdf", 'I');
+    }
+
+    public function estadisticoGeneralAction(Request $request)
+    {
+        $anio=$request->get('anno');
+        $idZonaCentroEducativo=$request->get('zona');
+        $idTamannoCentroEducativo=$request->get('tamanno');
+        $idModalidadCentroEducativo=$request->get('fines');
+        $idEstadoAcreditacion=$request->get('estado');
+        $idDepartamento=$request->get('departamento');
+        $idMunicipio=$request->get('municipio');
+        $listado=($request->get('t_reporte')=='listado'?1:0);
 
         $em = $this->getDoctrine()->getManager();
         $em->getConfiguration()
@@ -969,58 +998,120 @@ $listado=1;
         $this->pdfObj->startPageGroup();
         $this->pdfObj->AddPage();
 
-        $conteosPorAnioEstadoQuery=$em->createQueryBuilder()
+
+
+        $conteosPorAnioEstadoQuery=$em->createQueryBuilder();
+        if(!$listado){
+            $conteosPorAnioEstadoQuery
+                ->select('YEAR(a.fechaRegistro) as anio, e.codEstadoAcreditacion as codigo, count(1) as cantidad');
+        }
+        else{
+            $conteosPorAnioEstadoQuery
+                ->select('YEAR(a.fechaRegistro) as anio, e.codEstadoAcreditacion, e.nbrEstadoAcreditacion, ce.codCentroEducativo, ce.nbrCentroEducativo, ce.direccionCentroEducativo');
+        }
+        $conteosPorAnioEstadoQuery
             ->from('AcreditacionBundle:Acreditacion','a')
             ->join('a.idEstadoAcreditacion','e')
             ->join('a.idCentroEducativo','ce')
+            ->join('ce.idMunicipio','m')
             ->where('1=1');
-        $noEvaluadosQuery=$em->createQueryBuilder()
-            ->from('AcreditacionBundle:CentroEducativo','ce')
-            ->where('1=1');
-
-///faltan todos los filtros
-///faltan todos los filtros
-///faltan todos los filtros
-        $filtrosNoEvaluados='';
         if($anio){
             $conteosPorAnioEstadoQuery
                 ->andWhere('a.fechaInicio between :fechaIni and :fechaFin')
-                    ->setParameter('fechaIni',$anio . '-1-1')
-                    ->setParameter('fechaFin',$anio . '-12-31');
-            $filtrosNoEvaluados.='and a.fechaInicio between :fechaIni and :fechaFin';
-            $noEvaluadosQuery
-                ->setParameter('fechaIni',$anio . '-1-1')
-                ->setParameter('fechaFin',$anio . '-12-31');
+                    ->setParameter('fechaIni',new \DateTime($anio . '-1-1'))
+                    ->setParameter('fechaFin',new \DateTime($anio . '-12-31'));
+        }
+        if($idZonaCentroEducativo){
+            $conteosPorAnioEstadoQuery
+                ->andWhere('ce.idZonaCentroEducativo=:idZonaCentroEducativo')
+                    ->setParameter('idZonaCentroEducativo',$idZonaCentroEducativo);
+        }
+        if($idTamannoCentroEducativo){
+            $conteosPorAnioEstadoQuery
+                ->andWhere('ce.idTamannoCentroEducativo=:idTamannoCentroEducativo')
+                    ->setParameter('idTamannoCentroEducativo',$idTamannoCentroEducativo);
+        }
+        if($idModalidadCentroEducativo){
+            $conteosPorAnioEstadoQuery
+                ->andWhere('ce.idModalidadCentroEducativo=:idModalidadCentroEducativo')
+                    ->setParameter('idModalidadCentroEducativo',$idModalidadCentroEducativo);
+        }
+        if($idEstadoAcreditacion){
+            $conteosPorAnioEstadoQuery
+                ->andWhere('e.idEstadoAcreditacion=:idEstadoAcreditacion')
+                    ->setParameter('idEstadoAcreditacion',$idEstadoAcreditacion);
+        }
+        if($idDepartamento){
+            $conteosPorAnioEstadoQuery
+                ->andWhere('m.idDepartamento=:idDepartamento')
+                    ->setParameter('idDepartamento',$idDepartamento);
         }
         if($idMunicipio){
             $conteosPorAnioEstadoQuery
-                ->andWhere('ce.idMunicipio=:idMunicipio')
-                    ->setParameter('idMunicipio',$idMunicipio);
-            $noEvaluadosQuery
-                ->andWhere('ce.idMunicipio=:idMunicipio')
+                ->andWhere('m.idMunicipio=:idMunicipio')
                     ->setParameter('idMunicipio',$idMunicipio);
         }
-
         if(!$listado){
             $conteosPorAnioEstadoQuery
-                ->select('YEAR(a.fechaRegistro) as anio, e.codEstadoAcreditacion, count(1) as cantidad')
                 ->groupBy('anio, e.codEstadoAcreditacion')
                 ->orderBy('anio');
+        }
+        else{
+            $conteosPorAnioEstadoQuery
+                ->orderBy('anio, e.idEstadoAcreditacion, ce.codCentroEducativo');
+        }
+        $porAnioEstado=$conteosPorAnioEstadoQuery
+            ->getQuery()->getResult();
+
+
+
+        $filtrosNoEvaluados='';
+        $noEvaluadosQuery=$em->createQueryBuilder();
+        if(!$listado){
             $noEvaluadosQuery
                 ->select('count(1) as cantidad');
         }
         else{
-            $colListado='ce.codCentroEducativo, ce.nbrCentroEducativo, ce.direccionCentroEducativo';
-            $conteosPorAnioEstadoQuery
-                ->select('YEAR(a.fechaRegistro) as anio, e.codEstadoAcreditacion, e.nbrEstadoAcreditacion, ' . $colListado)
-                ->orderBy('anio, e.idEstadoAcreditacion, ce.codCentroEducativo');
             $noEvaluadosQuery
-                ->select($colListado)
-                ->orderBy('ce.codCentroEducativo');
+                ->select('ce.codCentroEducativo, ce.nbrCentroEducativo, ce.direccionCentroEducativo');
         }
-
-        $porAnioEstado=$conteosPorAnioEstadoQuery
-                ->getQuery()->getResult();
+        $noEvaluadosQuery
+            ->from('AcreditacionBundle:CentroEducativo','ce')
+            ->join('ce.idMunicipio','m')
+            ->where('1=1');
+        if($anio){
+            $filtrosNoEvaluados.='and a.fechaInicio between :fechaIni and :fechaFin';
+            $noEvaluadosQuery
+                ->setParameter('fechaIni',new \DateTime($anio . '-1-1'))
+                ->setParameter('fechaFin',new \DateTime($anio . '-12-31'));
+        }
+        if($idZonaCentroEducativo){
+            $noEvaluadosQuery
+                ->andWhere('ce.idZonaCentroEducativo=:idZonaCentroEducativo')
+                    ->setParameter('idZonaCentroEducativo',$idZonaCentroEducativo);
+        }
+        if($idTamannoCentroEducativo){
+            $noEvaluadosQuery
+                ->andWhere('ce.idTamannoCentroEducativo=:idTamannoCentroEducativo')
+                    ->setParameter('idTamannoCentroEducativo',$idTamannoCentroEducativo);
+        }
+        if($idModalidadCentroEducativo){
+            $noEvaluadosQuery
+                ->andWhere('ce.idModalidadCentroEducativo=:idModalidadCentroEducativo')
+                    ->setParameter('idModalidadCentroEducativo',$idModalidadCentroEducativo);
+        }
+        if($idEstadoAcreditacion){
+        }
+        if($idDepartamento){
+            $noEvaluadosQuery
+                ->andWhere('m.idDepartamento=:idDepartamento')
+                    ->setParameter('idDepartamento',$idDepartamento);
+        }
+        if($idMunicipio){
+            $noEvaluadosQuery
+                ->andWhere('m.idMunicipio=:idMunicipio')
+                    ->setParameter('idMunicipio',$idMunicipio);
+        }
         $noEvaluadosQuery
             ->andWhere('not exists (
                 select 1
@@ -1035,46 +1126,20 @@ $listado=1;
         }
         else{
             $noEvaluados=$noEvaluadosQuery
-                ->getQuery()->getResult();
+                ->orderBy('ce.codCentroEducativo')
+                    ->getQuery()->getResult();
         }
 
         if(!$listado){
-            $conteosPorAnioEstadoArr=array();
-            foreach ($porAnioEstado as $conteo) {
-                if(!isset($conteosPorAnioEstadoArr[$conteo['anio']])){
-                    $conteosPorAnioEstadoArr[$conteo['anio']]=array();
-                }
-                $conteosPorAnioEstadoArr[$conteo['anio']][$conteo['codEstadoAcreditacion']]=$conteo['cantidad'];
-            }
-            $estados=$em->getRepository('AcreditacionBundle:EstadoAcreditacion')->findAll();
-            $columnArr=array();
-            $columnArr[]=array('title' => 'Año','border' => 1,);
-            foreach ($estados as $estado) {
-                $columnArr[]=array('title' => $estado->getNbrEstadoAcreditacion(), 'border' => 1, 'align' => 'R',);
-            }
-
-            $reporteArr=$totales=array();
-            $totales[]='Totales';
-            foreach ($conteosPorAnioEstadoArr as $anio => $value) {
-                $tmp=array($anio);
-                reset($estados);
-                foreach ($estados as $estado) {
-                    if(!isset($totales[$estado->getCodEstadoAcreditacion()])){
-                        $totales[$estado->getCodEstadoAcreditacion()]=0;
-                    }
-                    if(!isset($value[$estado->getCodEstadoAcreditacion()])){
-                        $tmp[]=0;
-                    }
-                    else{
-                        $tmp[]=$value[$estado->getCodEstadoAcreditacion()];
-                        $totales[$estado->getCodEstadoAcreditacion()]+=$value[$estado->getCodEstadoAcreditacion()];
-                    }
-                }
-                $reporteArr[]=$tmp;
-            }
-            $reporteArr[]=array_values($totales);
-            $this->pdfObj->dataTable($columnArr,$reporteArr);
+            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'ESTADÍSTICO GENERAL DE EVALUACIÓN',0,'C');
             $this->pdfObj->newLine();
+
+            $estados=$em->createQueryBuilder()
+                ->select('e.codEstadoAcreditacion, e.nbrEstadoAcreditacion')
+                ->from('AcreditacionBundle:EstadoAcreditacion','e')
+                ->orderBy('e.idEstadoAcreditacion')
+                    ->getQuery()->getResult();
+            $this->pdfObj->crossTab($porAnioEstado,'anio','Año',$estados,'codEstadoAcreditacion','nbrEstadoAcreditacion');
 
             $this->pdfObj->dataTable(array(
                 array('title' => 'No evaluados','border' => 1,'align' => 'R',),
@@ -1083,6 +1148,8 @@ $listado=1;
             ));
         }
         else{
+            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'LISTADO GENERAL DE EVALUACIÓN POR ESTADO',0,'C');
+            $this->pdfObj->newLine();
 
             $columnArr=array(
                 array('title' => 'Código','border' => 1,'width' => 12,),
@@ -1132,5 +1199,268 @@ $listado=1;
         }
 
         $this->pdfObj->Output((!$listado?'estadisticoGeneral':'listadoGeneral') . ".pdf", 'I');
+    }
+
+    public function promedioCriterioIndicadorAction(Request $request)
+    {
+        $anioIni=$request->get('anno');
+        $anioFin=$request->get('anno_rango');
+        $idZonaCentroEducativo=$request->get('zona');
+        $idTamannoCentroEducativo=$request->get('tamanno');
+        $idDepartamento=$request->get('departamento');
+        $idMunicipio=$request->get('municipio');
+        $idModalidadCentroEducativo=$request->get('fines');
+        $tipoReporte=$request->get('t_reporte');
+
+        $em = $this->getDoctrine()->getManager();
+        $em->getConfiguration()
+            ->addCustomDatetimeFunction('YEAR', 'AcreditacionBundle\DQL\YearFunction');
+        $em->getConfiguration()
+            ->addCustomDatetimeFunction('ROUND', 'AcreditacionBundle\DQL\RoundFunction');
+        $this->pdfObj=$this->get("white_october.tcpdf")->create();
+
+        $this->pdfObj->setHeaderType('newLogoHeader');
+        $this->pdfObj->setFooterType('simpleFooter');
+        $this->pdfObj->startPageGroup();
+
+        if($tipoReporte=='por_criterio'){
+
+            $this->pdfObj->AddPage();
+
+            $promediosQuery=$em->createQueryBuilder()
+                ->select('YEAR(fc.fechaAplicacion) as anio, s.idSeccion as codigo, ROUND(AVG(v.ponderacionGanada/100),2) as cantidad')
+                ->from('AcreditacionBundle:ViewFormularioPorCentroEducativoSeccionPonderacion','v')
+                ->join('v.idFormularioPorCentroEducativo','fc')
+                ->join('fc.idCentroEducativo','ce')
+                ->join('ce.idMunicipio','m')
+                ->join('m.idDepartamento','d')
+                ->join('v.idSeccion','s')
+                ->groupBy('anio, s.idSeccion');
+
+        }
+        elseif($tipoReporte=='por_indicador'){
+
+            $this->pdfObj->AddPage('L');
+
+            $promediosQuery=$em->createQueryBuilder()
+                ->select('YEAR(fc.fechaAplicacion) as anio, i.idIndicador as codigo, ROUND(AVG(v.ponderacionGanada/100),2) as cantidad')
+                ->from('AcreditacionBundle:ViewFormularioPorCentroEducativoIndicadorPonderacion','v')
+                ->join('v.idFormularioPorCentroEducativo','fc')
+                ->join('fc.idCentroEducativo','ce')
+                ->join('ce.idMunicipio','m')
+                ->join('m.idDepartamento','d')
+                ->join('v.idIndicador','i')
+                ->groupBy('anio, i.idIndicador');
+
+        }
+
+        if($anioIni){
+            $promediosQuery
+                ->andWhere('fc.fechaAplicacion>=:fechaIni')
+                    ->setParameter('fechaIni',new \DateTime($anioIni . '-1-1'));
+        }
+        if($anioFin){
+            $promediosQuery
+                ->andWhere('fc.fechaAplicacion<=:fechaFin')
+                    ->setParameter('fechaFin',new \DateTime($anioFin . '-12-31'));
+        }
+        if($idZonaCentroEducativo){
+            $promediosQuery
+                ->andWhere('ce.idZonaCentroEducativo=:idZonaCentroEducativo')
+                    ->setParameter('idZonaCentroEducativo',$idZonaCentroEducativo);
+        }
+        if($idTamannoCentroEducativo){
+            $promediosQuery
+                ->andWhere('ce.idTamannoCentroEducativo=:idTamannoCentroEducativo')
+                    ->setParameter('idTamannoCentroEducativo',$idTamannoCentroEducativo);
+        }
+        if($idDepartamento){
+            $promediosQuery
+                ->andWhere('d.idDepartamento=:idDepartamento')
+                    ->setParameter('idDepartamento',$idDepartamento);
+        }
+        if($idMunicipio){
+            $promediosQuery
+                ->andWhere('m.idMunicipio=:idMunicipio')
+                    ->setParameter('idMunicipio',$idMunicipio);
+        }
+        if($idModalidadCentroEducativo){
+            $promediosQuery
+                ->andWhere('ce.idModalidadCentroEducativo=:idModalidadCentroEducativo')
+                    ->setParameter('idModalidadCentroEducativo',$idModalidadCentroEducativo);
+        }
+
+        $promedios=$promediosQuery
+            ->getQuery()->getResult();
+
+        if($tipoReporte=='por_criterio'){
+
+            $criterios=$em->createQueryBuilder()
+                ->select('s.idSeccion, s.nbrSeccion')
+                ->from('AcreditacionBundle:Seccion','s')
+                ->where('exists (
+                    select 1
+                    from AcreditacionBundle:Pregunta p
+                    where p.ponderacionMaxima is not null
+                    and p.idSeccion=s.idSeccion
+                )')
+                    ->getQuery()->getResult();
+            $this->pdfObj->SetFontSize(12);
+            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'PROMEDIOS POR CRITERIO',0,'C');
+            $this->pdfObj->newLine();
+            $this->pdfObj->SetFontSize(7);
+            $this->pdfObj->crossTab($promedios,'anio','Año',$criterios,'idSeccion','nbrSeccion',2);
+
+        }
+        elseif($tipoReporte=='por_indicador'){
+
+            $indicadores=$em->createQueryBuilder()
+                ->select('i.idIndicador, i.nbrIndicador')
+                ->from('AcreditacionBundle:Indicador','i')
+                    ->getQuery()->getResult();
+            $this->pdfObj->SetFontSize(12);
+            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'PROMEDIOS POR INDICADOR',0,'C');
+            $this->pdfObj->newLine();
+            $this->pdfObj->SetFontSize(6);
+            $this->pdfObj->crossTab($promedios,'anio','Año',$indicadores,'idIndicador','nbrIndicador',2);
+
+        }
+
+        $this->pdfObj->Output("promedio" . str_replace('_','',ucwords($tipoReporte,'_')) . ".pdf", 'I');
+    }
+
+    public function porDepartamentoAction (Request $request)
+    {
+        $idZonaCentroEducativo=$request->get('zona');
+        $idTamannoCentroEducativo=$request->get('tamanno');
+        $idModalidadCentroEducativo=$request->get('fines');
+        $idDepartamento=$request->get('departamento');
+        $idMunicipio=$request->get('municipio');
+        $tipoReporte=$request->get('t_reporte');
+
+        $em = $this->getDoctrine()->getManager();
+        $this->pdfObj=$this->get("white_october.tcpdf")->create();
+
+        $this->pdfObj->setHeaderType('newLogoHeader');
+        $this->pdfObj->setFooterType('simpleFooter');
+        $this->pdfObj->startPageGroup();
+        $this->pdfObj->AddPage();
+
+        if($tipoReporte=='colegios_por_departamento'){
+            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'CANTIDAD DE COLEGIOS Y ALUMNOS POR DEPARTAMENTO',0,'C');
+            $conteosQuery=$em->createQueryBuilder()
+                ->select('d.codDepartamento, d.nbrDepartamento, COUNT(1) as cantidadColegios, SUM(ce.totalAlumnos) as totalAlumnos')
+                ->from('AcreditacionBundle:CentroEducativo','ce')
+                ->join('ce.idMunicipio','m')
+                ->join('m.idDepartamento','d')
+                ->groupBy('d.codDepartamento, d.nbrDepartamento')
+                ->orderBy('d.codDepartamento');
+        }
+        elseif($tipoReporte=='docentes_por_departamento'){
+            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'CANTIDAD DE DOCENTES POR SEXO POR DEPARTAMENTO',0,'C');
+            $conteosQuery=$em->createQueryBuilder()
+                ->select('d.codDepartamento, d.nbrDepartamento, SUM(ce.totalDocentesMasculinos) as totalDocentesMasculinos, SUM(ce.totalDocentesFemeninos) as totalDocentesFemeninos')
+                ->from('AcreditacionBundle:CentroEducativo','ce')
+                ->join('ce.idMunicipio','m')
+                ->join('m.idDepartamento','d')
+                ->groupBy('d.codDepartamento, d.nbrDepartamento')
+                ->orderBy('d.codDepartamento');
+        }
+        elseif($tipoReporte=='modalidad_por_departamento'){
+            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'CANTIDAD DE COLEGIOS SIN FINES O CON FINES DE LUCRO',0,'C');
+            $conteosQuery=$em->createQueryBuilder()
+                ->select('d.codDepartamento, d.nbrDepartamento, SUM(
+                    case
+                        when mo.codModalidadCentroEducativo=\'SF\' then 1
+                        else 0
+                    end
+                ) as totalSinFines, SUM(
+                    case
+                        when mo.codModalidadCentroEducativo=\'CF\' then 1
+                        else 0
+                    end
+                ) as totalConFines')
+                ->from('AcreditacionBundle:CentroEducativo','ce')
+                ->join('ce.idMunicipio','m')
+                ->join('m.idDepartamento','d')
+                ->join('ce.idModalidadCentroEducativo','mo')
+                ->groupBy('d.codDepartamento, d.nbrDepartamento')
+                ->orderBy('d.codDepartamento');
+        }
+        $this->pdfObj->newLine();
+
+        if($idZonaCentroEducativo){
+            $conteosQuery
+                ->andWhere('ce.idZonaCentroEducativo=:idZonaCentroEducativo')
+                    ->setParameter('idZonaCentroEducativo',$idZonaCentroEducativo);
+        }
+        if($idTamannoCentroEducativo){
+            $conteosQuery
+                ->andWhere('ce.idTamannoCentroEducativo=:idTamannoCentroEducativo')
+                    ->setParameter('idTamannoCentroEducativo',$idTamannoCentroEducativo);
+        }
+        if($idModalidadCentroEducativo){
+            $conteosQuery
+                ->andWhere('ce.idModalidadCentroEducativo=:idModalidadCentroEducativo')
+                    ->setParameter('idModalidadCentroEducativo',$idModalidadCentroEducativo);
+        }
+        if($idDepartamento){
+            $conteosQuery
+                ->andWhere('d.idDepartamento=:idDepartamento')
+                    ->setParameter('idDepartamento',$idDepartamento);
+        }
+        if($idMunicipio){
+            $conteosQuery
+                ->andWhere('m.idMunicipio=:idMunicipio')
+                    ->setParameter('idMunicipio',$idMunicipio);
+        }
+
+        $conteos=$conteosQuery
+            ->getQuery()->getResult();
+
+        if($tipoReporte=='colegios_por_departamento'){
+            $codigo1='CC';
+            $codigo2='TA';
+            $cantidad1='cantidadColegios';
+            $cantidad2='totalAlumnos';
+            $texto1='Cantidad de colegios';
+            $texto2='Cantidad de alumnos';
+        }
+        elseif($tipoReporte=='docentes_por_departamento'){
+            $codigo1='DM';
+            $codigo2='DF';
+            $cantidad1='totalDocentesMasculinos';
+            $cantidad2='totalDocentesFemeninos';
+            $texto1='Docentes masculinos';
+            $texto2='Docentes femeninos';
+        }
+        elseif($tipoReporte=='modalidad_por_departamento'){
+            $codigo1='SF';
+            $codigo2='CF';
+            $cantidad1='totalSinFines';
+            $cantidad2='totalConFines';
+            $texto1='Sin fines de lucro';
+            $texto2='Con fines de lucro';
+        }
+
+        $reporteArr=array();
+        foreach ($conteos as $conteo) {
+            $reporteArr[]=array(
+                'nbrDepartamento' => $conteo['nbrDepartamento'],
+                'codigo' => $codigo1,
+                'cantidad' => $conteo[$cantidad1],
+            );
+            $reporteArr[]=array(
+                'nbrDepartamento' => $conteo['nbrDepartamento'],
+                'codigo' => $codigo2,
+                'cantidad' => $conteo[$cantidad2],
+            );
+        }
+        $this->pdfObj->crossTab($reporteArr,'nbrDepartamento','Departamento',array(
+            array('cod' => $codigo1, 'nbr' => $texto1),
+            array('cod' => $codigo2, 'nbr' => $texto2),
+        ),'cod','nbr',0,'C');
+
+        $this->pdfObj->Output("reporte" . str_replace('_','',ucwords($tipoReporte,'_')) . ".pdf", 'I');
     }
 }

@@ -3,17 +3,11 @@
        Estado
     </label>
     <select class="form-control input-1" id="estado" name="estado">
-        <option>
+        <option value="">
             Seleccione uno
         </option>
-        <option value="acred">
-            Acreditados
-        </option>
-        <option value="acred_obser">
-            Acreditados con observaciones
-        </option>
-        <option value="no_acred">
-            No acreditados
-        </option>
+        {% for estado in lista_estado_acred %}
+            <option value="{{ estado.idEstadoAcreditacion }}">{{ estado.nbrEstadoAcreditacion }}</option>
+        {% endfor %}
     </select>                                
 </div>

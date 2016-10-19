@@ -52,6 +52,20 @@ class CentroEducativo
     /**
      * @var int
      *
+     * @ORM\Column(name="TOTAL_DOCENTES_MASCULINOS", type="integer", nullable=true)
+     */
+    private $totalDocentesMasculinos;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="TOTAL_DOCENTES_FEMENINOS", type="integer", nullable=true)
+     */
+    private $totalDocentesFemeninos;
+
+    /**
+     * @var int
+     *
      * @ORM\ManyToOne(targetEntity="Municipio", inversedBy="centrosEducativos")
      * @ORM\JoinColumn(name="ID_MUNICIPIO",referencedColumnName="ID_MUNICIPIO")
      */
@@ -72,6 +86,22 @@ class CentroEducativo
      * @ORM\JoinColumn(name="ID_TAMANNO_CENTRO_EDUCATIVO",referencedColumnName="ID_TAMANNO_CENTRO_EDUCATIVO")
      */
     private $idTamannoCentroEducativo;
+
+    /**
+     * @var int
+     *
+     * @ORM\ManyToOne(targetEntity="ModalidadCentroEducativo", inversedBy="centrosEducativos")
+     * @ORM\JoinColumn(name="ID_MODALIDAD_CENTRO_EDUCATIVO",referencedColumnName="ID_MODALIDAD_CENTRO_EDUCATIVO")
+     */
+    private $idModalidadCentroEducativo;
+
+    /**
+     * @var int
+     *
+     * @ORM\ManyToOne(targetEntity="ZonaCentroEducativo", inversedBy="centrosEducativos")
+     * @ORM\JoinColumn(name="ID_ZONA_CENTRO_EDUCATIVO",referencedColumnName="ID_ZONA_CENTRO_EDUCATIVO")
+     */
+    private $idZonaCentroEducativo;
 
     /**
      * @var string
@@ -209,6 +239,52 @@ class CentroEducativo
     }
 
     /**
+     * Set totalDocentesMasculinos
+     *
+     * @param integer $totalDocentesMasculinos
+     * @return CentroEducativo
+     */
+    public function setTotalDocentesMasculinos($totalDocentesMasculinos)
+    {
+        $this->totalDocentesMasculinos = $totalDocentesMasculinos;
+
+        return $this;
+    }
+
+    /**
+     * Get totalDocentesMasculinos
+     *
+     * @return integer 
+     */
+    public function getTotalDocentesMasculinos()
+    {
+        return $this->totalDocentesMasculinos;
+    }
+
+    /**
+     * Set totalDocentesFemeninos
+     *
+     * @param integer $totalDocentesFemeninos
+     * @return CentroEducativo
+     */
+    public function setTotalDocentesFemeninos($totalDocentesFemeninos)
+    {
+        $this->totalDocentesFemeninos = $totalDocentesFemeninos;
+
+        return $this;
+    }
+
+    /**
+     * Get totalDocentesFemeninos
+     *
+     * @return integer 
+     */
+    public function getTotalDocentesFemeninos()
+    {
+        return $this->totalDocentesFemeninos;
+    }
+
+    /**
      * Set idMunicipio
      *
      * @param  \AcreditacionBundle\Entity\Municipio $idMunicipio
@@ -275,6 +351,52 @@ class CentroEducativo
     public function getIdTamannoCentroEducativo()
     {
         return $this->idTamannoCentroEducativo;
+    }
+
+    /**
+     * Set idModalidadCentroEducativo
+     *
+     * @param  \AcreditacionBundle\Entity\ModalidadCentroEducativo $idModalidadCentroEducativo
+     * @return CentroEducativo
+     */
+    public function setIdModalidadCentroEducativo(\AcreditacionBundle\Entity\ModalidadCentroEducativo $idModalidadCentroEducativo)
+    {
+        $this->idModalidadCentroEducativo = $idModalidadCentroEducativo;
+
+        return $this;
+    }
+
+    /**
+     * Get idModalidadCentroEducativo
+     *
+     * @return \AcreditacionBundle\Entity\ModalidadCentroEducativo
+     */
+    public function getIdModalidadCentroEducativo()
+    {
+        return $this->idModalidadCentroEducativo;
+    }
+
+    /**
+     * Set idZonaCentroEducativo
+     *
+     * @param  \AcreditacionBundle\Entity\ZonaCentroEducativo $idZonaCentroEducativo
+     * @return CentroEducativo
+     */
+    public function setIdZonaCentroEducativo(\AcreditacionBundle\Entity\ZonaCentroEducativo $idZonaCentroEducativo)
+    {
+        $this->idZonaCentroEducativo = $idZonaCentroEducativo;
+
+        return $this;
+    }
+
+    /**
+     * Get idZonaCentroEducativo
+     *
+     * @return \AcreditacionBundle\Entity\ZonaCentroEducativo
+     */
+    public function getIdZonaCentroEducativo()
+    {
+        return $this->idZonaCentroEducativo;
     }
 
     /**

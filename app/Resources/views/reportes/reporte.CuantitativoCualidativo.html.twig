@@ -11,7 +11,7 @@
     
     <div class="col-md-12">
         <div class="header-control-general">
-            <form class="form-registro form-border" method="post" action="">
+            <form class="form-registro form-border" method="post" action="" id="form_cual_cuant" target="_blank">
                 <div class="col-sm-6">
                     {% include 'reportes/anno.html.twig' %}
                     {% include 'reportes/cedu.html.twig' %}
@@ -21,10 +21,31 @@
                     {% include 'reportes/formato.reporte.html.twig'%}
                 </div>
                 <div class="col-sm-12 text-center">
-                    <button type="submit" class="btn btn-info btn-md"><span class="glyphicon glyphicon-th-list"></span> Generar</button>
+                    <button type="submit" class="btn btn-info btn-md" onClick="return validarCuantitativoCualitativo();"><span class="glyphicon glyphicon-th-list"></span> Generar</button>
                 </div>
                 <div class="clearfix"></div>
             </form>
+            <script type="text/javascript">
+                var cuantitativo='{{ path('reporte_informe_cuantitativo') }}';
+                var cualitativo='{{ path('reporte_informe_cualitativo') }}';
+
+                ///al elegir un año, cargar el combo sólo con los centros educativos evaluados en ese año
+                ///al elegir un año, cargar el combo sólo con los centros educativos evaluados en ese año
+                ///al elegir un año, cargar el combo sólo con los centros educativos evaluados en ese año
+
+                function validarCuantitativoCualitativo(){
+                    if($('#t_reporte').val()=='cuantitativo'){
+                        $('#form_cual_cuant').prop('action',cuantitativo);
+                    }
+                    else if($('#t_reporte').val()=='cualitativo'){
+                        $('#form_cual_cuant').prop('action',cualitativo);
+                    }
+                    ///validar que TODOS los campos sean requeridos
+                    ///validar que TODOS los campos sean requeridos
+                    ///validar que TODOS los campos sean requeridos
+                    $('#form_cual_cuant').submit();
+                }
+            </script>
         </div>
     </div>    
     

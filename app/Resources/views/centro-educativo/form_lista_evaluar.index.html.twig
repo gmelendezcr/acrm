@@ -62,9 +62,12 @@
                                 </td>
                                 <td class="text-center">
                                     
-                                    <form id="mostrarSecciones{{ form.idFormularioPorCentroEducativo }}" action="{{ path('seccion_index') }}" method="post">
-                                        <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ form.idFormularioPorCentroEducativo }}">
+                                    <form id="versionParaCoordinador{{ form.idFormularioPorCentroEducativo }}" action="{{ path('reporte_informe_cuantitativo') }}" method="post" target="_blank">
+                                        <input type="hidden" name="anno" value="{{ form.fechaAplicacion }}">
+                                        <input type="hidden" name="centrosEducativo" value="{{ form.idCentroEducativo }}">
+                                        <input type="hidden" name="versionParaCoordinador" value="1">
                                     </form>
+                                    <a href="#" onClick="$('#versionParaCoordinador{{ form.idFormularioPorCentroEducativo }}').submit();" class="btn btn-info btn-block">Reporte para coordinador</a>
                                     
                                     {% if form.codEstadoFormulario == 'CA' %}
                                     {% if form.estadoCriterioCentroEducativo=='TER' %}
@@ -84,6 +87,10 @@
                                     {% endif %}
                                     
                                     {% endif %}
+
+                                    <form id="mostrarSecciones{{ form.idFormularioPorCentroEducativo }}" action="{{ path('seccion_index') }}" method="post">
+                                        <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ form.idFormularioPorCentroEducativo }}">
+                                    </form>
                                     <a href="#" onClick="$('#mostrarSecciones{{ form.idFormularioPorCentroEducativo }}').submit();" class="btn btn-info btn-block">Mostrar</a>
                                     
                                     

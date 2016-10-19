@@ -1,16 +1,13 @@
 <div class="form-group">
     <label for="fines">
-       Fines
+        Modalidad
     </label>
     <select class="form-control input-1" id="fines" name="fines">
-        <option>
+        <option value="">
             Seleccione un criterio
         </option>
-        <option value="con-lucro">
-            Con lucro
-        </option>
-        <option value="sin-lucro">
-            Sin lucro
-        </option>
-    </select>                                
+        {% for modalidad in lista_modalidad %}
+            <option value="{{ modalidad.idModalidadCentroEducativo }}">{{ modalidad.nbrModalidadCentroEducativo }}</option>
+        {% endfor %}
+    </select>
 </div>

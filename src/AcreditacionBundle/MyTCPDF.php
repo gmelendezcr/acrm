@@ -21,6 +21,7 @@
 		private $colorFilasZebra=array(null,array(168, 184, 217));
 		private $colorearTotales=false;
 		private $colorTotales=array(0, 0, 255);
+		private $autoridades;
 
 
 		public function getCompanyLogo(){
@@ -67,9 +68,50 @@
 	    	return $this->colorearTotales;
 		}
 
+		public function setHeaderTypeChange($headerTypeChange){
+			return $this->headerTypeChange=$headerTypeChange;
+		}
+
 		public function __construct($orientation='P',$units='mm',$pageSize='Letter'){
 			parent::__construct($orientation,$units,$pageSize);
 			$this->SetHeaderMargin();
+			$this->autoridades=array(
+				'ministro' => array(
+					'titulo' => '',
+					'nombre' => 'Carlos Mauricio Canjura Linares',
+					'cargo' => 'Ministro de Educación',
+				),
+				'viceMinistro' => array(
+					'titulo' => '',
+					'nombre' => 'Francisco Humberto Castaneda Monterrosa',
+					'cargo' => 'Viceministro de Educación',
+				),
+				'directorGestion' => array(
+					'titulo' => 'Lic.',
+					'nombre' => 'Renzo Uriel Valencia Arana',
+					'cargo' => 'Director Nacional de Gestión Educativa',
+				),
+				'jefeAcreditacion' => array(
+					'titulo' => 'Lic.',
+					'nombre' => 'Juan Carlos Arteaga Mena',
+					'cargo' => 'Jefe Departamento de Acreditación Institucional',
+				),
+			);
+		}
+
+		public function getAutoridad($autoridad,$formato=null){
+			if(!isset($this->autoridades[$autoridad])){
+				return 'No definido';
+			}
+			switch ($formato) {
+				case 'ST':
+					return $this->autoridades[$autoridad]['nombre'] . "\n" . $this->autoridades[$autoridad]['cargo'];
+					break;
+				default:
+					return $this->autoridades[$autoridad]['titulo'] . ' ' . $this->autoridades[$autoridad]['nombre'] . "\n" . $this->autoridades[$autoridad]['cargo'];
+					break;
+			}
+
 		}
 
 		public function setHeaderType($headerType){
@@ -380,6 +422,67 @@ Departamento de Acreditación Institucional', null, 'C');
 				$idxRow++;
 			}
 		}
+
+        public function crossTab($conteos,$codConteo,$nbrConteo,$columnas,$codColumna,$nbrColumna,$decimales=0,$mostrarTotales='A'){
+        	//mostrarTotales - F: fila, C: columna, A: ambos
+            $conteosArr=array();
+            foreach ($conteos as $conteo) {
+                if(!isset($conteosArr[$conteo[$codConteo]])){
+                    $conteosArr[$conteo[$codConteo]]=array();
+                }
+                $conteosArr[$conteo[$codConteo]][$conteo['codigo']]=$conteo['cantidad'];
+            }
+            $columnArr=array();
+            $columnArr[]=array('title' => $nbrConteo,'border' => 1,);
+            foreach ($columnas as $columna) {
+                $columnArr[]=array('title' => $columna[$nbrColumna], 'border' => 1, 'align' => 'R',);
+            }
+            if(in_array($mostrarTotales,array('F','A'))){
+                $columnArr[]=array('title' => 'Totales','border' => 1,'align' => 'R',);
+            }
+
+            $reporteArr=$totales=array();
+            $totales[]='Totales';
+            foreach ($conteosArr as $anio => $value) {
+                $subtotal=0;
+                $tmp=array($anio);
+                reset($columnas);
+                foreach ($columnas as $columna) {
+                    if(!isset($totales[$columna[$codColumna]])){
+                        $totales[$columna[$codColumna]]=0;
+                    }
+                    if(!isset($value[$columna[$codColumna]])){
+                        $tmp[]=0;
+                    }
+                    else{
+                        $subtotal+=$value[$columna[$codColumna]];
+                        $tmp[]=number_format($value[$columna[$codColumna]],$decimales);
+                        $totales[$columna[$codColumna]]+=$value[$columna[$codColumna]];
+                    }
+                }
+                if(in_array($mostrarTotales,array('F','A'))){
+                    $tmp[]=number_format($subtotal,$decimales);
+                }
+                $reporteArr[]=$tmp;
+                if(in_array($mostrarTotales,array('F','A'))){
+                    if(!isset($totales['subtotal'])){
+                        $totales['subtotal']=0;
+                    }
+                    $totales['subtotal']+=$subtotal;
+                }
+            }
+            foreach ($totales as $key => $value) {
+                if($value=='Totales'){
+                    continue;
+                }
+                $totales[$key]=number_format($value,$decimales);
+            }
+            if(in_array($mostrarTotales,array('C','A')) && count($reporteArr)){
+                $reporteArr[]=array_values($totales);
+            }
+            $this->dataTable($columnArr,$reporteArr);
+            $this->newLine();
+        }
 
         public function dobleLineaSeparacion($newLine=true){
 	        $lineWidth=$this->getLineWidth();

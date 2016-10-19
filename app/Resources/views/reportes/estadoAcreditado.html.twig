@@ -6,10 +6,8 @@
         <option>
             Seleccione uno
         </option>
-        {% for lea in lista_estado_acred %}
-            <option value="{{ lea.codEstadoAcreditacion }}">
-                {{ lea.codEstadoAcreditacion ~ ' ' ~ lea.nbrEstadoAcreditacion }}
-            </option>
-        {% endfor %}                             
+        <option value="AC">Acreditados y acreditados con observaciones</option>
+        <option value="VD">Vencidos</option>
+        <option value="PV">Por vencer</option>
     </select>                                
 </div>
