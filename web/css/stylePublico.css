@@ -149,18 +149,12 @@ body{
     .dispositivo-movil {
         display: block;
     }
-.input-group-lg > .form-control, .input-group-lg > .input-group-addon, .input-group-lg > .input-group-btn > .btn {
-    border-radius: 3px !important;
-    font-size: 12px !important;
-    height: 30px !important;
-    line-height: 1.5 !important;
-    padding: 5px 10px !important;
-}
-
-
-select.input-group-lg > .form-control, select.input-group-lg > .input-group-addon, select.input-group-lg > .input-group-btn > .btn {
-    height: 30px;
-    line-height: 30px;
-}
+    .input-group-lg > .form-control, .input-group-lg > .input-group-addon, .input-group-lg > .input-group-btn > .btn {
+        border-radius: 3px;
+        font-size: 12px;
+        height: 30px;
+        line-height: 1.5;
+        padding: 5px 10px;
+    }
 }
 

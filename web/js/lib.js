@@ -39,11 +39,7 @@ $('#form_publico').validate({
             }
         }
 })
-  
-  
-  
-  
-  
+
   $( "#form_validar" ).validate( {
 	  rules: {
 		  codigo: "required",
@@ -192,6 +188,57 @@ $('#form_publico').validate({
 	});
 	
 	
+
+$('#form_validar_cuota_editar').validate({
+    rules: {
+    	["CuotaAnualPorGradoEscolarPorCentroEducativoType[matricula]"]: {
+			required: true,
+			minlength: 1,
+			maxlength: 15,
+			number: true,
+		},
+		["CuotaAnualPorGradoEscolarPorCentroEducativoType[monto]"]: {
+			required: true,
+			minlength: 1,
+			maxlength: 15,
+			number: true,
+		},
+		["CuotaAnualPorGradoEscolarPorCentroEducativoType[anno]"]: {
+    		required: true,
+    		date: true
+		}
+    },
+    messages: {	
+    	["CuotaAnualPorGradoEscolarPorCentroEducativoType[matricula]"]: {
+			required: "La matrícula es requerida",
+			number: "Debe ser un número"
+		},
+		["CuotaAnualPorGradoEscolarPorCentroEducativoType[monto]"]: {
+			required: "La cuota es requerida",
+			number: "Debe ser un número"
+		},
+		["CuotaAnualPorGradoEscolarPorCentroEducativoType[anno]"]: {
+			required: "El año es requerido",
+			date: "Debe ser ejem: 2016"
+		}
+	},
+       
+    highlight: function(element) {
+        $(element).closest('.form-group').addClass('has-error').removeClass( "has-success" );
+    },
+    unhighlight: function(element) {
+        $(element).closest('.form-group').addClass( "has-success" ).removeClass('has-error');
+    },
+    errorElement: 'span',
+    errorClass: 'help-block',
+    errorPlacement: function(error, element) {
+        if(element.parent('.input-group').length) {
+            error.insertAfter(element.parent());
+        } else {
+            error.insertAfter(element);
+        }
+    }
+});
 	
 	
 	

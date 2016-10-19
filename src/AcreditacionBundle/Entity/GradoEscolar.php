@@ -230,5 +230,6 @@ class GradoEscolar
     }
      public function __toString(){
         return $this->nbrGradoEscolar;
+        //return $this->idNivelEducativo->getNbrNivelEducativo() . ' / ' . $this->nbrGradoEscolar;
     }
 }

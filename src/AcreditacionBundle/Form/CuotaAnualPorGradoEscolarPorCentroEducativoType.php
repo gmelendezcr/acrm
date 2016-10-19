@@ -32,29 +32,23 @@ class CuotaAnualPorGradoEscolarPorCentroEducativoType extends AbstractType{
         'label' => 'Grado'
     );
         
-        
-        
     ///////////////////////////////////////////////////////
     
     //
      $res_nivel=$em->getRepository('AcreditacionBundle:NivelEducativo')->findAll();
-        $nxg=array();
-         
-        foreach($res_nivel as $item){
-            $nxg[$item->getNbrNivelEducativo()]=array();
-            foreach($item->getGradosEscolares() as $grado){
-                    $nxg[$item->getNbrNivelEducativo()][$grado->getNbrGradoEscolar()]=$grado;
-                    
-            }
-           
+    //$nxg=array();
+    foreach($res_nivel as $item){
+        $nxg[$item->getNbrNivelEducativo()]=array();
+        foreach($item->getGradosEscolares() as $grado){
+            $nxg[$grado->getNbrGradoEscolar()]=array();
+            $nxg[$item->getNbrNivelEducativo()][$grado->getNbrGradoEscolar()]=$grado;
         }
-        //var_dump($nxg);
-        $this->comboNG=array(
+    }       $this->comboNG=array(
             'choices' => $nxg,
             'choices_as_values' => true,
             'label' => 'Grados'
+           
         );
-        
         
         
     
@@ -84,12 +78,15 @@ class CuotaAnualPorGradoEscolarPorCentroEducativoType extends AbstractType{
      */
      
     public function buildForm(FormBuilderInterface $builder, array $options){
-        $dato = $builder->getData()->getIdGradoEscolarPorCentroEducativo();
+        //$dato = $options->getData()->getIdGradoEscolarPorCentroEducativo();
+        //echo $options[''];
+       // var_dump($options);
+        
         $builder
         ->add('matricula','text',array('label' => 'Matrícula'))
         ->add('monto','text',array('label' => 'Cuota'))
         ->add('anno','text',array('label' => 'Año'));
-        //->add('idGradoEscolarPorCentroEducativo',null,$this->comboNG);
+        //->add('idGradoEscolarPorCentroEducativo','choice', $this->comboNG);
         //->add('idGradoEscolarPorCentroEducativo','choice',$this->comboNG );
     }
     public function getName() { return 'CuotaAnualPorGradoEscolarPorCentroEducativoType'; }

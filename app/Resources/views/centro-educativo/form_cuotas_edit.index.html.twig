@@ -37,8 +37,7 @@
     </div>
     <div class="col-md-12">
         <div class="header-control-general">
-            <form class="form-registro form-border" method="{{ form.vars.method }}" action="{{ form.vars.action }}">
-                
+            <form class="form-registro form-border" method="{{ form.vars.method }}" action="{{ form.vars.action }}" id="form_validar_cuota_editar">
                 <div class="form-group">
                     <div class = "input-group">
                         <label for="matricula">{{  form_label(form.matricula)  }}</label>
@@ -67,13 +66,13 @@
                          </span>
                     </div>                               
                 </div>
-                  <div class="form-group"> 
-                  <div class="btn-group" role="group">
+                <div class="form-group"> 
+                   <div class="btn-group" role="group">
                         <a class="btn btn-info" href="{{path('centro_educativo_cuotas', {'id':ce_show.idCentroEducativo})}}">
                             <span class="glyphicon glyphicon-triangle-left"></span> 
                             Regresar
                         </a>
-                    <button type="submit" class="btn btn-success btn-md"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button>
+                        <button type="submit" class="btn btn-success btn-md"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button>
                     </div>
                 </div>        
             </form> 

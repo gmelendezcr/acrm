@@ -1,10 +1,8 @@
 $( document ).ready( function () {
-  $.validator.addMethod("valueNotEquals", function(value, element, arg){
-    return arg != value;
-  });
-  
-  
-$('#form_publico').validate({
+    $.validator.addMethod("valueNotEquals", function(value, element, arg){
+        return arg != value;
+    });
+    $('#form_publico').validate({
         rules: {
             criterio: {
                 minlength: 4,
@@ -17,7 +15,7 @@ $('#form_publico').validate({
 				minlength: "El nombre del centro educativo debe contener más de tres caracteres"
 			}
 		},
-       
+		
         highlight: function(element) {
             $(element).closest('.form-group').addClass('has-error').removeClass( "has-success" );
         },
@@ -33,5 +31,5 @@ $('#form_publico').validate({
                 error.insertAfter(element);
             }
         }
-})
+    })
 })
