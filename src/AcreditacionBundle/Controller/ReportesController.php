@@ -149,6 +149,36 @@ class ReportesController extends Controller{
     public function cuantitativo_cualitativoAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $lista_cedu = $em->getRepository('AcreditacionBundle:CentroEducativo')->findAll();
+        
+        $lista_cedu=$em->createQueryBuilder()
+        ->select('
+            ce.codCentroEducativo, ce.nbrCentroEducativo, ce.direccionCentroEducativo,
+            d.nbrDepartamento,
+            m.nbrMunicipio,
+            acred.fechaInicio,
+            acred.fechaFin,
+            est.nbrEstadoAcreditacion
+        ')
+        ->from('AcreditacionBundle:CentroEducativo', 'ce')
+        ->join('ce.acreditaciones','acred' )
+        ->join('acred.idEstadoAcreditacion','est' )
+        ->join('ce.idMunicipio','m')
+        ->join('m.idDepartamento','d')
+        ->where('ce.nbrCentroEducativo like :nbr')
+            ->andwhere('exists (
+                select 1
+                    from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
+                        where a.fechaInicio<=:fechaRef
+                            and a.fechaFin>=:fechaRef
+                            and e.codEstadoAcreditacion in (\'AC\',\'AO\')
+                            and a.idEstadoAcreditacion=e.idEstadoAcreditacion
+                            and a.idCentroEducativo=ce.idCentroEducativo
+            )')
+        ->setParameter('nbr', $criterio)
+        ->setParameter('fechaRef', new \DateTime())
+        ->getQuery()->getResult();
+        
+        
         return $this->render('reportes/reporte.CuantitativoCualidativo.html.twig',array(
             'lista_cedu'=>$lista_cedu
             ));

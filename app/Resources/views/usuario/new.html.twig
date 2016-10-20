@@ -12,7 +12,7 @@
     </div>
     <div class="col-md-12">
         <div class="header-control-general">
-            <form class="form-registro form-border" method="{{ form.vars.method }}" action="{{ form.vars.action }}" onsubmit="return checkForm(this);">
+            <form class="form-registro form-border" method="{{ form.vars.method }}" action="{{ form.vars.action }}" onsubmit="return checkForm(this);" id="form_registro_usuario">
                 <div class="form-group">
                     {{ form_label(form.username) }}
                     {{ form_widget(form.username, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite el usuario'}}) }}

@@ -455,6 +455,26 @@ class CentroEducativoController extends Controller{
         $ce_show = $em->getRepository('AcreditacionBundle:CentroEducativo')->find($id);
         //$ce_show=$ce_show->getnbrCentroEducativo();
         
+        
+        $grado=$em->createQueryBuilder()
+        ->select(
+            'cagece.idCuotaAnualPorGradoEscolarPorCentroEducativo,cagece.anno, cagece.matricula,cagece.monto,
+            ne.nbrNivelEducativo, 
+            ge.nbrGradoEscolar
+        ')
+        ->from('AcreditacionBundle:CuotaAnualPorGradoEscolarPorCentroEducativo', 'cagece')
+            ->join('cagece.idGradoEscolarPorCentroEducativo','gece')
+            ->join('gece.idCentroEducativo','ce')
+            ->join('gece.idGradoEscolar','ge')
+            ->join('ge.idNivelEducativo','ne')
+                ->where('ce.idCentroEducativo = :id')
+                ->andWhere('cagece.idCuotaAnualPorGradoEscolarPorCentroEducativo = :idCAGECE')
+                ->setParameter('id', $id)
+                ->setParameter('idCAGECE', $idcuota)
+                ->getQuery()->getSingleResult();
+        
+        
+        
         if (!$entity) {
             throw $this->createNotFoundException('Unable to and Userentity.'); 
         }
@@ -476,12 +496,13 @@ class CentroEducativoController extends Controller{
             $em->flush();
             return $this->redirectToRoute('centro_educativo_cuotas', array(
                 'id'=>$id,
-                'anno'=>$anno
+                'anno'=>$anno,
                 ));
         }
         return $this->render('centro-educativo/form_cuotas_edit.index.html.twig', 
             array(
-                'ce_show'=>$ce_show,    
+                'ce_show'=>$ce_show,
+                'grado'=>$grado,
                 'form' => $editForm->createView(),
             ));
     }
