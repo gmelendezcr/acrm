@@ -16,10 +16,14 @@ use AcreditacionBundle\Form\CentroEducativoType;
 use AcreditacionBundle\Form\CuotaAnualPorGradoEscolarPorCentroEducativoType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 
 
 class CentroEducativoController extends Controller{
+    /**
+     * @Security("has_role('ROLE_MINED')")
+     */
     public function listaAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $res=$em->createQueryBuilder()
@@ -43,6 +47,9 @@ class CentroEducativoController extends Controller{
         ));
     }
     
+    /**
+     * @Security("has_role('ROLE_MINED')")
+     */
     public function listanbrAction(Request $request){
         $nbrq=$request->get('nbr');
         $nbr="%".$nbrq."%";
@@ -79,6 +86,9 @@ class CentroEducativoController extends Controller{
             ));
     }
     
+    /**
+     * @Security("has_role('ROLE_MINED')")
+     */
     public function addAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $departamentos = $em->getRepository('AcreditacionBundle:Departamento')->findAll();
@@ -93,8 +103,11 @@ class CentroEducativoController extends Controller{
         ));
     }
     
+    /**
+     * @Security("has_role('ROLE_MINED')")
+     */
     public function addguardarAction(Request $request){
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $codigo=$request->get('codigo');
         $nombre=$request->get('nombre');
         $direccion=$request->get('direccion');
@@ -123,6 +136,9 @@ class CentroEducativoController extends Controller{
         return $this->redirectToRoute('centro_educativo_lista');
     }
     
+    /**
+     * @Security("has_role('ROLE_MINED')")
+     */
     public function actualizarAction(Request $request){
         if ($request->getMethod() == "POST") {
             $EditForm->submit($request);
@@ -138,8 +154,11 @@ class CentroEducativoController extends Controller{
        }
     }
     
+    /**
+     * @Security("has_role('ROLE_MINED')")
+     */
     public function borrarAction($id){
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $check_ced = $em->getRepository('AcreditacionBundle:CentroEducativo')->find($id);
         $em->remove($check_ced);
         $em->flush();
@@ -148,7 +167,11 @@ class CentroEducativoController extends Controller{
     
    
     
-    /*Editar datos de centros*/
+    /**
+     * Editar datos de centros
+     *
+     * @Security("has_role('ROLE_MINED')")
+     */
     public function editarrAction(Request $request,  $id){
         if (!$id) {
             throw $this->createNotFoundException('No se encuentra el Centro Educativo  con ID = '.$id);
@@ -194,9 +217,12 @@ class CentroEducativoController extends Controller{
     }
     /*Fin*/
     
+    /**
+     * @Security("has_role('ROLE_DIGITADOR')")
+     */
     public function form_dig_corrAction(){
         $session = new Session();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $idFormularioPorCentroEducativo=$session->get('idFormularioPorCentroEducativo');
         if($idFormularioPorCentroEducativo){
@@ -230,8 +256,11 @@ class CentroEducativoController extends Controller{
         ));
     }
     
+    /**
+     * @Security("has_role('ROLE_REVISOR')")
+     */
     public function form_lista_revisarAction(){
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $lista=$em->createQueryBuilder()
             ->select('fce.idFormularioPorCentroEducativo, c.codCentroEducativo, c.nbrCentroEducativo, c.direccionCentroEducativo,
                 f.codFormulario, f.nbrFormulario, u.nombres, u.apellidos, e.codEstadoFormulario, e.nbrEstadoFormulario')
@@ -250,8 +279,11 @@ class CentroEducativoController extends Controller{
         ));
     }
     
+    /**
+     * @Security("has_role('ROLE_EVALUADOR')")
+     */
     public function form_lista_evaluarAction(){
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $em->getConfiguration()
             ->addCustomDatetimeFunction('YEAR', 'AcreditacionBundle\DQL\YearFunction');
         $lista=$em->createQueryBuilder()
@@ -272,13 +304,16 @@ class CentroEducativoController extends Controller{
         ));
     }
 
+    /**
+     * @Security("has_role('ROLE_DIGITADOR')")
+     */
     public function digitarCorregirCargarAction(Request $request){
         $idCentroEducativo=$request->get('centrosEducativos');
         $idFormulario=$request->get('formularios');
         $lugarAplicacion=$request->get('lugarAplicacion');
         $fechaAplicacion=$request->get('fechaAplicacion');
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $formularioPorCentroEducativo=new FormularioPorCentroEducativo();
         $formularioPorCentroEducativo->setIdCentroEducativo($em->getRepository('AcreditacionBundle:CentroEducativo')->find($idCentroEducativo));
         
@@ -304,7 +339,12 @@ class CentroEducativoController extends Controller{
     Gestión de cuotas
     ----------------------------------------------------------------------------    
     */
-    //Lista
+
+    /**
+     * Lista
+     *
+     * @Security("has_role('ROLE_MINED')")
+     */
     public function cuotasAction(Request $request, $id){
         $em = $this->getDoctrine()->getManager();
         $ce_show = $em->getRepository('AcreditacionBundle:CentroEducativo')->find($id);
@@ -365,9 +405,13 @@ class CentroEducativoController extends Controller{
         ));
     }
     
-    //Borrar
+    /**
+     * Borrar
+     *
+     * @Security("has_role('ROLE_MINED')")
+     */
     public function borrar_cuotaAction($id,$idcuota){
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $check_cagece = $em->getRepository('AcreditacionBundle:CuotaAnualPorGradoEscolarPorCentroEducativo')->find($idcuota);
         $em->remove($check_cagece);
         $em->flush();
@@ -378,7 +422,11 @@ class CentroEducativoController extends Controller{
         );
     }
     
-    //Nueva
+    /**
+     * Nueva
+     *
+     * @Security("has_role('ROLE_MINED')")
+     */
     public function form_cuotaAction(Request $request,  $id){
         $em = $this->getDoctrine()->getManager();
         $ce_show = $em->getRepository('AcreditacionBundle:CentroEducativo')->find($id);
@@ -390,9 +438,14 @@ class CentroEducativoController extends Controller{
             )
         );
     }
-    //Guardar
+
+    /**
+     * Guardar
+     *
+     * @Security("has_role('ROLE_MINED')")
+     */
     public function guardarcuotaAction(Request $request){
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $show_ce=$request->get('idce');
         $idce=$request->get('idce');
         $idce = $em->getRepository('AcreditacionBundle:CentroEducativo')->find($idce);
@@ -444,7 +497,11 @@ class CentroEducativoController extends Controller{
         );
     }
     
-    //Editar
+    /**
+     * Editar
+     *
+     * @Security("has_role('ROLE_MINED')")
+     */
     public function editar_cuotaAction(Request $request,  $id, $idcuota){
         if (!$idcuota) {
             throw $this->createNotFoundException('No se encuentra el ID = '.$idcuota);
@@ -507,7 +564,11 @@ class CentroEducativoController extends Controller{
             ));
     }
     
-    //Cuota centro educativo por archivo
+    /**
+     * Cuota centro educativo por archivo
+     *
+     * @Security("has_role('ROLE_MINED')")
+     */
     public function formCuotaArchivoAction(Request $request,  $id){
         $em = $this->getDoctrine()->getManager();
         $ce_show = $em->getRepository('AcreditacionBundle:CentroEducativo')->find($id);
@@ -518,6 +579,9 @@ class CentroEducativoController extends Controller{
         );
     }
     
+    /**
+     * @Security("has_role('ROLE_MINED')")
+     */
     public function formCuotaArchivoCargarAction(Request $request){
         //$em = $this->getDoctrine()->getManager();
      
@@ -532,7 +596,12 @@ class CentroEducativoController extends Controller{
     Gestión de observaciones de criterios por centro educativo
     ----------------------------------------------------------------------------    
     */
-    //Lista
+
+    /**
+     * Lista
+     *
+     * @Security("has_role('ROLE_EVALUADOR')")
+     */
     public function observacionesAction(Request $request, $id,$form){
         $em = $this->getDoctrine()->getManager();
         $criterio=$em->createQueryBuilder()
@@ -571,9 +640,13 @@ class CentroEducativoController extends Controller{
     }
     
     
-    //Guardar
+    /**
+     * Guardar
+     *
+     * @Security("has_role('ROLE_EVALUADOR')")
+     */
     public function observaciones_guardarAction(Request $request){
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $btn_accion= $request->get('btn_guardar');
    
         
@@ -610,6 +683,9 @@ class CentroEducativoController extends Controller{
     }
     
     
+    /**
+     * @Security("has_role('ROLE_EVALUADOR')")
+     */
     public function observaciones_verAction(Request $request, $id,$form){
         
        
@@ -655,7 +731,11 @@ class CentroEducativoController extends Controller{
         ));
     }
     
-    //Editar
+    /**
+     * Editar
+     *
+     * @Security("has_role('ROLE_EVALUADOR')")
+     */
     public function observaciones_editarAction(Request $request, $id,$form){
     $em = $this->getDoctrine()->getManager();
     $criterio=$em->createQueryBuilder()
@@ -697,9 +777,13 @@ class CentroEducativoController extends Controller{
     }
     
     
-    //Guardar editar
+    /**
+     * Guardar editar
+     *
+     * @Security("has_role('ROLE_EVALUADOR')")
+     */
      public function observaciones_editar_guardarAction(Request $request){
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $btn_accion= $request->get('btn_guardar');
         $idFormularioPorCentroEducativo=$request->get('idFormularioPorCentroEducativo');
      
@@ -733,9 +817,12 @@ class CentroEducativoController extends Controller{
         
     }
 
+    /**
+     * @Security("has_role('ROLE_EVALUADOR')")
+     */
     public function registrarAcreditacionAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $em->getConfiguration()
             ->addCustomDatetimeFunction('YEAR', 'AcreditacionBundle\DQL\YearFunction');
 
@@ -793,9 +880,12 @@ class CentroEducativoController extends Controller{
         ));
     }
 
+    /**
+     * @Security("has_role('ROLE_EVALUADOR')")
+     */
     public function acreditarAction(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $centros=array();
         foreach ($request->request->all() as $key => $value) {

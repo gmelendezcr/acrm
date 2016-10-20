@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use AcreditacionBundle\Form\CentroEducativoType;
 use AcreditacionBundle\Form\CuotaAnualPorGradoEscolarPorCentroEducativoType;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 
 class ReportesController extends Controller{
@@ -146,6 +147,9 @@ class ReportesController extends Controller{
         );
     }
 
+    /**
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     */
     public function cuantitativo_cualitativoAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $lista_cedu = $em->getRepository('AcreditacionBundle:CentroEducativo')->findAll();
@@ -184,6 +188,9 @@ class ReportesController extends Controller{
             ));
     }
     
+    /**
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     */
     public function estadoAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $lista_tamanno = $em->getRepository('AcreditacionBundle:TamannoCentroEducativo')->findAll();
@@ -202,6 +209,9 @@ class ReportesController extends Controller{
         ));
     }
     
+    /**
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     */
     public function zonaAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $lista_tamanno = $em->getRepository('AcreditacionBundle:TamannoCentroEducativo')->findAll();
@@ -220,6 +230,9 @@ class ReportesController extends Controller{
         ));
     }
     
+    /**
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     */
     public function rango_fechaAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $lista_tamanno = $em->getRepository('AcreditacionBundle:TamannoCentroEducativo')->findAll();
@@ -241,6 +254,9 @@ class ReportesController extends Controller{
     
     
     
+    /**
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     */
     public function form_estado_actual_ceduAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         //$lista_estado_acred = $em->getRepository('AcreditacionBundle:EstadoAcreditacion')->findAll();
@@ -259,6 +275,9 @@ class ReportesController extends Controller{
     
     
     
+/**
+* @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+*/
 public function pdf_estado_actual_ceduAction(Request $request){
     $estado_acred=$request->get('estado_acred');
      $fecha=$request->get('fecha');
@@ -558,6 +577,9 @@ $pdfObj->lastPage();
         $this->informacionGeneralCentro();
     }
     
+    /**
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     */
     public function informeCuantitativoAction(Request $request)
     {
         $anio=$request->get('anno');
@@ -791,6 +813,9 @@ $pdfObj->lastPage();
         $this->pdfObj->Output("informeCuantitativo-" . $this->centroEducativo['codCentroEducativo'] . "-$anio.pdf", 'I');
     }
 
+    /**
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     */
     public function informeCualitativoAction(Request $request)
     {
         $anio=$request->get('anno');
@@ -882,6 +907,9 @@ $pdfObj->lastPage();
         $this->pdfObj->Output("informeCualitativo-" . $this->centroEducativo['codCentroEducativo'] . "-$anio.pdf", 'I');
     }
 
+    /**
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     */
     public function diplomaAction(Request $request)
     {
         $anio=$request->get('anio');
@@ -952,6 +980,9 @@ $this->pdfObj->setTextShadow(array('enabled' => true, 'depth_w' => 0.4, 'depth_h
 
     }
 
+    /**
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     */
     public function noAcreditadoAction(Request $request)
     {
         $anio=$request->get('anio');
@@ -1007,6 +1038,9 @@ MINISTERIO DE EDUCACIÓN',0,'C');
         $this->pdfObj->Output("noAcreditado-" . $centroEducativo['codCentroEducativo'] . "-$anio.pdf", 'I');
     }
 
+    /**
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     */
     public function estadisticoGeneralAction(Request $request)
     {
         $anio=$request->get('anno');
@@ -1231,6 +1265,9 @@ MINISTERIO DE EDUCACIÓN',0,'C');
         $this->pdfObj->Output((!$listado?'estadisticoGeneral':'listadoGeneral') . ".pdf", 'I');
     }
 
+    /**
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     */
     public function promedioCriterioIndicadorAction(Request $request)
     {
         $anioIni=$request->get('anno');
@@ -1359,6 +1396,9 @@ MINISTERIO DE EDUCACIÓN',0,'C');
         $this->pdfObj->Output("promedio" . str_replace('_','',ucwords($tipoReporte,'_')) . ".pdf", 'I');
     }
 
+    /**
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     */
     public function porDepartamentoAction (Request $request)
     {
         $idZonaCentroEducativo=$request->get('zona');

@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 use Doctrine\ORM\Query\ResultSetMapping;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 /**
  * FormularioPorCentroEducativo controller.
  *
@@ -22,6 +24,7 @@ class FormularioPorCentroEducativoController extends Controller
     /**
      * Lists all FormularioPorCentroEducativo entities.
      *
+     * @Security("has_role('ROLE_REVISOR')")
      */
     public function respuestaRevisarAction(Request $request)
     {
@@ -69,6 +72,9 @@ class FormularioPorCentroEducativoController extends Controller
         return new Response($nuevoRevisar);
     }
 
+    /**
+     * @Security("has_role('ROLE_EVALUADOR')")
+     */
     public function calificarAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();

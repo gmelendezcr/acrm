@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 /**
  * Seccion controller.
  *
@@ -20,6 +22,7 @@ class SeccionController extends Controller
     /**
      * Lists all Seccion entities.
      *
+     * @Security("has_role('ROLE_DIGITADOR') or has_role('ROLE_REVISOR') or has_role('ROLE_EVALUADOR')")
      */
     public function indexAction(Request $request)
     {
@@ -68,6 +71,7 @@ class SeccionController extends Controller
     /**
      * Finds and displays a Seccion entity.
      *
+     * @Security("has_role('ROLE_DIGITADOR') or has_role('ROLE_REVISOR') or has_role('ROLE_EVALUADOR')")
      */
     public function showAction(Seccion $seccion, Request $request)
     {
@@ -127,6 +131,7 @@ class SeccionController extends Controller
     /**
      * Guarda las preguntas de una sección
      *
+     * @Security("has_role('ROLE_DIGITADOR')")
      */
     public function guardarAction(Request $request)
     {
@@ -203,6 +208,9 @@ class SeccionController extends Controller
         
     }
 
+    /**
+     * @Security("has_role('ROLE_DIGITADOR')")
+     */
     public function terminarAction(Request $request)
     {
         $session = new Session();
@@ -226,6 +234,9 @@ class SeccionController extends Controller
         return $this->redirectToRoute('centro_educativo_form_dig_corr');
     }
 
+    /**
+     * @Security("has_role('ROLE_REVISOR')")
+     */
     public function aprobarRechazarAction(Request $request)
     {
         $session = new Session();

@@ -4,9 +4,17 @@ security:
     encoders:
         FOS\UserBundle\Model\UserInterface: bcrypt
 
+    #inicio             ROLE_USER
+    #mtto usuarios      ROLE_SUPER_ADMIN
+    #mtto centros       ROLE_MINED
+    #digitar            ROLE_DIGITADOR
+    #revisar            ROLE_REVISOR
+    #evaluar            ROLE_EVALUADOR
+    #registrar acred.   ROLE_EVALUADOR
+    #reportes           ROLE_MINED, ROLE_EVALUADOR, ROLE_SUPER_ADMIN (usuarios)
     role_hierarchy:
-        ROLE_ADMIN:       ROLE_USER
-        ROLE_SUPER_ADMIN: ROLE_ADMIN
+        ROLE_DEVELOPER:     [ ROLE_SUPER_ADMIN, ROLE_MINED, ROLE_DIGITADOR, ROLE_REVISOR, ROLE_EVALUADOR ]
+        default_roles:      [ ROLE_USER ]
 
     providers:
         fos_userbundle:
@@ -32,4 +40,4 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, role: ROLE_ADMIN }
+        - { path: ^/, role: [ ROLE_SUPER_ADMIN, ROLE_MINED, ROLE_DIGITADOR, ROLE_REVISOR, ROLE_EVALUADOR ] }

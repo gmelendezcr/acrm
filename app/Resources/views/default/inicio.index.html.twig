@@ -4,111 +4,111 @@
         <div class="header-control">
             <div class="jumbotron text-center sin-margin-bottom">
                 <h2>
-                    Bienvenido, {{ app.user.nombres }} 
+                    Bienvenido{{ app.user and app.user.nombres ? ', ' ~ app.user.nombres : null }}
                 </h2>
                 <div class="clearfix"></div>
             </div>
         </div>
         <div class="clearfix capa-separador-1"></div>
     </div>
-    
-    <div class="col-md-4">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                Formularios pendientes de calificar
-           </div> 
-           <!--<div class="panel-body">
-               <p>Aquí encontrará los últimos 5 registros de de formularios aprobados esperando ser calificados</p> 
-           </div>-->
-           <div class="table-responsive">
-               <table class="table table-hover table-striped">
-                    <thead> 
+
+    {% if is_granted('ROLE_REVISOR') or is_granted('ROLE_EVALUADOR') %}
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                  Formularios en digitación o corrección
+               </div>
+               <!--<div class="panel-body">
+                   <p> </p>
+               </div>-->
+               <table class="table">
+                    <thead>
                         <tr>
-                            <th class="col-xs-10">
+                            <th>
                                 Centro educativo
-                            </th> 
-                            <th class="col-xs-2">
-                                Acción
-                            </th> 
-                        </tr> 
-                    </thead> 
-                    <tbody> 
-                        {%for item in lista %} 
-                        <tr> 
-                            <td>
-                               {{item.codFormulario}} - {{item.nbrCentroEducativo}}
-                            </td> 
-                            
+                            </th>
                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
                             <td>
-                                <form id="mostrarSecciones{{ item.idFormularioPorCentroEducativo }}" action="{{ path('seccion_index') }}" method="post">
-                                    <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ item.idFormularioPorCentroEducativo }}">
-                                </form>
-                                <a href="#" onClick="$('#mostrarSecciones{{ item.idFormularioPorCentroEducativo }}').submit();" class="btn btn-info btn-block">Mostrar</a>
+                                --
                             </td>
                         </tr>
-                        {% endfor %}
-                    </tbody> 
+                    </tbody>
                 </table>
             </div>
         </div>
-    </div>
-    
-    <div class="col-md-4">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-               Formularios pendientes de revisar
-           </div> 
-           <!--<div class="panel-body">
-               <p> </p> 
-           </div>--> 
-           <table class="table">
-                <thead> 
-                    <tr>
-                        <th>
-                            Centro educativo
-                        </th> 
-                       
-                        
-                    </tr> 
-                </thead> 
-                <tbody> 
-                    <tr> 
-                        <td>
-                            --
-                        </td> 
-                        
-                    </tr> 
-                </tbody> 
-            </table> 
+
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                   Formularios pendientes de revisar
+               </div>
+               <!--<div class="panel-body">
+                   <p> </p>
+               </div>-->
+               <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Centro educativo
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                --
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
-    
-    <div class="col-md-4">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-              Formularios en digitación o corrección
-           </div> 
-           <!--<div class="panel-body">
-               <p> </p> 
-           </div>--> 
-           <table class="table">
-                <thead> 
-                    <tr>
-                        <th>
-                            Centro educativo
-                        </th> 
-                       
-                    </tr> 
-                </thead> 
-                <tbody> 
-                    <tr> 
-                        <td>
-                            --
-                        </td> 
-                    </tr> 
-                </tbody> 
-            </table> 
+    {% endif %}
+
+    {% if is_granted('ROLE_EVALUADOR') %}
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Formularios pendientes de calificar
+               </div>
+               <!--<div class="panel-body">
+                   <p>Aquí encontrará los últimos 5 registros de de formularios aprobados esperando ser calificados</p>
+               </div>-->
+               <div class="table-responsive">
+                   <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th class="col-xs-10">
+                                    Centro educativo
+                                </th>
+                                <th class="col-xs-2">
+                                    Acción
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for item in lista %}
+                            <tr>
+                                <td>
+                                   {{item.codFormulario}} - {{item.nbrCentroEducativo}}
+                                </td>
+                                <td>
+                                    <form id="mostrarSecciones{{ item.idFormularioPorCentroEducativo }}" action="{{ path('seccion_index') }}" method="post">
+                                        <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ item.idFormularioPorCentroEducativo }}">
+                                    </form>
+                                    <a href="#" onClick="$('#mostrarSecciones{{ item.idFormularioPorCentroEducativo }}').submit();" class="btn btn-info btn-block">Mostrar</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-    </div>
+    {% endif %}
+
 {% endblock %}

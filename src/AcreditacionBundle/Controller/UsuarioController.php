@@ -8,6 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AcreditacionBundle\Entity\Usuario;
 use AcreditacionBundle\Form\UsuarioType;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 /**
  * Usuario controller.
  *
@@ -17,6 +19,7 @@ class UsuarioController extends Controller
     /**
      * Lists all Usuario entities.
      *
+     * @Security("has_role('ROLE_SUPER_ADMIN')")
      */
     public function indexAction()
     {
@@ -32,6 +35,7 @@ class UsuarioController extends Controller
     /**
      * Creates a new Usuario entity.
      *
+     * @Security("has_role('ROLE_SUPER_ADMIN')")
      */
     public function newAction(Request $request)
     {
@@ -62,6 +66,7 @@ class UsuarioController extends Controller
     /**
      * Finds and displays a Usuario entity.
      *
+     * @Security("has_role('ROLE_SUPER_ADMIN')")
      */
     public function showAction(Usuario $usuario)
     {
@@ -118,6 +123,11 @@ public function setRole($role) {
     
     /* copia editar usuario*/
     
+    /**
+     * Edits a Usuario entity.
+     *
+     * @Security("has_role('ROLE_SUPER_ADMIN')")
+     */
       public function editAction(Request $request, Usuario $usuario){
         //$rl=array('roles' => $this->container->getParameter('security.role_hierarchy.roles'));
         //var_dump($a);
@@ -167,6 +177,7 @@ public function setRole($role) {
     /**
      * Deletes a Usuario entity.
      *
+     * @Security("has_role('ROLE_SUPER_ADMIN')")
      */
     public function deleteAction(Request $request, Usuario $usuario)
     {

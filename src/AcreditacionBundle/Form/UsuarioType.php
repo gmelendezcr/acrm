@@ -6,6 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+
 class UsuarioType extends AbstractType
 {
     /**
@@ -21,7 +24,7 @@ class UsuarioType extends AbstractType
         
  
         
-        
+/*
         $permisos = array(
         'ROLE_DIG'        => 'Digitador',
         
@@ -32,6 +35,7 @@ class UsuarioType extends AbstractType
              'ROLE_CONSULT'     => 'Corrector',
              'ROLE_SUPER_ADMIN' => 'Calificador'
          );
+*/
 
         
     /*->add('roles', null, array(
@@ -58,14 +62,26 @@ class UsuarioType extends AbstractType
             ->add('email',null,array(
                 'label' =>'Correo electrónico',
             ))
-            ->add('password','password')
-            ->add('passwordConfirmation', 'password', array(
+            ->add('password',PasswordType::class)
+            ->add('passwordConfirmation', PasswordType::class, array(
                 'label' =>'Confirmación',
                 'mapped' => false
             ))
             ->add('enabled',null,array(
                 'label' =>'Activo',
-            ));
+            ))
+            ->add('roles', ChoiceType::class, array(
+                'choices'  => array(
+                    'Digitador' => 'ROLE_DIGITADOR',
+                    'Revisor' => 'ROLE_REVISOR',
+                    'Evaluador' => 'ROLE_EVALUADOR',
+                    'MINED' => 'ROLE_MINED',
+                    'Administrador' => 'ROLE_SUPER_ADMIN',
+                ),
+                'choices_as_values' => true,
+                'multiple' => true,
+            ))
+        ;
             
             
             

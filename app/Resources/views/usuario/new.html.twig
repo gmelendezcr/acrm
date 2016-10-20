@@ -44,11 +44,8 @@
                     </label>
                 </div>
                 <div class="input-group" role="group">
-                    <select name="roles" id="roles" class="form-control">
-                        {% for role in app.user.roles %}
-                        <option value="{{ role }}">{{ role }}</option>
-                        {% endfor %}
-                    </select>
+                    {{ form_label(form.roles) }}
+                    {{ form_widget(form.roles) }}
                 </div>
                 <div class="capa-separador-1"></div>
                     {{ form_widget(form) }}

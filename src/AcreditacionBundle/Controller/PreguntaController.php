@@ -2,10 +2,11 @@
 
 namespace AcreditacionBundle\Controller;
 
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use AcreditacionBundle\Entity\Pregunta;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Pregunta controller.
@@ -31,6 +32,7 @@ class PreguntaController extends Controller
     /**
      * Finds and displays a Pregunta entity.
      *
+     * @Security("has_role('ROLE_DIGITADOR') or has_role('ROLE_REVISOR') or has_role('ROLE_EVALUADOR')")
      */
     public function showAction(Pregunta $pregunta)
     {
