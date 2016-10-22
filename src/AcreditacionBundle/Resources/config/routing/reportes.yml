@@ -1,4 +1,8 @@
 reporte_cuantitativo_cualitativo:
+    path:     /error
+    defaults: { _controller: AcreditacionBundle:Reportes:error }
+    methods:  [GET]
+reporte_cuantitativo_cualitativo:
     path:     /cuantitativo-cuantitativo
     defaults: { _controller: AcreditacionBundle:Reportes:cuantitativo_cualitativo }
     methods:  [GET]

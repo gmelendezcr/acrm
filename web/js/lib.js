@@ -57,8 +57,8 @@ $( document ).ready( function () {
 		},
 		messages: {
 	    	anno: {
-    			required:"El año es requerido",
-        		date:"Formato incorrecto ejem: 20016",
+    			required: "El año es requerido",
+        		date: "Formato incorrecto ejem: 20016",
     		},
 			centrosEducativo: { valueNotEquals: "Por favor seleccione un centro educativo" },
 			t_reporte: { valueNotEquals: "Por favor seleccione un tipo de reporte" },
@@ -81,6 +81,90 @@ $( document ).ready( function () {
 	        }
 	    }
 	});
+	
+	$( "#form_valida_rango_anio" ).validate( {
+		rules: {
+			anno: {
+    			required: true,
+        		date: true
+    		},
+    		anno_rango: {
+    			required: true,
+        		date: true
+    		},
+    		t_reporte: { valueNotEquals: "0" },
+    		formato: { valueNotEquals: "0" },
+		},
+		messages: {
+	    	anno: {
+    			required:"El año es requerido",
+        		date: "Formato incorrecto ejem: 2016",
+    		},
+    		anno_rango: {
+    			required:"El año es requerido",
+        		date: "Formato incorrecto ejem: 2016",
+    		},
+			t_reporte: { valueNotEquals: "Por favor seleccione un tipo de reporte" },
+			formato: { valueNotEquals: "Por favor seleccione un formato de salida" },
+		},
+		highlight: function(element) {
+	        $(element).closest('.form-group').addClass('has-error').removeClass( "has-success" );
+	    },
+	    unhighlight: function(element) {
+	        $(element).closest('.form-group').addClass( "has-success" ).removeClass('has-error');
+	    },
+	    errorElement: 'span',
+	    errorClass: 'help-block',
+	    errorPlacement: function(error, element) {
+	        if(element.parent('.input-group').length) {
+	            error.insertAfter(element.parent());
+	        } else {
+	            error.insertAfter(element);
+	        }
+	    }
+	});
+	
+	$.validator.addMethod(
+    "fecha_",
+    function(value, element) {
+        // put your own logic here, this is just a (crappy) example
+        return value.match(/^\d\d?\-\d\d?\-\d\d\d\d$/);
+    },
+    "Formato incorrecto, forma correcta 20-10-2016"
+);
+	
+	$( "#rep_cedu_estado_actual" ).validate( {
+		rules: {
+			estado_acred: { valueNotEquals: "0" },
+    		fecha: {
+    			required: true,
+        		fecha_: true
+    		},
+		},
+		messages: {
+	    	estado_acred: { valueNotEquals: "Por favor seleccione un estado de salida" },
+    		fecha: {
+    			required:"La fecha es requerida",
+        		date: "Formato incorrecto ejem: 20-10-2016",
+    		},
+		},
+		highlight: function(element) {
+	        $(element).closest('.form-group').addClass('has-error').removeClass( "has-success" );
+	    },
+	    unhighlight: function(element) {
+	        $(element).closest('.form-group').addClass( "has-success" ).removeClass('has-error');
+	    },
+	    errorElement: 'span',
+	    errorClass: 'help-block',
+	    errorPlacement: function(error, element) {
+	        if(element.parent('.input-group').length) {
+	            error.insertAfter(element.parent());
+	        } else {
+	            error.insertAfter(element);
+	        }
+	    }
+	});
+	
 	
 	
 	
@@ -306,6 +390,9 @@ $( document ).ready( function () {
 	            minlength: 4,
 	            equalTo : "#usuario_password"
 	        },
+	        ["usuario[roles][]"]:{
+	            required: true,
+	        },
 	    },
 	    messages: {
         	["usuario[username]"]: {
@@ -317,7 +404,7 @@ $( document ).ready( function () {
 	        },
 	        ["usuario[email]"]: {
 	            required: "Digite su cuenta de correo electrónico, esta le permitira recuperar su clave.",
-	            email: "Digite una cuenta de correo valida"
+	            email: "Digite una cuenta de correo válida"
 	        },
 	        ["usuario[password]"]: {
 	            required: "Por favor digite su clave de acceso",
@@ -327,6 +414,9 @@ $( document ).ready( function () {
 	            required: "Por favor repita su clave de acceso",
 	            minlength: "La clave debe superar los 4 caracteres",
 	            equalTo:"Las claves no coinciden, por favor verificar"
+	        },
+	        ["usuario[roles][]"]:{
+	            required: "Por favor seleccione un rol",
 	        },
 	    },
 	    highlight: function(element) {

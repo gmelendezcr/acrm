@@ -18,6 +18,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 
 class ReportesController extends Controller{
+    
+     public function errorAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        
+         return $this->render('reportes/error404.html.twig');
+        
+    }
+    
+    
     public function ConsultaPublicaAction(Request $request){
         $em = $this->getDoctrine()->getManager();
     

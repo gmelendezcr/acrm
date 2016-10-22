@@ -1,31 +1,15 @@
 {% extends ':usuario:new.html.twig' %}
-
 {% block titulo %}
     Editar un usuario
 {% endblock %}
-
 {% block guardar %}
-
-
-
-
     <div class="btn-group" role="group">
         <a class="btn btn-info" href="{{ path('usuario_index') }}">
             <span class="glyphicon glyphicon-triangle-left"></span> 
             Regresar
         </a>
-        <input type="submit" value="Modificar" class="btn btn-success" />
-        <a class="btn btn-danger" href="{{ path('usuario_delete', { 'id': usuario.id }) }}">Eliminar</a>
+        <input type="submit" value="Modificar" class="btn btn-success"/>
+        <a data-toggle="confirmation" data-title="Seguro?" class="btn btn-danger" href="{{ path('usuario_delete', { 'id': usuario.id }) }}">Eliminar</a>
     </div>
 {% endblock %}
-
-{#
-{% block eliminar %}
-   
-        {{ form_start(delete_form) }}
-            <input type="submit" value="Desactivar">
-        {{ form_end(delete_form) }}
-    
-{% endblock %}
-#}
 

@@ -43,9 +43,9 @@
                     {{ form_widget(form.enabled, {'attr': {'class': ' '}}) }}
                     </label>
                 </div>
-                <div class="input-group" role="group">
+                <div class="form-group">
                     {{ form_label(form.roles) }}
-                    {{ form_widget(form.roles) }}
+                    {{ form_widget(form.roles, {'attr': {'class': 'form-control input-2',}}) }}
                 </div>
                 <div class="capa-separador-1"></div>
                     {{ form_widget(form) }}

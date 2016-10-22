@@ -1,0 +1,76 @@
+body{
+    margin-top: 150px;
+}
+.logo{
+    margin: auto;
+    width:180px;
+    height:60px;
+}
+.logo-text{
+    margin:auto;
+    width:300px;
+    text-align: center;
+}
+/*
+--------------------------------------------------------------------------------
+> Control de relleno
+--------------------------------------------------------------------------------
+*/
+.sin-padding{
+    padding: 0px;
+}
+.sin-padding-left{
+    padding-left: 0px;
+}
+.sin-padding-right{
+    padding-right: 0px;
+}
+.sin-padding-top{
+    padding-top: 0px;
+}
+.sin-padding-bottom{
+    padding-bottom: 0px;
+}
+
+/*
+--------------------------------------------------------------------------------
+> Control de margenes
+--------------------------------------------------------------------------------
+*/
+.margin-auto{
+    margin:auto;
+}
+.sin-margin{
+    margin: 0px;
+}
+.sin-margin-left{
+    margin-left: 0px;
+}
+.sin-margin-right{
+    margin-right:0px;
+}
+.sin-margin-top{
+    margin-top:0px;
+}
+.sin-margin-bottom{
+    margin-bottom: 0px;
+}
+.error_sistema{
+    max-width:600px;
+    margin:auto;
+}
+
+.bandera-warning{
+    background-color:#ec971f !important;
+    border-color:#ec971f !important;;
+}
+.bandera-border-warning{
+    border-color:#ec971f !important;;
+}
+
+@media (max-width: 767px) {
+    body{
+        margin-top: 25px;
+    }
+}
+

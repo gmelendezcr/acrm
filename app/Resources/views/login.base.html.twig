@@ -19,55 +19,55 @@
     </head>
     <body>
         <div class="container">
-        <div class="row">
-           {% block body %}{% endblock %}
+            <div class="row">
+               {% block body %}{% endblock %}
+            </div>
         </div>
-    </div>
-    {% block javascripts %}
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-        <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
-        <script>
-            $( document ).ready( function () {
-                $( "#form_validar_login" ).validate( {
-                    rules: {
-                        _username: {
-                            required: true,
-                            minlength: 4,
+        {% block javascripts %}
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
+            <script>
+                $( document ).ready( function () {
+                    $( "#form_validar_login" ).validate( {
+                        rules: {
+                            _username: {
+                                required: true,
+                                minlength: 4,
+                            },
+        		            _password:{
+        		                required: true,
+        		                minlength: 4,
+        		            },
+        		        },
+        		        messages: {
+        		            _username: {
+    				            required: "Nombre de usuario es requerido",
+    				            minlength: "El nombre de usuarios debe superar los 4 caracteres"
+    			            },
+    			            _password: {
+    				            required: "Por favor digite el su clave de acceso",
+    				            minlength: "La clave debe superar los 4 caracteres"
+    			            },
+        		        },
+        		        highlight: function(element) {
+                            $(element).closest('.form-group').addClass('has-error').removeClass( "has-success" );
                         },
-    		            _password:{
-    		                required: true,
-    		                minlength: 4,
-    		            },
-    		        },
-    		        messages: {
-    		            _username: {
-				            required: "Nombre de usuario es requerido",
-				            minlength: "El nombre de usuarios debe superar los 4 caracteres"
-			            },
-			            _password: {
-				            required: "Por favor digite el su clave de acceso",
-				            minlength: "La clave debe superar los 4 caracteres"
-			            },
-    		        },
-    		        highlight: function(element) {
-                        $(element).closest('.form-group').addClass('has-error').removeClass( "has-success" );
-                    },
-                    unhighlight: function(element) {
-                        $(element).closest('.form-group').addClass( "has-success" ).removeClass('has-error');
-                    },
-                    errorElement: 'span',
-                    errorClass: 'help-block',
-                    errorPlacement: function(error, element) {
-                        if(element.parent('.input-group').length) {
-                            error.insertAfter(element.parent());
-                        } else {
-                            error.insertAfter(element);
+                        unhighlight: function(element) {
+                            $(element).closest('.form-group').addClass( "has-success" ).removeClass('has-error');
+                        },
+                        errorElement: 'span',
+                        errorClass: 'help-block',
+                        errorPlacement: function(error, element) {
+                            if(element.parent('.input-group').length) {
+                                error.insertAfter(element.parent());
+                            } else {
+                                error.insertAfter(element);
+                            }
                         }
-                    }
-    	        });
-            });
-        </script>
-   {% endblock %}
-</body>
+        	        });
+                });
+            </script>
+       {% endblock %}
+    </body>
 </html>
