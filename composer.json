@@ -23,7 +23,8 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "tecnickcom/tc-lib-pdf": "dev-master",
-        "whiteoctober/tcpdf-bundle": "^1.0"
+        "whiteoctober/tcpdf-bundle": "^1.0",
+        "liuggio/excelbundle": "^2.1"
     },
     "repositories": [
         {

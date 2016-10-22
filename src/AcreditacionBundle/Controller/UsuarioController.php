@@ -51,6 +51,7 @@ class UsuarioController extends Controller
             //$usuario->addRole($us['roles']['0']);
             $roles=$request->get('roles');
             $usuario->addRole($roles);
+            $usuario->setPlainPassword($usuario->getPassword());
             $em->persist($usuario);
             $em->flush();
 
@@ -146,6 +147,8 @@ public function setRole($role) {
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $usuario->setPlainPassword(''); //sin esta línea, al no cambiar la contraseña la guarda en texto plano
+            $usuario->setPlainPassword($usuario->getPassword());
             $em->persist($usuario);
             $em->flush();
 

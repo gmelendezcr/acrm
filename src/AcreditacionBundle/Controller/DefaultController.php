@@ -36,23 +36,47 @@ class DefaultController extends Controller{
     */
   
         $em = $this->getDoctrine()->getManager();
-        $lista=$em->createQueryBuilder()
-        ->select('fce.idFormularioPorCentroEducativo, c.codCentroEducativo, c.nbrCentroEducativo, c.direccionCentroEducativo,
-        f.codFormulario, f.nbrFormulario, u.nombres, u.apellidos, e.codEstadoFormulario, e.nbrEstadoFormulario')
+        $queryCentros=$em->createQueryBuilder()
+        ->select('fce.idFormularioPorCentroEducativo, c.codCentroEducativo, c.nbrCentroEducativo, f.codFormulario')
         ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'fce')
             ->join('fce.idCentroEducativo','c')
             ->join('fce.idFormulario','f')
             ->join('fce.idEstadoFormulario','e')
             ->join('fce.idUsuarioDigita','u')
-                ->andWhere('e.codEstadoFormulario in (:codEstadoFormulario)')
-                ->setParameter('codEstadoFormulario',array('AP'))
                 ->orderBy('e.codEstadoFormulario','desc')
-                ->setMaxResults('5')
+                ->setMaxResults('5');
+
+        $queryCentros1=clone $queryCentros;
+        $queryCentros1
+            ->where('e.codEstadoFormulario in (:codEstadoFormulario)')
+            ->setParameter('codEstadoFormulario',array('DI','CO'));
+        $lista1=$queryCentros1
                 ->getQuery()->getArrayResult();
-                $num_form=count($lista);
-                return $this->render('default/inicio.index.html.twig',array(
-                'lista'=>$lista,
-                'num_form'=>$num_form
+        $num_form1=count($lista1);
+
+        $queryCentros2=clone $queryCentros;
+        $queryCentros2
+            ->where('e.codEstadoFormulario in (:codEstadoFormulario)')
+            ->setParameter('codEstadoFormulario',array('TE'));
+        $lista2=$queryCentros2
+                ->getQuery()->getArrayResult();
+        $num_form2=count($lista2);
+
+        $queryCentros3=clone $queryCentros;
+        $queryCentros3
+            ->where('e.codEstadoFormulario in (:codEstadoFormulario)')
+            ->setParameter('codEstadoFormulario',array('AP'));
+        $lista3=$queryCentros3
+                ->getQuery()->getArrayResult();
+        $num_form3=count($lista3);
+
+        return $this->render('default/inicio.index.html.twig',array(
+            'lista1' => $lista1,
+            'num_form1' => $num_form1,
+            'lista2' => $lista2,
+            'num_form2' => $num_form2,
+            'lista3' => $lista3,
+            'num_form3' => $num_form3,
         ));
     }
 }

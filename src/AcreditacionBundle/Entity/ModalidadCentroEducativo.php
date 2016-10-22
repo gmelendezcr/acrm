@@ -38,7 +38,7 @@ class ModalidadCentroEducativo
     /**
      * @var string
      *
-     * @ORM\Column(name="ACTIVO", type="string", length=1)
+     * @ORM\Column(name="ACTIVO", type="string", length=1, columnDefinition="CHAR(1) NOT NULL DEFAULT 'S' CHECK (ACTIVO IN ('S','N'))")
      */
     private $activo;
 

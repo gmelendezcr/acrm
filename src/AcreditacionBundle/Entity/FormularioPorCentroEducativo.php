@@ -93,7 +93,7 @@ class FormularioPorCentroEducativo
     /**
      * @var string
      *
-     * @ORM\Column(name="ESTADO_CRITERIO_CENTRO_EDUCATIVO", type="string", length=5, nullable=false)
+     * @ORM\Column(name="ESTADO_CRITERIO_CENTRO_EDUCATIVO", type="string", length=5, nullable=true)
      */
     private $estadoCriterioCentroEducativo;
 

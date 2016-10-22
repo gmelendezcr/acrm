@@ -16,7 +16,7 @@
         <div class="col-md-4">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                  Formularios en digitación o corrección
+                  Formularios en digitación o corrección {{ num_form1 }}
                </div>
                <!--<div class="panel-body">
                    <p> </p>
@@ -31,11 +31,19 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {%for item in lista1 %}
                         <tr>
                             <td>
-                                --
+                                {{item.nbrCentroEducativo}} ({{item.codFormulario}})
+                            </td>
+                            <td>
+                                <form id="mostrarSecciones{{ item.idFormularioPorCentroEducativo }}" action="{{ path('seccion_index') }}" method="post">
+                                    <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ item.idFormularioPorCentroEducativo }}">
+                                </form>
+                                <a href="#" onClick="$('#mostrarSecciones{{ item.idFormularioPorCentroEducativo }}').submit();" class="btn btn-info btn-block">Mostrar</a>
                             </td>
                         </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -44,7 +52,7 @@
         <div class="col-md-4">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                   Formularios pendientes de revisar
+                   Formularios pendientes de revisar {{ num_form2 }}
                </div>
                <!--<div class="panel-body">
                    <p> </p>
@@ -58,11 +66,19 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {%for item in lista2 %}
                         <tr>
                             <td>
-                                --
+                                {{item.nbrCentroEducativo}} ({{item.codFormulario}})
+                            </td>
+                            <td>
+                                <form id="mostrarSecciones{{ item.idFormularioPorCentroEducativo }}" action="{{ path('seccion_index') }}" method="post">
+                                    <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ item.idFormularioPorCentroEducativo }}">
+                                </form>
+                                <a href="#" onClick="$('#mostrarSecciones{{ item.idFormularioPorCentroEducativo }}').submit();" class="btn btn-info btn-block">Mostrar</a>
                             </td>
                         </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -73,7 +89,7 @@
         <div class="col-md-4">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    Formularios pendientes de calificar
+                    Formularios pendientes de calificar {{ num_form3 }}
                </div>
                <!--<div class="panel-body">
                    <p>Aquí encontrará los últimos 5 registros de de formularios aprobados esperando ser calificados</p>
@@ -91,10 +107,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {%for item in lista %}
+                            {%for item in lista3 %}
                             <tr>
                                 <td>
-                                   {{item.codFormulario}} - {{item.nbrCentroEducativo}}
+                                    {{item.nbrCentroEducativo}} ({{item.codFormulario}})
                                 </td>
                                 <td>
                                     <form id="mostrarSecciones{{ item.idFormularioPorCentroEducativo }}" action="{{ path('seccion_index') }}" method="post">

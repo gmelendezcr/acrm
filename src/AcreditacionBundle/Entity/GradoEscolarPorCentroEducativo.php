@@ -40,6 +40,13 @@ class GradoEscolarPorCentroEducativo
     /**
      * @var string
      *
+     * @ORM\Column(name="OPCION_GRADO_ESCOLAR", type="string", length=100, nullable=true)
+     */
+    private $opcionGradoEscolar;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="ACTIVO", type="string", length=1, columnDefinition="CHAR(1) NOT NULL DEFAULT 'S' CHECK (ACTIVO IN ('S','N'))")
      */
     private $activo;
@@ -112,6 +119,29 @@ class GradoEscolarPorCentroEducativo
     public function getIdGradoEscolar()
     {
         return $this->idGradoEscolar;
+    }
+
+    /**
+     * Set opcionGradoEscolar
+     *
+     * @param string $opcionGradoEscolar
+     * @return GradoEscolar
+     */
+    public function setOpcionGradoEscolar($opcionGradoEscolar)
+    {
+        $this->opcionGradoEscolar = $opcionGradoEscolar;
+
+        return $this;
+    }
+
+    /**
+     * Get opcionGradoEscolar
+     *
+     * @return string 
+     */
+    public function getOpcionGradoEscolar()
+    {
+        return $this->opcionGradoEscolar;
     }
 
     /**

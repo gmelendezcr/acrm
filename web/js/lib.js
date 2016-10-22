@@ -519,6 +519,7 @@ $("#warning-alert").fadeTo(3000, 6000).slideUp(6000, function(){
 /*--------------------------------------------------------------------------------
 Cargar de archivos
 --------------------------------------------------------------------------------*/	
+/*
 $(function(){
     $("input[name='archivo']").on("change", function(){
         var formData = new FormData($("#formulario")[0]);
@@ -534,7 +535,7 @@ $(function(){
         });
     });
 });
-
+*/
 
 
   

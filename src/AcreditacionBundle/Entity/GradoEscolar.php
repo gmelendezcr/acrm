@@ -36,13 +36,6 @@ class GradoEscolar
     private $nbrGradoEscolar;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="OPCION_GRADO_ESCOLAR", type="string", length=100, nullable=true)
-     */
-    private $opcionGradoEscolar;
-
-    /**
      * @var int
      *
      * @ORM\ManyToOne(targetEntity="NivelEducativo", inversedBy="gradosEscolares")
@@ -125,29 +118,6 @@ class GradoEscolar
     public function getNbrGradoEscolar()
     {
         return $this->nbrGradoEscolar;
-    }
-
-    /**
-     * Set opcionGradoEscolar
-     *
-     * @param string $opcionGradoEscolar
-     * @return GradoEscolar
-     */
-    public function setOpcionGradoEscolar($opcionGradoEscolar)
-    {
-        $this->opcionGradoEscolar = $opcionGradoEscolar;
-
-        return $this;
-    }
-
-    /**
-     * Get opcionGradoEscolar
-     *
-     * @return string 
-     */
-    public function getOpcionGradoEscolar()
-    {
-        return $this->opcionGradoEscolar;
     }
 
     /**

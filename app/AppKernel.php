@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new AcreditacionBundle\AcreditacionBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new WhiteOctober\TCPDFBundle\WhiteOctoberTCPDFBundle(),
+            new Liuggio\ExcelBundle\LiuggioExcelBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

@@ -37,14 +37,15 @@
     </div>
     <div class="col-md-12">
         <div class="header-control-general">
-            <form class="form-registro form-border" method="post"  id="form_archivo" enctype="multipart/form-data">
+            <form class="form-registro form-border" method="post" action="{{ path('centro_educativo_cuota_form_archivo_cargar') }}" id="form_archivo" enctype="multipart/form-data">
                 
                 <label class="btn btn-default btn-file btn-block btn-lg">
                     <div class="icon-lg"><span class="glyphicon glyphicon-cloud-upload"></span></div>
 			        <span>
 			            Seleccionar archivo
 		            </span>
-		            <input type="file" style="display: none;" name="archivo" value="" onchange='$("#upload-file-info").html($(this).val());'>
+                    <input type="hidden" name="id_centro_educativo" value="{{ ce_show.idCentroEducativo }}">
+		            <input type="file" style="display: none;" name="archivo" value="" onchange='$("#upload-file-info").html($(this).val()); $("#form_archivo").submit();'>
 		            <!--<input type="file" style="display: none;" value="" onchange="upload_archivo();" id="archivo">-->
                 </label>
                 <div class="capa-separador-1"></div>

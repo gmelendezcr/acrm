@@ -50,6 +50,13 @@ class CuotaAnualPorGradoEscolarPorCentroEducativo
      */
     private $monto;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="CANTIDAD_CUOTAS", type="smallint")
+     */
+    private $cantidadCuotas;
+
 
     /**
      * Get idCuotaAnualPorGradoEscolarPorCentroEducativo
@@ -152,7 +159,32 @@ class CuotaAnualPorGradoEscolarPorCentroEducativo
     {
         return $this->monto;
     }
- public function __toString(){
+
+    /**
+     * Set cantidadCuotas
+     *
+     * @param integer $cantidadCuotas
+     *
+     * @return CuotaAnualPorGradoEscolarPorCentroEducativo
+     */
+    public function setCantidadCuotas($cantidadCuotas)
+    {
+        $this->cantidadCuotas = $cantidadCuotas;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadCuotas
+     *
+     * @return int
+     */
+    public function getCantidadCuotas()
+    {
+        return $this->cantidadCuotas;
+    }
+
+    public function __toString(){
         return $this->idGradoEscolarPorCentroEducativo;
     }
 }

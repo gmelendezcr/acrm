@@ -165,7 +165,7 @@ class ReportesController extends Controller{
         
         $lista_cedu=$em->createQueryBuilder()
         ->select('
-            ce.codCentroEducativo, ce.nbrCentroEducativo, ce.direccionCentroEducativo,
+            ce.idCentroEducativo, ce.codCentroEducativo, ce.nbrCentroEducativo, ce.direccionCentroEducativo,
             d.nbrDepartamento,
             m.nbrMunicipio,
             acred.fechaInicio,
@@ -177,7 +177,7 @@ class ReportesController extends Controller{
         ->join('acred.idEstadoAcreditacion','est' )
         ->join('ce.idMunicipio','m')
         ->join('m.idDepartamento','d')
-        ->where('ce.nbrCentroEducativo like :nbr')
+        //->where('ce.nbrCentroEducativo like :nbr')
             ->andwhere('exists (
                 select 1
                     from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
@@ -187,7 +187,7 @@ class ReportesController extends Controller{
                             and a.idEstadoAcreditacion=e.idEstadoAcreditacion
                             and a.idCentroEducativo=ce.idCentroEducativo
             )')
-        ->setParameter('nbr', $criterio)
+        //->setParameter('nbr', $criterio)
         ->setParameter('fechaRef', new \DateTime())
         ->getQuery()->getResult();
         
@@ -1402,7 +1402,7 @@ MINISTERIO DE EDUCACIÓN',0,'C');
 
         }
 
-        $this->pdfObj->Output("promedio" . str_replace('_','',ucwords($tipoReporte,'_')) . ".pdf", 'I');
+        $this->pdfObj->Output("promedio" . str_replace(' ','',ucwords(str_replace('_',' ',$tipoReporte))) . ".pdf", 'I');
     }
 
     /**
@@ -1540,6 +1540,6 @@ MINISTERIO DE EDUCACIÓN',0,'C');
             array('cod' => $codigo2, 'nbr' => $texto2),
         ),'cod','nbr',0,'C');
 
-        $this->pdfObj->Output("reporte" . str_replace('_','',ucwords($tipoReporte,'_')) . ".pdf", 'I');
+        $this->pdfObj->Output("reporte" . str_replace(' ','',ucwords(str_replace('_',' ',$tipoReporte))) . ".pdf", 'I');
     }
 }

@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+use PHPExcel_IOFactory;
+
 
 
 class CentroEducativoController extends Controller{
@@ -356,6 +358,7 @@ class CentroEducativoController extends Controller{
         }
         $centro_escolar_id= $ce_show->getIdCentroEducativo();
         
+        /*
         $idselector=$em->createQueryBuilder()
         ->distinct()
         ->select('gece.idGradoEscolarPorCentroEducativo')
@@ -365,19 +368,21 @@ class CentroEducativoController extends Controller{
             ->setMaxResults('1')
             ->getQuery()
             ->getResult();
+        */
          
         $resanno=array();
-        if((isset( $idselector)) && (!empty( $idselector))){
-            $grado_escolar_ce_id= $idselector[0]['idGradoEscolarPorCentroEducativo'];
-             $resanno=$em->createQueryBuilder()
+        //if((isset( $idselector)) && (!empty( $idselector))){
+        //$grado_escolar_ce_id= $idselector[0]['idGradoEscolarPorCentroEducativo'];
+        $resanno=$em->createQueryBuilder()
             ->select('cagece.anno')->distinct()
-            ->from('AcreditacionBundle:CuotaAnualPorGradoEscolarPorCentroEducativo', 'cagece')
-            ->where('cagece.idGradoEscolarPorCentroEducativo = :id')
+            ->from('AcreditacionBundle:GradoEscolarPorCentroEducativo', 'gece')
+            ->join('gece.cuotasAnualesPorGradoEscolarPorCentroEducativo','cagece')
+            ->where('gece.idCentroEducativo = :id')
             ->orderBy('cagece.anno', 'DESC')
-            ->setParameter('id', $grado_escolar_ce_id)
+            ->setParameter('id', $id)
             ->getQuery()
             ->getResult();
-        }
+        //}
             
         $res=$em->createQueryBuilder()
         ->select(
@@ -583,10 +588,177 @@ class CentroEducativoController extends Controller{
      * @Security("has_role('ROLE_MINED')")
      */
     public function formCuotaArchivoCargarAction(Request $request){
-        //$em = $this->getDoctrine()->getManager();
-     
-        
-       
+        $session = new Session();
+        $em = $this->getDoctrine()->getManager();
+        $idCentroEducativo= $request->get('id_centro_educativo');
+        $centroEducativo = $em->getRepository('AcreditacionBundle:CentroEducativo')->find($idCentroEducativo);
+
+        if($idCentroEducativo && isset($_FILES['archivo'])){
+            $nbrArchivoPts=explode('.',$_FILES['archivo']['name']);
+            $extArchivo=array_pop($nbrArchivoPts);
+            $arrExt=array('.ods','.xls','.xlsx',);
+            if(in_array('.' . strtolower($extArchivo),$arrExt)){
+
+                switch ('.' . strtolower($extArchivo)) {
+                    case '.ods':
+                        $objReader = PHPExcel_IOFactory::createReader('OOCalc');
+                        break;
+                    case '.xls':
+                        $objReader = PHPExcel_IOFactory::createReader('Excel5');
+                        break;
+                    case '.xlsx':
+                        $objReader = PHPExcel_IOFactory::createReader('Excel2007');
+                        break;
+                }
+                $objReader->setReadDataOnly(true);
+                $objPHPExcel = $objReader->load($_FILES['archivo']['tmp_name']);
+                $objPHPExcel->setActiveSheetIndex(0);
+
+                $cntError=0;
+                $maxErrores=3;
+                $wsIterator = $objPHPExcel->getWorksheetIterator();
+                foreach($wsIterator as $worksheet){
+                    $fila=array();
+                    $idxHoja = $wsIterator->key();
+                    foreach ($worksheet->getRowIterator() as $row){
+                        $cellIterator = $row->getCellIterator();
+                        foreach ($cellIterator as $cell){
+                            $coord=$cell->getCoordinate();
+                            $value=$cell->getCalculatedValue();
+                            $fila[preg_replace('/[0-9]+/', '', $coord)]=$value;
+                            //error_log("$idxHoja - $coord - $value");
+                        }
+
+                        if($cntError>=$maxErrores){
+                            break 2;
+                        }
+
+                        $anio=(isset($fila['A'])?$fila['A']:null);
+                        $grado=(isset($fila['B'])?$fila['B']:null);
+                        $opcion=(isset($fila['C'])?$fila['C']:null);
+                        $matricula=(isset($fila['D'])?$fila['D']:null);
+                        $cuota=(isset($fila['E'])?$fila['E']:null);
+                        $cantCuotas=(isset($fila['F'])?$fila['F']:null);
+
+                        if(strtoupper($anio)==strtoupper('Año')){
+                            continue;
+                        }
+                        if(!$anio || !$grado || !$matricula || !$cuota || !$cantCuotas){
+                            continue;
+                        }
+
+                        $errorArr=array();
+                        $filaIdx=preg_replace('/[A-Z]+/', '', $coord);
+
+                        if(!is_numeric($anio) || $anio<1900 || $anio>date('Y')+1){
+                            $errorArr[]='el año "' . $anio . '" no es válido';
+                        }
+
+                        $idGradoEscolar=null;
+                        if(is_numeric($grado)){
+                            $idGradoEscolar = $em->getRepository('AcreditacionBundle:GradoEscolar')->find($grado);
+                        }
+                        elseif(strlen($grado)==3){
+                            $idGradoEscolar = $em->getRepository('AcreditacionBundle:GradoEscolar')->findOneByCodGradoEscolar(strtoupper(trim($grado)));
+                        }
+                        else{
+                            $resGrados = $em->createQueryBuilder()
+                                ->select('g.idGradoEscolar')
+                                ->from('AcreditacionBundle:GradoEscolar', 'g')
+                                ->where('UPPER(g.nbrGradoEscolar) = UPPER(:nbrGradoEscolar)')
+                                    ->setParameter('nbrGradoEscolar', trim($grado))
+                                        ->getQuery()->getResult();
+                            foreach ($resGrados as $regGrado) {
+                                $idGradoEscolar = $em->getRepository('AcreditacionBundle:GradoEscolar')->find($regGrado['idGradoEscolar']);
+                                break;
+                            }
+                        }
+                        if(!$idGradoEscolar){
+                            $errorArr[]='no se encontró el grado escolar "' . $grado . '"';
+                        }
+
+                        if(!is_numeric($matricula) || $matricula<0){
+                            $errorArr[]='el monto de la matrícula "' . $matricula . '" no es válido';
+                        }
+                        if(!is_numeric($cuota) || $cuota<0){
+                            $errorArr[]='el monto de la cuota "' . $cuota . '" no es válido';
+                        }
+                        if(!is_numeric($cantCuotas) || $cantCuotas<0){
+                            $errorArr[]='la cantidad de cuotas "' . $cantCuotas . '" no es válida';
+                        }
+
+                        if(count($errorArr)){
+                            $session->getFlashBag()->add('error','Hoja ' . ($idxHoja+1) . ', fila ' . $filaIdx . ': ' . implode(' / ',$errorArr));
+                            $cntError++;
+                        }
+                        else{
+
+                            $resGradosQuery = $em->createQueryBuilder()
+                                ->select('g.idGradoEscolarPorCentroEducativo')
+                                ->from('AcreditacionBundle:GradoEscolarPorCentroEducativo', 'g')
+                                ->where('g.idCentroEducativo=:idCentroEducativo')
+                                ->andWhere('g.idGradoEscolar=:idGradoEscolar')
+                                    ->setParameter('idCentroEducativo', $idCentroEducativo)
+                                    ->setParameter('idGradoEscolar', $idGradoEscolar);
+                            if($opcion){
+                                $resGradosQuery
+                                    ->andWhere('UPPER(g.opcionGradoEscolar) = UPPER(:opcionGradoEscolar)')
+                                        ->setParameter('opcionGradoEscolar', trim($opcion));
+                            }
+                            $resGrados=$resGradosQuery
+                                ->getQuery()->getResult();
+                            $idGradoEscolarPorCentroEducativo=null;
+                            foreach ($resGrados as $regGrado) {
+                                $idGradoEscolarPorCentroEducativo = $em->getRepository('AcreditacionBundle:GradoEscolarPorCentroEducativo')->find($regGrado['idGradoEscolarPorCentroEducativo']);
+                                break;
+                            }
+                            if(!$idGradoEscolarPorCentroEducativo){
+                                $idGradoEscolarPorCentroEducativo=new GradoEscolarPorCentroEducativo();
+                                $idGradoEscolarPorCentroEducativo->setIdCentroEducativo($centroEducativo);
+                                $idGradoEscolarPorCentroEducativo->setIdGradoEscolar($idGradoEscolar);
+                                $idGradoEscolarPorCentroEducativo->setOpcionGradoEscolar(trim($opcion));
+                                $idGradoEscolarPorCentroEducativo->setActivo('S');
+                                $em->persist($idGradoEscolarPorCentroEducativo);
+                            }
+
+                            $idCuotaAnualPorGradoEscolarPorCentroEducativo=$em->getRepository('AcreditacionBundle:CuotaAnualPorGradoEscolarPorCentroEducativo')->findOneBy(array(
+                                    'idGradoEscolarPorCentroEducativo' => $idGradoEscolarPorCentroEducativo,
+                                    'anno' => $anio,
+                                ));
+                            if(!$idCuotaAnualPorGradoEscolarPorCentroEducativo){
+                                $idCuotaAnualPorGradoEscolarPorCentroEducativo=new CuotaAnualPorGradoEscolarPorCentroEducativo();
+                                $idCuotaAnualPorGradoEscolarPorCentroEducativo->setIdGradoEscolarPorCentroEducativo($idGradoEscolarPorCentroEducativo);
+                                $idCuotaAnualPorGradoEscolarPorCentroEducativo->setAnno($anio);
+                            }
+                            $idCuotaAnualPorGradoEscolarPorCentroEducativo->setMatricula($matricula);
+                            $idCuotaAnualPorGradoEscolarPorCentroEducativo->setMonto($cuota);
+                            $idCuotaAnualPorGradoEscolarPorCentroEducativo->setCantidadCuotas($cantCuotas);
+                            $em->persist($idCuotaAnualPorGradoEscolarPorCentroEducativo);
+
+                        }
+
+                    }
+                }
+
+                if($cntError>=$maxErrores){
+                    $session->getFlashBag()->add('error','Se alcanzó la cantidad límite de errores; no se cargó ninguna cuota.');
+                }
+                else{
+                    $em->flush();
+                }
+
+            }
+            else{
+                $session->getFlashBag()->add('error','Debe cargar un archivo de un tipo permitido: (' . implode(', ',$arrExt) . ').');
+            }
+        }
+        else{
+            $session->getFlashBag()->add('error','No se encontró el archivo cargado.');
+        }
+
+        return $this->redirect($this->generateUrl('centro_educativo_cuotas', array(
+            'id' => $idCentroEducativo,
+        )));
     }
     
     /*Fin*/
