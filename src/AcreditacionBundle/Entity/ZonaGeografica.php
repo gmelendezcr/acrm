@@ -24,6 +24,13 @@ class ZonaGeografica
     /**
      * @var string
      *
+     * @ORM\Column(name="COD_ZONA_GEOGRAFICA", type="string", length=20)
+     */
+    private $codZonaGeografica;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="NBR_ZONA_GEOGRAFICA", type="string", length=100)
      */
     private $nbrZonaGeografica;
@@ -57,6 +64,29 @@ class ZonaGeografica
     public function getIdZonaGeografica()
     {
         return $this->idZonaGeografica;
+    }
+
+    /**
+     * Set codZonaGeografica
+     *
+     * @param string $codZonaGeografica
+     * @return ZonaGeografica
+     */
+    public function setCodZonaGeografica($codZonaGeografica)
+    {
+        $this->codZonaGeografica = $codZonaGeografica;
+
+        return $this;
+    }
+
+    /**
+     * Get codZonaGeografica
+     *
+     * @return string 
+     */
+    public function getCodZonaGeografica()
+    {
+        return $this->codZonaGeografica;
     }
 
     /**

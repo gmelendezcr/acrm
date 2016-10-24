@@ -10,6 +10,7 @@ use AcreditacionBundle\Entity\Formulario;
 use AcreditacionBundle\Entity\FormularioPorCentroEducativo;
 use AcreditacionBundle\Entity\SeccionPorFormularioPorCentroEducativo;
 use AcreditacionBundle\Entity\Acreditacion;
+use AcreditacionBundle\Entity\AccionPorUsuario;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use AcreditacionBundle\Form\CentroEducativoType;
@@ -97,11 +98,15 @@ class CentroEducativoController extends Controller{
         $zona = $em->getRepository('AcreditacionBundle:ZonaGeografica')->findAll();
         $jornadas = $em->getRepository('AcreditacionBundle:JornadaCentroEducativo')->findAll();
         $tamannos = $em->getRepository('AcreditacionBundle:TamannoCentroEducativo')->findAll();
+        $zonasCE = $em->getRepository('AcreditacionBundle:ZonaCentroEducativo')->findAll();
+        $modalidades = $em->getRepository('AcreditacionBundle:ModalidadCentroEducativo')->findAll();
         return $this->render('centro-educativo/addcedu.index.html.twig', array(
             'departamentos' => $departamentos,
             'zonas' =>$zona,
             'jornadas'=> $jornadas,
-            'tamannos'=> $tamannos
+            'tamannos'=> $tamannos,
+            'zonasCE' => $zonasCE,
+            'modalidades' => $modalidades,
         ));
     }
     
@@ -117,9 +122,15 @@ class CentroEducativoController extends Controller{
         $municipio=$request->get('municipio');
         $jornada=$request->get('jornada');
         $tamanno=$request->get('tamanno');
+        $totalDocentesMasculinos=$request->get('totalDocentesMasculinos');
+        $totalDocentesFemeninos=$request->get('totalDocentesFemeninos');
+
         $municipio = $em->getRepository('AcreditacionBundle:Municipio')->find($municipio);
         $jornada = $em->getRepository('AcreditacionBundle:JornadaCentroEducativo')->find($jornada);
         $tamanno = $em->getRepository('AcreditacionBundle:TamannoCentroEducativo')->find($tamanno);
+        $zonaCE = $em->getRepository('AcreditacionBundle:ZonaCentroEducativo')->find($request->get('zonasCE'));
+        $modalidad = $em->getRepository('AcreditacionBundle:ModalidadCentroEducativo')->find($request->get('modalidades'));
+
         //$jornadas=$request->get('jornadas');
         //$tamanno=$request->get('tamanno');
         $ce=new CentroEducativo();
@@ -130,9 +141,14 @@ class CentroEducativoController extends Controller{
         $ce->setIdMunicipio($municipio);
         $ce->setIdJornadaCentroEducativo($jornada);
         $ce->setIdTamannoCentroEducativo($tamanno);
+        $ce->setTotalDocentesMasculinos($totalDocentesMasculinos);
+        $ce->setTotalDocentesFemeninos($totalDocentesFemeninos);
+        $ce->setIdZonaCentroEducativo($zonaCE);
+        $ce->setIdModalidadCentroEducativo($modalidad);
         
         $ce->setActivo('S');
         $em=$this->getDoctrine()->getManager();
+        new AccionPorUsuario($em,$this->getUser(),'AC',$ce);
         $em->persist($ce);
         $em->flush();
         return $this->redirectToRoute('centro_educativo_lista');
@@ -162,6 +178,7 @@ class CentroEducativoController extends Controller{
     public function borrarAction($id){
         $em = $this->getDoctrine()->getManager();
         $check_ced = $em->getRepository('AcreditacionBundle:CentroEducativo')->find($id);
+        new AccionPorUsuario($em,$this->getUser(),'EC',$check_ced);
         $em->remove($check_ced);
         $em->flush();
         return $this->redirectToRoute('centro_educativo_lista');
@@ -206,6 +223,7 @@ class CentroEducativoController extends Controller{
             $entity->setIdTamannoCentroEducativo($idTamannoCentroEducativo);
             
             $em = $this->getDoctrine()->getManager();
+            new AccionPorUsuario($em,$this->getUser(),'MC',$entity);
             $em->persist($entity);
             $em->flush();
             return $this->redirectToRoute('centro_educativo_lista');
@@ -326,6 +344,7 @@ class CentroEducativoController extends Controller{
         $formularioPorCentroEducativo->setIdEstadoFormulario($em->getRepository('AcreditacionBundle:EstadoFormulario')->findOneBy(array(
             'codEstadoFormulario' => 'NU',
         )));
+        new AccionPorUsuario($em,$this->getUser(),'DF',$formularioPorCentroEducativo);
         $em->persist($formularioPorCentroEducativo);
         $em->flush();
 
@@ -418,6 +437,7 @@ class CentroEducativoController extends Controller{
     public function borrar_cuotaAction($id,$idcuota){
         $em = $this->getDoctrine()->getManager();
         $check_cagece = $em->getRepository('AcreditacionBundle:CuotaAnualPorGradoEscolarPorCentroEducativo')->find($idcuota);
+        new AccionPorUsuario($em,$this->getUser(),'ED',$check_cagece);
         $em->remove($check_cagece);
         $em->flush();
         return $this->redirectToRoute('centro_educativo_cuotas', 
@@ -459,6 +479,7 @@ class CentroEducativoController extends Controller{
         $matricula=$request->get('matricula');
         $cuota=$request->get('cuota');
         $anno=$request->get('anno');
+        $cantidadCuotas=$request->get('cantidadCuotas');
         $grado = $em->getRepository('AcreditacionBundle:GradoEscolar')->find($grado);
         
         $existe=$em->createQueryBuilder()
@@ -493,6 +514,8 @@ class CentroEducativoController extends Controller{
         $cagece->setAnno($anno);
         $cagece->setMatricula($matricula);
         $cagece->setMonto($cuota);
+        $cagece->setCantidadCuotas($cantidadCuotas);
+        new AccionPorUsuario($em,$this->getUser(),'AD',$cagece);
         $em->persist($cagece);
         $em->flush();
         return $this->redirectToRoute('centro_educativo_cuotas', 
@@ -548,12 +571,15 @@ class CentroEducativoController extends Controller{
             $monto = $editForm->get('monto')->getData();
             
             $anno = $editForm->get('anno')->getData();
+            $cantidadCuotas=$editForm->get('cantidadCuotas')->getData();
             
             $entity->setMatricula($matricula);
             $entity->setMonto($monto);
             $entity->setAnno($anno);
+            $entity->setCantidadCuotas($cantidadCuotas);
             
             $em = $this->getDoctrine()->getManager();
+            new AccionPorUsuario($em,$this->getUser(),'MD',$entity);
             $em->persist($entity);
             $em->flush();
             return $this->redirectToRoute('centro_educativo_cuotas', array(
@@ -729,10 +755,15 @@ class CentroEducativoController extends Controller{
                                 $idCuotaAnualPorGradoEscolarPorCentroEducativo=new CuotaAnualPorGradoEscolarPorCentroEducativo();
                                 $idCuotaAnualPorGradoEscolarPorCentroEducativo->setIdGradoEscolarPorCentroEducativo($idGradoEscolarPorCentroEducativo);
                                 $idCuotaAnualPorGradoEscolarPorCentroEducativo->setAnno($anio);
+                                $accionPorUsuario='AD';
+                            }
+                            else{
+                                $accionPorUsuario='MD';
                             }
                             $idCuotaAnualPorGradoEscolarPorCentroEducativo->setMatricula($matricula);
                             $idCuotaAnualPorGradoEscolarPorCentroEducativo->setMonto($cuota);
                             $idCuotaAnualPorGradoEscolarPorCentroEducativo->setCantidadCuotas($cantCuotas);
+                            new AccionPorUsuario($em,$this->getUser(),$accionPorUsuario,$idCuotaAnualPorGradoEscolarPorCentroEducativo);
                             $em->persist($idCuotaAnualPorGradoEscolarPorCentroEducativo);
 
                         }
@@ -844,6 +875,7 @@ class CentroEducativoController extends Controller{
             $form->setidFormularioPorCentroEducativo($idFormularioPorCentroEducativo);
             $form->setobservacion($g);
             $form->setidSeccion($idseccion);
+            new AccionPorUsuario($em,$this->getUser(),'AO',$form);
             $em->persist($form);
         }
        
@@ -979,6 +1011,7 @@ class CentroEducativoController extends Controller{
             //$idseccion->setidFormularioPorCentroEducativo($idFormularioPorCentroEducativo);
             $idseccion->setobservacion($g);
            
+            new AccionPorUsuario($em,$this->getUser(),'MO',$idseccion);
             $em->persist($idseccion);
         }
        
@@ -1078,6 +1111,7 @@ class CentroEducativoController extends Controller{
             $acreditacion->setFechaInicio($fechaInicio);
             $acreditacion->setFechaFin($fechaFin->add(new \DateInterval('P' . $estadoAcreditacion->getAniosVigencia() . 'Y')));
             $acreditacion->setFechaRegistro(new \DateTime());
+            new AccionPorUsuario($em,$this->getUser(),'RA',$acreditacion);
             $em->persist($acreditacion);
 
             $estadoFormulario=$em->getRepository('AcreditacionBundle:EstadoFormulario')->findOneBy(array('codEstadoFormulario' => 'DC'));

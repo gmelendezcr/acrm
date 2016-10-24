@@ -187,4 +187,16 @@ class CuotaAnualPorGradoEscolarPorCentroEducativo
     public function __toString(){
         return $this->idGradoEscolarPorCentroEducativo;
     }
+
+    public function vaciarPropiedades()
+    {
+        $detalle='';
+        $detalle.='centro educativo: ' . $this->getIdGradoEscolarPorCentroEducativo()->getIdCentroEducativo()->__toString() . "\n";
+        $detalle.='grado: ' . $this->getIdGradoEscolarPorCentroEducativo()->__toString() . "\n";
+        $detalle.='año: ' . $this->getAnno() . "\n";
+        $detalle.='matrícula: ' . $this->getMatricula() . "\n";
+        $detalle.='monto: ' . $this->getMonto() . "\n";
+        $detalle.='cantidad cuotas: ' . $this->getCantidadCuotas() . "\n";
+        return $detalle;
+    }
 }

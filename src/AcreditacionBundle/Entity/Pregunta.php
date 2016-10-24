@@ -1129,4 +1129,8 @@ class Pregunta
     {
         return $this->detallesPonderacionPregunta;
     }
+
+    public function __toString(){
+        return ($this->getCodPregunta()?$this->getCodPregunta() . ' - ':'') . $this->getDescripcionPregunta();
+    }
 }

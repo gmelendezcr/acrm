@@ -170,5 +170,8 @@ class EstadoAcreditacion
     {
         return $this->acreditaciones;
     }
-}
 
+    public function __toString(){
+        return $this->getCodEstadoAcreditacion() . ' - ' . $this->getNbrEstadoAcreditacion();
+    }
+}

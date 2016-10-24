@@ -137,4 +137,8 @@ class EstadoFormulario
     {
         return $this->formulariosPorCentroEducativo;
     }
+
+    public function __toString(){
+        return $this->getCodEstadoFormulario() . ' - ' . $this->getNbrEstadoFormulario();
+    }
 }

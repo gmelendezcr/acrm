@@ -188,4 +188,15 @@ class Acreditacion
     {
         return $this->idEstadoAcreditacion;
     }
+
+    public function vaciarPropiedades()
+    {
+        $detalle='';
+        $detalle.='centro educativo: ' . $this->getIdCentroEducativo()->__toString() . "\n";
+        $detalle.='fecha registro: ' . $this->getFechaRegistro()->format('d/m/Y h:i:s') . "\n";
+        $detalle.='fecha inicio: ' . $this->getFechaInicio()->format('d/m/Y') . "\n";
+        $detalle.='fecha fin: ' . $this->getFechaFin()->format('d/m/Y') . "\n";
+        $detalle.='estado acreditacion: ' . $this->getIdEstadoAcreditacion()->__toString() . "\n";
+        return $detalle;
+    }
 }

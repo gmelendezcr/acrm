@@ -170,4 +170,8 @@ class ModalidadCentroEducativo
     {
         return $this->centrosEducativos;
     }
+
+    public function __toString(){
+        return $this->getNbrModalidadCentroEducativo();
+    }
 }

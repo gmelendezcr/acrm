@@ -199,4 +199,8 @@ class GradoEscolarPorCentroEducativo
     {
         return $this->cuotasAnualesPorGradoEscolarPorCentroEducativo;
     }
+
+    public function __toString(){
+        return $this->getIdGradoEscolar()->__toString();
+    }
 }

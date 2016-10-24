@@ -86,7 +86,7 @@
     {% if not idFormularioPorCentroEducativoRevisar and ( estadoFormularioPorCentroEducativo == 'DI' or estadoFormularioPorCentroEducativo == 'CO' ) %}
         <form id="secciones" method="POST" action="{{ path('seccion_terminar') }}">
             <div class="col-md-12 text-right">
-                <button  data-toggle="confirmation" data-title="Seguro?" type="submit" name="Terminar" value="Terminar" class="btn btn-success">
+                <button  data-toggle="confirmation" data-title="¿Seguro?" type="submit" name="Terminar" value="Terminar" class="btn btn-success">
                     <span class="glyphicon glyphicon-share-alt"></span> Terminar
                 </button>
             </div>
@@ -96,8 +96,8 @@
             <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ idFormularioPorCentroEducativoRevisar }}">
             <div class="col-md-12 text-right">
                 <div class="btn-group" role="group" aria-label="accion">
-                    <button type="submit" name="Aprobar" value="Aprobar" class="btn btn-success" data-toggle="confirmation" data-title="Seguro?"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Aprobar</button>
-                    <button type="submit" name="Rechazar" value="Rechazar" class="btn btn-warning" data-toggle="confirmation" data-title="Seguro?"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> Rechazar</button>
+                    <button type="submit" name="Aprobar" value="Aprobar" class="btn btn-success" data-toggle="confirmation" data-title="¿Seguro?"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Aprobar</button>
+                    <button type="submit" name="Rechazar" value="Rechazar" class="btn btn-warning" data-toggle="confirmation" data-title="¿Seguro?"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> Rechazar</button>
                 </div>
             </div>
         </form>

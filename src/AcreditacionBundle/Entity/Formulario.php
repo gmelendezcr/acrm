@@ -236,4 +236,8 @@ class Formulario
     {
         return $this->formulariosPorCentroEducativo;
     }
+
+    public function __toString(){
+        return $this->getCodFormulario() . ' - ' . $this->getNbrFormulario();
+    }
 }

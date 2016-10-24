@@ -54,10 +54,27 @@ class AccionPorUsuario
     /**
      * @var string
      *
-     * @ORM\Column(name="DETALLE_ACCION_USUARIO", type="string", length=255)
+     * @ORM\Column(name="DETALLE_ACCION_USUARIO", type="string", length=1000)
      */
     private $detalleAccionUsuario;
 
+
+    public function __construct($em,$user,$codTipoAccionUsuario,$objeto=null)
+    {
+        $this->setIdUsuario($user);
+        $this->setFechaHora(new \DateTime());
+        $this->setDireccionIp($_SERVER['REMOTE_ADDR']);
+        $this->setIdTipoAccionUsuario($em->getRepository('AcreditacionBundle:TipoAccionUsuario')->findOneByCodTipoAccionUsuario($codTipoAccionUsuario));
+
+        if(is_object($objeto)){
+            $this->setDetalleAccionUsuario(trim($objeto->vaciarPropiedades()));
+        }
+        else{
+            $this->setDetalleAccionUsuario('');
+        }
+
+        $em->persist($this);
+    }
 
     /**
      * Get idAccionPorUsuario

@@ -170,4 +170,8 @@ class ZonaCentroEducativo
     {
         return $this->centrosEducativos;
     }
+
+    public function __toString(){
+        return $this->getNbrZonaCentroEducativo();
+    }
 }

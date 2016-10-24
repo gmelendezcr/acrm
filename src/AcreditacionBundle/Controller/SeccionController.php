@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use AcreditacionBundle\Entity\Seccion;
 use AcreditacionBundle\Entity\RespuestaPorFormularioPorCentroEducativo;
+use AcreditacionBundle\Entity\AccionPorUsuario;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -185,6 +186,7 @@ class SeccionController extends Controller
                     }
                 }
                 $resp->setValorRespuesta($value);
+                new AccionPorUsuario($em,$this->getUser(),'GF',$resp);
                 $em->persist($resp);
             }
             if(in_array($codEstadoFormulario,array('NU','DI'))){
@@ -223,6 +225,7 @@ class SeccionController extends Controller
             $formularioPorCentroEducativo->setIdEstadoFormulario($em->getRepository('AcreditacionBundle:EstadoFormulario')->findOneBy(array(
                 'codEstadoFormulario' => 'TE',
             )));
+            new AccionPorUsuario($em,$this->getUser(),'TF',$formularioPorCentroEducativo);
             $em->persist($formularioPorCentroEducativo);
             $em->flush();
         }
@@ -245,9 +248,11 @@ class SeccionController extends Controller
         $idFormularioPorCentroEducativo=$request->get('idFormularioPorCentroEducativoRevisar');
         if($request->get('Aprobar')!=''){
             $estadoFormulario='AP';
+            $accionPorUsuario='AF';
         }
         elseif($request->get('Rechazar')!=''){
             $estadoFormulario='RE';
+            $accionPorUsuario='RF';
         }
 
         $formularioPorCentroEducativo=$em->getRepository('AcreditacionBundle:FormularioPorCentroEducativo')->find($idFormularioPorCentroEducativo);
@@ -256,6 +261,7 @@ class SeccionController extends Controller
             $formularioPorCentroEducativo->setIdEstadoFormulario($em->getRepository('AcreditacionBundle:EstadoFormulario')->findOneBy(array(
                 'codEstadoFormulario' => $estadoFormulario,
             )));
+            new AccionPorUsuario($em,$this->getUser(),$accionPorUsuario,$formularioPorCentroEducativo);
             $em->persist($formularioPorCentroEducativo);
             $em->flush();
         }

@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use AcreditacionBundle\Entity\Usuario;
+use AcreditacionBundle\Entity\AccionPorUsuario;
 use AcreditacionBundle\Form\UsuarioType;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -52,6 +53,7 @@ class UsuarioController extends Controller
             $roles=$request->get('roles');
             $usuario->addRole($roles);
             $usuario->setPlainPassword($usuario->getPassword());
+            new AccionPorUsuario($em,$this->getUser(),'AU',$usuario);
             $em->persist($usuario);
             $em->flush();
 
@@ -149,6 +151,7 @@ public function setRole($role) {
             $em = $this->getDoctrine()->getManager();
             $usuario->setPlainPassword(''); //sin esta línea, al no cambiar la contraseña la guarda en texto plano
             $usuario->setPlainPassword($usuario->getPassword());
+            new AccionPorUsuario($em,$this->getUser(),'MU',$usuario);
             $em->persist($usuario);
             $em->flush();
 
@@ -189,6 +192,7 @@ public function setRole($role) {
 
         //if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            new AccionPorUsuario($em,$this->getUser(),'EU',$usuario);
             $em->remove($usuario);
             $em->flush();
         //}

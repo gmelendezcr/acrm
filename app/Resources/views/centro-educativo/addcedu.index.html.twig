@@ -66,6 +66,32 @@
                     </select>                                
                 </div>
                 <div class="form-group">
+                    <label for="zonasCE">Zona</label>
+                    <select class="form-control input-3" id="zonasCE" name="zonasCE">
+                        <option value="0">Seleccione una</option>
+                        {% for zonaCE in zonasCE %}
+                            <option value="{{ zonaCE.idZonaCentroEducativo }}">{{ zonaCE.nbrZonaCentroEducativo }}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="modalidades">Modalidad</label>
+                    <select class="form-control input-3" id="modalidades" name="modalidades">
+                        <option value="0">Selecciona uno</option>
+                        {% for modalidad in modalidades %}
+                            <option value="{{ modalidad.idModalidadCentroEducativo }}">{{ modalidad.nbrModalidadCentroEducativo }}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">                                
+                    <label for="totalDocentesMasculinos">Cantidad de docentes masculinos</label>
+                    <input type="text" class="form-control input-3" id="totalDocentesMasculinos" name="totalDocentesMasculinos" placeholder="Digite la cantidad de docentes masculinos">
+                </div>
+                <div class="form-group">                                
+                    <label for="totalDocentesFemeninos">Cantidad de docentes femeninos</label>
+                    <input type="text" class="form-control input-3" id="totalDocentesFemeninos" name="totalDocentesFemeninos" placeholder="Digite la cantidad de docentes femeninos">
+                </div>
+                <div class="form-group">
                     <div class="btn-group" role="group">
                         <a class="btn btn-info" href="{{ path('centro_educativo_lista') }}">
                             <span class="glyphicon glyphicon-triangle-left"></span> 

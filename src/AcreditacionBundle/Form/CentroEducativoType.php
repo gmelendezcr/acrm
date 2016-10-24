@@ -50,6 +50,28 @@ class CentroEducativoType extends AbstractType{
             'choices_as_values' => true,
             'label' => 'Tamaño'
         );
+
+        $zonaCentroEducativo=array();
+        $resZonaCentroEducativo=$em->getRepository('AcreditacionBundle:ZonaCentroEducativo')->findAll();
+        foreach($resZonaCentroEducativo as $regZonaCentroEducativo){
+            $zonaCentroEducativo[$regZonaCentroEducativo->getNbrZonaCentroEducativo()]=$regZonaCentroEducativo;
+        }
+        $this->comboZonaCentroEducativo=array(
+            'choices' => $zonaCentroEducativo,
+            'choices_as_values' => true,
+            'label' => 'Zona',
+        );
+
+        $modalidadCentroEducativo=array();
+        $resModalidadCentroEducativo=$em->getRepository('AcreditacionBundle:ModalidadCentroEducativo')->findAll();
+        foreach($resModalidadCentroEducativo as $regModalidadCentroEducativo){
+            $modalidadCentroEducativo[$regModalidadCentroEducativo->getNbrModalidadCentroEducativo()]=$regModalidadCentroEducativo;
+        }
+        $this->comboModalidadCentroEducativo=array(
+            'choices' => $modalidadCentroEducativo,
+            'choices_as_values' => true,
+            'label' => 'Modalidad',
+        );
     }
 
     /**
@@ -71,6 +93,10 @@ class CentroEducativoType extends AbstractType{
         ->add('idMunicipio',null,$this->comboMun)
         ->add('idJornadaCentroEducativo',null,$this->comboJda)
         ->add('idTamannoCentroEducativo',null,$this->comboTnno)
+        ->add('idZonaCentroEducativo',null,$this->comboZonaCentroEducativo)
+        ->add('idModalidadCentroEducativo',null,$this->comboModalidadCentroEducativo)
+        ->add('totalDocentesMasculinos', 'text',array('label' => 'Total de docentes masculinos'))
+        ->add('totalDocentesFemeninos', 'text',array('label' => 'Total de docentes femeninos'))
         ->add('activo', 'choice', 
             array(
                 'label' => 'Estado',

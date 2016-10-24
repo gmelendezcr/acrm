@@ -49,6 +49,26 @@
                     {{ form_widget(form.idTamannoCentroEducativo, {'attr': {'class': 'form-control input-3'}}) }}
                     {{ form_errors(form.idTamannoCentroEducativo) }}                           
                 </div>
+                <div class="form-group">
+                    {{ form_label(form.idZonaCentroEducativo) }}
+                    {{ form_widget(form.idZonaCentroEducativo, {'attr': {'class': 'form-control input-3'}}) }}
+                    {{ form_errors(form.idZonaCentroEducativo) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.idModalidadCentroEducativo) }}
+                    {{ form_widget(form.idModalidadCentroEducativo, {'attr': {'class': 'form-control input-3'}}) }}
+                    {{ form_errors(form.idModalidadCentroEducativo) }}
+                </div>
+                <div class="form-group">
+                    {{  form_label(form.totalDocentesMasculinos) }}
+                    {{ form_widget(form.totalDocentesMasculinos, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite la cantidad de docentes masculinos'}}) }}
+                    {{ form_errors(form.totalDocentesMasculinos) }}
+                </div>
+                <div class="form-group">
+                    {{  form_label(form.totalDocentesFemeninos) }}
+                    {{ form_widget(form.totalDocentesFemeninos, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite la cantidad de docentes femeninos'}}) }}
+                    {{ form_errors(form.totalDocentesFemeninos) }}
+                </div>
                 <div class="form-group">                                
                     {{ form_label(form.activo)  }}
                     {{ form_widget(form.activo, {'attr': {'class': 'form-control input-3'}}) }}

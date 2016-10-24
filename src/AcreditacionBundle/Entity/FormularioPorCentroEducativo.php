@@ -498,4 +498,19 @@ class FormularioPorCentroEducativo
     {
         return $this->formulariosPorCentroEducativoIndicadorPonderacion;
     }
+
+    public function __toString(){
+        return $this->getIdFormulario()->__toString();
+    }
+
+    public function vaciarPropiedades()
+    {
+        $detalle='';
+        $detalle.='centro educativo: ' . $this->getIdCentroEducativo()->__toString() . "\n";
+        $detalle.='formulario: ' . $this->getIdFormulario()->__toString() . "\n";
+        $detalle.='lugar aplicacion: ' . $this->getLugarAplicacion() . "\n";
+        $detalle.='fecha aplicacion: ' . $this->getFechaAplicacion()->format('d/m/Y') . "\n";
+        $detalle.='estado formulario: ' . $this->getIdEstadoFormulario()->__toString() . "\n";
+        return $detalle;
+    }
 }

@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use AcreditacionBundle\Entity\FormularioPorCentroEducativo;
 use AcreditacionBundle\Entity\RespuestaPorFormularioPorCentroEducativo;
+use AcreditacionBundle\Entity\AccionPorUsuario;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,6 +65,7 @@ class FormularioPorCentroEducativoController extends Controller
                 }
                 $respuestaPorFormularioPorCentroEducativo->setRevisar($nuevoRevisar);
             }
+            new AccionPorUsuario($em,$this->getUser(),'MF',$respuestaPorFormularioPorCentroEducativo);
             $em->persist($respuestaPorFormularioPorCentroEducativo);
             $em->flush();
 
@@ -80,6 +82,8 @@ class FormularioPorCentroEducativoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $idFormularioPorCentroEducativo=$request->get('idFormularioPorCentroEducativo');
 
+        new AccionPorUsuario($em,$this->getUser(),'CF');
+        $em->flush();
         $em->getConnection()
             ->prepare("CALL CALIFICAR_FORMULARIO ($idFormularioPorCentroEducativo)")
                 ->execute();

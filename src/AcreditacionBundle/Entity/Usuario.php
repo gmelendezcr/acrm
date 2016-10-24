@@ -218,6 +218,20 @@ class Usuario extends BaseUser
         return $this->formulariosPorCentroEducativoRevisados;
     }
     
-  
-    
+    public function vaciarPropiedades()
+    {
+        $detalle='';
+        $detalle.='usuario: ' . $this->getUsername() . "\n";
+        $detalle.='nombres: ' . $this->getNombres() . "\n";
+        $detalle.='apellidos: ' . $this->getApellidos() . "\n";
+        $detalle.='correo: ' . $this->getEmail() . "\n";
+        $roleArr=array();
+        foreach ($this->getRoles() as $role) {
+            if($role){
+                $roleArr[]=$role;
+            }
+        }
+        $detalle.='roles: ' . implode(', ',$roleArr) . "\n";
+        return $detalle;
+    }
 }

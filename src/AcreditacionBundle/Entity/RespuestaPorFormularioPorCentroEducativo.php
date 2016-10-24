@@ -214,4 +214,22 @@ class RespuestaPorFormularioPorCentroEducativo
     {
         return $this->ponderacionGanada;
     }
+
+    public function vaciarPropiedades()
+    {
+        $detalle='';
+        $detalle.='centro educativo: ' . $this->getIdFormularioPorCentroEducativo()->getIdCentroEducativo()->__toString() . "\n";
+        $detalle.='formulario: ' . $this->getIdFormularioPorCentroEducativo()->__toString() . "\n";
+        if($this->getIdOpcionRespuesta()){
+            $detalle.='pregunta: ' . $this->getIdOpcionRespuesta()->getIdPregunta()->getIdPreguntaPadre()->__toString() . "\n";
+            $detalle.='fila: ' . $this->getIdOpcionRespuesta()->__toString() . "\n";
+            $detalle.='columna: ' . $this->getIdPregunta()->__toString() . "\n";
+        }
+        else{
+            $detalle.='pregunta: ' . $this->getIdPregunta()->__toString() . "\n";
+        }
+        $detalle.='respuesta: ' . $this->getValorRespuesta() . "\n";
+        $detalle.='revisar: ' . $this->getRevisar() . "\n";
+        return $detalle;
+    }
 }

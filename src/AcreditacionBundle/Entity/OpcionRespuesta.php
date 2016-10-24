@@ -288,4 +288,8 @@ class OpcionRespuesta
     {
         return $this->respuestasPorFormularioPorCentroEducativo;
     }
+
+    public function __toString(){
+        return $this->getDescripcionOpcionRespuesta();
+    }
 }

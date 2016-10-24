@@ -520,4 +520,25 @@ class CentroEducativo
     {
         return $this->acreditaciones;
     }
+
+    public function __toString(){
+        return $this->getCodCentroEducativo() . ' - ' . $this->getNbrCentroEducativo();
+    }
+
+    public function vaciarPropiedades()
+    {
+        $detalle='';
+        $detalle.='código: ' . $this->getCodCentroEducativo() . "\n";
+        $detalle.='nombre: ' . $this->getNbrCentroEducativo() . "\n";
+        $detalle.='dirección: ' . $this->getDireccionCentroEducativo() . "\n";
+        $detalle.='total alumnos: ' . $this->getTotalAlumnos() . "\n";
+        $detalle.='total docentes masculinos: ' . $this->getTotalDocentesMasculinos() . "\n";
+        $detalle.='total docentes femeninos: ' . $this->getTotalDocentesFemeninos() . "\n";
+        $detalle.='municipio: ' . $this->getIdMunicipio()->__toString() . "\n";
+        $detalle.='jornada: ' . $this->getIdJornadaCentroEducativo()->__toString() . "\n";
+        $detalle.='tamaño: ' . $this->getIdTamannoCentroEducativo()->__toString() . "\n";
+        $detalle.='modalidad: ' . $this->getIdModalidadCentroEducativo()->__toString() . "\n";
+        $detalle.='zona: ' . $this->getIdZonaCentroEducativo()->__toString() . "\n";
+        return $detalle;
+    }
 }

@@ -124,5 +124,14 @@ class SeccionPorFormularioPorCentroEducativo
     {
         return $this->observacion;
     }
-}
 
+    public function vaciarPropiedades()
+    {
+        $detalle='';
+        $detalle.='centro educativo: ' . $this->getIdFormularioPorCentroEducativo()->getIdCentroEducativo()->__toString() . "\n";
+        $detalle.='formulario: ' . $this->getIdFormularioPorCentroEducativo()->getIdFormulario()->__toString() . "\n";
+        $detalle.='criterio: ' . $this->getIdSeccion()->__toString() . "\n";
+        $detalle.='observación: ' . $this->getObservacion() . "\n";
+        return $detalle;
+    }
+}

@@ -36,7 +36,7 @@
             <a class="btn btn-info btn-sm" href="{{ path('usuario_index') }}"><span class="glyphicon glyphicon-triangle-left"></span> Regresar</a>
        
             <a class="btn btn-success btn-sm" href="{{ path('usuario_edit', { 'id': usuario.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
-            <a data-toggle="confirmation" data-title="Seguro?" class="btn btn-danger btn-sm" href="{{ path('usuario_delete', { 'id': usuario.id }) }}"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+            <a data-toggle="confirmation" data-title="¿Seguro?" class="btn btn-danger btn-sm" href="{{ path('usuario_delete', { 'id': usuario.id }) }}"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
             {#
             {{ form_start(delete_form) }}
                 <input type="submit" value="Desactivar">

@@ -305,4 +305,8 @@ class Seccion
     {
         return $this->formulariosPorCentroEducativoSeccionPonderacion;
     }
+
+    public function __toString(){
+        return $this->getCodSeccion() . ' - ' . $this->getNbrSeccion();
+    }
 }
