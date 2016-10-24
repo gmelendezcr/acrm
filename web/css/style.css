@@ -290,6 +290,10 @@ color:#204d74 !important;
     display: none;
 }
 @media (max-width: 767px) {
+    .btnk {
+        display: flex;
+    }
+
     .logo{
         float:inherit !important;
         width:180px;
@@ -408,4 +412,12 @@ Control de td de tabla
     margin:auto;
 }
 
-
+/*
+--------------------------------------------------------------------------------
+> Control de align
+--------------------------------------------------------------------------------
+*/
+.label-right{
+    float:right;
+    position:relative;
+}

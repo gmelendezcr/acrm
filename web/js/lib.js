@@ -176,6 +176,7 @@ $( document ).ready( function () {
 		rules: {
 	    	codigo: "required",
 			nombre: "required",
+			direccion: "required",
 			total_alumnos: {
 				required: true,
 				minlength: 1,
@@ -189,6 +190,7 @@ $( document ).ready( function () {
 		messages: {
 	    codigo: "Código requerido",
 		  nombre: "El nombre es requerido",
+		  direccion: "La dirección es requerida",
 		  total_alumnos: {
 				required: "El total de alumnos es requerido",
 				number: "Debe ser un número"
@@ -219,6 +221,7 @@ $( document ).ready( function () {
 		rules: {
 			["CentroEducativoType[codCentroEducativo]"]: "required",
 			["CentroEducativoType[nbrCentroEducativo]"]: "required",
+			["CentroEducativoType[direccionCentroEducativo]"]: "required",
 			["CentroEducativoType[totalAlumnos]"]: {
 				required: true,
 				minlength: 1,
@@ -232,6 +235,7 @@ $( document ).ready( function () {
 		messages: {
 	    	["CentroEducativoType[codCentroEducativo]"]: "Código requerido",
 			["CentroEducativoType[nbrCentroEducativo]"]: "El nombre es requerido",
+			["CentroEducativoType[direccionCentroEducativo]"]: "La dirección es requerida",
 			["CentroEducativoType[totalAlumnos]"]: {
 				required: "El total de alumnos es requerido",
 				number: "Debe ser un número"

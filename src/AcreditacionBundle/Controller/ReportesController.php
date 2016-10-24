@@ -13,9 +13,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use AcreditacionBundle\Form\CentroEducativoType;
 use AcreditacionBundle\Form\CuotaAnualPorGradoEscolarPorCentroEducativoType;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+use PHPExcel_IOFactory;
 
 class ReportesController extends Controller{
     
@@ -289,10 +291,13 @@ class ReportesController extends Controller{
 */
 public function pdf_estado_actual_ceduAction(Request $request){
     $estado_acred=$request->get('estado_acred');
+    $formato=$request->get('formato');
      $fecha=$request->get('fecha');
      $fechaRef=new \DateTime($fecha);
      
     $em = $this->getDoctrine()->getManager();
+    
+    if($formato=="pdf"){
     $pdfObj=$this->get("white_october.tcpdf")->create();
     $pdfObj->setHeaderType('newLogoHeader');
     $pdfObj->setFooterType('simpleFooter');
@@ -301,6 +306,7 @@ public function pdf_estado_actual_ceduAction(Request $request){
     $pdfObj->MultiCell($pdfObj->getWorkAreaWidth(),$pdfObj->getLineHeight(),'Listado de centros educativos por estado actual',0,'C');
     $pdfObj->newLine();
     $pdfObj->SetFontSize(9);
+    }
     $msj="";
     if($estado_acred=="AC"){
         $msj="Lista de acreditados y acreditados con observaciones";
@@ -395,7 +401,7 @@ public function pdf_estado_actual_ceduAction(Request $request){
    }
 
     
-    
+    if($formato=="pdf"){
     $html = '
         <style>
             table{
@@ -442,93 +448,75 @@ foreach ($lista_cedu as $cd) {
         </tr>';
 }
     $html .='</table>';
+    $pdfObj->writeHTML($html, true, 0, true, 0);
+    $pdfObj->lastPage();
+    $pdfObj->Output("informeCuantitat.pdf", 'I');
+    }else{
+        
+        //Excel
+        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+        $phpExcelObject->getProperties()
+            ->setCreator("")
+            ->setLastModifiedBy("")
+            //->setTitle("Listado de centros educativos por estado actual")
+            ->setSubject("Listado de centros educativos por estado actual")
+            ->setDescription("Listado de centros educativos por estado actual")
+            ->setKeywords("Listado de centros educativos por estado actual");
+        $phpExcelObject->setActiveSheetIndex(0);
+        $phpExcelObject->getActiveSheet()->setTitle('Centros educativos');
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->mergeCells('B1:F1')
+            ->setCellValue('B1', 'Listado de centros educativos por estado actual')
+            ->setCellValue('B3', 'Código')
+            ->setCellValue('C3', 'Nombre')
+            ->setCellValue('D3', 'Ubicación')
+            ->setCellValue('E3', 'Fecha inicia')
+            ->setCellValue('F3', 'Fecha vencimiento');
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->getColumnDimension('B')
+            ->setWidth(10);
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->getColumnDimension('C')
+            ->setWidth(35);
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->getColumnDimension('D')
+            ->setWidth(35);
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->getColumnDimension('E')
+            ->setWidth(15);
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->getColumnDimension('F')
+            ->setWidth(15);
+        $row = 4;
+        foreach($lista_cedu as $cd){
+            $codigo                 =$cd["codCentroEducativo"];
+            $nbr_centro_educativo   =$cd["nbrCentroEducativo"];
+            $direccion              =$cd["nbrDepartamento"].','.$cd["nbrMunicipio"].''.$cd["direccionCentroEducativo"];
+            $fecha_inicial          =$cd["fechaInicio"]->format("d-m-Y");
+            $fecha_vencimiento      =$cd["fechaFin"]->format("d-m-Y");
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->setCellValue('B'.$row, $codigo)
+                ->setCellValue('C'.$row, $nbr_centro_educativo)
+                ->setCellValue('D'.$row, $direccion)
+                ->setCellValue('E'.$row, $fecha_inicial)
+                ->setCellValue('F'.$row, $fecha_vencimiento);
+            $row++;
+        }
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            'Listado de centros educativos por estado actual.xls'
+        );
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+        return $response;
+    }
     
-
-
-
-
-/*
-$fechaRef=new \DateTime('2022-10-14');
-
-//acreditados
-$acreditados=$em->createQueryBuilder()
-    ->select('ce.codCentroEducativo, ce.nbrCentroEducativo')
-    ->from('AcreditacionBundle:CentroEducativo', 'ce')
-    ->where('exists (
-        select 1
-        from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
-        where a.fechaInicio<=:fechaRef
-        and a.fechaFin>=:fechaRef
-        and e.codEstadoAcreditacion in (\'AC\',\'AO\')
-        and a.idEstadoAcreditacion=e.idEstadoAcreditacion
-        and a.idCentroEducativo=ce.idCentroEducativo
-    )')
-        ->setParameter('fechaRef',$fechaRef)
-        ->getQuery()->getResult();
-
-//vencidos
-$vencidos=$em->createQueryBuilder()
-    ->select('ce.codCentroEducativo, ce.nbrCentroEducativo')
-    ->from('AcreditacionBundle:CentroEducativo', 'ce')
-    ->where('exists (
-        select 1
-        from AcreditacionBundle:Acreditacion a1, AcreditacionBundle:EstadoAcreditacion e1
-        where e1.codEstadoAcreditacion in (\'AC\',\'AO\')
-        and a1.idEstadoAcreditacion=e1.idEstadoAcreditacion
-        and a1.idCentroEducativo=ce.idCentroEducativo
-    )')
-    ->andWhere('not exists (
-        select 1
-        from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
-        where a.fechaInicio<=:fechaRef
-        and a.fechaFin>=:fechaRef
-        and e.codEstadoAcreditacion in (\'AC\',\'AO\')
-        and a.idEstadoAcreditacion=e.idEstadoAcreditacion
-        and a.idCentroEducativo=ce.idCentroEducativo
-    )')
-        ->setParameter('fechaRef',$fechaRef)
-        ->getQuery()->getResult();
-
-//por vencer
-$porVencer=$em->createQueryBuilder()
-    ->select('ce.codCentroEducativo, ce.nbrCentroEducativo')
-    ->from('AcreditacionBundle:CentroEducativo', 'ce')
-    ->where('exists (
-        select 1
-        from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
-        where a.fechaInicio<=:fechaActual
-        and a.fechaFin>=:fechaActual
-        and e.codEstadoAcreditacion in (\'AC\',\'AO\')
-        and a.idEstadoAcreditacion=e.idEstadoAcreditacion
-        and a.idCentroEducativo=ce.idCentroEducativo
-    )')
-    ->andWhere('not exists (
-        select 1
-        from AcreditacionBundle:Acreditacion a1, AcreditacionBundle:EstadoAcreditacion e1
-        where a1.fechaInicio<=:fechaRef
-        and a1.fechaFin>=:fechaRef
-        and e1.codEstadoAcreditacion in (\'AC\',\'AO\')
-        and a1.idEstadoAcreditacion=e1.idEstadoAcreditacion
-        and a1.idCentroEducativo=ce.idCentroEducativo
-    )')
-        ->setParameter('fechaRef',$fechaRef)
-        ->setParameter('fechaActual',new \DateTime()) //hoy
-        ->getQuery()->getResult();
-
-//var_dump($porVencer);
-*/
-        
-
-      
-
-     
-        
-       $pdfObj->writeHTML($html, true, 0, true, 0);
-$pdfObj->lastPage();
-
-        
-
-        $pdfObj->Output("informeCuantitat.pdf", 'I');
+    
+    
     }
 
     private function informacionGeneralCentro()
@@ -1287,21 +1275,25 @@ MINISTERIO DE EDUCACIÓN',0,'C');
         $idMunicipio=$request->get('municipio');
         $idModalidadCentroEducativo=$request->get('fines');
         $tipoReporte=$request->get('t_reporte');
-
+        $formato=$request->get('formato');
+        $formato_tipo="pdf";
         $em = $this->getDoctrine()->getManager();
         $em->getConfiguration()
             ->addCustomDatetimeFunction('YEAR', 'AcreditacionBundle\DQL\YearFunction');
         $em->getConfiguration()
             ->addCustomDatetimeFunction('ROUND', 'AcreditacionBundle\DQL\RoundFunction');
-        $this->pdfObj=$this->get("white_october.tcpdf")->create();
-
-        $this->pdfObj->setHeaderType('newLogoHeader');
-        $this->pdfObj->setFooterType('simpleFooter');
-        $this->pdfObj->startPageGroup();
+        
+        if($formato==$formato_tipo){
+            $this->pdfObj=$this->get("white_october.tcpdf")->create();
+            $this->pdfObj->setHeaderType('newLogoHeader');
+            $this->pdfObj->setFooterType('simpleFooter');
+            $this->pdfObj->startPageGroup();
+        }
 
         if($tipoReporte=='por_criterio'){
-
-            $this->pdfObj->AddPage();
+            if($formato==$formato_tipo){
+                $this->pdfObj->AddPage();
+            }
 
             $promediosQuery=$em->createQueryBuilder()
                 ->select('YEAR(fc.fechaAplicacion) as anio, s.idSeccion as codigo, ROUND(AVG(v.ponderacionGanada/100),2) as cantidad')
@@ -1315,8 +1307,9 @@ MINISTERIO DE EDUCACIÓN',0,'C');
 
         }
         elseif($tipoReporte=='por_indicador'){
-
-            $this->pdfObj->AddPage('L');
+            if($formato==$formato_tipo){
+                $this->pdfObj->AddPage('L');
+            }
 
             $promediosQuery=$em->createQueryBuilder()
                 ->select('YEAR(fc.fechaAplicacion) as anio, i.idIndicador as codigo, ROUND(AVG(v.ponderacionGanada/100),2) as cantidad')
@@ -1368,7 +1361,7 @@ MINISTERIO DE EDUCACIÓN',0,'C');
 
         $promedios=$promediosQuery
             ->getQuery()->getResult();
-
+   
         if($tipoReporte=='por_criterio'){
 
             $criterios=$em->createQueryBuilder()
@@ -1381,12 +1374,94 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                     and p.idSeccion=s.idSeccion
                 )')
                     ->getQuery()->getResult();
-            $this->pdfObj->SetFontSize(12);
-            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'PROMEDIOS POR CRITERIO',0,'C');
-            $this->pdfObj->newLine();
-            $this->pdfObj->SetFontSize(7);
-            $this->pdfObj->crossTab($promedios,'anio','Año',$criterios,'idSeccion','nbrSeccion',2);
+                   
+            if($formato==$formato_tipo){
+                $this->pdfObj->SetFontSize(12);
+                $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'PROMEDIOS POR CRITERIO',0,'C');
+                $this->pdfObj->newLine();
+                $this->pdfObj->SetFontSize(7);
+                $this->pdfObj->crossTab($promedios,'anio','Año',$criterios,'idSeccion','nbrSeccion',2);
+            }else{
+                
+            //Inicia excel
+            
+           
+            
+            $excel_titulo="PROMEDIOS POR CRITERIO";
+            $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+            $phpExcelObject->getProperties()
+            ->setCreator("")
+            ->setLastModifiedBy("")
+            //->setTitle("Listado de centros educativos por estado actual")
+            ->setSubject("Listado de centros educativos por estado actual")
+            ->setDescription("Listado de centros educativos por estado actual")
+            ->setKeywords("Listado de centros educativos por estado actual");
+            $phpExcelObject->setActiveSheetIndex(0);
+            //$phpExcelObject->getActiveSheet()->setTitle('Centros educativos');
+            $contar="67";
+            $phpExcelObject->setActiveSheetIndex(0)
+            ->mergeCells('B1:D1')
+            ->setCellValue('B1', $excel_titulo)
+            ->setCellValue('B3', "Año");
+            foreach($criterios as $criterio){
+                $letra=chr($contar);
+                $phpExcelObject->setActiveSheetIndex(0)
+                    ->setCellValue(''.$letra.'3', $criterio['nbrSeccion'])
+                    ->getColumnDimension($letra)
+                        ->setWidth(8);
+                $contar++;
+            }
+        /*$phpExcelObject->setActiveSheetIndex(0)
+            ->getColumnDimension('B')
+            ->setWidth(40);
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->getColumnDimension('C')
+            ->setWidth(20);
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->getColumnDimension('D')
+            ->setWidth(20);*/
+        $row = 4;
+        $suma1="0";
+        $suma2="0";
+        
+       
+            
+        
+            
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            ''.$tipoReporte.'.xls'
+        );
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+        return $response;
 
+        //Fin excel
+    
+                
+                
+                
+                
+                
+                
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         }
         elseif($tipoReporte=='por_indicador'){
 
@@ -1401,8 +1476,94 @@ MINISTERIO DE EDUCACIÓN',0,'C');
             $this->pdfObj->crossTab($promedios,'anio','Año',$indicadores,'idIndicador','nbrIndicador',2);
 
         }
+        if($formato==$formato_tipo){
+            $this->pdfObj->Output("promedio" . str_replace(' ','',ucwords(str_replace('_',' ',$tipoReporte))) . ".pdf", 'I');
+        }else{
+        
+        //Inicia excel
+        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+            $phpExcelObject->getProperties()
+            ->setCreator("")
+            ->setLastModifiedBy("")
+            //->setTitle("Listado de centros educativos por estado actual")
+            ->setSubject("Listado de centros educativos por estado actual")
+            ->setDescription("Listado de centros educativos por estado actual")
+            ->setKeywords("Listado de centros educativos por estado actual");
+            $phpExcelObject->setActiveSheetIndex(0);
+            //$phpExcelObject->getActiveSheet()->setTitle('Centros educativos');
+            $phpExcelObject->setActiveSheetIndex(0)
+            ->mergeCells('B1:D1')
+            ->setCellValue('B1', $excel_titulo)
+            ->setCellValue('B3', "Departamento")
+            ->setCellValue('C3', $texto1)
+            ->setCellValue('D3', $texto2);
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->getColumnDimension('B')
+            ->setWidth(40);
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->getColumnDimension('C')
+            ->setWidth(20);
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->getColumnDimension('D')
+            ->setWidth(20);
+        $row = 4;
+        $suma1="0";
+        $suma2="0";
+        
+        foreach($conteos as $conteo){
+            $nbrDepartamento        =$conteo["nbrDepartamento"];
+            if($tipoReporte=="colegios_por_departamento"){
+                $var_dato1        =$conteo["cantidadColegios"];
+                $suma1            =$suma1+$var_dato1;
+                
+                $var_dato2        =$conteo["totalAlumnos"];
+                $suma2            =$suma2+$var_dato2;
 
-        $this->pdfObj->Output("promedio" . str_replace(' ','',ucwords(str_replace('_',' ',$tipoReporte))) . ".pdf", 'I');
+            }elseif($tipoReporte=="docentes_por_departamento"){
+                $var_dato1        =$conteo["totalDocentesMasculinos"];
+                $suma1            =$suma1+$var_dato1;
+                
+                $var_dato2        =$conteo["totalDocentesFemeninos"];
+                $suma2            =$suma2+$var_dato2;
+            }else{
+                //$cantidad1='totalSinFines';
+                //$cantidad2='totalConFines';
+                $var_dato1        =$conteo["totalSinFines"];
+                $suma1            =$suma1+$var_dato1;
+                
+                $var_dato2        =$conteo["totalConFines"];
+                $suma2            =$suma2+$var_dato2;
+            }
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->setCellValue('B'.$row, $nbrDepartamento)
+                ->setCellValue('C'.$row, $var_dato1)
+                ->setCellValue('D'.$row, $var_dato2);
+                $row++;
+        }
+        
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->setCellValue('B'.$row, "Totales")
+            ->setCellValue('C'.$row, $suma1)
+            ->setCellValue('D'.$row, $suma2);
+            
+        
+            
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            ''.$tipoReporte.'.xls'
+        );
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+        return $response;
+
+        //Fin excel
+        
+        }
+        
     }
 
     /**
@@ -1416,17 +1577,23 @@ MINISTERIO DE EDUCACIÓN',0,'C');
         $idDepartamento=$request->get('departamento');
         $idMunicipio=$request->get('municipio');
         $tipoReporte=$request->get('t_reporte');
-
+        $formato=$request->get('formato');
+        $formato_tipo="pdf";
         $em = $this->getDoctrine()->getManager();
-        $this->pdfObj=$this->get("white_october.tcpdf")->create();
-
-        $this->pdfObj->setHeaderType('newLogoHeader');
-        $this->pdfObj->setFooterType('simpleFooter');
-        $this->pdfObj->startPageGroup();
-        $this->pdfObj->AddPage();
+        if($formato==$formato_tipo){
+            $this->pdfObj=$this->get("white_october.tcpdf")->create();
+            $this->pdfObj->setHeaderType('newLogoHeader');
+            $this->pdfObj->setFooterType('simpleFooter');
+            $this->pdfObj->startPageGroup();
+            $this->pdfObj->AddPage();
+        }
 
         if($tipoReporte=='colegios_por_departamento'){
-            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'CANTIDAD DE COLEGIOS Y ALUMNOS POR DEPARTAMENTO',0,'C');
+            if($formato==$formato_tipo){
+                $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'CANTIDAD DE COLEGIOS Y ALUMNOS POR DEPARTAMENTO',0,'C');
+            }else{
+                $excel_titulo="CANTIDAD DE COLEGIOS Y ALUMNOS POR DEPARTAMENTO";
+            }
             $conteosQuery=$em->createQueryBuilder()
                 ->select('d.codDepartamento, d.nbrDepartamento, COUNT(1) as cantidadColegios, SUM(ce.totalAlumnos) as totalAlumnos')
                 ->from('AcreditacionBundle:CentroEducativo','ce')
@@ -1436,7 +1603,11 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 ->orderBy('d.codDepartamento');
         }
         elseif($tipoReporte=='docentes_por_departamento'){
-            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'CANTIDAD DE DOCENTES POR SEXO POR DEPARTAMENTO',0,'C');
+            if($formato==$formato_tipo){
+                $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'CANTIDAD DE DOCENTES POR SEXO POR DEPARTAMENTO',0,'C');
+            }else{
+                $excel_titulo="CANTIDAD DE DOCENTES POR SEXO POR DEPARTAMENTO";
+            }
             $conteosQuery=$em->createQueryBuilder()
                 ->select('d.codDepartamento, d.nbrDepartamento, SUM(ce.totalDocentesMasculinos) as totalDocentesMasculinos, SUM(ce.totalDocentesFemeninos) as totalDocentesFemeninos')
                 ->from('AcreditacionBundle:CentroEducativo','ce')
@@ -1446,7 +1617,11 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 ->orderBy('d.codDepartamento');
         }
         elseif($tipoReporte=='modalidad_por_departamento'){
-            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'CANTIDAD DE COLEGIOS SIN FINES O CON FINES DE LUCRO',0,'C');
+            if($formato==$formato_tipo){
+                $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'CANTIDAD DE COLEGIOS SIN FINES O CON FINES DE LUCRO',0,'C');
+            }else{
+                $excel_titulo="CANTIDAD DE COLEGIOS SIN FINES O CON FINES DE LUCRO";
+            }
             $conteosQuery=$em->createQueryBuilder()
                 ->select('d.codDepartamento, d.nbrDepartamento, SUM(
                     case
@@ -1466,7 +1641,9 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 ->groupBy('d.codDepartamento, d.nbrDepartamento')
                 ->orderBy('d.codDepartamento');
         }
+        if($formato==$formato_tipo){
         $this->pdfObj->newLine();
+        }
 
         if($idZonaCentroEducativo){
             $conteosQuery
@@ -1535,11 +1712,99 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 'cantidad' => $conteo[$cantidad2],
             );
         }
-        $this->pdfObj->crossTab($reporteArr,'nbrDepartamento','Departamento',array(
-            array('cod' => $codigo1, 'nbr' => $texto1),
-            array('cod' => $codigo2, 'nbr' => $texto2),
-        ),'cod','nbr',0,'C');
+        if($formato==$formato_tipo){
+            $this->pdfObj->crossTab($reporteArr,'nbrDepartamento','Departamento',array(
+                array('cod' => $codigo1, 'nbr' => $texto1),
+                array('cod' => $codigo2, 'nbr' => $texto2),
+            ),'cod','nbr',0,'C');
+            $this->pdfObj->Output("reporte" . str_replace(' ','',ucwords(str_replace('_',' ',$tipoReporte))) . ".pdf", 'I');
+        }else{
+            //Excel
+            //var_dump($reporteArr);
+            //die();
+            
+            
+            
+            $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+            $phpExcelObject->getProperties()
+            ->setCreator("")
+            ->setLastModifiedBy("")
+            //->setTitle("Listado de centros educativos por estado actual")
+            ->setSubject("Listado de centros educativos por estado actual")
+            ->setDescription("Listado de centros educativos por estado actual")
+            ->setKeywords("Listado de centros educativos por estado actual");
+            $phpExcelObject->setActiveSheetIndex(0);
+            //$phpExcelObject->getActiveSheet()->setTitle('Centros educativos');
+            $phpExcelObject->setActiveSheetIndex(0)
+            ->mergeCells('B1:D1')
+            ->setCellValue('B1', $excel_titulo)
+            ->setCellValue('B3', "Departamento")
+            ->setCellValue('C3', $texto1)
+            ->setCellValue('D3', $texto2);
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->getColumnDimension('B')
+            ->setWidth(40);
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->getColumnDimension('C')
+            ->setWidth(20);
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->getColumnDimension('D')
+            ->setWidth(20);
+        $row = 4;
+        $suma1="0";
+        $suma2="0";
+        
+        foreach($conteos as $conteo){
+            $nbrDepartamento        =$conteo["nbrDepartamento"];
+            if($tipoReporte=="colegios_por_departamento"){
+                $var_dato1        =$conteo["cantidadColegios"];
+                $suma1            =$suma1+$var_dato1;
+                
+                $var_dato2        =$conteo["totalAlumnos"];
+                $suma2            =$suma2+$var_dato2;
 
-        $this->pdfObj->Output("reporte" . str_replace(' ','',ucwords(str_replace('_',' ',$tipoReporte))) . ".pdf", 'I');
+            }elseif($tipoReporte=="docentes_por_departamento"){
+                $var_dato1        =$conteo["totalDocentesMasculinos"];
+                $suma1            =$suma1+$var_dato1;
+                
+                $var_dato2        =$conteo["totalDocentesFemeninos"];
+                $suma2            =$suma2+$var_dato2;
+            }else{
+                //$cantidad1='totalSinFines';
+                //$cantidad2='totalConFines';
+                $var_dato1        =$conteo["totalSinFines"];
+                $suma1            =$suma1+$var_dato1;
+                
+                $var_dato2        =$conteo["totalConFines"];
+                $suma2            =$suma2+$var_dato2;
+            }
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->setCellValue('B'.$row, $nbrDepartamento)
+                ->setCellValue('C'.$row, $var_dato1)
+                ->setCellValue('D'.$row, $var_dato2);
+                $row++;
+        }
+        
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->setCellValue('B'.$row, "Totales")
+            ->setCellValue('C'.$row, $suma1)
+            ->setCellValue('D'.$row, $suma2);
+            
+        
+            
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            ''.$tipoReporte.'.xls'
+        );
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+        return $response;
+            
+            //Fin excel
+        }
     }
 }
