@@ -1,9 +1,9 @@
 <div class="form-group">                                
     <label for="fecha">
-        Fecha
+        {{ label ?? 'Fecha' }}
     </label>
-    <div class='input-group date input-1' id='fecha'>
-        <input type='text' id="fecha" name="fecha" class="form-control" placeholder="Digite la fecha, ejem: 14-10-2016"/>
+    <div class='input-group date input-1' id='{{ id ?? 'fecha' }}Div'>
+        <input type='text' id="{{ id ?? 'fecha' }}" name="{{ id ?? 'fecha' }}" class="form-control" placeholder="Digite la fecha, ejem: 14-10-2016"/>
         <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
         </span>
     </div>                               

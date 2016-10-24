@@ -229,7 +229,7 @@ class RespuestaPorFormularioPorCentroEducativo
             $detalle.='pregunta: ' . $this->getIdPregunta()->__toString() . "\n";
         }
         $detalle.='respuesta: ' . $this->getValorRespuesta() . "\n";
-        $detalle.='revisar: ' . $this->getRevisar() . "\n";
+        $detalle.='revisar: ' . ($this->getRevisar()=='S'?'Sí':'') . "\n";
         return $detalle;
     }
 }

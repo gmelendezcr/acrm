@@ -1807,4 +1807,163 @@ MINISTERIO DE EDUCACIÓN',0,'C');
             //Fin excel
         }
     }
+
+    /**
+     * @Security("has_role('ROLE_SUPER_ADMIN')")
+     */
+    public function actividadUsuarioFormAction(){
+        $em = $this->getDoctrine()->getManager();
+
+        $usuarios=$em->getRepository('AcreditacionBundle:Usuario')->findAll();
+        $tiposAccion=$em->getRepository('AcreditacionBundle:TipoAccionUsuario')->findAll();
+
+        return $this->render('reportes/actividadUsuarioForm.html.twig',array(
+            'usuarios' => $usuarios,
+            'tiposAccion' => $tiposAccion,
+        ));
+    }
+
+    /**
+     * @Security("has_role('ROLE_SUPER_ADMIN')")
+     */
+    public function actividadUsuarioAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+
+        $fechaIni=$request->get('fechaIni');
+        $fechaFin=$request->get('fechaFin');
+        $idUsuario=$request->get('idUsuario');
+        $idTipoAccionUsuario=$request->get('idTipoAccionUsuario');
+        $detalle=$request->get('detalle');
+        $formato=$request->get('formato');
+
+        $queryAcciones=$em->createQueryBuilder()
+            ->select('a.fechaHora, CONCAT(u.nombres,\' \',u.apellidos) as nbrUsuario, a.direccionIp, t.descripcionTipoAccionUsuario, a.detalleAccionUsuario')
+            ->from('AcreditacionBundle:AccionPorUsuario','a')
+            ->join('a.idUsuario','u')
+            ->join('a.idTipoAccionUsuario','t')
+            ->where('1=1');
+
+        if($fechaIni){
+            $queryAcciones
+                ->andWhere('a.fechaHora>=:fechaIni')
+                    ->setParameter('fechaIni',new \DateTime($fechaIni));
+        }
+        if($fechaFin){
+            $fechaFinRef=new \DateTime($fechaFin);
+            $fechaFinRef->add(new \DateInterval('P1D'));
+            $queryAcciones
+                ->andWhere('a.fechaHora<:fechaFin')
+                    ->setParameter('fechaFin',$fechaFinRef);
+        }
+        if($idUsuario){
+            $queryAcciones
+                ->andWhere('a.idUsuario=:idUsuario')
+                    ->setParameter('idUsuario',$idUsuario);
+        }
+        if($idTipoAccionUsuario){
+            $queryAcciones
+                ->andWhere('a.idTipoAccionUsuario=:idTipoAccionUsuario')
+                    ->setParameter('idTipoAccionUsuario',$idTipoAccionUsuario);
+        }
+        if($detalle){
+            $queryAcciones
+                ->andWhere('a.detalleAccionUsuario like :detalleAccionUsuario')
+                    ->setParameter('detalleAccionUsuario','%' . str_replace(' ','%',$detalle) . '%');
+        }
+
+        $acciones=$queryAcciones
+            ->getQuery()->getResult();
+
+        $nbrReporte='Reporte de actividad de usuarios';
+        $nbrReporteCorto='Actividad de usuarios';
+
+        if($formato=='pdf'){
+            $this->pdfObj=$this->get("white_october.tcpdf")->create();
+
+            $this->pdfObj->setHeaderType('newLogoHeader');
+            $this->pdfObj->setFooterType('simpleFooter');
+            $this->pdfObj->startPageGroup();
+            $this->pdfObj->AddPage('L');
+            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),$nbrReporte,0,'C');
+            $this->pdfObj->newLine();
+            $this->pdfObj->SetFontSize(9);
+
+            $accionesArr=array();
+            foreach ($acciones as $accion) {
+                $accionesArr[]=array(
+                    $accion['fechaHora']->format('m/d/Y H:i:s'),
+                    $accion['nbrUsuario'],
+                    $accion['direccionIp'],
+                    $accion['descripcionTipoAccionUsuario'],
+                    $accion['detalleAccionUsuario'],
+                );
+            }
+            $this->pdfObj->dataTable(array(
+                    array('title' => 'Fecha/hora','border' => 1,'width' => 12,),
+                    array('title' => 'Usuario','border' => 1,'width' => 12,),
+                    array('title' => 'Dirección IP','border' => 1,'width' => 12,),
+                    array('title' => 'Acción','border' => 1,'width' => 12,),
+                    array('title' => 'Detalle','border' => 1,),
+                ),$accionesArr,array());
+
+            $this->pdfObj->Output("reporteActividadUsuarios.pdf", 'I');
+        }
+        else{
+            $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+            $phpExcelObject->getProperties()
+                ->setCreator("")
+                ->setLastModifiedBy("")
+                ->setSubject($nbrReporte)
+                ->setDescription($nbrReporte)
+                ->setKeywords($nbrReporte);
+            $phpExcelObject->getActiveSheet()->setTitle($nbrReporteCorto);
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->mergeCells('B1:F1')
+                ->setCellValue('B1',$nbrReporte)
+                ->setCellValue('B3','Fecha/hora')
+                ->setCellValue('C3','Usuario')
+                ->setCellValue('D3','Dirección IP')
+                ->setCellValue('E3','Acción')
+                ->setCellValue('F3','Detalle');
+
+            $row=4;
+            foreach ($acciones as $accion) {
+                $phpExcelObject->setActiveSheetIndex(0)
+                    ->setCellValue('B'.$row,$accion['fechaHora']->format('m/d/Y H:i:s'))
+                    ->setCellValue('C'.$row,$accion['nbrUsuario'])
+                    ->setCellValue('D'.$row,$accion['direccionIp'])
+                    ->setCellValue('E'.$row,$accion['descripcionTipoAccionUsuario'])
+                    ->setCellValue('F'.$row,$accion['detalleAccionUsuario']);
+                $row++;
+            }
+
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->getColumnDimension('B')
+                ->setWidth(15);
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->getColumnDimension('C')
+                ->setWidth(15);
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->getColumnDimension('D')
+                ->setWidth(15);
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->getColumnDimension('E')
+                ->setWidth(15);
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->getColumnDimension('F')
+                ->setWidth(50);
+
+            $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+            $response = $this->get('phpexcel')->createStreamedResponse($writer);
+            $dispositionHeader = $response->headers->makeDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                $nbrReporte . '.xls'
+            );
+            $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+            $response->headers->set('Pragma', 'public');
+            $response->headers->set('Cache-Control', 'maxage=1');
+            $response->headers->set('Content-Disposition', $dispositionHeader);
+            return $response;
+        }
+    }
 }

@@ -1,3 +1,11 @@
+reporte_actividad_usuario_form:
+    path:     /actividadUsuarioForm
+    defaults: { _controller: AcreditacionBundle:Reportes:actividadUsuarioForm }
+    methods:  [GET]
+reporte_actividad_usuario:
+    path:     /actividadUsuario
+    defaults: { _controller: AcreditacionBundle:Reportes:actividadUsuario }
+    methods:  [POST]
 reporte_cuantitativo_cualitativo:
     path:     /cuantitativo-cuantitativo
     defaults: { _controller: AcreditacionBundle:Reportes:cuantitativo_cualitativo }
