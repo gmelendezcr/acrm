@@ -2,6 +2,55 @@ $( document ).ready( function () {
 	$.validator.addMethod("valueNotEquals", function(value, element, arg){
     	return arg != value;
 	});
+	$.validator.addMethod(
+    "fecha_",
+    function(value, element) {
+        // put your own logic here, this is just a (crappy) example
+        return value.match(/^\d\d?\-\d\d?\-\d\d\d\d$/);
+    },
+    "Formato incorrecto, forma correcto 20-10-2016"
+);
+	
+	/*--------------------------------------------------------------------------------
+	Validación de formulario de actividad de usuario
+	--------------------------------------------------------------------------------*/
+	$( "#reporte_actividad_usuario" ).validate( {
+		rules: {
+			fechaIni: {
+	    			required: true,
+	        		fecha_: true
+	    		},
+			fechaFin: {
+				required: true,
+	    		fecha_: true
+			},
+		},
+		messages: {
+	    	fechaIni: {
+	    			required: "La fecha es requerida",
+	    		},
+    		fechaFin: {
+    			required: "La fecha es requerida",
+    		},
+		},
+		highlight: function(element) {
+	        $(element).closest('.form-group').addClass('has-error').removeClass( "has-success" );
+	    },
+	    unhighlight: function(element) {
+	        $(element).closest('.form-group').addClass( "has-success" ).removeClass('has-error');
+	    },
+	    errorElement: 'span',
+	    errorClass: 'help-block',
+	    errorPlacement: function(error, element) {
+	        if(element.parent('.input-group').length) {
+	            error.insertAfter(element.parent());
+	        } else {
+	            error.insertAfter(element);
+	        }
+	    }
+	});
+	
+	
 	
 	/*--------------------------------------------------------------------------------
 	Validación de reportes
@@ -124,14 +173,7 @@ $( document ).ready( function () {
 	    }
 	});
 	
-	$.validator.addMethod(
-    "fecha_",
-    function(value, element) {
-        // put your own logic here, this is just a (crappy) example
-        return value.match(/^\d\d?\-\d\d?\-\d\d\d\d$/);
-    },
-    "Formato incorrecto, forma correcta 20-10-2016"
-);
+
 	
 	$( "#rep_cedu_estado_actual" ).validate( {
 		rules: {
@@ -271,33 +313,49 @@ $( document ).ready( function () {
 			matricula: {
 				required: true,
 				minlength: 1,
-				maxlength: 15,
+				maxlength: 10,
 				number: true,
 			},
 			cuota: {
 				required: true,
 				minlength: 1,
-				maxlength: 15,
+				maxlength: 10,
+				number: true,
+			},
+			cantidadCuotas: {
+				required: true,
+				minlength: 1,
+				maxlength: 10,
 				number: true,
 			},
 	    	anno: {
         		required: true,
-        		date: true
+        		date: true,
+        		maxlength: 4,
+        		
     		}
 		},
 		messages: {
 			grado: { valueNotEquals: "Por favor seleccione un grado" },
 			matricula: {
 				required: "La matrícula es requerido",
-				number: "Debe ser un número"
+				number: "Debe ser un número",
+				maxlength: "Límite de caracteres superado"
 			},
 			cuota: {
-				required: "La cuota es requerida",
-				number: "Debe ser un número"
+				required: "La colegiatura es requerida",
+				number: "Debe ser un número",
+				maxlength: "Límite de caracteres superado"
+			},
+			cantidadCuotas: {
+				required: "La cantidad de colegiatura es requerida",
+				number: "Debe ser un número",
+				maxlength: "Límite de caracteres superado"
 			},
 			anno: {
 				required: "El año es requerido",
-				date: "Debe ser ejem: 2016"
+				date: "Debe ser ejem: 2016",
+				maxlength: "Límite de caracteres superado"
 			},
 		},
 		highlight: function(element) {
@@ -323,13 +381,19 @@ $( document ).ready( function () {
     		["CuotaAnualPorGradoEscolarPorCentroEducativoType[matricula]"]: {
 				required: true,
 				minlength: 1,
-				maxlength: 15,
+				maxlength: 10,
 				number: true,
 			},
 			["CuotaAnualPorGradoEscolarPorCentroEducativoType[monto]"]: {
 				required: true,
 				minlength: 1,
-				maxlength: 15,
+				maxlength: 10,
+				number: true,
+			},
+			["CuotaAnualPorGradoEscolarPorCentroEducativoType[cantidadCuotas]"]: {
+				required: true,
+				minlength: 1,
+				maxlength: 10,
 				number: true,
 			},
 			["CuotaAnualPorGradoEscolarPorCentroEducativoType[anno]"]: {
@@ -339,16 +403,24 @@ $( document ).ready( function () {
     	},
     	messages: {	
     		["CuotaAnualPorGradoEscolarPorCentroEducativoType[matricula]"]: {
-				required: "La matrícula es requerida",
-				number: "Debe ser un número"
+				required: "La matrícula es requerido",
+				number: "Debe ser un número",
+				maxlength: "Límite de caracteres superado"
 			},
 			["CuotaAnualPorGradoEscolarPorCentroEducativoType[monto]"]: {
-				required: "La cuota es requerida",
-				number: "Debe ser un número"
+				required: "La colegiatura es requerida",
+				number: "Debe ser un número",
+				maxlength: "Límite de caracteres superado"
+			},
+			["CuotaAnualPorGradoEscolarPorCentroEducativoType[cantidadCuotas]"]: {
+				required: "La cantidad de colegiatura es requerida",
+				number: "Debe ser un número",
+				maxlength: "Límite de caracteres superado"
 			},
 			["CuotaAnualPorGradoEscolarPorCentroEducativoType[anno]"]: {
 				required: "El año es requerido",
-				date: "Debe ser ejem: 2016"
+				date: "Debe ser ejem: 2016",
+				maxlength: "Límite de caracteres superado"
 			}
 		},
     	highlight: function(element) {
@@ -490,7 +562,7 @@ function cargarMunicipios(idDepartamento,comboMunicipio,selected){
 	});
 }
 
-function marcarRevisar(control,idFormularioPorCentroEducativoRevisar,idPregunta,idOpcionRespuesta=null){
+function marcarRevisar(control,idFormularioPorCentroEducativoRevisar,idPregunta,idOpcionRespuesta){
 	$.ajax({
     	method: 'POST',
     	url: appSf + '/formularioPorCentro/respuestaRevisar',

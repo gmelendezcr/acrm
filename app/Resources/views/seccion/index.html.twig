@@ -1,14 +1,5 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <!--
-    <div class="col-md-12 text-center">                                            
-        <h2 class="sin-margin">
-            Secciones
-        </h2>
-        <div class="clearfix capa-separador-1 border-bottom"></div>
-        <div class="capa-separador-1"></div>
-    </div>
-    -->
     <div class="col-md-10 text-center">                                            
         <strong>
             Usted está trabajando en el:<br /> {{ app.session.get('nbrFormulario') }}
@@ -17,12 +8,14 @@
         <div class="capa-separador-1"></div>
     </div>
     <div class="col-md-2 text-right">
-           <!--Validar roles-->
-                <a class="btn btn-info" href="{{path('centro_educativo_form_lista_evaluar')}}"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
-           <!--fin-->
-            <div class="clearfix capa-separador-1 border-bottom"></div>
-            <div class="capa-separador-1"></div>
-        </div>
+        {% if is_granted('ROLE_EVALUADOR') %}
+        <!--Validar roles-->
+            <a class="btn btn-info" href="{{path('centro_educativo_form_lista_evaluar')}}"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
+        <!--fin-->
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+        {% endif %}
+    </div>
     
     <div class="clearfix"></div>
     <div class="col-md-12">
@@ -86,9 +79,17 @@
     {% if not idFormularioPorCentroEducativoRevisar and ( estadoFormularioPorCentroEducativo == 'DI' or estadoFormularioPorCentroEducativo == 'CO' ) %}
         <form id="secciones" method="POST" action="{{ path('seccion_terminar') }}">
             <div class="col-md-12 text-right">
+                <div class="btn-group btnk" role="group">
+                    <a href='{{path('form_archivo_instrumento')}}' class='btn btn-success'>
+                        <span class="glyphicon glyphicon-cloud-upload"></span> Cargar archivo
+                    </a>
+                
                 <button  data-toggle="confirmation" data-title="¿Seguro?" type="submit" name="Terminar" value="Terminar" class="btn btn-success">
                     <span class="glyphicon glyphicon-share-alt"></span> Terminar
                 </button>
+                
+                </div>
+                
             </div>
         </form>
     {% elseif estadoFormularioPorCentroEducativo == 'TE' %}

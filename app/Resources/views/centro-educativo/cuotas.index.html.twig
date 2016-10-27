@@ -8,15 +8,15 @@
         <div class="capa-separador-1"></div>
     </div>
     <div class="col-md-4 text-right">
-        <div class="btn-group" role="group">
-            <a class="btn btn-info" href="{{ path('centro_educativo_lista') }}">
+        <div class="btn-group btnk" role="group">
+            <a class="btn btn-info btn-sm inline" href="{{ path('centro_educativo_lista') }}">
                             <span class="glyphicon glyphicon-triangle-left"></span> 
                             Regresar
                         </a>
-            <a href='{{path('centro_educativo_cuota_form_archivo',{'id':ce_show.idCentroEducativo })}}' class='btn btn-success  '>
+            <a href='{{path('centro_educativo_cuota_form_archivo',{'id':ce_show.idCentroEducativo })}}' class='btn btn-success btn-sm inline '>
                 <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span> Cargar archivo
             </a>
-            <a class="btn btn-success" href="{{path('centro_educativo_cuota_form', {'id':ce_show.idCentroEducativo })}}">
+            <a class="btn btn-success btn-sm inline" href="{{path('centro_educativo_cuota_form', {'id':ce_show.idCentroEducativo })}}">
                
                 <span class="glyphicon glyphicon-plus"></span> Agregar
             </a>
@@ -66,7 +66,7 @@
                 <table class="table table-bordered table-hover"> 
                     <thead> 
                         <tr> 
-                            <th class="col-sm-3">
+                            <th class="col-sm-4">
                                 Grado
                             </th> 
                             <th class="col-sm-1">
@@ -76,7 +76,10 @@
                                Matrícula
                             </th>
                             <th class="col-sm-1 text-center">
-                               Cuota
+                               Colegiatura
+                            </th>
+                            <th class="col-sm-2 text-center">
+                               Cant Colegiatura
                             </th>
                             
                             <th class="col-sm-2 text-center">
@@ -85,7 +88,7 @@
                         </tr> 
                     </thead> 
                     <tbody>
-                        {%for item in lista %} 
+                        {%for item in lista %}
                             <tr>
                                 <td>
                                     {{item.nbrGradoEscolar}}                                        
@@ -100,7 +103,10 @@
                                     $ {{item.monto}}
                                 </td>
                                 <td class="text-center">
-                                    <div class="btn-group" role="group">
+                                     {{item.cantidadCuotas}}
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group btnk" role="group">
                                     <a href='{{path('centro_educativo_cuota_editar',  {'id':ce_show.idCentroEducativo,'idcuota':item.idCuotaAnualPorGradoEscolarPorCentroEducativo })}}' class='btn btn-success btn-sm '>
                                         <span class="glyphicon glyphicon-pencil"></span> Editar
                                     </a>

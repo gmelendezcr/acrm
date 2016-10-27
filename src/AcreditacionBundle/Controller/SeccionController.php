@@ -147,6 +147,7 @@ class SeccionController extends Controller
 
             $idSeccion=$request->get('idSeccion');
             foreach($request->request->all() as $key => $value){
+error_log("$key => $value");
                 $matches=array();
                 if(in_array($key,array('idSeccion','Guardar'))){
                     continue;

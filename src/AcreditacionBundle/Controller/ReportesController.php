@@ -454,16 +454,24 @@ foreach ($lista_cedu as $cd) {
     }else{
         
         //Excel
-        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
-        $phpExcelObject->getProperties()
-            ->setCreator("")
-            ->setLastModifiedBy("")
-            //->setTitle("Listado de centros educativos por estado actual")
-            ->setSubject("Listado de centros educativos por estado actual")
-            ->setDescription("Listado de centros educativos por estado actual")
-            ->setKeywords("Listado de centros educativos por estado actual");
-        $phpExcelObject->setActiveSheetIndex(0);
-        $phpExcelObject->getActiveSheet()->setTitle('Centros educativos');
+        
+        
+        //Header
+                $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+                $phpExcelObject->getProperties()
+                    ->setCreator("Sistema de Acreditación")
+                    ->setLastModifiedBy("")
+                    ->setTitle("Sistema de Acreditación")
+                    ->setSubject("")
+                    ->setDescription("")
+                    ->setKeywords("");
+                $phpExcelObject->setActiveSheetIndex(0);
+                $phpExcelObject->getActiveSheet()->setTitle('Sistema de Acreditación');
+                //Fin header
+        
+        
+        
+        
         $phpExcelObject->setActiveSheetIndex(0)
             ->mergeCells('B1:F1')
             ->setCellValue('B1', 'Listado de centros educativos por estado actual')
@@ -1048,18 +1056,22 @@ MINISTERIO DE EDUCACIÓN',0,'C');
         $idDepartamento=$request->get('departamento');
         $idMunicipio=$request->get('municipio');
         $listado=($request->get('t_reporte')=='listado'?1:0);
-
+        
+        $formato=$request->get('formato');
+        $tipo_formato="pdf";
+        
         $em = $this->getDoctrine()->getManager();
         $em->getConfiguration()
             ->addCustomDatetimeFunction('YEAR', 'AcreditacionBundle\DQL\YearFunction');
-        $this->pdfObj=$this->get("white_october.tcpdf")->create();
+        
+        if($formato==$tipo_formato){
+            $this->pdfObj=$this->get("white_october.tcpdf")->create();
 
-        $this->pdfObj->setHeaderType('newLogoHeader');
-        $this->pdfObj->setFooterType('simpleFooter');
-        $this->pdfObj->startPageGroup();
-        $this->pdfObj->AddPage();
-
-
+            $this->pdfObj->setHeaderType('newLogoHeader');
+            $this->pdfObj->setFooterType('simpleFooter');
+            $this->pdfObj->startPageGroup();
+            $this->pdfObj->AddPage();
+        }
 
         $conteosPorAnioEstadoQuery=$em->createQueryBuilder();
         if(!$listado){
@@ -1192,44 +1204,153 @@ MINISTERIO DE EDUCACIÓN',0,'C');
         }
 
         if(!$listado){
-            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'ESTADÍSTICO GENERAL DE EVALUACIÓN',0,'C');
-            $this->pdfObj->newLine();
+            if($formato==$tipo_formato){
+                $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'ESTADÍSTICO GENERAL DE EVALUACIÓN',0,'C');
+                $this->pdfObj->newLine();
+            }
 
             $estados=$em->createQueryBuilder()
                 ->select('e.codEstadoAcreditacion, e.nbrEstadoAcreditacion')
                 ->from('AcreditacionBundle:EstadoAcreditacion','e')
                 ->orderBy('e.idEstadoAcreditacion')
                     ->getQuery()->getResult();
-            $this->pdfObj->crossTab($porAnioEstado,'anio','Año',$estados,'codEstadoAcreditacion','nbrEstadoAcreditacion');
+            if($formato==$tipo_formato){
+                $this->pdfObj->crossTab($porAnioEstado,'anio','Año',$estados,'codEstadoAcreditacion','nbrEstadoAcreditacion');
 
-            $this->pdfObj->dataTable(array(
-                array('title' => 'No evaluados','border' => 1,'align' => 'R',),
-            ),array(
-                array($noEvaluados),
-            ));
+                $this->pdfObj->dataTable(array(
+                    array('title' => 'No evaluados','border' => 1,'align' => 'R',),
+                ),array(
+                    array($noEvaluados),
+                ));
+            }else{
+                /////////////////////////////////////////////////////////////////////////////
+                //Inicia excel
+                $excel_titulo="ESTADÍSTICO GENERAL DE EVALUACIÓN";
+                
+                //Header
+                $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+                $phpExcelObject->getProperties()
+                    ->setCreator("Sistema de Acreditación")
+                    ->setLastModifiedBy("")
+                    ->setTitle("Sistema de Acreditación")
+                    ->setSubject("")
+                    ->setDescription("")
+                    ->setKeywords("");
+                $phpExcelObject->setActiveSheetIndex(0);
+                $phpExcelObject->getActiveSheet()->setTitle('Sistema de Acreditación');
+                //Fin header
+                
+                $phpExcelObject->setActiveSheetIndex(0)
+                    ->mergeCells('B1:H1')
+                    ->setCellValue('B1', $excel_titulo);
+                $phpExcelObject->setActiveSheetIndex(0)
+                        ->setCellValue('E2','Totales');
+                    
+                $xlsFila=4; //3?
+                
+                $xlsDataArr=array();
+                foreach ($porAnioEstado as $value) {
+                    $xlsDataArr[$value['anio']][$value['codigo']]=$value['cantidad'];
+                }
+                $letra=67;
+                $filaXls=2; //1?
+                $phpExcelObject->setActiveSheetIndex(0)
+                    ->setCellValue('B' . $filaXls,'Año')
+                    ->getColumnDimension('B')
+                    ->setWidth(15);
+                foreach ($estados as $estado) {
+                    $phpExcelObject->setActiveSheetIndex(0)
+                        ->setCellValue(chr($letra) . $filaXls,$estado['nbrEstadoAcreditacion'])
+                        ->getColumnDimension(chr($letra))
+                        ->setWidth(15);
+                        $letra++;
+                }
+                //cuerpo
+                $letra=66;
+                $filaXls=3; //3?
+                foreach($xlsDataArr as $anio => $registro){
+                    $phpExcelObject->setActiveSheetIndex(0)
+                        ->setCellValue(chr($letra) . $filaXls,$anio);
+                    $letra++;
+                    reset($estados);
+                    foreach ($estados as $estado) {
+                        $phpExcelObject->setActiveSheetIndex(0)
+                            ->setCellValue(chr($letra) . $filaXls,(isset($registro[$estado['codEstadoAcreditacion']])?$registro[$estado['codEstadoAcreditacion']]:0));
+                            $phpExcelObject->setActiveSheetIndex(0)
+                                ->setCellValue('E'.$filaXls,'=sum(C'.$filaXls.':D'.$filaXls.')');
+                        $letra++;
+                    }
+                    $filaXls++;
+                }
+                
+                //Encabezados
+                $xlsFila=($xlsFila+2);
+                $phpExcelObject->setActiveSheetIndex(0)
+                    ->mergeCells('B'.$xlsFila.':D'.$xlsFila)
+                    ->setCellValue('B'.$xlsFila, 'No evaluados');
+                    
+                $xlsFila=($xlsFila+1);    
+               
+                    $phpExcelObject->setActiveSheetIndex(0)
+                        ->setCellValue('B' . $xlsFila,$noEvaluados);
+                        
+                $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+                $response = $this->get('phpexcel')->createStreamedResponse($writer);
+                $dispositionHeader = $response->headers->makeDisposition(
+                    ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                    'reporte.xls'
+                );
+                $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+                $response->headers->set('Pragma', 'public');
+                $response->headers->set('Cache-Control', 'maxage=1');
+                $response->headers->set('Content-Disposition', $dispositionHeader);
+                return $response;
+                //Fin excel
+                //////////////////////////////////////////////////////////////////////////
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         }
         else{
-            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'LISTADO GENERAL DE EVALUACIÓN POR ESTADO',0,'C');
-            $this->pdfObj->newLine();
+            if($formato==$tipo_formato){
+                $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'LISTADO GENERAL DE EVALUACIÓN POR ESTADO',0,'C');
+                $this->pdfObj->newLine();
 
-            $columnArr=array(
-                array('title' => 'Código','border' => 1,'width' => 12,),
-                array('title' => 'Nombre','border' => 1,),
-                array('title' => 'Dirección','border' => 1,),
-            );
-
+                $columnArr=array(
+                    array('title' => 'Código','border' => 1,'width' => 12,),
+                    array('title' => 'Nombre','border' => 1,),
+                    array('title' => 'Dirección','border' => 1,),
+                );
+            }
+            
+            
+            
+            
+            
             $reporteArr=array();
             $codEstadoAcreditacionAnt='';
             foreach ($porAnioEstado as $value) {
 
                 if($value['codEstadoAcreditacion']!=$codEstadoAcreditacionAnt){
                     if(count($reporteArr)>0){
-                        $this->pdfObj->dataTable($columnArr,$reporteArr);
-                        $this->pdfObj->newLine();
-                        $reporteArr=array();
+                        if($formato==$tipo_formato){
+                            $this->pdfObj->dataTable($columnArr,$reporteArr);
+                            $this->pdfObj->newLine();
+                        }
+                            $reporteArr=array();
                     }
-                    $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'Año ' . $value['anio'] . ' - ' . $value['nbrEstadoAcreditacion'],0,'L');
-                    $this->pdfObj->newLine();
+                    if($formato==$tipo_formato){
+                        $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'Año ' . $value['anio'] . ' - ' . $value['nbrEstadoAcreditacion'],0,'L');
+                        $this->pdfObj->newLine();
+                    }
                 }
 
                 $reporteArr[]=array(
@@ -1241,8 +1362,10 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 $codEstadoAcreditacionAnt=$value['codEstadoAcreditacion'];
             }
             if(count($reporteArr)>0){
-                $this->pdfObj->dataTable($columnArr,$reporteArr);
-                $this->pdfObj->newLine();
+                if($formato==$tipo_formato){
+                    $this->pdfObj->dataTable($columnArr,$reporteArr);
+                    $this->pdfObj->newLine();
+                }
             }
 
             $reporteArr=array();
@@ -1253,13 +1376,112 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                     $value['direccionCentroEducativo'],
                 );
             }
-            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'No evaluados',0,'L');
-            $this->pdfObj->newLine();
-            $this->pdfObj->dataTable($columnArr,$reporteArr);
-
+            if($formato==$tipo_formato){
+                $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'No evaluados',0,'L');
+                $this->pdfObj->newLine();
+                $this->pdfObj->dataTable($columnArr,$reporteArr);
+            }
         }
+        if($formato==$tipo_formato){
+            $this->pdfObj->Output((!$listado?'estadisticoGeneral':'listadoGeneral') . ".pdf", 'I');
+        }else{
+            
+            
+            
+            /////////////////////////////////////////////////////////////////////////////
+            //Inicia excel
+            $excel_titulo="ESTADÍSTICO GENERAL DE EVALUACIÓN";
+            
+            //Header
+            $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+            $phpExcelObject->getProperties()
+                ->setCreator("Sistema de Acreditación")
+                ->setLastModifiedBy("")
+                ->setTitle("Sistema de Acreditación")
+                ->setSubject("")
+                ->setDescription("")
+                ->setKeywords("");
+            $phpExcelObject->setActiveSheetIndex(0);
+            $phpExcelObject->getActiveSheet()->setTitle('Sistema de Acreditación');
+            //Fin header
+            
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->mergeCells('B1:H1')
+                ->setCellValue('B1', $excel_titulo);
 
-        $this->pdfObj->Output((!$listado?'estadisticoGeneral':'listadoGeneral') . ".pdf", 'I');
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->mergeCells('B2:H2')
+                ->setCellValue('B2', 'Centros educativos evaluados');
+                
+            //Encabezados
+            $styleArray = array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => 'FF0000'),
+                    'size'  => 15,
+                    'name'  => 'Verdana'
+                )
+            );
+
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->setCellValue('B3','Código')
+                ->getColumnDimension('B')
+                ->setWidth(15);
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->setCellValue('C3','Nombre')
+                ->getColumnDimension('C')
+                ->setWidth(60);
+            $phpExcelObject->setActiveSheetIndex(0)    
+                ->setCellValue('D3','Dirección')
+                ->getColumnDimension('D')
+                ->setWidth(100);
+                    
+                    
+            $xlsFila=4; //3?
+            foreach($porAnioEstado as $registro){
+                $phpExcelObject->setActiveSheetIndex(0)
+                    ->setCellValue('B' . $xlsFila,$registro['codCentroEducativo'])
+                    ->setCellValue('C' . $xlsFila,$registro['nbrCentroEducativo'])
+                    ->setCellValue('D' . $xlsFila,$registro['direccionCentroEducativo']);
+                $xlsFila++;
+            }
+            //Encabezados
+            $xlsFila=($xlsFila+2);
+            
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->mergeCells('B'.$xlsFila.':H'.$xlsFila)
+                ->setCellValue('B'.$xlsFila, 'Centros educativos no evaluados');
+
+            $xlsFila=($xlsFila+1);
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->setCellValue('B'.$xlsFila,'Código')
+                ->setCellValue('C'.$xlsFila,'Nombre')
+                ->setCellValue('D'.$xlsFila,'Dirección');
+                
+                
+            $xlsFila=($xlsFila+1);    
+            foreach($noEvaluados as $registro){
+                $phpExcelObject->setActiveSheetIndex(0)
+                    ->setCellValue('B' . $xlsFila,$registro['codCentroEducativo'])
+                    ->setCellValue('C' . $xlsFila,$registro['nbrCentroEducativo'])
+                    ->setCellValue('D' . $xlsFila,$registro['direccionCentroEducativo']);
+                $xlsFila++;
+            }
+          
+            $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+            $response = $this->get('phpexcel')->createStreamedResponse($writer);
+            $dispositionHeader = $response->headers->makeDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                'reporte.xls'
+            );
+            $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+            $response->headers->set('Pragma', 'public');
+            $response->headers->set('Cache-Control', 'maxage=1');
+            $response->headers->set('Content-Disposition', $dispositionHeader);
+            return $response;
+            //Fin excel
+            //////////////////////////////////////////////////////////////////////////
+        }
     }
 
     /**
@@ -1373,7 +1595,7 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                     where p.ponderacionMaxima is not null
                     and p.idSeccion=s.idSeccion
                 )')
-                    ->getQuery()->getResult();
+                ->getQuery()->getResult();
                    
             if($formato==$formato_tipo){
                 $this->pdfObj->SetFontSize(12);
@@ -1382,188 +1604,234 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 $this->pdfObj->SetFontSize(7);
                 $this->pdfObj->crossTab($promedios,'anio','Año',$criterios,'idSeccion','nbrSeccion',2);
             }else{
+                //Inicia excel
+                $excel_titulo="PROMEDIOS POR CRITERIO";
                 
-            //Inicia excel
-            
-           
-            
-            $excel_titulo="PROMEDIOS POR CRITERIO";
-            $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
-            $phpExcelObject->getProperties()
-            ->setCreator("")
-            ->setLastModifiedBy("")
-            //->setTitle("Listado de centros educativos por estado actual")
-            ->setSubject("Listado de centros educativos por estado actual")
-            ->setDescription("Listado de centros educativos por estado actual")
-            ->setKeywords("Listado de centros educativos por estado actual");
-            $phpExcelObject->setActiveSheetIndex(0);
-            //$phpExcelObject->getActiveSheet()->setTitle('Centros educativos');
-            $contar="67";
-            $phpExcelObject->setActiveSheetIndex(0)
-            ->mergeCells('B1:D1')
-            ->setCellValue('B1', $excel_titulo)
-            ->setCellValue('B3', "Año");
-            foreach($criterios as $criterio){
-                $letra=chr($contar);
+                //Header
+                $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+                $phpExcelObject->getProperties()
+                    ->setCreator("Sistema de Acreditación")
+                    ->setLastModifiedBy("")
+                    ->setTitle("Sistema de Acreditación")
+                    ->setSubject("")
+                    ->setDescription("")
+                    ->setKeywords("");
+                $phpExcelObject->setActiveSheetIndex(0);
+                $phpExcelObject->getActiveSheet()->setTitle('Sistema de Acreditación');
+                //Fin header
+                
+                
+                $contar="67";
                 $phpExcelObject->setActiveSheetIndex(0)
-                    ->setCellValue(''.$letra.'3', $criterio['nbrSeccion'])
-                    ->getColumnDimension($letra)
-                        ->setWidth(8);
-                $contar++;
-            }
-        /*$phpExcelObject->setActiveSheetIndex(0)
-            ->getColumnDimension('B')
-            ->setWidth(40);
-        $phpExcelObject->setActiveSheetIndex(0)
-            ->getColumnDimension('C')
-            ->setWidth(20);
-        $phpExcelObject->setActiveSheetIndex(0)
-            ->getColumnDimension('D')
-            ->setWidth(20);*/
-        $row = 4;
-        $suma1="0";
-        $suma2="0";
-        
-       
-            
-        
-            
-        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
-        $response = $this->get('phpexcel')->createStreamedResponse($writer);
-        $dispositionHeader = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            ''.$tipoReporte.'.xls'
-        );
-        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
-        $response->headers->set('Pragma', 'public');
-        $response->headers->set('Cache-Control', 'maxage=1');
-        $response->headers->set('Content-Disposition', $dispositionHeader);
-        return $response;
-
+                    ->mergeCells('B1:H1')
+                    ->setCellValue('B1', $excel_titulo)
+                    ->setCellValue('B3', "Año")
+                    ->setCellValue('H3', "Totales");
+                foreach($criterios as $criterio){
+                    $letra=chr($contar);
+                    $phpExcelObject->setActiveSheetIndex(0)
+                        ->setCellValue(''.$letra.'3', $criterio['nbrSeccion'])
+                        ->getColumnDimension($letra)
+                        ->setWidth(15);
+                        $contar++;
+                }
+                $row = 4;
+                $contarr="67";
+                $arrFilas=array();
+                    foreach($promedios as $promedio){
+                        if(!isset($arrFilas[$promedio['anio']])){
+                            $arrFilas[$promedio['anio']]=array();
+                        }
+                        $arrFilas[$promedio['anio']][$promedio['codigo']]=$promedio['cantidad'];
+                    }
+                reset($criterios);
+                $row="4";
+                foreach($arrFilas as $anio => $fila){
+                    //echo $anio; //esto debería mandarse a xls
+                    $phpExcelObject->setActiveSheetIndex(0)
+                    ->setCellValue('B'.$row, $anio);
+                reset($criterios);
+                $contar="67";
+                    $sumaCriterio="0";
+                    foreach ($criterios as $criterio) {
+                        $letra=chr($contar);
+                        if(isset($fila[$criterio['idSeccion']])){
+                        
+                                ////echo $fila[$criterio['idSeccion']]; //esto debería mandarse a xls
+                                $phpExcelObject->setActiveSheetIndex(0)
+                                ->setCellValue($letra.$row, $fila[$criterio['idSeccion']]);
+                                $sumaCriterio=$sumaCriterio+$fila[$criterio['idSeccion']];
+                                
+                                $phpExcelObject->setActiveSheetIndex(0)
+                                ->setCellValue('H'.$row, $sumaCriterio);
+                            }
+                            $contar++;
+                        }
+                        
+                        $row++;
+                    }
+                    $row=($row-1);
+                    $rowv=($row+1);
+                    $phpExcelObject->setActiveSheetIndex(0)
+                    ->setCellValue('B'.$rowv, "Totales")
+                    ->setCellValue('C'.$rowv, '=sum(C2:C'.$row.')')
+                    ->setCellValue('D'.$rowv, '=sum(D2:D'.$row.')')
+                    ->setCellValue('E'.$rowv, '=sum(E2:E'.$row.')')
+                    ->setCellValue('F'.$rowv, '=sum(F2:F'.$row.')')
+                    ->setCellValue('G'.$rowv, '=sum(G2:G'.$row.')')
+                    ->setCellValue('H'.$rowv, '=sum(H2:H'.$row.')');
+                
+                $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+                $response = $this->get('phpexcel')->createStreamedResponse($writer);
+                $dispositionHeader = $response->headers->makeDisposition(
+                    ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                    ''.$tipoReporte.'.xls'
+                );
+                $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+                $response->headers->set('Pragma', 'public');
+                $response->headers->set('Cache-Control', 'maxage=1');
+                $response->headers->set('Content-Disposition', $dispositionHeader);
+                return $response;
         //Fin excel
-    
-                
-                
-                
-                
-                
                 
             }
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
         }
         elseif($tipoReporte=='por_indicador'){
-
             $indicadores=$em->createQueryBuilder()
                 ->select('i.idIndicador, i.nbrIndicador')
                 ->from('AcreditacionBundle:Indicador','i')
                     ->getQuery()->getResult();
-            $this->pdfObj->SetFontSize(12);
-            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'PROMEDIOS POR INDICADOR',0,'C');
-            $this->pdfObj->newLine();
-            $this->pdfObj->SetFontSize(6);
-            $this->pdfObj->crossTab($promedios,'anio','Año',$indicadores,'idIndicador','nbrIndicador',2);
-
-        }
-        if($formato==$formato_tipo){
-            $this->pdfObj->Output("promedio" . str_replace(' ','',ucwords(str_replace('_',' ',$tipoReporte))) . ".pdf", 'I');
-        }else{
-        
-        //Inicia excel
-        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
-            $phpExcelObject->getProperties()
-            ->setCreator("")
-            ->setLastModifiedBy("")
-            //->setTitle("Listado de centros educativos por estado actual")
-            ->setSubject("Listado de centros educativos por estado actual")
-            ->setDescription("Listado de centros educativos por estado actual")
-            ->setKeywords("Listado de centros educativos por estado actual");
-            $phpExcelObject->setActiveSheetIndex(0);
-            //$phpExcelObject->getActiveSheet()->setTitle('Centros educativos');
-            $phpExcelObject->setActiveSheetIndex(0)
-            ->mergeCells('B1:D1')
-            ->setCellValue('B1', $excel_titulo)
-            ->setCellValue('B3', "Departamento")
-            ->setCellValue('C3', $texto1)
-            ->setCellValue('D3', $texto2);
-        $phpExcelObject->setActiveSheetIndex(0)
-            ->getColumnDimension('B')
-            ->setWidth(40);
-        $phpExcelObject->setActiveSheetIndex(0)
-            ->getColumnDimension('C')
-            ->setWidth(20);
-        $phpExcelObject->setActiveSheetIndex(0)
-            ->getColumnDimension('D')
-            ->setWidth(20);
-        $row = 4;
-        $suma1="0";
-        $suma2="0";
-        
-        foreach($conteos as $conteo){
-            $nbrDepartamento        =$conteo["nbrDepartamento"];
-            if($tipoReporte=="colegios_por_departamento"){
-                $var_dato1        =$conteo["cantidadColegios"];
-                $suma1            =$suma1+$var_dato1;
-                
-                $var_dato2        =$conteo["totalAlumnos"];
-                $suma2            =$suma2+$var_dato2;
-
-            }elseif($tipoReporte=="docentes_por_departamento"){
-                $var_dato1        =$conteo["totalDocentesMasculinos"];
-                $suma1            =$suma1+$var_dato1;
-                
-                $var_dato2        =$conteo["totalDocentesFemeninos"];
-                $suma2            =$suma2+$var_dato2;
+            if($formato==$formato_tipo){
+                $this->pdfObj->SetFontSize(12);
+                $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'PROMEDIOS POR INDICADOR',0,'C');
+                $this->pdfObj->newLine();
+                $this->pdfObj->SetFontSize(6);
+                $this->pdfObj->crossTab($promedios,'anio','Año',$indicadores,'idIndicador','nbrIndicador',2);
+                $this->pdfObj->Output("promedio" . str_replace(' ','',ucwords(str_replace('_',' ',$tipoReporte))) . ".pdf", 'I');
             }else{
-                //$cantidad1='totalSinFines';
-                //$cantidad2='totalConFines';
-                $var_dato1        =$conteo["totalSinFines"];
-                $suma1            =$suma1+$var_dato1;
+            
+            //Inicia excel
+                $excel_titulo="PROMEDIOS POR INDICADOR";
                 
-                $var_dato2        =$conteo["totalConFines"];
-                $suma2            =$suma2+$var_dato2;
-            }
-            $phpExcelObject->setActiveSheetIndex(0)
-                ->setCellValue('B'.$row, $nbrDepartamento)
-                ->setCellValue('C'.$row, $var_dato1)
-                ->setCellValue('D'.$row, $var_dato2);
-                $row++;
-        }
-        
-        $phpExcelObject->setActiveSheetIndex(0)
-            ->setCellValue('B'.$row, "Totales")
-            ->setCellValue('C'.$row, $suma1)
-            ->setCellValue('D'.$row, $suma2);
-            
-        
-            
-        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
-        $response = $this->get('phpexcel')->createStreamedResponse($writer);
-        $dispositionHeader = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            ''.$tipoReporte.'.xls'
-        );
-        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
-        $response->headers->set('Pragma', 'public');
-        $response->headers->set('Cache-Control', 'maxage=1');
-        $response->headers->set('Content-Disposition', $dispositionHeader);
-        return $response;
-
+                
+                //Header
+                $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+                $phpExcelObject->getProperties()
+                    ->setCreator("Sistema de Acreditación")
+                    ->setLastModifiedBy("")
+                    ->setTitle("Sistema de Acreditación")
+                    ->setSubject("")
+                    ->setDescription("")
+                    ->setKeywords("");
+                $phpExcelObject->setActiveSheetIndex(0);
+                $phpExcelObject->getActiveSheet()->setTitle('Sistema de Acreditación');
+                //Fin header
+                
+                $contar="67";
+                $A="A";
+                $rango="67";
+                $phpExcelObject->setActiveSheetIndex(0)
+                    ->mergeCells('B1:H1')
+                    ->setCellValue('B1', $excel_titulo)
+                    ->setCellValue('B3', "Año")
+                     ->setCellValue('AJ3', "Totales");
+                foreach($indicadores as $indicador){
+                    if($rango<=90){
+                        $letra=chr($contar);
+                    }elseif($rango==91){
+                        $contar="65";
+                        $letra=$A.chr($contar);
+                    }else{
+                        $letra=$A.chr($contar);
+                    }
+                    $phpExcelObject->setActiveSheetIndex(0)
+                        ->setCellValue(''.$letra.'3', $indicador['nbrIndicador'])
+                        ->getColumnDimension($letra)
+                        ->setWidth(15);
+                        $contar++;
+                        $rango++;
+                    }
+                $row = 4;
+                $contarr="67";
+                $arrFilas=array();
+                    foreach($promedios as $promedio){
+                        if(!isset($arrFilas[$promedio['anio']])){
+                            $arrFilas[$promedio['anio']]=array();
+                        }
+                        $arrFilas[$promedio['anio']][$promedio['codigo']]=$promedio['cantidad'];
+                    }
+                reset($indicadores);
+                $row="4";
+                foreach($arrFilas as $anio => $fila){
+                    $phpExcelObject->setActiveSheetIndex(0)
+                    ->setCellValue('B'.$row, $anio);
+                reset($indicadores);
+                $contar="67";
+                $rango="67";
+                $A="A";
+                    $sumaIdicador="0";
+                    foreach ($indicadores as $indicador) {
+                        $letra=chr($contar);
+                        if($rango<=90){
+                        $letra=chr($contar);
+                    }elseif($rango==91){
+                        $contar="65";
+                        $letra=$A.chr($contar);
+                    }else{
+                        $letra=$A.chr($contar);
+                    }
+                        if(isset($fila[$indicador['idIndicador']])){
+                                $phpExcelObject->setActiveSheetIndex(0)
+                                ->setCellValue($letra.$row, $fila[$indicador['idIndicador']]);
+                                $sumaIdicador=$sumaIdicador+$fila[$indicador['idIndicador']];
+                                $phpExcelObject->setActiveSheetIndex(0)
+                                ->setCellValue('AJ'.$row, $sumaIdicador);
+                            }
+                            $contar++;
+                            $rango++;
+                        }
+                        
+                        $row++;
+                    }
+                    $row=($row-1);
+                    $rowv=($row+1);
+                    $phpExcelObject->setActiveSheetIndex(0)
+                    ->setCellValue('B'.$rowv, "Totales");
+                     $A="A";
+                     $contar=65;
+                    $rango=$rango-1;
+                    for($i=67; $i<=$rango; $i++) {
+                        if($i<=90){
+                            $letra=chr($i);
+                        }else{
+                            $letra=$A.chr($contar);
+                            $contar++;
+                        }
+                        $phpExcelObject->setActiveSheetIndex(0)
+                        ->setCellValue($letra.$rowv, '=sum('.$letra.'2:'.$letra.$row.')');
+                    }
+                    $phpExcelObject->setActiveSheetIndex(0)
+                        ->setCellValue('AJ'.$rowv, '=sum(AJ2:AJ'.$row.')');
+                
+                $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+                $response = $this->get('phpexcel')->createStreamedResponse($writer);
+                $dispositionHeader = $response->headers->makeDisposition(
+                    ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                    ''.$tipoReporte.'.xls'
+                );
+                $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+                $response->headers->set('Pragma', 'public');
+                $response->headers->set('Cache-Control', 'maxage=1');
+                $response->headers->set('Content-Disposition', $dispositionHeader);
+                return $response;
         //Fin excel
         
-        }
         
+        }
+            
+            
+
+        }
     }
 
     /**
@@ -1720,21 +1988,22 @@ MINISTERIO DE EDUCACIÓN',0,'C');
             $this->pdfObj->Output("reporte" . str_replace(' ','',ucwords(str_replace('_',' ',$tipoReporte))) . ".pdf", 'I');
         }else{
             //Excel
-            //var_dump($reporteArr);
-            //die();
+            
+            //Header
+                $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+                $phpExcelObject->getProperties()
+                    ->setCreator("Sistema de Acreditación")
+                    ->setLastModifiedBy("")
+                    ->setTitle("Sistema de Acreditación")
+                    ->setSubject("")
+                    ->setDescription("")
+                    ->setKeywords("");
+                $phpExcelObject->setActiveSheetIndex(0);
+                $phpExcelObject->getActiveSheet()->setTitle('Sistema de Acreditación');
+                //Fin header
             
             
             
-            $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
-            $phpExcelObject->getProperties()
-            ->setCreator("")
-            ->setLastModifiedBy("")
-            //->setTitle("Listado de centros educativos por estado actual")
-            ->setSubject("Listado de centros educativos por estado actual")
-            ->setDescription("Listado de centros educativos por estado actual")
-            ->setKeywords("Listado de centros educativos por estado actual");
-            $phpExcelObject->setActiveSheetIndex(0);
-            //$phpExcelObject->getActiveSheet()->setTitle('Centros educativos');
             $phpExcelObject->setActiveSheetIndex(0)
             ->mergeCells('B1:D1')
             ->setCellValue('B1', $excel_titulo)
@@ -1917,6 +2186,9 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 ->setDescription($nbrReporte)
                 ->setKeywords($nbrReporte);
             $phpExcelObject->getActiveSheet()->setTitle($nbrReporteCorto);
+            
+            
+            
             $phpExcelObject->setActiveSheetIndex(0)
                 ->mergeCells('B1:F1')
                 ->setCellValue('B1',$nbrReporte)

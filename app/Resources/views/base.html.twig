@@ -189,7 +189,7 @@
                     locale: 'es',   
                     format: 'YYYY'
                 });
-                $('#fecha').datetimepicker({
+                $('#fecha,#fechaIniDiv,#fechaIni,#fechaFinDiv,#fechaFin').datetimepicker({
                     locale: 'es',
                     format: 'DD-MM-YYYY'
                 });
@@ -204,11 +204,11 @@
                     format: 'YYYY',
                     useCurrent: false
                 });
-                $("#fecha_annio1").on("dp.change", function (e) {
-                $('#fecha_annio2').data("DateTimePicker").minDate(e.date);
+                $("#fecha_annio1,#fechaIni").on("dp.change", function (e) {
+                $('#fecha_annio2,#fechaFin').data("DateTimePicker").minDate(e.date);
                 });
-                $("#fecha_annio2").on("dp.change", function (e) {
-                $('#fecha_annio1').data("DateTimePicker").maxDate(e.date);
+                $("#fecha_annio2,#fechaFin").on("dp.change", function (e) {
+                $('#fecha_annio1,#fechaIni').data("DateTimePicker").maxDate(e.date);
                 });
             });
         </script>

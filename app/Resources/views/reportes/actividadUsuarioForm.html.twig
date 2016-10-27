@@ -15,41 +15,47 @@
                 <div class="col-sm-6">
                     {% include 'reportes/fecha.html.twig' with {'label': 'Fecha inicial', 'id': 'fechaIni'} %}
                     {% include 'reportes/fecha.html.twig' with {'label': 'Fecha final', 'id': 'fechaFin'} %}
+                    
+                    
                     <div class="form-group">
                         <label for="idUsuario">
                             Usuario
                         </label>
-                        <div class='input-group date input-1' id='idUsuarioDiv'>
-                            <select id="idUsuario" name="idUsuario" class="form-control input-1">
+                            <select id="idUsuario" name="idUsuario" class=" form-control input-1">
                                 <option value="">Seleccione uno</option>
                                 {% for usuario in usuarios %}
                                     <option value="{{ usuario.id }}">{{ usuario.username }}</option>
                                 {% endfor %}
                             </select>
-                        </div>
                     </div>
+                    
+                    
+                    
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="idTipoAccionUsuario">
                             Tipo de acción
                         </label>
-                        <div class='input-group date input-1' id='idTipoAccionUsuarioDiv'>
+                        
                             <select id="idTipoAccionUsuario" name="idTipoAccionUsuario" class="form-control input-1">
                                 <option value="">Seleccione uno</option>
                                 {% for tipoAccion in tiposAccion %}
                                     <option value="{{ tipoAccion.idTipoAccionUsuario }}">{{ tipoAccion.descripcionTipoAccionUsuario }}</option>
                                 {% endfor %}
                             </select>
-                        </div>
+                        
                     </div>
+                    
+                    
+                    
                     <div class="form-group">
                         <label for="detalle">
                             Detalle
                         </label>
-                        <div class='input-group date input-1' id='detalleDiv'>
+                       
                             <input type="text" name="detalle" id="detalle" class="form-control input-1">
-                        </div>
+                        
                     </div>
                     {% include 'reportes/formato.reporte.html.twig' %}
                 </div>
