@@ -48,13 +48,13 @@
                 {% endif %}
             </div>#}
             <div class="clearfix capa-separador-1"></div>
-            {% for pregunta in seccion.preguntas %}
+            {% if idFormularioPorCentroEducativoRevisar %}
+                {% set readonlyOrg, disabledOrg = 'readonly', 'disabled' %}
+            {% else %}
+                {% set readonlyOrg, disabledOrg = '', '' %}
+            {% endif %}
 
-                {% if idFormularioPorCentroEducativoRevisar %}
-                    {% set readonly, disabled = 'readonly', 'disabled' %}
-                {% else %}
-                    {% set readonly, disabled = '', '' %}
-                {% endif %}
+            {% for pregunta in seccion.preguntas %}
 
                 {% if estadoFormularioPorCentroEducativo in ['RE','CO','TE','AP'] and ( idFormularioPorCentroEducativoRevisar or revisar[pregunta.idPregunta] is defined ) %}
                     {% if idFormularioPorCentroEducativoRevisar and estadoFormularioPorCentroEducativo == 'TE' %}
@@ -70,10 +70,14 @@
                         {% set classRevisar = 'class="cursor label label-success"' %}
                     {% endif %}
                     {% set btRevisar = '<span ' ~ onClickRevisar ~ ' ' ~ classRevisar ~ '>[Revisar]</span>' %}
-                    {% set readonly, disabled = readonly, disabled %}
+                    {% if not idFormularioPorCentroEducativoRevisar %}
+                        {% set readonly, disabled = '', '' %}
+                    {% else %}
+                        {% set readonly, disabled = readonlyOrg, disabledOrg %}
+                    {% endif %}
                 {% else %}
                     {% set btRevisar = '' %}
-                    {% set readonly, disabled = 'readonly', 'disabled' %}
+                    {% set readonly, disabled = readonlyOrg, disabledOrg %}
                 {% endif %}
 
                 {% if estadoFormularioPorCentroEducativo == 'CA' and ( pregunta.ponderacionMaxima or pregunta.ponderacion ) %}

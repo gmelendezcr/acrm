@@ -24,6 +24,9 @@ use PHPExcel_IOFactory;
 
 
 class CentroEducativoController extends Controller{
+
+    private $margenNota=0.5;
+
     /**
      * @Security("has_role('ROLE_MINED')")
      */
@@ -290,7 +293,7 @@ class CentroEducativoController extends Controller{
             ->join('fce.idEstadoFormulario','e')
             ->join('fce.idUsuarioDigita','u')
             ->andWhere('e.codEstadoFormulario in (:codEstadoFormulario)')
-            ->orderBy('e.codEstadoFormulario','desc')
+            ->orderBy('e.codEstadoFormulario desc, c.codCentroEducativo, f.codFormulario')
                 ->setParameter('codEstadoFormulario',array('TE','AP'))
                     ->getQuery()->getArrayResult();
         //var_dump($lista);
@@ -315,10 +318,10 @@ class CentroEducativoController extends Controller{
             ->join('fce.idFormulario','f')
             ->join('fce.idEstadoFormulario','e')
             ->join('fce.idUsuarioDigita','u')
-                ->andWhere('e.codEstadoFormulario in (:codEstadoFormulario)')
+            ->where('e.codEstadoFormulario in (:codEstadoFormulario)')
+            ->orderBy('e.codEstadoFormulario desc, c.codCentroEducativo, f.codFormulario')
                 ->setParameter('codEstadoFormulario',array('AP','CA'))
-                ->orderBy('e.codEstadoFormulario','desc')
-                ->getQuery()->getArrayResult();
+                    ->getQuery()->getArrayResult();
         return $this->render('centro-educativo/form_lista_evaluar.index.html.twig',array(
             'lista'=>$lista    
         ));
@@ -1099,7 +1102,7 @@ class CentroEducativoController extends Controller{
             'med1' => $acreditadoConObservaciones->getNotaMinima(),
             'med2' => $acreditadoConObservaciones->getNotaMaxima(),
             'max' => $acreditado->getNotaMaxima(),
-            'margen' => 0.5,
+            'margen' => $this->margenNota,
         );
 
         $nFormulariosCalificados=array();
