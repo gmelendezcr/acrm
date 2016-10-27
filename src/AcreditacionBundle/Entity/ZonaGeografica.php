@@ -24,7 +24,7 @@ class ZonaGeografica
     /**
      * @var string
      *
-     * @ORM\Column(name="COD_ZONA_GEOGRAFICA", type="string", length=20)
+     * @ORM\Column(name="COD_ZONA_GEOGRAFICA", type="string", length=20, unique=true)
      */
     private $codZonaGeografica;
 

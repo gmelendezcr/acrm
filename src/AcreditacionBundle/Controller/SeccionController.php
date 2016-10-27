@@ -58,9 +58,28 @@ class SeccionController extends Controller
         $session->set('nbrCentroEducativo', $resFormulario['nbrCentroEducativo']);
         $session->set('nbrFormulario', $resFormulario['nbrFormulario']);
 
-        $seccions = $em->getRepository('AcreditacionBundle:Seccion')->findBy(array(
-            'idFormulario' => $idFormulario,
-        ));
+        $seccions=$em->createQueryBuilder()
+            ->select('s.idSeccion, s.codSeccion, s.nbrSeccion, s.descripcionSeccion, s.activo, (
+                    select count(1)
+                    from AcreditacionBundle:pregunta p, AcreditacionBundle:RespuestaPorFormularioPorCentroEducativo r
+                    where r.idFormularioPorCentroEducativo=:idFormularioPorCentroEducativo
+                    and r.revisar=\'S\'
+                    and p.idPregunta=r.idPregunta
+                    and p.idSeccion=s.idSeccion
+                ) as cntRevisar, (
+                    select count(1)
+                    from AcreditacionBundle:pregunta h, AcreditacionBundle:pregunta p1, AcreditacionBundle:RespuestaPorFormularioPorCentroEducativo r1
+                    where r1.idFormularioPorCentroEducativo=:idFormularioPorCentroEducativo
+                    and r1.revisar=\'S\'
+                    and h.idPreguntaPadre=p1.idPregunta
+                    and h.idPregunta=r1.idPregunta
+                    and p1.idSeccion=s.idSeccion
+                ) as cntRevisarHija')
+            ->from('AcreditacionBundle:Seccion', 's')
+            ->where('s.idFormulario=:idFormulario')
+                ->setParameter('idFormulario',$idFormulario)
+                ->setParameter('idFormularioPorCentroEducativo',$idFormularioPorCentroEducativo)
+                    ->getQuery()->getResult();
 
         return $this->render('seccion/index.html.twig', array(
             'seccions' => $seccions,
@@ -89,7 +108,7 @@ class SeccionController extends Controller
         $idSeccion=$seccion->getIdSeccion();
         $em = $this->getDoctrine()->getManager();
         $resps=$em->createQueryBuilder()
-            ->select('p.idPregunta, t.codTipoPregunta, pp.idPregunta as idPreguntaPadre, ore.idOpcionRespuesta, rfc.revisar, rfc.valorRespuesta, rfc.ponderacionGanada')
+            ->select('p.idPregunta, t.codTipoPregunta, pp.idPregunta as idPreguntaPadre, ore.idOpcionRespuesta, rfc.revisar, rfc.valorRespuesta, rfc.ponderacionGanada, rfc.opcionNoAplica, rfc.opcionOtroTexto')
             ->from('AcreditacionBundle:RespuestaPorFormularioPorCentroEducativo', 'rfc')
             ->join('rfc.idPregunta','p')
             ->join('p.idSeccion','s')
@@ -101,7 +120,7 @@ class SeccionController extends Controller
                 ->setParameter('idFormularioPorCentroEducativo',$formularioPorCentroEducativo)
                 ->setParameter('idSeccion',$em->getRepository('AcreditacionBundle:Seccion')->find($idSeccion))
                     ->getQuery()->getResult();
-        $respuestas=$revisar=$puntuaciones=array();
+        $respuestas=$revisar=$puntuaciones=$noAplica=$opcionOtroTexto=array();
         foreach($resps as $resp){
             if($resp['idPreguntaPadre'] && $resp['idOpcionRespuesta']){
                 $respuestas[$resp['idPregunta']][$resp['idOpcionRespuesta']]=$resp['valorRespuesta'];
@@ -117,6 +136,12 @@ class SeccionController extends Controller
                     $revisar[$resp['idPregunta']]=true;
                 }
             }
+            if($resp['opcionNoAplica']=='S'){
+                $noAplica[$resp['idPregunta']]=true;
+            }
+            if($resp['opcionOtroTexto']){
+                $opcionOtroTexto[$resp['idPregunta']]=$resp['opcionOtroTexto'];
+            }
         }
 
         return $this->render('seccion/showAsForm.html.twig', array(
@@ -124,6 +149,8 @@ class SeccionController extends Controller
             'respuestas' => $respuestas,
             'revisar' => $revisar,
             'puntuaciones' => $puntuaciones,
+            'noAplica' => $noAplica,
+            'opcionOtroTexto' => $opcionOtroTexto,
             'idFormularioPorCentroEducativoRevisar' => $idFormularioPorCentroEducativoRevisar,
             'estadoFormularioPorCentroEducativo' => $formularioPorCentroEducativo->getIdEstadoFormulario()->getCodEstadoFormulario()
         ));
@@ -146,9 +173,20 @@ class SeccionController extends Controller
         if(in_array($codEstadoFormulario, array('NU','DI','RE','CO'))){
 
             $idSeccion=$request->get('idSeccion');
-            foreach($request->request->all() as $key => $value){
-error_log("$key => $value");
+            $respuestasArr=$request->request->all();
+            $opcionOtroTextoArr=array();
+            foreach($respuestasArr as $key => $value){
+                if(preg_match('/^[A-Z]{2}_([0-9]+)_Texto$/', $key, $matches)){
+                    $opcionOtroTextoArr[$matches[1]]=$value;
+                }
+                elseif(preg_match('/^idFila([0-9]*)_idColumna([0-9]+)_Texto$/', $key, $matches)){
+                    $opcionOtroTextoArr[$matches[2]]=$value;
+                }
+            }
+            reset($respuestasArr);
+            foreach($respuestasArr as $key => $value){
                 $matches=array();
+                $opcionNoAplica=$opcionOtroTexto=null;
                 if(in_array($key,array('idSeccion','Guardar'))){
                     continue;
                 }
@@ -160,32 +198,47 @@ error_log("$key => $value");
                     $idOpcionRespuesta=$matches[1];
                     $idPregunta=$matches[2];
                 }
+                elseif(preg_match('/^[A-Z]{2}NoAplica_([0-9]+)$/', $key, $matches)){
+                    $idPregunta=$matches[1];
+                    $opcionNoAplica='S';
+                    $value=null;
+                }
+                elseif(preg_match('/^[A-Z]{2}_([0-9]+)_Texto$/', $key, $matches) ||
+                    preg_match('/^idFila([0-9]*)_idColumna([0-9]+)_Texto$/', $key, $matches)){
+                    continue;
+                }
                 else{
                     error_log(__CLASS__ . '->' . __METHOD__ . ' (línea ' . __LINE__ . '), no se guardó: ' . "key: $key, value: $value");
                     continue;
                 }
+                if(isset($opcionOtroTextoArr[$idPregunta])){
+                    $opcionOtroTexto=$opcionOtroTextoArr[$idPregunta];
+                }
+                $pregunta=$em->getRepository('AcreditacionBundle:Pregunta')->find($idPregunta);
                 $resp=$em->getRepository('AcreditacionBundle:RespuestaPorFormularioPorCentroEducativo')->findOneBy(array(
                     'idFormularioPorCentroEducativo' => $idFormularioPorCentroEducativo,
                     'idPregunta' => $idPregunta,
                     'idOpcionRespuesta' => ($idOpcionRespuesta?$idOpcionRespuesta:null),
                 ));
                 if(!is_object($resp)){
-                    if($value . ''===''){
+                    if($value . ''==='' && !$opcionNoAplica && !$opcionOtroTexto){
                         continue;
                     }
                     $resp=new RespuestaPorFormularioPorCentroEducativo();
                     $resp->setIdFormularioPorCentroEducativo($formularioPorCentroEducativo);
-                    $resp->setIdPregunta($em->getRepository('AcreditacionBundle:Pregunta')->find($idPregunta));
+                    $resp->setIdPregunta($pregunta);
                     if($idOpcionRespuesta){
                         $resp->setIdOpcionRespuesta($em->getRepository('AcreditacionBundle:OpcionRespuesta')->find($idOpcionRespuesta));
                     }
                 }
                 else{
-                    if($value.''===''){
+                    if($value.''==='' && !$opcionNoAplica && !$opcionOtroTexto){
                         $em->remove($resp);
                         continue;
                     }
                 }
+                $resp->setOpcionNoAplica($opcionNoAplica);
+                $resp->setOpcionOtroTexto($opcionOtroTexto);
                 $resp->setValorRespuesta($value);
                 new AccionPorUsuario($em,$this->getUser(),'GF',$resp);
                 $em->persist($resp);
@@ -223,12 +276,49 @@ error_log("$key => $value");
         $formularioPorCentroEducativo=$em->getRepository('AcreditacionBundle:FormularioPorCentroEducativo')->find($idFormularioPorCentroEducativo);
         $codEstadoFormulario=$formularioPorCentroEducativo->getIdEstadoFormulario()->getCodEstadoFormulario();
         if(in_array($codEstadoFormulario,array('DI','CO'))){
-            $formularioPorCentroEducativo->setIdEstadoFormulario($em->getRepository('AcreditacionBundle:EstadoFormulario')->findOneBy(array(
-                'codEstadoFormulario' => 'TE',
-            )));
-            new AccionPorUsuario($em,$this->getUser(),'TF',$formularioPorCentroEducativo);
-            $em->persist($formularioPorCentroEducativo);
-            $em->flush();
+
+
+
+            $seccSinRespuesta=$em->createQueryBuilder()
+                ->select('s.codSeccion, s.nbrSeccion')
+                ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'fce')
+                ->join('fce.idFormulario','f')
+                ->join('f.secciones','s')
+                ->where('fce.idFormularioPorCentroEducativo=:idFormularioPorCentroEducativo')
+                ->andWhere('not exists (
+                    select 1
+                    from AcreditacionBundle:Pregunta p, AcreditacionBundle:RespuestaPorFormularioPorCentroEducativo r
+                    where r.idFormularioPorCentroEducativo=:idFormularioPorCentroEducativo
+                    and p.idPregunta=r.idPregunta
+                    and p.idSeccion=s.idSeccion
+                )')
+                ->andWhere('not exists (
+                    select 1
+                    from AcreditacionBundle:Pregunta h, AcreditacionBundle:Pregunta p1, AcreditacionBundle:RespuestaPorFormularioPorCentroEducativo r1
+                    where r1.idFormularioPorCentroEducativo=:idFormularioPorCentroEducativo
+                    and h.idPreguntaPadre=p1.idPregunta
+                    and h.idPregunta=r1.idPregunta
+                    and p1.idSeccion=s.idSeccion
+                )')
+                    ->setParameter('idFormularioPorCentroEducativo',$formularioPorCentroEducativo)
+                        ->getQuery()->getResult();
+            if(count($seccSinRespuesta)==0){
+
+                $formularioPorCentroEducativo->setIdEstadoFormulario($em->getRepository('AcreditacionBundle:EstadoFormulario')->findOneBy(array(
+                    'codEstadoFormulario' => 'TE',
+                )));
+                new AccionPorUsuario($em,$this->getUser(),'TF',$formularioPorCentroEducativo);
+                $em->persist($formularioPorCentroEducativo);
+                $em->flush();
+
+            }
+            else{
+                $seccStrArr=array();
+                foreach ($seccSinRespuesta as $secc) {
+                    $seccStrArr[]='<li>' . $secc['codSeccion'] . ' - ' . $secc['nbrSeccion'] . '</li>';
+                }
+                $session->getFlashBag()->add('error','Las siguientes secciones/criterios no tienen respuestas registradas: <ul>' . implode('', $seccStrArr) . '</ul>');
+            }
         }
         else{
             $session->getFlashBag()->add('error','El estado del formulario no es el correcto para terminarlo.');

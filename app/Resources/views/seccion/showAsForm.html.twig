@@ -48,12 +48,14 @@
                 {% endif %}
             </div>#}
             <div class="clearfix capa-separador-1"></div>
-            {% if idFormularioPorCentroEducativoRevisar %}
-                {% set readonly, disabled = 'readonly', 'disabled' %}
-            {% else %}
-                {% set readonly, disabled = '', '' %}
-            {% endif %}
             {% for pregunta in seccion.preguntas %}
+
+                {% if idFormularioPorCentroEducativoRevisar %}
+                    {% set readonly, disabled = 'readonly', 'disabled' %}
+                {% else %}
+                    {% set readonly, disabled = '', '' %}
+                {% endif %}
+
                 {% if estadoFormularioPorCentroEducativo in ['RE','CO','TE','AP'] and ( idFormularioPorCentroEducativoRevisar or revisar[pregunta.idPregunta] is defined ) %}
                     {% if idFormularioPorCentroEducativoRevisar and estadoFormularioPorCentroEducativo == 'TE' %}
                         {% set onClickRevisar = 'onClick="marcarRevisar($(this),' ~ idFormularioPorCentroEducativoRevisar ~ ',' ~ pregunta.idPregunta ~ ');"' %}
@@ -68,9 +70,12 @@
                         {% set classRevisar = 'class="cursor label label-success"' %}
                     {% endif %}
                     {% set btRevisar = '<span ' ~ onClickRevisar ~ ' ' ~ classRevisar ~ '>[Revisar]</span>' %}
+                    {% set readonly, disabled = readonly, disabled %}
                 {% else %}
                     {% set btRevisar = '' %}
+                    {% set readonly, disabled = 'readonly', 'disabled' %}
                 {% endif %}
+
                 {% if estadoFormularioPorCentroEducativo == 'CA' and ( pregunta.ponderacionMaxima or pregunta.ponderacion ) %}
                     {% if puntuaciones[pregunta.idPregunta] is not defined %}
                         {% set puntuacion = 0.00 %}
@@ -94,7 +99,7 @@
             <div class="col-md-12 text-right">
                 <input type="hidden" name="idSeccion" value="{{ seccion.idSeccion }}">
                 {% if not idFormularioPorCentroEducativoRevisar %}
-                    <button type="submit" value="Guardar" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button>
+                    <button type="submit" onClick="if($('.noValido').length > 0) return false; return true;" value="Guardar" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button>
                 {% endif %}
             </div>
         </form>

@@ -23,15 +23,13 @@
                             {% endfor %}
                         </select>
                         {% if pregunta.jsCargar %}
+                            {% if respuestas[pregunta.idPregunta] is defined %}
+                                {% set selected = respuestas[pregunta.idPregunta] %}
+                            {% else %}
+                                {% set selected = '' %}
+                            {% endif %}
                             <script languaje='javascript'>
-                                setTimeout(function(){
-                                    {% if respuestas[pregunta.idPregunta] is defined %}
-                                        {% set selected = respuestas[pregunta.idPregunta] %}
-                                    {% else %}
-                                        {% set selected = '' %}
-                                    {% endif %}
-                                    {{ pregunta.jsCargar|replace({'selected': "'" ~ selected ~ "'"})|raw }}
-                                }, 1000);
+                                setTimeout(function(){ {{ pregunta.jsCargar|replace({'selected': "'" ~ selected ~ "'"})|raw }} }, 1000);
                             </script>
                         {% endif %}
                         {{ btRevisar|raw }}

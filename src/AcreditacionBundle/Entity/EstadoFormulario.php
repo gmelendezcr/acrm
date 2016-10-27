@@ -24,7 +24,7 @@ class EstadoFormulario
     /**
      * @var string
      *
-     * @ORM\Column(name="COD_ESTADO_FORMULARIO", type="string", length=2)
+     * @ORM\Column(name="COD_ESTADO_FORMULARIO", type="string", length=2, unique=true)
      */
     private $codEstadoFormulario;
 

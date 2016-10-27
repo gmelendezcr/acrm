@@ -24,7 +24,7 @@ class ModalidadCentroEducativo
     /**
      * @var string
      *
-     * @ORM\Column(name="COD_MODALIDAD_CENTRO_EDUCATIVO", type="string", length=20)
+     * @ORM\Column(name="COD_MODALIDAD_CENTRO_EDUCATIVO", type="string", length=20, unique=true)
      */
     private $codModalidadCentroEducativo;
 

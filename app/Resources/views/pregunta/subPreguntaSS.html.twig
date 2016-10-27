@@ -14,11 +14,27 @@
             {% else %}
                 {% set checked = '' %}
             {% endif %}
+            {% set onClick = '' %}
+            {% if pregunta.opcionOtroCampoTexto == 'S' %}
+                {% if opcion.codigo == 'S' %}
+                    {% set onClick = "onClick=\"$('\#" ~ id ~ "_Texto').prop('disabled',false);\"" %}
+                {% else %}
+                    {% set onClick = "onClick=\"$('\#" ~ id ~ "_Texto').prop('disabled',true);\"" %}
+                {% endif %}
+            {% endif %}
             <label class="checkbox-inline btn btn-info btn-xs">
-                <input type='radio' class='subPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}_{{ opcion.codigo }}' name='{{ id }}' onChange='{{ onChange }}' value='{{ opcion.codigo }}' {{ checked }} {{ disabled }}>{{ opcion.texto }}
+                <input type='radio' class='subPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}_{{ opcion.codigo }}' name='{{ id }}' onChange='{{ onChange }}' value='{{ opcion.codigo }}' {{ checked }} {{ disabled }} {{ onClick|raw }}>{{ opcion.texto }}
             </label>
         {% endif %}
     {% endfor %}
+    {% if pregunta.opcionOtroCampoTexto == 'S' %}
+        {% if respuestas[pregunta.idPregunta] is defined and respuestas[pregunta.idPregunta]=='S' %}
+            {% set disabled2 = disabled %}
+        {% else %}
+            {% set disabled2 = 'disabled' %}
+        {% endif %}
+        <input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}Texto form-control' id='{{ id }}_Texto' name='{{ id }}_Texto' {{ maxLength }} {{ disabled2 }} value="{{ opcionOtroTexto[pregunta.idPregunta] ?? null }}">
+    {% endif %}
     {{ btRevisar|raw }}
     {% if pregunta.ponderacionMaxima or pregunta.ponderacion %}
         {{ btPuntuacion|raw }}

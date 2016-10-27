@@ -24,7 +24,7 @@ class EstadoAcreditacion
     /**
      * @var string
      *
-     * @ORM\Column(name="COD_ESTADO_ACREDITACION", type="string", length=2)
+     * @ORM\Column(name="COD_ESTADO_ACREDITACION", type="string", length=2, unique=true)
      */
     private $codEstadoAcreditacion;
 
@@ -41,6 +41,20 @@ class EstadoAcreditacion
      * @ORM\Column(name="ANIOS_VIGENCIA", type="smallint")
      */
     private $aniosVigencia;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="NOTA_MINIMA", type="decimal", precision=4, scale=2, nullable=true)
+     */
+    private $notaMinima;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="NOTA_MAXIMA", type="decimal", precision=4, scale=2, nullable=true)
+     */
+    private $notaMaxima;
 
     /**
      * @ORM\OneToMany(targetEntity="Acreditacion",mappedBy="idEstadoAcreditacion")
@@ -136,6 +150,54 @@ class EstadoAcreditacion
     public function getAniosVigencia()
     {
         return $this->aniosVigencia;
+    }
+
+    /**
+     * Set notaMinima
+     *
+     * @param integer $notaMinima
+     *
+     * @return EstadoAcreditacion
+     */
+    public function setNotaMinima($notaMinima)
+    {
+        $this->notaMinima = $notaMinima;
+
+        return $this;
+    }
+
+    /**
+     * Get notaMinima
+     *
+     * @return int
+     */
+    public function getNotaMinima()
+    {
+        return $this->notaMinima;
+    }
+
+    /**
+     * Set notaMaxima
+     *
+     * @param integer $notaMaxima
+     *
+     * @return EstadoAcreditacion
+     */
+    public function setNotaMaxima($notaMaxima)
+    {
+        $this->notaMaxima = $notaMaxima;
+
+        return $this;
+    }
+
+    /**
+     * Get notaMaxima
+     *
+     * @return int
+     */
+    public function getNotaMaxima()
+    {
+        return $this->notaMaxima;
     }
 
     /**

@@ -9,6 +9,7 @@
                     </th>
                 </tr>
                 {% set idx = 0 %}
+                {% set readonlyOrg, disabledOrg = readonly, disabled %}
                 {% for subPregunta in pregunta.subPreguntas %}
                     {% if idx % pregunta.cantidadColumnasSubPreguntas == 0 %}
                         {% if idx > 0 %}
@@ -32,8 +33,14 @@
                                     {#{% set classRevisar = 'class="revisar-alerta"' %}#}
                                 {% endif %}
                                 {% set btRevisar = '<span ' ~ onClickRevisar ~ ' ' ~ classRevisar ~ '>[Revisar]</span>' %}
+                                {% if not idFormularioPorCentroEducativoRevisar %}
+                                    {% set readonly, disabled = '', '' %}
+                                {% else %}
+                                    {% set readonly, disabled = readonlyOrg, disabledOrg %}
+                                {% endif %}
                             {% else %}
                                 {% set btRevisar = '' %}
+                                {% set readonly, disabled = readonlyOrg, disabledOrg %}
                             {% endif %}
 
                             {% if estadoFormularioPorCentroEducativo == 'CA' and ( subPregunta.ponderacionMaxima or subPregunta.ponderacion ) %}

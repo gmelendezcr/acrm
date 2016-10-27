@@ -55,6 +55,20 @@ class RespuestaPorFormularioPorCentroEducativo
     /**
      * @var string
      *
+     * @ORM\Column(name="OPCION_NO_APLICA", type="string", length=1, nullable=true, columnDefinition="CHAR(1) NULL CHECK (OPCION_NO_APLICA IN ('S','N'))")
+     */
+    private $opcionNoAplica;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="OPCION_OTRO_TEXTO", type="string", length=100, nullable=true)
+     */
+    private $opcionOtroTexto;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="REVISAR", type="string", length=1, nullable=true)
      */
     private $revisar;
@@ -167,6 +181,52 @@ class RespuestaPorFormularioPorCentroEducativo
     public function getValorRespuesta()
     {
         return $this->valorRespuesta;
+    }
+
+    /**
+     * Set opcionNoAplica
+     *
+     * @param string $opcionNoAplica
+     * @return Pregunta
+     */
+    public function setOpcionNoAplica($opcionNoAplica)
+    {
+        $this->opcionNoAplica = $opcionNoAplica;
+
+        return $this;
+    }
+
+    /**
+     * Get opcionNoAplica
+     *
+     * @return string 
+     */
+    public function getOpcionNoAplica()
+    {
+        return $this->opcionNoAplica;
+    }
+
+    /**
+     * Set opcionOtroTexto
+     *
+     * @param string $opcionOtroTexto
+     * @return Pregunta
+     */
+    public function setOpcionOtroTexto($opcionOtroTexto)
+    {
+        $this->opcionOtroTexto = $opcionOtroTexto;
+
+        return $this;
+    }
+
+    /**
+     * Get opcionOtroTexto
+     *
+     * @return string 
+     */
+    public function getOpcionOtroTexto()
+    {
+        return $this->opcionOtroTexto;
     }
 
     /**

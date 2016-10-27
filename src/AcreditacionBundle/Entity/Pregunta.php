@@ -239,6 +239,13 @@ class Pregunta
     /**
      * @var string
      *
+     * @ORM\Column(name="NUMERICA", type="string", length=1, nullable=true)
+     */
+    private $numerica;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="ACTIVO", type="string", length=1, columnDefinition="CHAR(1) NOT NULL DEFAULT 'S' CHECK (ACTIVO IN ('S','N'))")
      */
     private $activo;
@@ -973,6 +980,29 @@ class Pregunta
     public function getFormulaPonderacion()
     {
         return $this->formulaPonderacion;
+    }
+
+    /**
+     * Set numerica
+     *
+     * @param string $numerica
+     * @return Pregunta
+     */
+    public function setNumerica($numerica)
+    {
+        $this->numerica = $numerica;
+
+        return $this;
+    }
+
+    /**
+     * Get numerica
+     *
+     * @return string 
+     */
+    public function getNumerica()
+    {
+        return $this->numerica;
     }
 
     /**

@@ -24,7 +24,7 @@ class Indicador
     /**
      * @var string
      *
-     * @ORM\Column(name="COD_INDICADOR", type="string", length=20)
+     * @ORM\Column(name="COD_INDICADOR", type="string", length=20, unique=true)
      */
     private $codIndicador;
 

@@ -30,6 +30,7 @@
                     {% endif %}
                 </tr>
                 {% set sumaColumnas = '' %}
+                {% set readonlyOrg, disabledOrg = readonly, disabled %}
                 {% set subTotalColumnaId = "total_" ~ pregunta.idTipoPregunta.codTipoPregunta ~ "_" ~ pregunta.idPregunta %}
                 {% for subPregunta in pregunta.subPreguntas %}
                     {% set subId = "idFila_idColumna" ~ subPregunta.idPregunta %}
@@ -55,8 +56,14 @@
                                 {% set classRevisar = 'class="cursor label label-success"' %}
                             {% endif %}
                             {% set btRevisar = '<span ' ~ onClickRevisar ~ ' ' ~ classRevisar ~ '>[Revisar]</span>' %}
+                            {% if not idFormularioPorCentroEducativoRevisar %}
+                                {% set readonly, disabled = '', '' %}
+                            {% else %}
+                                {% set readonly, disabled = readonlyOrg, disabledOrg %}
+                            {% endif %}
                         {% else %}
                             {% set btRevisar = '' %}
+                            {% set readonly, disabled = readonlyOrg, disabledOrg %}
                         {% endif %}
 
                         {% if estadoFormularioPorCentroEducativo == 'CA' and ( subPregunta.ponderacionMaxima or subPregunta.ponderacion ) %}

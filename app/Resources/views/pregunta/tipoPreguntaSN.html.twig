@@ -9,14 +9,20 @@
                 </tr>
                 <tr>
                     <td>
+                        {% set disabled2 = disabled %}
                         {% for opcion in opciones %}
                             {% if opcion.texto %}
                                 {% set onClick = '' %}
                                 {% if pregunta.opcionOtroCampoTexto == 'S' %}
                                     {% if opcion.codigo == 'O' %}
-                                        {% set onClick = "$('\#{{ id }}_Texto').prop('disabled',!$(this).prop('checked'));" %}
+                                        {% set onClick = "onClick=\"$('\#" ~ id ~ "_Texto').prop('disabled',false);\"" %}
+                                        {% if respuestas[pregunta.idPregunta] is defined and respuestas[pregunta.idPregunta]=='O' %}
+                                            {% set disabled2 = disabled %}
+                                        {% else %}
+                                            {% set disabled2 = 'disabled' %}
+                                        {% endif %}
                                     {% else %}
-                                        {% set onClick = "$('\#{{ id }}_Texto').prop('disabled',true);" %}
+                                        {% set onClick = "onClick=\"$('\#" ~ id ~ "_Texto').prop('disabled',true); $('\#" ~ id ~ "_Texto').val('');\"" %}
                                     {% endif %}
                                 {% endif %}
                                 {% if respuestas[pregunta.idPregunta] is defined and respuestas[pregunta.idPregunta]==opcion.codigo %}
@@ -25,12 +31,12 @@
                                     {% set checked = '' %}
                                 {% endif %}
                                 <label class="checkbox-inline btn  btn-info btn-xs">
-                                    <input type='radio' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' value='{{ opcion.codigo }}' {{ onClick }} {{ checked }} {{ disabled }}>{{ opcion.texto }}
+                                    <input type='radio' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' value='{{ opcion.codigo }}' {{ onClick|raw }} {{ checked }} {{ disabled }}>{{ opcion.texto }}
                                 </label>
                             {% endif %}
                         {% endfor %}
                         {% if pregunta.opcionOtroCampoTexto == 'S' %}
-                            <input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}Texto form-control' id='{{ id }}_Texto' name='{{ id }}_Texto' {{ maxLength }} {{ disabled }}>
+                            <input type='text' class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}Texto form-control' id='{{ id }}_Texto' name='{{ id }}_Texto' {{ maxLength }} {{ disabled2 }} value="{{ opcionOtroTexto[pregunta.idPregunta] ?? null }}">
                         {% endif %}
                         {{ btRevisar|raw }}
                         {{ btPuntuacion|raw }}

@@ -69,6 +69,9 @@
                                     </form>
                                     <a class="btn btn-info" href="#" onClick="$('#mostrarSeccion{{ seccion.idSeccion }}').submit();">Mostrar</a>
                                 {% endif %}
+                                {% if seccion.cntRevisar + seccion.cntRevisarHija > 0 %}
+                                    <span class="cursor label label-warning">[Revisar]</span>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

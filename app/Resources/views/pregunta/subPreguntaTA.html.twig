@@ -7,12 +7,14 @@
     </div>
 {% endif %}
 {% if pregunta.idPreguntaPadre.totalesFilas == 'S' or pregunta.idPreguntaPadre.totalesColumnas == 'S' %}
-    {% set onChange = 'calcularTotalesPregunta' ~ pregunta.idPreguntaPadre.idTipoPregunta.codTipoPregunta ~ pregunta.idPreguntaPadre.idPregunta ~ '($(this));' %}
+    {% set onChange = 'calcularTotalesPregunta' ~ pregunta.idPreguntaPadre.idTipoPregunta.codTipoPregunta ~ pregunta.idPreguntaPadre.idPregunta ~ '($(this),"' ~ pregunta.numerica ~ '");' %}
 {% else %}
     {% set onChange = '' %}
 {% endif %}
 {% if respuestas[pregunta.idPregunta][idFila] is defined %}
     {% set value = respuestas[pregunta.idPregunta][idFila] %}
+{% elseif respuestas[pregunta.idPregunta] is defined and respuestas[pregunta.idPregunta] is not iterable %}
+    {% set value = respuestas[pregunta.idPregunta] %}
 {% else %}
     {% set value = '' %}
 {% endif %}

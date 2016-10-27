@@ -332,26 +332,48 @@ class CentroEducativoController extends Controller{
         $idFormulario=$request->get('formularios');
         $lugarAplicacion=$request->get('lugarAplicacion');
         $fechaAplicacion=$request->get('fechaAplicacion');
-
-        $em = $this->getDoctrine()->getManager();
-        $formularioPorCentroEducativo=new FormularioPorCentroEducativo();
-        $formularioPorCentroEducativo->setIdCentroEducativo($em->getRepository('AcreditacionBundle:CentroEducativo')->find($idCentroEducativo));
-        
-        $formularioPorCentroEducativo->setIdFormulario($em->getRepository('AcreditacionBundle:Formulario')->find($idFormulario));
-        $formularioPorCentroEducativo->setLugarAplicacion($lugarAplicacion);
-        $formularioPorCentroEducativo->setFechaAplicacion(new \DateTime($fechaAplicacion));
-        $formularioPorCentroEducativo->setIdUsuarioDigita($this->getUser());
-        $formularioPorCentroEducativo->setIdEstadoFormulario($em->getRepository('AcreditacionBundle:EstadoFormulario')->findOneBy(array(
-            'codEstadoFormulario' => 'NU',
-        )));
-        new AccionPorUsuario($em,$this->getUser(),'DF',$formularioPorCentroEducativo);
-        $em->persist($formularioPorCentroEducativo);
-        $em->flush();
+        $fechaAplicacionObj=new \DateTime($fechaAplicacion);
 
         $session = new Session();
-        $session->set('idFormularioPorCentroEducativo', $formularioPorCentroEducativo->getIdFormularioPorCentroEducativo());
-       
-        return $this->redirectToRoute('seccion_index');
+        $em = $this->getDoctrine()->getManager();
+
+        $em->getConfiguration()
+            ->addCustomDatetimeFunction('YEAR', 'AcreditacionBundle\DQL\YearFunction');
+        $existeFormulario=$em->createQueryBuilder()
+            ->select('fce.idFormularioPorCentroEducativo')
+            ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'fce')
+            ->where('fce.idFormulario=:idFormulario')
+            ->andWhere('fce.idCentroEducativo=:idCentroEducativo')
+            ->andWhere('YEAR(fce.fechaAplicacion)=:anioAplicacion')
+                ->setParameter('idFormulario',$idFormulario)
+                ->setParameter('idCentroEducativo',$idCentroEducativo)
+                ->setParameter('anioAplicacion',$fechaAplicacionObj->format('Y'))
+                    ->getQuery()->getArrayResult();
+        if(count($existeFormulario)==0){
+
+            $formularioPorCentroEducativo=new FormularioPorCentroEducativo();
+            $formularioPorCentroEducativo->setIdCentroEducativo($em->getRepository('AcreditacionBundle:CentroEducativo')->find($idCentroEducativo));
+            
+            $formularioPorCentroEducativo->setIdFormulario($em->getRepository('AcreditacionBundle:Formulario')->find($idFormulario));
+            $formularioPorCentroEducativo->setLugarAplicacion($lugarAplicacion);
+            $formularioPorCentroEducativo->setFechaAplicacion(new \DateTime($fechaAplicacion));
+            $formularioPorCentroEducativo->setIdUsuarioDigita($this->getUser());
+            $formularioPorCentroEducativo->setIdEstadoFormulario($em->getRepository('AcreditacionBundle:EstadoFormulario')->findOneBy(array(
+                'codEstadoFormulario' => 'NU',
+            )));
+            new AccionPorUsuario($em,$this->getUser(),'DF',$formularioPorCentroEducativo);
+            $em->persist($formularioPorCentroEducativo);
+            $em->flush();
+
+            $session->set('idFormularioPorCentroEducativo', $formularioPorCentroEducativo->getIdFormularioPorCentroEducativo());
+           
+            return $this->redirectToRoute('seccion_index');
+
+        }
+        else{
+            $session->getFlashBag()->add('error','El formulario ya existe para el centro educativo seleccionado.');
+            return $this->redirectToRoute('centro_educativo_form_dig_corr');
+        }
     }
     
     
@@ -1069,6 +1091,17 @@ class CentroEducativoController extends Controller{
                 ->setParameter('codEstadoFormulario',array('CA','DC'))
                 ->getQuery()->getArrayResult();
 
+        $noAcreditado=$em->getRepository('AcreditacionBundle:EstadoAcreditacion')->findOneByCodEstadoAcreditacion('NA');
+        $acreditadoConObservaciones=$em->getRepository('AcreditacionBundle:EstadoAcreditacion')->findOneByCodEstadoAcreditacion('AO');
+        $acreditado=$em->getRepository('AcreditacionBundle:EstadoAcreditacion')->findOneByCodEstadoAcreditacion('AC');
+        $arrayLimites=array(
+            'min' => $noAcreditado->getNotaMinima(),
+            'med1' => $acreditadoConObservaciones->getNotaMinima(),
+            'med2' => $acreditadoConObservaciones->getNotaMaxima(),
+            'max' => $acreditado->getNotaMaxima(),
+            'margen' => 0.5,
+        );
+
         $nFormulariosCalificados=array();
         foreach ($formulariosCalificados as $formularioCalificado) {
             $nFormulariosCalificados[$formularioCalificado['idCentroEducativo']]=$formularioCalificado;
@@ -1081,7 +1114,8 @@ class CentroEducativoController extends Controller{
         }
 
         return $this->render('centro-educativo/acreditar.index.html.twig',array(
-            'centrosEducativos' => $nFormulariosCalificados
+            'centrosEducativos' => $nFormulariosCalificados,
+            'arrayLimites' => $arrayLimites,
         ));
     }
 

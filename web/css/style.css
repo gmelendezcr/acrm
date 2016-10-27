@@ -412,6 +412,15 @@ Control de td de tabla
     margin:auto;
 }
 
+.noValidoOculto{
+    color: red;
+    display: none;
+}
+
+.noValido{
+    display: block;
+}
+
 /*
 --------------------------------------------------------------------------------
 > Control de align
