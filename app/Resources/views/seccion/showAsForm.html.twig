@@ -48,13 +48,15 @@
                 {% endif %}
             </div>#}
             <div class="clearfix capa-separador-1"></div>
-            {% if idFormularioPorCentroEducativoRevisar %}
+            {% if idFormularioPorCentroEducativoRevisar or estadoFormularioPorCentroEducativo in ['RE','CO','TE','AP'] %}
                 {% set readonlyOrg, disabledOrg = 'readonly', 'disabled' %}
             {% else %}
                 {% set readonlyOrg, disabledOrg = '', '' %}
             {% endif %}
 
             {% for pregunta in seccion.preguntas %}
+
+                {% set readonly, disabled = readonlyOrg, disabledOrg %}
 
                 {% if estadoFormularioPorCentroEducativo in ['RE','CO','TE','AP'] and ( idFormularioPorCentroEducativoRevisar or revisar[pregunta.idPregunta] is defined ) %}
                     {% if idFormularioPorCentroEducativoRevisar and estadoFormularioPorCentroEducativo == 'TE' %}
@@ -65,19 +67,18 @@
                     {% if revisar[pregunta.idPregunta] is defined %}
                         {#{% set classRevisar = 'class="revisar-alerta revisar"' %}#}
                         {% set classRevisar = 'class="cursor label label-warning"' %}
+
+                        {% if estadoFormularioPorCentroEducativo in ['RE','CO'] %}
+                            {% set readonly, disabled = '', '' %}
+                        {% endif %}
+
                     {% else %}
                         {#{% set classRevisar = 'class="revisar-alerta"' %}#}
                         {% set classRevisar = 'class="cursor label label-success"' %}
                     {% endif %}
                     {% set btRevisar = '<span ' ~ onClickRevisar ~ ' ' ~ classRevisar ~ '>[Revisar]</span>' %}
-                    {% if not idFormularioPorCentroEducativoRevisar %}
-                        {% set readonly, disabled = '', '' %}
-                    {% else %}
-                        {% set readonly, disabled = readonlyOrg, disabledOrg %}
-                    {% endif %}
                 {% else %}
                     {% set btRevisar = '' %}
-                    {% set readonly, disabled = readonlyOrg, disabledOrg %}
                 {% endif %}
 
                 {% if estadoFormularioPorCentroEducativo == 'CA' and ( pregunta.ponderacionMaxima or pregunta.ponderacion ) %}

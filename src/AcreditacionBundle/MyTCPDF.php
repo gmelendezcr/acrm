@@ -21,7 +21,6 @@
 		private $colorFilasZebra=array(null,array(168, 184, 217));
 		private $colorearTotales=false;
 		private $colorTotales=array(0, 0, 255);
-		private $autoridades;
 
 
 		public function getCompanyLogo(){
@@ -75,43 +74,6 @@
 		public function __construct($orientation='P',$units='mm',$pageSize='Letter'){
 			parent::__construct($orientation,$units,$pageSize);
 			$this->SetHeaderMargin();
-			$this->autoridades=array(
-				'ministro' => array(
-					'titulo' => '',
-					'nombre' => 'Carlos Mauricio Canjura Linares',
-					'cargo' => 'Ministro de Educación',
-				),
-				'viceMinistro' => array(
-					'titulo' => '',
-					'nombre' => 'Francisco Humberto Castaneda Monterrosa',
-					'cargo' => 'Viceministro de Educación',
-				),
-				'directorGestion' => array(
-					'titulo' => 'Lic.',
-					'nombre' => 'Renzo Uriel Valencia Arana',
-					'cargo' => 'Director Nacional de Gestión Educativa',
-				),
-				'jefeAcreditacion' => array(
-					'titulo' => 'Lic.',
-					'nombre' => 'Juan Carlos Arteaga Mena',
-					'cargo' => 'Jefe Departamento de Acreditación Institucional',
-				),
-			);
-		}
-
-		public function getAutoridad($autoridad,$formato=null){
-			if(!isset($this->autoridades[$autoridad])){
-				return 'No definido';
-			}
-			switch ($formato) {
-				case 'ST':
-					return $this->autoridades[$autoridad]['nombre'] . "\n" . $this->autoridades[$autoridad]['cargo'];
-					break;
-				default:
-					return $this->autoridades[$autoridad]['titulo'] . ' ' . $this->autoridades[$autoridad]['nombre'] . "\n" . $this->autoridades[$autoridad]['cargo'];
-					break;
-			}
-
 		}
 
 		public function setHeaderType($headerType){

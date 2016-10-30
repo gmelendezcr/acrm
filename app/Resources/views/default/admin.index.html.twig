@@ -1,6 +1,20 @@
 {% extends 'login.base.html.twig' %}
 
 {% block body %}
+
+{% if app.session.get('_security.last_error') %}
+    <div class="container" id="warning-alert">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-warning">
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                    <strong>Error! <br /></strong>
+                    Usuario o clave incorrectos.
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
 <div class="header-control-login">
             <div class="container">
                 <div class="row">

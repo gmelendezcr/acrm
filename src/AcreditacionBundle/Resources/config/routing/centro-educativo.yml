@@ -110,3 +110,7 @@ form_archivo_instrumento_cargar:
     path:     /cargar-archivo-instrumento
     defaults: { _controller: AcreditacionBundle:CentroEducativo:CargarArchivoInstrumento }
     methods:  [POST]
+form_archivo_descargar:
+    path:     /descargar-archivo
+    defaults: { _controller: AcreditacionBundle:CentroEducativo:descargarArchivoInstrumento }
+    methods:  [GET|POST]

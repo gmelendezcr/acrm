@@ -24,7 +24,6 @@
                         </th>
                     {% endif %}
                 </tr>
-                {% set readonlyOrg, disabledOrg = readonly, disabled %}
                 {% set sumaFila, sumaFila2, sumaFilas, ceroColumnas, sumaColumnas, existePreguntaSiNo = '', '', '', '', '', false %}
                 {% for fila in columnaFija.opcionesRespuesta %}
                     {% set sumaFila, sumaFila2, ceroColumnas = '', '', '' %}
@@ -40,13 +39,16 @@
                             {{ fila.descripcionOpcionRespuesta }}
                         </th>
                         {% for subPregunta in pregunta.subPreguntas %}
+
+                            {% set readonly, disabled = readonlyOrg, disabledOrg %}
+
                             {% set subId = "idFila" ~ fila.idOpcionRespuesta ~ "_idColumna" ~ subPregunta.idPregunta %}
                             {% if subPregunta.idTipoPregunta.codTipoPregunta == 'SN' %}
                                 {% set existePreguntaSiNo = true %}
                             {% endif %}
                             {% if subPregunta.idTipoPregunta.codTipoPregunta != 'CF' %}
                                 <td>
-                                    {% if estadoFormularioPorCentroEducativo in ['RE','CO','TE','AP'] and ( idFormularioPorCentroEducativoRevisar or revisar[subPregunta.idPregunta] is defined ) %}
+                                    {% if estadoFormularioPorCentroEducativo in ['RE','CO','TE','AP'] and ( idFormularioPorCentroEducativoRevisar or revisar[subPregunta.idPregunta][fila.idOpcionRespuesta] is defined ) %}
                                         {% if idFormularioPorCentroEducativoRevisar %}
                                             {% set onClickRevisar = 'onClick="marcarRevisar($(this),' ~ idFormularioPorCentroEducativoRevisar ~ ',' ~ subPregunta.idPregunta ~ ',' ~ fila.idOpcionRespuesta ~ ');"' %}
                                         {% else %}
@@ -55,15 +57,14 @@
                                         {% if revisar[subPregunta.idPregunta][fila.idOpcionRespuesta] is defined %}
                                             {# {% set classRevisar = 'class="revisar-alerta revisar-item"' %}#}
                                             {% set classRevisar = 'class="cursor label label-warning"' %}
-                                            {% if not idFormularioPorCentroEducativoRevisar %}
+
+                                            {% if estadoFormularioPorCentroEducativo in ['RE','CO'] %}
                                                 {% set readonly, disabled = '', '' %}
-                                            {% else %}
-                                                {% set readonly, disabled = readonlyOrg, disabledOrg %}
                                             {% endif %}
+
                                         {% else %}
                                             {#{% set classRevisar = 'class="revisar-alerta"' %}#}
                                             {% set classRevisar = 'class="cursor label label-success"' %}
-                                            {% set readonly, disabled = readonlyOrg, disabledOrg %}
                                         {% endif %}
                                         {% set btRevisar = '<span ' ~ onClickRevisar ~ ' ' ~ classRevisar ~ '>[Revisar]</span>' %}
                                     {% else %}

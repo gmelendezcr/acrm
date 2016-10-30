@@ -30,9 +30,11 @@
                     {% endif %}
                 </tr>
                 {% set sumaColumnas = '' %}
-                {% set readonlyOrg, disabledOrg = readonly, disabled %}
                 {% set subTotalColumnaId = "total_" ~ pregunta.idTipoPregunta.codTipoPregunta ~ "_" ~ pregunta.idPregunta %}
                 {% for subPregunta in pregunta.subPreguntas %}
+
+                    {% set readonly, disabled = readonlyOrg, disabledOrg %}
+
                     {% set subId = "idFila_idColumna" ~ subPregunta.idPregunta %}
                     {% if subPregunta.encabezadoSubPreguntas %}
                         <tr>
@@ -51,19 +53,18 @@
                             {% if revisar[subPregunta.idPregunta] is defined %}
                                {# {% set classRevisar = 'class="revisar-alerta revisar-item"' %}#}
                                {% set classRevisar = 'class="cursor label label-warning"' %}
+
+                               {% if estadoFormularioPorCentroEducativo in ['RE','CO'] %}
+                                   {% set readonly, disabled = '', '' %}
+                               {% endif %}
+
                             {% else %}
                                 {#{% set classRevisar = 'class="revisar-alerta"' %} #}
                                 {% set classRevisar = 'class="cursor label label-success"' %}
                             {% endif %}
                             {% set btRevisar = '<span ' ~ onClickRevisar ~ ' ' ~ classRevisar ~ '>[Revisar]</span>' %}
-                            {% if not idFormularioPorCentroEducativoRevisar %}
-                                {% set readonly, disabled = '', '' %}
-                            {% else %}
-                                {% set readonly, disabled = readonlyOrg, disabledOrg %}
-                            {% endif %}
                         {% else %}
                             {% set btRevisar = '' %}
-                            {% set readonly, disabled = readonlyOrg, disabledOrg %}
                         {% endif %}
 
                         {% if estadoFormularioPorCentroEducativo == 'CA' and ( subPregunta.ponderacionMaxima or subPregunta.ponderacion ) %}

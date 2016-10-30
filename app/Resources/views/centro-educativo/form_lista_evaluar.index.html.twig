@@ -62,14 +62,15 @@
                                 </td>
                                 <td class="text-center">
                                     
+                                    {% if form.codEstadoFormulario == 'CA' %}
                                     <form id="versionParaCoordinador{{ form.idFormularioPorCentroEducativo }}" action="{{ path('reporte_informe_cuantitativo') }}" method="post" target="_blank">
                                         <input type="hidden" name="anno" value="{{ form.fechaAplicacion }}">
                                         <input type="hidden" name="centrosEducativo" value="{{ form.idCentroEducativo }}">
+                                        <input type="hidden" name="formato" value="pdf">
                                         <input type="hidden" name="versionParaCoordinador" value="1">
                                     </form>
                                     <a href="#" onClick="$('#versionParaCoordinador{{ form.idFormularioPorCentroEducativo }}').submit();" class="btn btn-info btn-block">Reporte para coordinador</a>
                                     
-                                    {% if form.codEstadoFormulario == 'CA' %}
                                     {% if form.estadoCriterioCentroEducativo=='TER' %}
                                     <a href="{{path('centro_educativo_criterio_observaciones_ver',{'id':form.idCentroEducativo,'form':form.idFormulario})}}" class="btn btn-success btn-block">
                                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Observación

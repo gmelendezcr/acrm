@@ -98,6 +98,20 @@ class FormularioPorCentroEducativo
     private $estadoCriterioCentroEducativo;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="NBR_ARCHIVO", type="string", length=255, nullable=true)
+     */
+    private $nbrArchivo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="RUTA_ARCHIVO", type="string", length=255, nullable=true)
+     */
+    private $rutaArchivo;
+
+    /**
      * @ORM\OneToMany(targetEntity="RespuestaPorFormularioPorCentroEducativo",mappedBy="idFormularioPorCentroEducativo")
      */
     private $respuestasPorFormularioPorCentroEducativo;
@@ -365,6 +379,52 @@ class FormularioPorCentroEducativo
     public function getEstadoCriterioCentroEducativo()
     {
         return $this->estadoCriterioCentroEducativo;
+    }
+
+    /**
+     * Set nbrArchivo
+     *
+     * @param string $nbrArchivo
+     * @return FormularioPorCentroEducativo
+     */
+    public function setNbrArchivo($nbrArchivo)
+    {
+        $this->nbrArchivo = $nbrArchivo;
+
+        return $this;
+    }
+
+    /**
+     * Get nbrArchivo
+     *
+     * @return string 
+     */
+    public function getNbrArchivo()
+    {
+        return $this->nbrArchivo;
+    }
+
+    /**
+     * Set rutaArchivo
+     *
+     * @param string $rutaArchivo
+     * @return FormularioPorCentroEducativo
+     */
+    public function setRutaArchivo($rutaArchivo)
+    {
+        $this->rutaArchivo = $rutaArchivo;
+
+        return $this;
+    }
+
+    /**
+     * Get rutaArchivo
+     *
+     * @return string 
+     */
+    public function getRutaArchivo()
+    {
+        return $this->rutaArchivo;
     }
 
     /**

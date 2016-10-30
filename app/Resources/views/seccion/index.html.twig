@@ -31,6 +31,21 @@
                     <tr>
                         <td class="col-sm-2 success"><strong>Formulario:</strong> </td><td class="col-sm-10">{{ app.session.get('nbrFormulario') }}</td>
                     </tr>
+                    {% if archivoSubido %}
+                        <tr>
+                            <td class="col-sm-2 success">
+                                <strong>Descargar archivo:</strong>
+                            </td>
+                            <td class="col-sm-10">
+                                <form action="{{ path('form_archivo_descargar') }}" target="_blank">
+                                {% if idFormularioPorCentroEducativoRevisar %}
+                                    <input type="hidden" name="idFormularioPorCentroEducativoRevisar" value="{{ idFormularioPorCentroEducativoRevisar }}">
+                                {% endif %}
+                                    <button type="submit" name="Descargar" value="Descargar" class="btn btn-info"><span class="glyphicon glyphicon-download" aria-hidden="true"></span> Descargar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endif %}
                 </tbody>
             </table>
         </div>
@@ -79,18 +94,18 @@
             </table>
         </div>
     </div>
-    {% if not idFormularioPorCentroEducativoRevisar and ( estadoFormularioPorCentroEducativo == 'DI' or estadoFormularioPorCentroEducativo == 'CO' ) %}
+    {% if not idFormularioPorCentroEducativoRevisar and estadoFormularioPorCentroEducativo in ['NU','DI','RE','CO'] %}
         <form id="secciones" method="POST" action="{{ path('seccion_terminar') }}">
             <div class="col-md-12 text-right">
                 <div class="btn-group btnk" role="group">
                     <a href='{{path('form_archivo_instrumento')}}' class='btn btn-success'>
                         <span class="glyphicon glyphicon-cloud-upload"></span> Cargar archivo
                     </a>
-                
-                <button  data-toggle="confirmation" data-title="¿Seguro?" type="submit" name="Terminar" value="Terminar" class="btn btn-success">
-                    <span class="glyphicon glyphicon-share-alt"></span> Terminar
-                </button>
-                
+                {% if estadoFormularioPorCentroEducativo != 'NU' %}
+                    <button  data-toggle="confirmation" data-title="¿Seguro?" type="submit" name="Terminar" value="Terminar" class="btn btn-success">
+                        <span class="glyphicon glyphicon-share-alt"></span> Terminar
+                    </button>
+                {% endif %}
                 </div>
                 
             </div>

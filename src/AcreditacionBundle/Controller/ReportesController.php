@@ -20,6 +20,47 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use PHPExcel_IOFactory;
 
 class ReportesController extends Controller{
+
+    private $autoridades;
+
+    public function __construct(){
+        $this->autoridades=array(
+            'ministro' => array(
+                'titulo' => '',
+                'nombre' => 'Carlos Mauricio Canjura Linares',
+                'cargo' => 'Ministro de Educación',
+            ),
+            'viceMinistro' => array(
+                'titulo' => '',
+                'nombre' => 'Francisco Humberto Castaneda Monterrosa',
+                'cargo' => 'Viceministro de Educación',
+            ),
+            'directorGestion' => array(
+                'titulo' => 'Lic.',
+                'nombre' => 'Renzo Uriel Valencia Arana',
+                'cargo' => 'Director Nacional de Gestión Educativa',
+            ),
+            'jefeAcreditacion' => array(
+                'titulo' => 'Lic.',
+                'nombre' => 'Juan Carlos Arteaga Mena',
+                'cargo' => 'Jefe Departamento de Acreditación Institucional',
+            ),
+        );
+    }
+
+    public function getAutoridad($autoridad,$formato=null){
+        if(!isset($this->autoridades[$autoridad])){
+            return 'No definido';
+        }
+        switch ($formato) {
+            case 'ST':
+                return $this->autoridades[$autoridad]['nombre'] . "\n" . $this->autoridades[$autoridad]['cargo'];
+                break;
+            default:
+                return $this->autoridades[$autoridad]['titulo'] . ' ' . $this->autoridades[$autoridad]['nombre'] . "\n" . $this->autoridades[$autoridad]['cargo'];
+                break;
+        }
+    }
     
      public function errorAction(Request $request){
         $em = $this->getDoctrine()->getManager();
@@ -91,7 +132,7 @@ class ReportesController extends Controller{
         ->join('m.idDepartamento','d')
         ->where('ce.nbrCentroEducativo like :nbr')
         ->orWhere('ce.codCentroEducativo like :nbr')
-            /*->andwhere('exists (
+            /*->andWhere('exists (
                 select 1
                     from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
                         where a.fechaInicio<=:fechaRef
@@ -136,7 +177,7 @@ class ReportesController extends Controller{
         ->join('ce.idMunicipio','m')
         ->join('m.idDepartamento','d')
         ->where('ce.nbrCentroEducativo like :nbr')
-            ->andwhere('exists (
+            ->andWhere('exists (
                 select 1
                     from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
                         where a.fechaInicio<=:fechaRef
@@ -180,17 +221,15 @@ class ReportesController extends Controller{
         ->join('ce.idMunicipio','m')
         ->join('m.idDepartamento','d')
         //->where('ce.nbrCentroEducativo like :nbr')
-            ->andwhere('exists (
+            ->andWhere('exists (
                 select 1
                     from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
-                        where a.fechaInicio<=:fechaRef
-                            and a.fechaFin>=:fechaRef
-                            and e.codEstadoAcreditacion in (\'AC\',\'AO\')
+                        where e.codEstadoAcreditacion in (\'AC\',\'AO\')
                             and a.idEstadoAcreditacion=e.idEstadoAcreditacion
                             and a.idCentroEducativo=ce.idCentroEducativo
             )')
         //->setParameter('nbr', $criterio)
-        ->setParameter('fechaRef', new \DateTime())
+        //->setParameter('fechaRef', new \DateTime())
         ->getQuery()->getResult();
         
         
@@ -529,41 +568,69 @@ foreach ($lista_cedu as $cd) {
 
     private function informacionGeneralCentro()
     {
-        $this->pdfObj->setFilasZebra(true);
-        $this->pdfObj->dataTable(array(
-                array('title' => '','border' => 1,'width' => 25,),
-                array('title' => '','border' => 1,),
-            ),array(
-                array(
-                    'Centro educativo:',
-                    $this->centroEducativo['nbrCentroEducativo'],
-                ),
-                array(
-                    'Código:',
-                    $this->centroEducativo['codCentroEducativo'],
-                ),
-                array(
-                    'Departamento:',
-                    $this->centroEducativo['nbrDepartamento'],
-                ),
-                array(
-                    'Municipio:',
-                    $this->centroEducativo['nbrMunicipio'],
-                ),
-            ),array(),false);
-        $this->pdfObj->setFilasZebra(false);
-        $this->pdfObj->newLine();
+        $columns=array(
+            array('title' => '','border' => 1,'width' => 25,),
+            array('title' => '','border' => 1,),
+        );
+        $rows=array(
+            array(
+                'Centro educativo:',
+                $this->centroEducativo['nbrCentroEducativo'],
+            ),
+            array(
+                'Código:',
+                $this->centroEducativo['codCentroEducativo'],
+            ),
+            array(
+                'Departamento:',
+                $this->centroEducativo['nbrDepartamento'],
+            ),
+            array(
+                'Municipio:',
+                $this->centroEducativo['nbrMunicipio'],
+            ),
+        );
+        $differentHeader=array();
+        $showHeaders=false;
+        if($this->formato=='pdf'){
+            $this->pdfObj->setFilasZebra(true);
+            $this->pdfObj->dataTable($columns,$rows,$differentHeader,$showHeaders);
+            $this->pdfObj->setFilasZebra(false);
+            $this->pdfObj->newLine();
+        }
+        else{
+            $this->phpExcelDataTable($columns,$rows,$differentHeader,$showHeaders);
+            $this->excelFila++;
+        }
     }
 
     private function encabezadoCuantitativo($em,$anio,$idCentroEducativo)
     {
-        $this->pdfObj->setHeaderType('newLogoHeader');
-        $this->pdfObj->setFooterType('simpleFooter');
-        $this->pdfObj->startPageGroup();
-        $this->pdfObj->AddPage();
-        $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'RESULTADOS DE LA EVALUACIÓN EXTERNA PARA LA ACREDITACIÓN INSTITUCIONAL DE CENTROS EDUCATIVOS PRIVADOS AÑO ' . $anio,0,'C');
-        $this->pdfObj->newLine();
-        $this->pdfObj->SetFontSize(9);
+        $titulo='RESULTADOS DE LA EVALUACIÓN EXTERNA PARA LA ACREDITACIÓN INSTITUCIONAL DE CENTROS EDUCATIVOS PRIVADOS AÑO ' . $anio;
+        if($this->formato=='pdf'){
+            $this->pdfObj->setHeaderType('newLogoHeader');
+            $this->pdfObj->setFooterType('simpleFooter');
+            $this->pdfObj->startPageGroup();
+            $this->pdfObj->AddPage();
+            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),$titulo,0,'C');
+            $this->pdfObj->newLine();
+            $this->pdfObj->SetFontSize(9);
+        }
+        else{
+            $this->phpExcelObject->getProperties()
+                ->setCreator("Sistema de Acreditación")
+                ->setLastModifiedBy("")
+                ->setTitle("Sistema de Acreditación")
+                ->setSubject("")
+                ->setDescription("")
+                ->setKeywords("");
+            $this->phpExcelObject->setActiveSheetIndex(0);
+            $this->phpExcelObject->getActiveSheet()->setTitle('Sistema de Acreditación');
+
+            $this->phpExcelObject->setActiveSheetIndex(0)
+                ->setCellValue($this->excelColumna . $this->excelFila, $titulo);
+            $this->excelFila+=2;
+        }
 
         $this->centroEducativo=$em->createQueryBuilder()
             ->distinct()
@@ -581,6 +648,64 @@ foreach ($lista_cedu as $cd) {
 
         $this->informacionGeneralCentro();
     }
+
+    private function incExcelColumna(){
+        if(strlen($this->excelColumna)==1){
+            $prefCol='';
+            $col=ord($this->excelColumna);
+        }
+        else{
+            $prefCol=substr($this->excelColumna,1,1);
+            $col=ord(substr($this->excelColumna,-1));
+        }
+        if(chr($col)=='Z'){
+            $col=ord('A');
+            if($prefCol==''){
+                $prefCol='A';
+            }
+            else{
+                $prefCol=chr(ord($prefCol)+1);
+            }
+        }
+        else{
+            $col++;
+        }
+        $this->excelColumna=$prefCol . chr($col);
+    }
+
+    private function phpExcelDataTable($columns,$rows,$differentHeader=array('type' => 'N','text' => ''),$showHeaders=true){
+        $orgCol=$this->excelColumna;
+
+        $sinTitulo=true;
+        foreach ($columns as $column) {
+            if($column['title']!=''){
+                $this->phpExcelObject->getActiveSheet()
+                    ->setCellValue($this->excelColumna . $this->excelFila, $column['title']);
+                $sinTitulo=false;
+            }
+            if(isset($column['width'])){
+                $this->phpExcelObject->getActiveSheet()
+                    ->getColumnDimension($this->excelColumna)
+                    ->setWidth($column['width']);
+            }
+                $this->incExcelColumna();
+        }
+        if(!$sinTitulo){
+            $this->excelFila++;
+        }
+
+        foreach ($rows as $row) {
+            $this->excelColumna=$orgCol;
+            foreach ($row as $cell) {
+                $this->phpExcelObject->getActiveSheet()
+                    ->setCellValue($this->excelColumna . $this->excelFila, $cell);
+                $this->incExcelColumna();
+            }
+            $this->excelFila++;
+        }
+
+        $this->excelColumna=$orgCol;
+    }
     
     /**
      * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
@@ -588,11 +713,19 @@ foreach ($lista_cedu as $cd) {
     public function informeCuantitativoAction(Request $request)
     {
         $anio=$request->get('anno');
+        $this->formato=$request->get('formato');
         $idCentroEducativo=$request->get('centrosEducativo');
         $versionParaCoordinador=$request->get('versionParaCoordinador');
 
         $em = $this->getDoctrine()->getManager();
-        $this->pdfObj=$this->get("white_october.tcpdf")->create();
+        if($this->formato=='pdf'){
+            $this->pdfObj=$this->get("white_october.tcpdf")->create();
+        }
+        else{
+            $this->phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+            $this->excelColumna='A';
+            $this->excelFila=1;
+        }
 
         $this->encabezadoCuantitativo($em,$anio,$idCentroEducativo);
 
@@ -649,14 +782,21 @@ foreach ($lista_cedu as $cd) {
             number_format($tot2,2),
             number_format($tot3,2),
         );
-        $this->pdfObj->setColorearTotales(true);
-        $this->pdfObj->dataTable(array(
-                array('title' => 'CRITERIOS PROMEDIADOS BÁSICA, MEDIA Y PARVULARIA','border' => 1,'width' => 50,),
-                array('title' => 'Puntuación global esperada','border' => 1,),
-                array('title' => 'Puntuación global obtenida','border' => 1,),
-                array('title' => 'Diferencia','border' => 1,),
-            ),$puntosPorCriterioData,array());
-        $this->pdfObj->newLine();
+        $puntosPorCriterioTitulos=array(
+            array('title' => 'CRITERIOS PROMEDIADOS BÁSICA, MEDIA Y PARVULARIA','border' => 1,'width' => 50,),
+            array('title' => 'Puntuación global esperada','border' => 1,),
+            array('title' => 'Puntuación global obtenida','border' => 1,),
+            array('title' => 'Diferencia','border' => 1,),
+        );
+        if($this->formato=='pdf'){
+            $this->pdfObj->setColorearTotales(true);
+            $this->pdfObj->dataTable($puntosPorCriterioTitulos,$puntosPorCriterioData,array());
+            $this->pdfObj->newLine();
+        }
+        else{
+            $this->phpExcelDataTable($puntosPorCriterioTitulos,$puntosPorCriterioData,array());
+            $this->excelFila++;
+        }
         $resultado=$tot2;
 
         $formularios=$em->createQueryBuilder()
@@ -675,7 +815,9 @@ foreach ($lista_cedu as $cd) {
         foreach ($formularios as $formulario) {
 
             if(!$primerFormulario){
-                $this->pdfObj->AddPage();
+                if($this->formato=='pdf'){
+                    $this->pdfObj->AddPage();
+                }
                 $this->informacionGeneralCentro();
             }
             $primerFormulario=false;
@@ -739,16 +881,28 @@ foreach ($lista_cedu as $cd) {
                 );
 
                 if($mostrarCriterio){
-                    $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),$criterio['nbrSeccion'] . "\n" . $formulario['nbrFormulario'],0,'C');
-                    $this->pdfObj->newLine();
+                    $puntosPorIndicadorDataTitulos=array(
+                        array('title' => 'INDICADORES','border' => 1,'width' => 50,),
+                        array('title' => 'Puntuación global esperada','border' => 1,),
+                        array('title' => 'Puntuación global obtenida','border' => 1,),
+                        array('title' => 'Diferencia','border' => 1,),
+                    );
+                    $nbrCriterioStr=$criterio['nbrSeccion'] . "\n" . $formulario['nbrFormulario'];
+                    if($this->formato=='pdf'){
+                        $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),$nbrCriterioStr,0,'C');
+                        $this->pdfObj->newLine();
 
-                    $this->pdfObj->dataTable(array(
-                            array('title' => 'INDICADORES','border' => 1,'width' => 50,),
-                            array('title' => 'Puntuación global esperada','border' => 1,),
-                            array('title' => 'Puntuación global obtenida','border' => 1,),
-                            array('title' => 'Diferencia','border' => 1,),
-                        ),$puntosPorIndicadorData,array());
-                    $this->pdfObj->newLine();
+                        $this->pdfObj->dataTable($puntosPorIndicadorDataTitulos,$puntosPorIndicadorData,array());
+                        $this->pdfObj->newLine();
+                    }
+                    else{
+                        $this->phpExcelObject->getActiveSheet()
+                            ->setCellValue($this->excelColumna . $this->excelFila, $nbrCriterioStr);
+                        $this->excelFila+=2;
+
+                        $this->phpExcelDataTable($puntosPorIndicadorDataTitulos,$puntosPorIndicadorData,array());
+                        $this->excelFila++;
+                    }
                 }
 
             }
@@ -763,7 +917,7 @@ foreach ($lista_cedu as $cd) {
                     ->join('r.idPregunta','p')
                     ->join('p.idSeccion','s')
                     ->where('s.codSeccion=:codSeccion')
-                    ->andwhere('fce.idCentroEducativo=:idCentroEducativo')
+                    ->andWhere('fce.idCentroEducativo=:idCentroEducativo')
                     ->andWhere('f.codFormulario=:codFormulario')
                     ->andWhere('fce.fechaAplicacion between :fechaIni and :fechaFin')
                         ->setParameter('codSeccion',$codSeccion)
@@ -787,35 +941,78 @@ foreach ($lista_cedu as $cd) {
                     );
                 }
 
-                $this->pdfObj->setColorearTotales(false);
-                $this->pdfObj->dataTable(array(
-                        array('title' => 'Observaciones','border' => 1,),
-                    ),$observacionesArr,array());
-                $this->pdfObj->newLine();
+                $observacionesTitulos=array(
+                    array('title' => 'Observaciones','border' => 1,),
+                );
+                if($this->formato=='pdf'){
+                    $this->pdfObj->setColorearTotales(false);
+                    $this->pdfObj->dataTable($observacionesTitulos,$observacionesArr,array());
+                    $this->pdfObj->newLine();
+                }
+                else{
+                    $this->phpExcelDataTable($observacionesTitulos,$observacionesArr,array());
+                    $this->excelFila++;
+                }
             }
 
         }
 
         if(!$versionParaCoordinador){
-            $margins=$this->pdfObj->getMargins();
-            $col1=60;
-            $col2=20;
-            $this->pdfObj->setX($margins['left']+($this->pdfObj->getWorkAreaWidth()-$col1-$col2)/2);
-            $this->pdfObj->MultiCell($col1,2*$this->pdfObj->getLineHeight(),'RESULTADO DE ACREDITACIÓN INSTITUCIONAL',1,'C',
-                false,0,'','',true,0,false,true,2*$this->pdfObj->getLineHeight(),'M'
-                );
-            $this->pdfObj->SetFontSize(14);
-            $this->pdfObj->MultiCell($col2,2*$this->pdfObj->getLineHeight(),$resultado,1,'C',
-                false,1,'','',true,0,false,true,2*$this->pdfObj->getLineHeight(),'M'
-                );
-            $this->pdfObj->newLine(2);
+            $resultadoStr='RESULTADO DE ACREDITACIÓN INSTITUCIONAL';
+            if($this->formato=='pdf'){
+                $margins=$this->pdfObj->getMargins();
+                $col1=60;
+                $col2=20;
+                $this->pdfObj->setX($margins['left']+($this->pdfObj->getWorkAreaWidth()-$col1-$col2)/2);
+                $this->pdfObj->MultiCell($col1,2*$this->pdfObj->getLineHeight(),$resultadoStr,1,'C',
+                    false,0,'','',true,0,false,true,2*$this->pdfObj->getLineHeight(),'M'
+                    );
+                $this->pdfObj->SetFontSize(14);
+                $this->pdfObj->MultiCell($col2,2*$this->pdfObj->getLineHeight(),$resultado,1,'C',
+                    false,1,'','',true,0,false,true,2*$this->pdfObj->getLineHeight(),'M'
+                    );
+                $this->pdfObj->newLine(2);
 
-            $this->pdfObj->SetFontSize(9);
-            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth()/2,$this->pdfObj->getLineHeight(),$this->pdfObj->getAutoridad('directorGestion'),0,'C',false,0);
-            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth()/2,$this->pdfObj->getLineHeight(),$this->pdfObj->getAutoridad('jefeAcreditacion'),0,'C');
+                $this->pdfObj->SetFontSize(9);
+                $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth()/2,$this->pdfObj->getLineHeight(),$this->getAutoridad('directorGestion'),0,'C',false,0);
+                $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth()/2,$this->pdfObj->getLineHeight(),$this->getAutoridad('jefeAcreditacion'),0,'C');
+            }
+            else{
+                $this->phpExcelObject->getActiveSheet()
+                    ->setCellValue($this->excelColumna . $this->excelFila, $resultadoStr);
+                $this->incExcelColumna();
+                $this->phpExcelObject->getActiveSheet()
+                    ->setCellValue($this->excelColumna . $this->excelFila, $resultado);
+                $this->incExcelColumna();
+                $this->excelFila+=2;
+
+                $this->excelColumna='A';
+                $this->phpExcelObject->getActiveSheet()
+                    ->setCellValue($this->excelColumna . $this->excelFila, $this->getAutoridad('directorGestion'));
+                $this->incExcelColumna();
+                $this->incExcelColumna();
+                $this->phpExcelObject->getActiveSheet()
+                    ->setCellValue($this->excelColumna . $this->excelFila, $this->getAutoridad('jefeAcreditacion'));
+            }
         }
 
-        $this->pdfObj->Output("informeCuantitativo-" . $this->centroEducativo['codCentroEducativo'] . "-$anio.pdf", 'I');
+        $outputFileName="informeCuantitativo-" . $this->centroEducativo['codCentroEducativo'] . "-$anio";
+        if($this->formato=='pdf'){
+            $this->pdfObj->Output($outputFileName . '.pdf', 'I');
+        }
+        else{
+            $writer = $this->get('phpexcel')->createWriter($this->phpExcelObject, 'Excel5');
+            $response = $this->get('phpexcel')->createStreamedResponse($writer);
+            $dispositionHeader = $response->headers->makeDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                $outputFileName . '.xls'
+            );
+            $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+            $response->headers->set('Pragma', 'public');
+            $response->headers->set('Cache-Control', 'maxage=1');
+            $response->headers->set('Content-Disposition', $dispositionHeader);
+            return $response;
+        }
     }
 
     /**
@@ -824,16 +1021,26 @@ foreach ($lista_cedu as $cd) {
     public function informeCualitativoAction(Request $request)
     {
         $anio=$request->get('anno');
+        $this->formato=$request->get('formato');
         $idCentroEducativo=$request->get('centrosEducativo');
 
         $em = $this->getDoctrine()->getManager();
-        $this->pdfObj=$this->get("white_october.tcpdf")->create();
+        if($this->formato=='pdf'){
+            $this->pdfObj=$this->get("white_october.tcpdf")->create();
+        }
+        else{
+            $this->phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+            $this->excelColumna='A';
+            $this->excelFila=1;
+        }
 
         $this->encabezadoCuantitativo($em,$anio,$idCentroEducativo);
-        $this->pdfObj->setFooterType('imageFooter');
+        if($this->formato=='pdf'){
+            $this->pdfObj->setFooterType('imageFooter');
+        }
 
         $formularios=$em->createQueryBuilder()
-            ->select('f.codFormulario, f.nbrFormulario')
+            ->select('f.codFormulario, f.nbrFormulario, fce.idFormularioPorCentroEducativo')
             ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'fce')
             ->join('fce.idFormulario','f')
             ->where('fce.idCentroEducativo=:idCentroEducativo')
@@ -848,23 +1055,30 @@ foreach ($lista_cedu as $cd) {
         foreach ($formularios as $formulario) {
 
             if(!$primerFormulario){
-                $this->pdfObj->AddPage();
+                if($this->formato=='pdf'){
+                    $this->pdfObj->AddPage();
+                }
                 $this->informacionGeneralCentro();
             }
             $primerFormulario=false;
 
-            $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'OBSERVACIONES PARA ELABORAR EL PLAN DE MEJORAMIENTO INSTITUCIONAL' . "\n" . $formulario['nbrFormulario'],0,'C');
-            $this->pdfObj->newLine();
+            $observacionStr='OBSERVACIONES PARA ELABORAR EL PLAN DE MEJORAMIENTO INSTITUCIONAL' . "\n" . $formulario['nbrFormulario'];
+            if($this->formato=='pdf'){
+                $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),$observacionStr,0,'C');
+                $this->pdfObj->newLine();
+            }
+            else{
+                $this->phpExcelObject->getActiveSheet()
+                    ->setCellValue($this->excelColumna . $this->excelFila, $observacionStr);
+                $this->excelFila+=2;
+            }
 
             $criterios=$em->createQueryBuilder()
                 ->select('s.nbrSeccion, sfce.observacion')
-                ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'fce')
-                ->join('fce.idFormulario','f')
+                ->from('AcreditacionBundle:Formulario', 'f')
                 ->join('f.secciones','s')
-                ->leftJoin('s.seccionesPorFormularioPorCentroEducativo','sfce')
-                ->where('fce.idCentroEducativo=:idCentroEducativo')
+                ->leftJoin('s.seccionesPorFormularioPorCentroEducativo','sfce','WITH','sfce.idFormularioPorCentroEducativo=:idFormularioPorCentroEducativo')
                 ->andWhere('f.codFormulario=:codFormulario')
-                ->andWhere('fce.fechaAplicacion between :fechaIni and :fechaFin')
                 ->andWhere('exists (
                     select 1
                     from AcreditacionBundle:Pregunta p
@@ -872,10 +1086,8 @@ foreach ($lista_cedu as $cd) {
                     and p.idSeccion=s.idSeccion
                 )')
                 ->orderBy('s.codSeccion')
-                    ->setParameter('idCentroEducativo',$idCentroEducativo)
                     ->setParameter('codFormulario',$formulario['codFormulario'])
-                    ->setParameter('fechaIni',new \DateTime($anio . '-1-1'))
-                    ->setParameter('fechaFin',new \DateTime($anio . '-12-31'))
+                    ->setParameter('idFormularioPorCentroEducativo',$formulario['idFormularioPorCentroEducativo'])
                     ->getQuery()->getResult();
 
             $arrCriterios=array();
@@ -899,17 +1111,39 @@ foreach ($lista_cedu as $cd) {
                 );
             }
 
-            $this->pdfObj->setFilasZebra(true);
-            $this->pdfObj->dataTable(array(
-                    array('title' => 'CRITERIOS','border' => 1,'width' => 50,'align' => 'C'),
-                    array('title' => 'OBSERVACIONES','border' => 1,),
-                ),$arrCriterios,array());
-            $this->pdfObj->setFilasZebra(true);
-            $this->pdfObj->newLine();
-
+            $arrCriteriosTitulos=array(
+                array('title' => 'CRITERIOS','border' => 1,'width' => 50,'align' => 'C'),
+                array('title' => 'OBSERVACIONES','border' => 1,),
+            );
+            if($this->formato=='pdf'){
+                $this->pdfObj->setFilasZebra(true);
+                $this->pdfObj->dataTable($arrCriteriosTitulos,$arrCriterios,array());
+                $this->pdfObj->setFilasZebra(true);
+                $this->pdfObj->newLine();
+            }
+            else{
+                $this->phpExcelDataTable($arrCriteriosTitulos,$arrCriterios,array());
+                $this->excelFila++;
+            }
         }
 
-        $this->pdfObj->Output("informeCualitativo-" . $this->centroEducativo['codCentroEducativo'] . "-$anio.pdf", 'I');
+        $outputFileName="informeCualitativo-" . $this->centroEducativo['codCentroEducativo'] . "-$anio";
+        if($this->formato=='pdf'){
+            $this->pdfObj->Output($outputFileName . '.pdf', 'I');
+        }
+        else{
+            $writer = $this->get('phpexcel')->createWriter($this->phpExcelObject, 'Excel5');
+            $response = $this->get('phpexcel')->createStreamedResponse($writer);
+            $dispositionHeader = $response->headers->makeDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                $outputFileName . '.xls'
+            );
+            $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+            $response->headers->set('Pragma', 'public');
+            $response->headers->set('Cache-Control', 'maxage=1');
+            $response->headers->set('Content-Disposition', $dispositionHeader);
+            return $response;
+        }
     }
 
     /**
@@ -975,11 +1209,11 @@ foreach ($lista_cedu as $cd) {
         $y=$this->pdfObj->GetY()+20;
         $this->pdfObj->SetXY($x,$y);
 $this->pdfObj->setTextShadow(array('enabled' => true, 'depth_w' => 0.4, 'depth_h' => 0.4, 'color' => array(255,255,255)));
-        $this->pdfObj->MultiCell(90, $this->pdfObj->getLineHeight(), $this->pdfObj->getAutoridad('ministro','ST'), 0, 'C');
+        $this->pdfObj->MultiCell(90, $this->pdfObj->getLineHeight(), $this->getAutoridad('ministro','ST'), 0, 'C');
         $this->pdfObj->SetXY($x+92,$y);
-        $this->pdfObj->MultiCell(90, $this->pdfObj->getLineHeight(), $this->pdfObj->getAutoridad('viceMinistro','ST'), 0, 'C');
+        $this->pdfObj->MultiCell(90, $this->pdfObj->getLineHeight(), $this->getAutoridad('viceMinistro','ST'), 0, 'C');
         $this->pdfObj->SetXY($x+2*92,$y);
-        $this->pdfObj->MultiCell(90, $this->pdfObj->getLineHeight(), $this->pdfObj->getAutoridad('directorGestion','ST'), 0, 'C');
+        $this->pdfObj->MultiCell(90, $this->pdfObj->getLineHeight(), $this->getAutoridad('directorGestion','ST'), 0, 'C');
 
         $this->pdfObj->Output("diploma-" . $centroEducativo['codCentroEducativo'] . "-$anio.pdf", 'I');
 
@@ -1038,7 +1272,7 @@ MINISTERIO DE EDUCACIÓN',0,'C');
             </ol>', 0, 1, false, true, 'L');
         $this->pdfObj->newLine(3);
 
-        $this->pdfObj->MultiCell(80,$this->pdfObj->getLineHeight(),$this->pdfObj->getAutoridad('directorGestion'),'T','L');
+        $this->pdfObj->MultiCell(80,$this->pdfObj->getLineHeight(),$this->getAutoridad('directorGestion'),'T','L');
 
         $this->pdfObj->Output("noAcreditado-" . $centroEducativo['codCentroEducativo'] . "-$anio.pdf", 'I');
     }

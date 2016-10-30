@@ -38,8 +38,14 @@ class SeccionController extends Controller
             $idFormularioPorCentroEducativoRevisar=null;
             $idFormularioPorCentroEducativo=$session->get('idFormularioPorCentroEducativo');
         }
-        $estadoFormularioPorCentroEducativo=$em->getRepository('AcreditacionBundle:FormularioPorCentroEducativo')->find($idFormularioPorCentroEducativo)
+        $formularioPorCentroEducativo=$em->getRepository('AcreditacionBundle:FormularioPorCentroEducativo')->find($idFormularioPorCentroEducativo);
+        $estadoFormularioPorCentroEducativo=$formularioPorCentroEducativo
             ->getIdEstadoFormulario()->getCodEstadoFormulario();
+        if($formularioPorCentroEducativo->getIdformularioPorCentroEducativo()==$session->get('idFormularioPorCentroEducativo') &&
+            !in_array($formularioPorCentroEducativo->getIdEstadoFormulario()->getCodEstadoFormulario(),array('NU','DI','CO'))){
+            $idFormularioPorCentroEducativo=null;
+            $session->remove('idFormularioPorCentroEducativo');
+        }
         if(!$idFormularioPorCentroEducativo){
             return $this->redirectToRoute('homepage');
         }
@@ -84,7 +90,8 @@ class SeccionController extends Controller
         return $this->render('seccion/index.html.twig', array(
             'seccions' => $seccions,
             'idFormularioPorCentroEducativoRevisar' => $idFormularioPorCentroEducativoRevisar,
-            'estadoFormularioPorCentroEducativo' => $estadoFormularioPorCentroEducativo
+            'estadoFormularioPorCentroEducativo' => $estadoFormularioPorCentroEducativo,
+            'archivoSubido' => $formularioPorCentroEducativo->getRutaArchivo(),
         ));
     }
 
@@ -275,7 +282,7 @@ class SeccionController extends Controller
         $idFormularioPorCentroEducativo=$session->get('idFormularioPorCentroEducativo');
         $formularioPorCentroEducativo=$em->getRepository('AcreditacionBundle:FormularioPorCentroEducativo')->find($idFormularioPorCentroEducativo);
         $codEstadoFormulario=$formularioPorCentroEducativo->getIdEstadoFormulario()->getCodEstadoFormulario();
-        if(in_array($codEstadoFormulario,array('DI','CO'))){
+        if(in_array($codEstadoFormulario,array('DI','RE','CO'))){
 
 
 
