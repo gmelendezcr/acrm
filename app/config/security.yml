@@ -27,6 +27,8 @@ security:
                 provider: fos_userbundle
                 csrf_token_generator: security.csrf.token_manager
                 login_path: /admin
+                always_use_default_target_path: true
+                default_target_path: /postLogin
                 remember_me: true
                 #failure_path: login_fallo
                 # if you are using Symfony < 2.8, use the following config instead:

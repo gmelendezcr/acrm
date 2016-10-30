@@ -36,3 +36,9 @@ acreditacion_recovery:
 acreditacion_login:
     path:     /admin
     defaults: { _controller: AcreditacionBundle:Default:admin }
+acreditacion_post_login:
+    path:     /postLogin
+    defaults: { _controller: AcreditacionBundle:Default:postLogin }
+acreditacion_pre_logout:
+    path:     /preLogout
+    defaults: { _controller: AcreditacionBundle:Default:preLogout }

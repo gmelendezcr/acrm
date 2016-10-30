@@ -27,6 +27,29 @@ class DefaultController extends Controller{
             ));
         }
     }
+
+    public function postLoginAction()
+    {
+        $user=$this->getUser();
+        if(substr($_SERVER['HTTP_REFERER'],-6)=='/admin' && $user){
+            $em=$this->getDoctrine()->getManager();
+            new AccionPorUsuario($em,$user,'IN',$user);
+            $em->flush();
+        }
+        return $this->redirectToRoute('acreditacion_homepage');
+    }
+
+    public function preLogoutAction()
+    {
+        $user=$this->getUser();
+        if($user){
+            $em=$this->getDoctrine()->getManager();
+            new AccionPorUsuario($em,$user,'SA',$user);
+            $em->flush();
+        }
+        return $this->redirectToRoute('fos_user_security_logout');
+    }
+
     public function inicioAction(){
         
         

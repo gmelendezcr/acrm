@@ -37,7 +37,7 @@
                                             <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-user"></span>                                            
                                             </span>
-                                            <input type="text" name="_username" class="form-control" placeholder="Digite su usuario">
+                                            <input type="text" name="_username" value="{{ app.session.get('_security.last_username') }}" class="form-control" placeholder="Digite su usuario">
                                         </div>
                                         </div>
                                         <div class="capa-separador-1 clearfix"></div>
