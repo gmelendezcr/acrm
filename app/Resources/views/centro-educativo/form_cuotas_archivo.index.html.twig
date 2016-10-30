@@ -2,9 +2,17 @@
 
 {% block body %}
     <div class="col-md-12">
-        <h2 class="sin-margin text-center">
-            Cargar cuotas desde archivo
-        </h2>
+        <div class="col-md-10">
+            <h2 class="sin-margin text-center">
+                Cargar cuotas desde archivo
+            </h2>
+        </div>
+        <div class="col-md-2 text-right sin-padding-right">
+            <a class="btn btn-info btn-sm inline" href="{{path('centro_educativo_cuotas', {'id':ce_show.idCentroEducativo })}}">
+                <span class="glyphicon glyphicon-triangle-left"></span> 
+                Regresar
+            </a>
+        </div>
         <div class="capa-separador-1"></div>
         <div class="table-responsive">
         <table class="table table-bordered">

@@ -1,6 +1,7 @@
 {% extends 'login.base.html.twig' %}
 
 {% block body %}
+
 <div class="header-control-login">
             <div class="container">
                 <div class="row">
@@ -35,20 +36,11 @@
                                             <input type="password" name="_password" class="form-control" placeholder="Digite su clave">
                                         </div>
                                         </div>
-                                        <div class="help-block text-right">
-                                            <a href="{{ path('acreditacion_recovery') }}">
-                                                ¿Olvidó su clave?
-                                            </a>
-                                        </div>                                                                        
                                         <div class="col-md-12 sin-padding text-center">
-                                            <a href='#' onClick="$('form:first').submit();" class="btn btn-info btn-md btn-block ">
+                                            {#<a href='#' onClick="$('form:first').submit();" class="btn btn-info btn-md btn-block ">
                                                 <span class="glyphicon glyphicon-triangle-right"></span> Entrar
-                                            </a>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" id="remember_me" name="_remember_me" value="on" /> Recordarme
-                                                </label>
-                                            </div>
+                                            </a>#}
+                                            <button type="submit" form="form_validar_login" value="Entrar" class="btn btn-info btn-md btn-block "><span class="glyphicon glyphicon-triangle-right"></span> Entrar</button>
                                         </div>
                                     </div>
                                 </form>

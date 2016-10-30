@@ -332,7 +332,6 @@ $( document ).ready( function () {
         		required: true,
         		date: true,
         		maxlength: 4,
-        		
     		}
 		},
 		messages: {
@@ -479,7 +478,7 @@ $( document ).ready( function () {
 	            required: "Su nombre es requerido",
 	        },
 	        ["usuario[email]"]: {
-	            required: "Digite su cuenta de correo electrónico, esta le permitira recuperar su clave.",
+	            required: "Digite su cuenta de correo electrónico",
 	            email: "Digite una cuenta de correo válida"
 	        },
 	        ["usuario[password]"]: {
@@ -512,8 +511,63 @@ $( document ).ready( function () {
 	    }
 	});
 	
+		//Registro editar
+	$( "#form_cambio_clave" ).validate( {
+		rules: {
+	        ["fos_user_change_password_form[current_password]"]:{
+	            required: true,
+	            minlength: 4,
+	        },
+	        ["fos_user_change_password_form[plainPassword][first]"]:{
+	            required: true,
+	            minlength: 4
+	        },
+	        ["fos_user_change_password_form[plainPassword][second]"]:{
+	            required: true,
+	            minlength: 4,
+	            equalTo : "#fos_user_change_password_form_plainPassword_first"
+	        },
+	        
+	    },
+	    messages: {
+	        ["fos_user_change_password_form[current_password]"]: {
+	            required: "Por favor digite su clave de acceso actual",
+	            minlength: "La clave debe superar los 4 caracteres"
+	        },
+        	["fos_user_change_password_form[plainPassword][first]"]: {
+	            required: "Por favor digite su nueva clave de acceso",
+	            minlength: "La clave debe superar los 4 caracteres",
+	           
+	        },
+	        ["fos_user_change_password_form[plainPassword][second]"]: {
+	            required: "Por favor repita su nueva clave de acceso",
+	            minlength: "La clave debe superar los 4 caracteres",
+	            equalTo:"Las claves no coinciden, por favor verificar"
+	        },
+	        
+	    },
+	    highlight: function(element) {
+	        $(element).closest('.form-group').addClass('has-error').removeClass( "has-success" );
+	    },
+	    unhighlight: function(element) {
+	        $(element).closest('.form-group').addClass( "has-success" ).removeClass('has-error');
+	    },
+	    errorElement: 'span',
+	    errorClass: 'help-block',
+	    errorPlacement: function(error, element) {
+	        if(element.parent('.input-group').length) {
+	            error.insertAfter(element.parent());
+	        } else {
+	            error.insertAfter(element);
+	        }
+	    }
+	});
+	
 	
 });
+
+
+
 
 /*--------------------------------------------------------------------------------
 Msj informativo title

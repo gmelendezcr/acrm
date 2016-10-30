@@ -131,30 +131,28 @@ public function setRole($role) {
      *
      * @Security("has_role('ROLE_SUPER_ADMIN')")
      */
-      public function editAction(Request $request, Usuario $usuario){
-        //$rl=array('roles' => $this->container->getParameter('security.role_hierarchy.roles'));
-        //var_dump($a);
-        //--$em = $this->getDoctrine()->getManager();
-        //--$edit_user = $em->getRepository('AcreditacionBundle:Usuario')->find($usuario);
-      
+    public function editAction(Request $request, Usuario $usuario){
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('AcreditacionBundle:Usuario')->find($usuario);
+        $password = $user->getPassword();
         
-        
-        
-        //var_dump($edit_user);
         $deleteForm = $this->createDeleteForm($usuario);
         $editForm = $this->createForm('AcreditacionBundle\Form\UsuarioType', $usuario);
+        //$usuario->remove('password');
         $editForm->handleRequest($request);
-        //$userManager = $this->get('fos_user.user_manager');
-        //$user = $userManager->findUserBy(['id' => 1]);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $usuario->setPlainPassword(''); //sin esta línea, al no cambiar la contraseña la guarda en texto plano
-            $usuario->setPlainPassword($usuario->getPassword());
+            $pss = $editForm->get('password')->getData();
+            if($pss!="abcd"){
+                $usuario->setPlainPassword(''); 
+                $usuario->setPlainPassword($usuario->getPassword());
+            }else{
+                $usuario->setPassword($password);
+            }
             new AccionPorUsuario($em,$this->getUser(),'MU',$usuario);
             $em->persist($usuario);
             $em->flush();
-
             return $this->redirectToRoute('usuario_index');
            
         }
@@ -215,4 +213,13 @@ public function setRole($role) {
             ->getForm()
         ;
     }
+    
+    public function falloAction(Request $request, Usuario $usuario){
+       
+        
+        
+        
+        return $this->render('defaults/admin.index.html.twig');
+    }
+    
 }

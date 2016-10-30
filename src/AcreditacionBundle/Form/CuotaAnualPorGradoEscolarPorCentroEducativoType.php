@@ -98,7 +98,7 @@ class CuotaAnualPorGradoEscolarPorCentroEducativoType extends AbstractType{
         ->add('matricula','text',array('label' => 'Matrícula'))
         ->add('monto','text',array('label' => 'Colegiatura'))
         ->add('anno','text',array('label' => 'Año'))
-        ->add('cantidadCuotas','text',array('label' => 'Cantidad de colegiaturas'));
+        ->add('cantidadCuotas','text',array('label' => 'Número de colegiaturas'));
         //->add('idGradoEscolarPorCentroEducativo','choice', $this->comboNG);
         //->add('idGradoEscolarPorCentroEducativo','choice',$this->comboNG );
     }
