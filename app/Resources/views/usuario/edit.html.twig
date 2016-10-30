@@ -2,6 +2,19 @@
 {% block titulo %}
     Editar un usuario
 {% endblock %}
+
+{% block password %}
+<div class="form-group">
+    {{ form_label(form.password) }}
+    {{ form_widget(form.password, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite la contraseña','required':'required'}}) }}
+</div>
+<div class="form-group">
+    {{ form_label(form.passwordConfirmation) }}
+    {{ form_widget(form.passwordConfirmation, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite la confirmación de la contraseña','required':'required'}}) }}
+</div>
+{% endblock %}
+
+
 {% block guardar %}
     <div class="btn-group  btnk" role="group">
         <a class="btn btn-info btn-sm" href="{{ path('usuario_index') }}">

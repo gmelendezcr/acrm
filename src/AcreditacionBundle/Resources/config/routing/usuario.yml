@@ -22,3 +22,8 @@ usuario_delete:
     path:     /{id}/delete
     defaults: { _controller: "AcreditacionBundle:Usuario:delete" }
     methods:  [DELETE, GET]
+
+login_fallo:
+    path:     /fallo
+    defaults: { _controller: "AcreditacionBundle:Usuario:fallo" }
+    methods:  [POST, GET]

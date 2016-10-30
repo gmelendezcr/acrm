@@ -10,9 +10,9 @@
     <div class="col-md-4 text-right">
         <div class="btn-group btnk" role="group">
             <a class="btn btn-info btn-sm inline" href="{{ path('centro_educativo_lista') }}">
-                            <span class="glyphicon glyphicon-triangle-left"></span> 
-                            Regresar
-                        </a>
+                <span class="glyphicon glyphicon-triangle-left"></span> 
+                Regresar
+            </a>
             <a href='{{path('centro_educativo_cuota_form_archivo',{'id':ce_show.idCentroEducativo })}}' class='btn btn-success btn-sm inline '>
                 <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span> Cargar archivo
             </a>
@@ -38,7 +38,7 @@
                         <td>{{ce_show.nbrCentroEducativo}}</td>
                     </tr>
                     <tr>
-                        <td class="text-right bg-success"><strong>Año</strong></td>
+                        <td class="text-right bg-success"><strong>Vigente desde</strong></td>
                         <td>{{anno}}</td>
                     </tr>
                 </tbody>
@@ -79,7 +79,7 @@
                                Colegiatura
                             </th>
                             <th class="col-sm-2 text-center">
-                               Cant Colegiatura
+                               No. Colegiatura
                             </th>
                             
                             <th class="col-sm-2 text-center">

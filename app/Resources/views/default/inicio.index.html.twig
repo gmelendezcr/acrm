@@ -11,9 +11,19 @@
         </div>
         <div class="clearfix capa-separador-1"></div>
     </div>
-
+    {% if is_granted('ROLE_SUPER_ADMIN') and is_granted('ROLE_MINED') and is_granted('ROLE_DIGITADOR') and is_granted('ROLE_REVISOR') and is_granted('ROLE_EVALUADOR') %}
+         {% set col = '4' %}
+    {% elseif is_granted('ROLE_REVISOR') %}
+        {% set col = '6' %}
+    {% elseif is_granted('ROLE_EVALUADOR') %}
+        {% set col = '4' %}
+    {% elseif is_granted('ROLE_REVISOR') or is_granted('ROLE_EVALUADOR') %}
+        {% set col = '4' %}
+    {% else %}
+        {% set col = '4' %}
+    {% endif %}
     {% if is_granted('ROLE_REVISOR') or is_granted('ROLE_EVALUADOR') %}
-        <div class="col-md-4">
+        <div class="col-md-{{col}}">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                   <span class="label label-warning label-right">{{ num_form1 }}</span> Formularios en digitación o corrección 
@@ -58,7 +68,7 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-{{col}}">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                    <span class="label label-warning label-right">{{ num_form2 }}</span> Formularios pendientes de revisar 
@@ -105,7 +115,7 @@
     {% endif %}
 
     {% if is_granted('ROLE_EVALUADOR') %}
-        <div class="col-md-4">
+        <div class="col-md-{{col}}">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <span class="label label-warning label-right">{{ num_form3 }}</span> Formularios pendientes de calificar 

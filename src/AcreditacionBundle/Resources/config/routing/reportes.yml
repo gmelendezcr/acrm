@@ -67,3 +67,11 @@ consulta_publica_form_buscar:
     path: /consulta-publica-reporte
     defaults: { _controller: AcreditacionBundle:Reportes:ConsultaPublicaBuscar}
     methods:  [POST]
+reporte_general_cedu:
+    path:     /formulario-general-de-centro-educativo
+    defaults: { _controller: AcreditacionBundle:Reportes:ReporteGeneralCedu }
+    methods:  [GET]
+reporte_general_cedu_generar:
+    path:     /reporte-general-de-centro-educativo
+    defaults: { _controller: AcreditacionBundle:Reportes:ReporteGeneralCeduGenerar }
+    methods:  [POST]

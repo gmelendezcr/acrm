@@ -36,7 +36,7 @@
                         {% endif %}
                         <textarea class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control' id='{{ id }}' name='{{ id }}' {{ maxLength }} {{ regExp|raw }} {{ (regExp ? 'onBlur="' ~ id ~ '_regExp();"' : '')|raw }} {{ readonly }} {{ disabled2 }}>{{ respuestas[pregunta.idPregunta] ?? null }}</textarea>
                         {% if regExp %}
-                            <span id="{{ id }}_noValido" class="noValidoOculto">El valor no es válido</span>
+                            <span id="{{ id }}_noValido" class="noValidoOculto">Digite una cuenta de correo válida</span>
                         {% endif %}
                         {{ btRevisar|raw }}
                     </td>

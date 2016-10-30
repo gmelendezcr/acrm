@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 use PHPExcel_IOFactory;
-
+use PHPExcel_Style_Alignment;
 class ReportesController extends Controller{
 
     private $autoridades;
@@ -508,8 +508,18 @@ foreach ($lista_cedu as $cd) {
                 $phpExcelObject->getActiveSheet()->setTitle('Sistema de Acreditación');
                 //Fin header
         
+                $styleArray = array(
+                    'font'  => array(
+                        'bold'  => true,
+                        //'color' => array('rgb' => 'FF0000'),
+                        //'size'  => 15,
+                        'name'  => 'Verdana'
+                    )
+                );
         
-        
+        $phpExcelObject->getActiveSheet()->getStyle('B1')->applyFromArray($styleArray);
+        $phpExcelObject->getActiveSheet()->getStyle('B1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $phpExcelObject->getActiveSheet()->getStyle('B3:F3')->applyFromArray($styleArray);
         
         $phpExcelObject->setActiveSheetIndex(0)
             ->mergeCells('B1:F1')
@@ -519,6 +529,7 @@ foreach ($lista_cedu as $cd) {
             ->setCellValue('D3', 'Ubicación')
             ->setCellValue('E3', 'Fecha inicia')
             ->setCellValue('F3', 'Fecha vencimiento');
+        
         $phpExcelObject->setActiveSheetIndex(0)
             ->getColumnDimension('B')
             ->setWidth(10);
@@ -2472,4 +2483,235 @@ MINISTERIO DE EDUCACIÓN',0,'C');
             return $response;
         }
     }
+    
+    public function ReporteGeneralCeduAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $lista_cedu=$em->createQueryBuilder()
+        ->select('
+            ce.idCentroEducativo,ce.codCentroEducativo, ce.nbrCentroEducativo, ce.direccionCentroEducativo,
+            d.nbrDepartamento,
+            m.nbrMunicipio,
+            acred.fechaInicio,
+            acred.fechaFin,
+            est.nbrEstadoAcreditacion
+        ')
+        ->from('AcreditacionBundle:CentroEducativo', 'ce')
+        ->join('ce.acreditaciones','acred' )
+        ->join('acred.idEstadoAcreditacion','est' )
+        ->join('ce.idMunicipio','m')
+        ->join('m.idDepartamento','d')
+            ->where('exists (
+                select 1
+                    from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
+                        where e.codEstadoAcreditacion in (\'AC\',\'AO\',\'NA\')
+                            and a.idEstadoAcreditacion=e.idEstadoAcreditacion
+                            and a.idCentroEducativo=ce.idCentroEducativo
+            )')
+        ->getQuery()->getResult();
+        return $this->render('reportes/reporte.InformacionGeneralCedu.html.twig',
+            array(
+                'lista_cedu'=>$lista_cedu
+            )
+        );
+    }
+    
+    
+    public function ReporteGeneralCeduGenerarAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        
+        //Parametros 
+        $idCentroEducativo=$request->get('centrosEducativo');
+        $formato=$request->get('formato');
+        
+        //Muestra centro educativo
+        $CentroEducativo=$em->createQueryBuilder()
+            ->select('ce.codCentroEducativo, ce.nbrCentroEducativo, ce.direccionCentroEducativo, m.nbrMunicipio, d.nbrDepartamento')
+            ->from('AcreditacionBundle:CentroEducativo', 'ce')
+            ->join('ce.idMunicipio','m')
+            ->join('m.idDepartamento','d')
+            ->where('ce.idCentroEducativo=:idCentroEducativo')
+                ->setParameter('idCentroEducativo',$idCentroEducativo)
+                ->getQuery()->getSingleResult();
+                
+        //msj encabezado
+        $msj_encabezado="Información general del centro educativo";
+        $msj_historial="Historial de evaluaciones";
+        
+        //Datos de centros educativos
+        //$codCentroEducativo="";
+        
+        $codCentroEducativo=$CentroEducativo["codCentroEducativo"];
+        $nbrCentroEducativo=$CentroEducativo["nbrCentroEducativo"];
+        $ubicacionCentroEducativo=$CentroEducativo["nbrDepartamento"].", ".$CentroEducativo["nbrMunicipio"].", ".$CentroEducativo["direccionCentroEducativo"];
+        
+        //Historial
+        $lista_historial=$em->createQueryBuilder()
+        ->select('
+            acred.fechaInicio,
+            acred.fechaFin,
+            est.nbrEstadoAcreditacion
+        ')->from('AcreditacionBundle:CentroEducativo', 'ce')
+            ->join('ce.acreditaciones','acred' )
+            ->join('acred.idEstadoAcreditacion','est' )
+            ->where('ce.idCentroEducativo=:idCentroEducativo')
+                ->setParameter('idCentroEducativo',$idCentroEducativo)
+                ->getQuery()->getResult();
+        
+        //código genera pdf
+        if($formato=="pdf"){
+            $pdfObj=$this->get("white_october.tcpdf")->create();
+            $pdfObj->setHeaderType('newLogoHeader');
+            $pdfObj->setFooterType('simpleFooter');
+            $pdfObj->startPageGroup();
+            $pdfObj->AddPage();
+            $pdfObj->MultiCell($pdfObj->getWorkAreaWidth(),$pdfObj->getLineHeight(),''.$msj_encabezado.'',0,'C');
+            $pdfObj->newLine();
+            $pdfObj->SetFontSize(9);
+    
+            $html = '
+                <style>
+                    table{
+                        color: #003300;
+                        font-family: helvetica;
+                        font-size: 8pt;
+                        background-color: #ccffcc;
+                    }
+                    table, td, th {
+                        border: 1px solid #CDCDCD;
+                        text-align: left;
+                    }
+                    td{
+                        padding:5px;
+                    }
+                    td.second {
+                        background-color: #ccffcc;
+                    }
+                </style>
+        
+                <table border="0" cellpadding="4" cellpacing="4">
+                    <tr bgcolor="#ccc" valign="middle">
+                        <td width="15%" valign="middle"><strong>Código</strong></td><td width="90%" valign="middle" bgcolor="#fff">'.$codCentroEducativo.'</td>
+                    </tr>
+                    <tr bgcolor="#ccc" valign="middle">
+                        <td width="15%" valign="middle"><strong>Nombre</strong></td><td width="90%" valign="middle" bgcolor="#fff">'.$nbrCentroEducativo.'</td>
+                    </tr>
+                    <tr bgcolor="#ccc" valign="middle">
+                        <td width="15%" valign="middle"><strong>Ubicación</strong></td><td width="90%" valign="middle" bgcolor="#fff">'.$ubicacionCentroEducativo.'</td>
+                    </tr>
+                </table>
+                <br /><br />
+                <table border="0" cellpadding="4" cellpacing="4" width="105%">
+                    <tr>
+                        <th colspan="4" align="center">'.$msj_historial.'</th>
+                    </tr>
+                    <tr bgcolor="#ccc" valign="middle">
+                        <th width="10%" valign="middle" rowspan="2"><br /><strong>Año</strong></th>
+                        <th width="60%" rowspan="2"><br /><strong>Estado</strong></th>
+                        <th width="30%" colspan="2" align="center"><strong>Fecha</strong></th>
+                    </tr>
+                    <tr bgcolor="#ccc" valign="middle">
+                        <th width="15%" align="center"><strong>Inicial</strong></th>
+                        <th width="15%" align="center"><strong>Vencimiento</strong></th>
+                    </tr>
+            ';
+            foreach ($lista_historial as $item_historico) {
+                $html .='
+                    <tr>
+                        <td>'.$item_historico["fechaInicio"]->format('Y').'</td>
+                        <td>'.$item_historico["nbrEstadoAcreditacion"].'</td>
+                        <td align="center">'.$item_historico["fechaInicio"]->format('d-m-Y').'</td>
+                        <td align="center">'.$item_historico["fechaFin"]->format('d-m-Y').'</td>
+                    </tr>';
+            }
+            $html.="</table>";
+            
+            //Se genera el pdf
+            $pdfObj->writeHTML($html, true, 0, true, 0);
+            $pdfObj->lastPage();
+            $pdfObj->Output($codCentroEducativo, 'I');
+        }else{
+            //Inicia excell
+            
+            //Header
+                $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+                $phpExcelObject->getProperties()
+                    ->setCreator("Sistema de Acreditación")
+                    ->setLastModifiedBy("")
+                    ->setTitle("Sistema de Acreditación")
+                    ->setSubject("")
+                    ->setDescription("")
+                    ->setKeywords("");
+                $phpExcelObject->setActiveSheetIndex(0);
+                $phpExcelObject->getActiveSheet()->setTitle('Sistema de Acreditación');
+            //Fin header
+        
+                $styleArray = array(
+                    'font'  => array(
+                        'bold'  => true,
+                        //'color' => array('rgb' => 'FF0000'),
+                        //'size'  => 15,
+                        'name'  => 'Verdana'
+                    )
+                );
+        
+        $phpExcelObject->getActiveSheet()->getStyle('B1')->applyFromArray($styleArray);
+        $phpExcelObject->getActiveSheet()->getStyle('B1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $phpExcelObject->getActiveSheet()->getStyle('B3:F3')->applyFromArray($styleArray);
+        
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->mergeCells('B1:F1')
+            ->setCellValue('B1', 'Listado de centros educativos por estado actual')
+            ->setCellValue('B3', 'Código')
+            ->setCellValue('C3', 'Nombre')
+            ->setCellValue('D3', 'Ubicación')
+            ->setCellValue('E3', 'Fecha inicia')
+            ->setCellValue('F3', 'Fecha vencimiento');
+        
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->getColumnDimension('B')
+            ->setWidth(10);
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->getColumnDimension('C')
+            ->setWidth(35);
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->getColumnDimension('D')
+            ->setWidth(35);
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->getColumnDimension('E')
+            ->setWidth(15);
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->getColumnDimension('F')
+            ->setWidth(15);
+        $row = 4;
+        foreach($lista_cedu as $cd){
+            $codigo                 =$cd["codCentroEducativo"];
+            $nbr_centro_educativo   =$cd["nbrCentroEducativo"];
+            $direccion              =$cd["nbrDepartamento"].','.$cd["nbrMunicipio"].''.$cd["direccionCentroEducativo"];
+            $fecha_inicial          =$cd["fechaInicio"]->format("d-m-Y");
+            $fecha_vencimiento      =$cd["fechaFin"]->format("d-m-Y");
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->setCellValue('B'.$row, $codigo)
+                ->setCellValue('C'.$row, $nbr_centro_educativo)
+                ->setCellValue('D'.$row, $direccion)
+                ->setCellValue('E'.$row, $fecha_inicial)
+                ->setCellValue('F'.$row, $fecha_vencimiento);
+            $row++;
+        }
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            'Listado de centros educativos por estado actual.xls'
+        );
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+        return $response;
+            
+            
+        }
+    }
+    
+    
 }
