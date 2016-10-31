@@ -463,16 +463,16 @@ public function pdf_estado_actual_ceduAction(Request $request){
         </style>
         
         <table border="0" cellpadding="4" cellpacing="4" style="">
-            <tr>
+            <tr bgcolor="#1D365F" style="color:#fff">
                 <th colspan="5" align="center">'.$msj.'</th>
             </tr>
-            <tr bgcolor="#ccc" valign="middle">
+            <tr bgcolor="#D9EDF7" valign="middle">
                 <th width="10%" valign="middle" rowspan="2"><br /><strong>Código</strong></th>
                 <th width="30%" rowspan="2"><br /><strong>Nombre</strong></th>
                 <th width="30%" rowspan="2"><br /><strong>Ubicación</strong></th>
                 <th width="30%" colspan="2" align="center"><strong>Fecha</strong></th>
             </tr>
-            <tr bgcolor="#ccc" valign="middle">
+            <tr bgcolor="#D9EDF7" valign="middle">
                 <th width="15%" align="center"><strong>Inicial</strong></th>
                 <th width="15%" align="center"><strong>Vencimiento</strong></th>
             </tr>
@@ -517,19 +517,45 @@ foreach ($lista_cedu as $cd) {
                         'name'  => 'Verdana'
                     )
                 );
+                $styleArrayCabecera = array(
+                'font'  => array(
+                    'color' => array('rgb' => 'FFFFFF'),
+                    'name'  => 'Verdana'
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => '1D365F')
+                )
+            );
+
+            $styleArrayItem = array(
+                'font'  => array(
+                    'color' => array('rgb' => '000000'),
+                    'name'  => 'Verdana'
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => 'D9EDF7')
+                    )
+            );
+                
+                
         
-        $phpExcelObject->getActiveSheet()->getStyle('B1')->applyFromArray($styleArray);
+        $phpExcelObject->getActiveSheet()->getStyle('B1')->applyFromArray($styleArrayCabecera);
         $phpExcelObject->getActiveSheet()->getStyle('B1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $phpExcelObject->getActiveSheet()->getStyle('B3:F3')->applyFromArray($styleArray);
+        $phpExcelObject->getActiveSheet()->getStyle('B2:F2')->applyFromArray($styleArrayItem);
         
         $phpExcelObject->setActiveSheetIndex(0)
             ->mergeCells('B1:F1')
             ->setCellValue('B1', 'Listado de centros educativos por estado actual')
-            ->setCellValue('B3', 'Código')
-            ->setCellValue('C3', 'Nombre')
-            ->setCellValue('D3', 'Ubicación')
-            ->setCellValue('E3', 'Fecha inicia')
-            ->setCellValue('F3', 'Fecha vencimiento');
+            ->setCellValue('B2', 'Código')
+            ->setCellValue('C2', 'Nombre')
+            ->setCellValue('D2', 'Ubicación')
+            ->setCellValue('E2', 'Fecha inicia')
+            ->setCellValue('F2', 'Fecha vencimiento');
+            
+        $phpExcelObject->getActiveSheet()->getRowDimension(1)->setRowHeight(20);
+        $phpExcelObject->getActiveSheet()->getRowDimension(2)->setRowHeight(20);
         
         $phpExcelObject->setActiveSheetIndex(0)
             ->getColumnDimension('B')
@@ -546,7 +572,7 @@ foreach ($lista_cedu as $cd) {
         $phpExcelObject->setActiveSheetIndex(0)
             ->getColumnDimension('F')
             ->setWidth(15);
-        $row = 4;
+        $row = 3;
         foreach($lista_cedu as $cd){
             $codigo                 =$cd["codCentroEducativo"];
             $nbr_centro_educativo   =$cd["nbrCentroEducativo"];
@@ -2489,25 +2515,10 @@ MINISTERIO DE EDUCACIÓN',0,'C');
         $em = $this->getDoctrine()->getManager();
         $lista_cedu=$em->createQueryBuilder()
         ->select('
-            ce.idCentroEducativo,ce.codCentroEducativo, ce.nbrCentroEducativo, ce.direccionCentroEducativo,
-            d.nbrDepartamento,
-            m.nbrMunicipio,
-            acred.fechaInicio,
-            acred.fechaFin,
-            est.nbrEstadoAcreditacion
+            ce.idCentroEducativo,ce.codCentroEducativo, ce.nbrCentroEducativo
         ')
         ->from('AcreditacionBundle:CentroEducativo', 'ce')
-        ->join('ce.acreditaciones','acred' )
-        ->join('acred.idEstadoAcreditacion','est' )
-        ->join('ce.idMunicipio','m')
-        ->join('m.idDepartamento','d')
-            ->where('exists (
-                select 1
-                    from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
-                        where e.codEstadoAcreditacion in (\'AC\',\'AO\',\'NA\')
-                            and a.idEstadoAcreditacion=e.idEstadoAcreditacion
-                            and a.idCentroEducativo=ce.idCentroEducativo
-            )')
+        ->orderBy("ce.nbrCentroEducativo", 'ASC')
         ->getQuery()->getResult();
         return $this->render('reportes/reporte.InformacionGeneralCedu.html.twig',
             array(
@@ -2515,7 +2526,6 @@ MINISTERIO DE EDUCACIÓN',0,'C');
             )
         );
     }
-    
     
     public function ReporteGeneralCeduGenerarAction(Request $request){
         $em = $this->getDoctrine()->getManager();
@@ -2590,27 +2600,27 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 </style>
         
                 <table border="0" cellpadding="4" cellpacing="4">
-                    <tr bgcolor="#ccc" valign="middle">
+                    <tr bgcolor="#D9EDF7" valign="middle">
                         <td width="15%" valign="middle"><strong>Código</strong></td><td width="90%" valign="middle" bgcolor="#fff">'.$codCentroEducativo.'</td>
                     </tr>
-                    <tr bgcolor="#ccc" valign="middle">
+                    <tr bgcolor="#D9EDF7" valign="middle">
                         <td width="15%" valign="middle"><strong>Nombre</strong></td><td width="90%" valign="middle" bgcolor="#fff">'.$nbrCentroEducativo.'</td>
                     </tr>
-                    <tr bgcolor="#ccc" valign="middle">
+                    <tr bgcolor="#D9EDF7" valign="middle">
                         <td width="15%" valign="middle"><strong>Ubicación</strong></td><td width="90%" valign="middle" bgcolor="#fff">'.$ubicacionCentroEducativo.'</td>
                     </tr>
                 </table>
                 <br /><br />
                 <table border="0" cellpadding="4" cellpacing="4" width="105%">
                     <tr>
-                        <th colspan="4" align="center">'.$msj_historial.'</th>
+                        <th colspan="4" align="center" bgcolor="#1D365F" style="color:#fff">'.$msj_historial.'</th>
                     </tr>
-                    <tr bgcolor="#ccc" valign="middle">
+                    <tr bgcolor="#D9EDF7" valign="middle">
                         <th width="10%" valign="middle" rowspan="2"><br /><strong>Año</strong></th>
                         <th width="60%" rowspan="2"><br /><strong>Estado</strong></th>
                         <th width="30%" colspan="2" align="center"><strong>Fecha</strong></th>
                     </tr>
-                    <tr bgcolor="#ccc" valign="middle">
+                    <tr bgcolor="#D9EDF7" valign="middle">
                         <th width="15%" align="center"><strong>Inicial</strong></th>
                         <th width="15%" align="center"><strong>Vencimiento</strong></th>
                     </tr>
@@ -2742,7 +2752,7 @@ MINISTERIO DE EDUCACIÓN',0,'C');
             $response = $this->get('phpexcel')->createStreamedResponse($writer);
             $dispositionHeader = $response->headers->makeDisposition(
                 ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-                ''.$codCentroEducativo.$nbrCentroEducativo.'.xls'
+                ''.$codCentroEducativo.'.xls'
             );
             $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
             $response->headers->set('Pragma', 'public');

@@ -1,20 +1,6 @@
 {% extends 'login.base.html.twig' %}
 
 {% block body %}
-
-{% if app.session.get('_security.last_error') %}
-    <div class="container" id="warning-alert">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="alert alert-warning">
-                    <button type="button" class="close" data-dismiss="alert">x</button>
-                    <strong>Error! <br /></strong>
-                    Usuario o clave incorrectos.
-                </div>
-            </div>
-        </div>
-    </div>
-{% endif %}
 <div class="header-control-login">
             <div class="container">
                 <div class="row">
@@ -29,7 +15,16 @@
                                 </h3>                                
                             </div>
                             <div class="panel-body">
-                                <!--Formulario-->
+                                {% if app.session.get('_security.last_error') %}
+                                    <div class="col-md-12" id="warning-alert">
+                                        <div class="alert alert-warning">
+                                            <button type="button" class="close" data-dismiss="alert">x</button>
+                                            <strong>Error! <br /></strong>
+                                            Usuario o clave incorrectos.
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                
                                 <form action="{{ path("fos_user_security_check") }}" method="post" class="form-login" id="form_validar_login">
                                     <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
                                     <div class="form-group">
@@ -50,18 +45,13 @@
                                         </div>
                                         </div>
                                         <div class="col-md-12 sin-padding text-center">
-                                            {#<a href='#' onClick="$('form:first').submit();" class="btn btn-info btn-md btn-block ">
-                                                <span class="glyphicon glyphicon-triangle-right"></span> Entrar
-                                            </a>#}
                                             <button type="submit" form="form_validar_login" value="Entrar" class="btn btn-info btn-md btn-block "><span class="glyphicon glyphicon-triangle-right"></span> Entrar</button>
                                         </div>
                                     </div>
                                 </form>
-                                <!--Fin de fomulario-->                                
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        
 {% endblock %}
