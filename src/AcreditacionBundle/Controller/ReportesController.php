@@ -19,6 +19,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 use PHPExcel_IOFactory;
 use PHPExcel_Style_Alignment;
+use PHPExcel_Style_Fill;
 class ReportesController extends Controller{
 
     private $autoridades;
@@ -2633,83 +2634,121 @@ MINISTERIO DE EDUCACIÓN',0,'C');
             //Inicia excell
             
             //Header
-                $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
-                $phpExcelObject->getProperties()
-                    ->setCreator("Sistema de Acreditación")
-                    ->setLastModifiedBy("")
-                    ->setTitle("Sistema de Acreditación")
-                    ->setSubject("")
-                    ->setDescription("")
-                    ->setKeywords("");
-                $phpExcelObject->setActiveSheetIndex(0);
-                $phpExcelObject->getActiveSheet()->setTitle('Sistema de Acreditación');
+            $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+            $phpExcelObject->getProperties()
+                ->setCreator("Sistema de Acreditación")
+                ->setLastModifiedBy("")
+                ->setTitle("Sistema de Acreditación")
+                ->setSubject("")
+                ->setDescription("")
+                ->setKeywords("");
+            $phpExcelObject->setActiveSheetIndex(0);
+            $phpExcelObject->getActiveSheet()->setTitle('Sistema de Acreditación');
             //Fin header
-        
-                $styleArray = array(
-                    'font'  => array(
-                        'bold'  => true,
-                        //'color' => array('rgb' => 'FF0000'),
-                        //'size'  => 15,
-                        'name'  => 'Verdana'
+
+            $styleArrayCabecera = array(
+                'font'  => array(
+                    'color' => array('rgb' => 'FFFFFF'),
+                    'name'  => 'Verdana'
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => '1D365F')
+                )
+            );
+
+            $styleArrayItem = array(
+                'font'  => array(
+                    'color' => array('rgb' => '000000'),
+                    'name'  => 'Verdana'
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => 'D9EDF7')
                     )
-                );
-        
-        $phpExcelObject->getActiveSheet()->getStyle('B1')->applyFromArray($styleArray);
-        $phpExcelObject->getActiveSheet()->getStyle('B1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $phpExcelObject->getActiveSheet()->getStyle('B3:F3')->applyFromArray($styleArray);
-        
-        $phpExcelObject->setActiveSheetIndex(0)
-            ->mergeCells('B1:F1')
-            ->setCellValue('B1', 'Listado de centros educativos por estado actual')
-            ->setCellValue('B3', 'Código')
-            ->setCellValue('C3', 'Nombre')
-            ->setCellValue('D3', 'Ubicación')
-            ->setCellValue('E3', 'Fecha inicia')
-            ->setCellValue('F3', 'Fecha vencimiento');
-        
-        $phpExcelObject->setActiveSheetIndex(0)
-            ->getColumnDimension('B')
-            ->setWidth(10);
-        $phpExcelObject->setActiveSheetIndex(0)
-            ->getColumnDimension('C')
-            ->setWidth(35);
-        $phpExcelObject->setActiveSheetIndex(0)
-            ->getColumnDimension('D')
-            ->setWidth(35);
-        $phpExcelObject->setActiveSheetIndex(0)
-            ->getColumnDimension('E')
-            ->setWidth(15);
-        $phpExcelObject->setActiveSheetIndex(0)
-            ->getColumnDimension('F')
-            ->setWidth(15);
-        $row = 4;
-        foreach($lista_cedu as $cd){
-            $codigo                 =$cd["codCentroEducativo"];
-            $nbr_centro_educativo   =$cd["nbrCentroEducativo"];
-            $direccion              =$cd["nbrDepartamento"].','.$cd["nbrMunicipio"].''.$cd["direccionCentroEducativo"];
-            $fecha_inicial          =$cd["fechaInicio"]->format("d-m-Y");
-            $fecha_vencimiento      =$cd["fechaFin"]->format("d-m-Y");
+            );
+
+            $phpExcelObject->getActiveSheet()->getStyle('B1')->applyFromArray($styleArrayCabecera);
+            $phpExcelObject->getActiveSheet()->getStyle('B2:B4')->applyFromArray($styleArrayItem);
+            
+            $phpExcelObject->getActiveSheet()->getStyle('B8')->applyFromArray($styleArrayCabecera);
+            
+            $phpExcelObject->getActiveSheet()->getStyle('B9:E9')->applyFromArray($styleArrayItem);
+                
+            $phpExcelObject->getActiveSheet()->getStyle('B1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $phpExcelObject->getActiveSheet()->getStyle('B8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            
             $phpExcelObject->setActiveSheetIndex(0)
-                ->setCellValue('B'.$row, $codigo)
-                ->setCellValue('C'.$row, $nbr_centro_educativo)
-                ->setCellValue('D'.$row, $direccion)
-                ->setCellValue('E'.$row, $fecha_inicial)
-                ->setCellValue('F'.$row, $fecha_vencimiento);
-            $row++;
-        }
-        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
-        $response = $this->get('phpexcel')->createStreamedResponse($writer);
-        $dispositionHeader = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            'Listado de centros educativos por estado actual.xls'
-        );
-        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
-        $response->headers->set('Pragma', 'public');
-        $response->headers->set('Cache-Control', 'maxage=1');
-        $response->headers->set('Content-Disposition', $dispositionHeader);
-        return $response;
+                ->mergeCells('B1:E1')
+                ->setCellValue('B1', $msj_encabezado)
+                
+                ->setCellValue('B2', 'Código')
+                ->setCellValue('C2', $codCentroEducativo)
+                
+                ->setCellValue('B3', 'Nombre')
+                ->mergeCells('C3:D3')
+                ->setCellValue('C3', $nbrCentroEducativo)
+                    
+                ->setCellValue('B4', 'Ubicación')
+                ->mergeCells('C4:D4')
+                ->setCellValue('C4', $ubicacionCentroEducativo)
+                
+                ->mergeCells('B8:E8')
+                ->setCellValue('B8', $msj_historial)
+                    
+                ->setCellValue('B9', 'Año')
+                ->setCellValue('C9', 'Estado')
+                ->setCellValue('D9', 'Fecha inicial')
+                ->setCellValue('E9', 'Fecha vencimiento');
+        
+           $phpExcelObject->getActiveSheet()->getRowDimension(1)->setRowHeight(20);
+           $phpExcelObject->getActiveSheet()->getRowDimension(8)->setRowHeight(20);
+           $phpExcelObject->getActiveSheet()->getRowDimension(3)->setRowHeight(20);
+           $phpExcelObject->getActiveSheet()->getRowDimension(4)->setRowHeight(20);
+           $phpExcelObject->getActiveSheet()->getRowDimension(5)->setRowHeight(20);
+           $phpExcelObject->getActiveSheet()->getRowDimension(9)->setRowHeight(20);
+        
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->getColumnDimension('B')
+                ->setWidth(10);
             
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->getColumnDimension('C')
+                ->setWidth(35);
+        
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->getColumnDimension('D')
+                ->setWidth(15);
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->getColumnDimension('E')
+                ->setWidth(15);
             
+            $row = 10;
+            foreach ($lista_historial as $item_historico) {
+                $anio=$item_historico["fechaInicio"]->format('Y');
+                $estado=$item_historico["nbrEstadoAcreditacion"];
+                $fecha_inicio=$item_historico["fechaInicio"]->format('d-m-Y');
+                $fecha_vencimiento=$item_historico["fechaFin"]->format('d-m-Y');
+            
+                $phpExcelObject->setActiveSheetIndex(0)
+                    ->setCellValue('B'.$row, $anio)
+                    ->setCellValue('C'.$row, $estado)
+                    ->setCellValue('D'.$row, $fecha_inicio)
+                    ->setCellValue('E'.$row, $fecha_vencimiento);
+                $row++;
+            }
+        
+            $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+            $response = $this->get('phpexcel')->createStreamedResponse($writer);
+            $dispositionHeader = $response->headers->makeDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                ''.$codCentroEducativo.$nbrCentroEducativo.'.xls'
+            );
+            $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+            $response->headers->set('Pragma', 'public');
+            $response->headers->set('Cache-Control', 'maxage=1');
+            $response->headers->set('Content-Disposition', $dispositionHeader);
+            return $response;
         }
     }
     
