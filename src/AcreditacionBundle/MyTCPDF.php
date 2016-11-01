@@ -16,11 +16,11 @@
 		private $headerTitle;
 		private $workAreaWidth;
 		private $lineHeight=6;
-		private $colorFondoEncabezado=array(255, 255, 153);
+		private $colorFondoEncabezado=array(29,54,95);
 		private $filasZebra=false;
-		private $colorFilasZebra=array(null,array(168, 184, 217));
+		private $colorFilasZebra=array(null,array(217,237,247));
 		private $colorearTotales=false;
-		private $colorTotales=array(0, 0, 255);
+		private $colorTotales=array(217,237,247);
 
 
 		public function getCompanyLogo(){
@@ -331,10 +331,13 @@ Departamento de Acreditación Institucional', null, 'C');
 						if(isset($differentHeader['type']) && $differentHeader['type']=='E'){
 							if(!isset($differentHeader['background']) || $differentHeader['background']===true)
 								$this->SetFillColor(125, 166, 71);
-							else
+							else{
+								$this->SetColorArray('text',array(255,255,255));
 								$this->SetFillColorArray($this->colorFondoEncabezado);
+							}
 							$this->MultiCell($this->getWorkAreaWidth(),$this->getLineHeight(),$differentHeader['text'],1,'C',1,1);
 						}
+						$this->SetColorArray('text',array(255,255,255));
 						$this->SetFillColorArray($this->colorFondoEncabezado);
 						reset($columns);
 						foreach($columns as $key => $column){
@@ -342,6 +345,7 @@ Departamento de Acreditación Institucional', null, 'C');
 						}
 						$this->SetX(0);
 						$this->SetY($this->GetY() + $maxHeightHeader);
+						$this->SetColorArray('text',array(0,0,0));
 					}
 					$this->SetFont(null,'');
 					$firstRow=false;

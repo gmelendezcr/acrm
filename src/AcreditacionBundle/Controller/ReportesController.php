@@ -768,7 +768,7 @@ foreach ($lista_cedu as $cd) {
         $this->encabezadoCuantitativo($em,$anio,$idCentroEducativo);
 
         $puntosPorCriterio=$em->createQueryBuilder()
-            ->select('s.idSeccion, s.nbrSeccion, sum(p.ponderacionMaxima)/100 as ponderacionMaxima')
+            ->select('s.idSeccion, s.nbrSeccion, sum(p.ponderacionMaxima) as ponderacionMaxima')
             ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'fce')
             ->join('fce.idFormulario','f')
             ->join('f.secciones','s')
@@ -787,11 +787,11 @@ foreach ($lista_cedu as $cd) {
                 ->setParameter('fechaFin',new \DateTime($anio . '-12-31'))
                     ->getQuery()->getResult();
 
-        $puntosPorCriterioData=array();
+        $puntosPorCriterioTmp=array();
         $tot1=$tot2=$tot3=0;
         foreach ($puntosPorCriterio as $puntoPorCriterio) {
             $ponderacionObtenida=$em->createQueryBuilder()
-                ->select('avg(v.ponderacionGanada)/100 as ponderacionGanada')
+                ->select('avg(v.ponderacionGanada) as ponderacionGanada')
                 ->from('AcreditacionBundle:ViewFormularioPorCentroEducativoSeccionPonderacion', 'v')
                 ->join('v.idFormularioPorCentroEducativo','fce')
                 ->where('fce.idCentroEducativo=:idCentroEducativo')
@@ -802,18 +802,38 @@ foreach ($lista_cedu as $cd) {
                     ->setParameter('fechaIni',new \DateTime($anio . '-1-1'))
                     ->setParameter('fechaFin',new \DateTime($anio . '-12-31'))
                         ->getQuery()->getSingleResult();
-            if(!$versionParaCoordinador || $puntoPorCriterio['ponderacionMaxima'] - $ponderacionObtenida['ponderacionGanada']>0){
+            if(!isset($puntosPorCriterioTmp[$puntoPorCriterio['nbrSeccion']])){
+                $tmp=array(
+                    'nbrSeccion' => $puntoPorCriterio['nbrSeccion'],
+                    'ponderacionMaxima' => $puntoPorCriterio['ponderacionMaxima'],
+                    'ponderacionGanada' => array(),
+                );
+                $tmp['ponderacionGanada'][]=round($ponderacionObtenida['ponderacionGanada']/100,2);
+                $puntosPorCriterioTmp[$puntoPorCriterio['nbrSeccion']]=$tmp;
+            }
+            else{
+                $puntosPorCriterioTmp[$puntoPorCriterio['nbrSeccion']]['ponderacionGanada'][]=round($ponderacionObtenida['ponderacionGanada']/100,2);
+            }
+        }
+
+        $puntosPorCriterioData=array();
+        foreach ($puntosPorCriterioTmp as $puntoPorCriterio) {
+            $ponderacionMaxima=round($puntoPorCriterio['ponderacionMaxima']/100,2);
+            $ponderacionGanada=round(array_sum($puntoPorCriterio['ponderacionGanada'])/count($puntoPorCriterio['ponderacionGanada']),2);
+            $ponderacionPerdida=$ponderacionMaxima - $ponderacionGanada;
+            if(!$versionParaCoordinador || ($ponderacionMaxima - $ponderacionGanada)>0){
                 $puntosPorCriterioData[]=array(
                     $puntoPorCriterio['nbrSeccion'],
-                    number_format(round($puntoPorCriterio['ponderacionMaxima'],2),2),
-                    number_format(round($ponderacionObtenida['ponderacionGanada'],2),2),
-                    number_format(round($puntoPorCriterio['ponderacionMaxima'] - $ponderacionObtenida['ponderacionGanada'],2),2),
+                    number_format($ponderacionMaxima,2),
+                    number_format($ponderacionGanada,2),
+                    number_format($ponderacionPerdida,2),
                 );
             }
-            $tot1+=round($puntoPorCriterio['ponderacionMaxima'],2);
-            $tot2+=round($ponderacionObtenida['ponderacionGanada'],2);
-            $tot3+=round($puntoPorCriterio['ponderacionMaxima'] - $ponderacionObtenida['ponderacionGanada'],2);
+            $tot1+=$ponderacionMaxima;
+            $tot2+=$ponderacionGanada;
+            $tot3+=$ponderacionPerdida;
         }
+
         $puntosPorCriterioData[]=array(
             'Resultado de evaluación',
             number_format($tot1,2),
@@ -864,7 +884,7 @@ foreach ($lista_cedu as $cd) {
             foreach ($puntosPorCriterio as $criterio) {
 
                 $puntosPorIndicador=$em->createQueryBuilder()
-                    ->select('i.idIndicador, i.nbrIndicador, sum(p.ponderacionMaxima)/100 as ponderacionMaxima')
+                    ->select('i.idIndicador, i.nbrIndicador, sum(p.ponderacionMaxima) as ponderacionMaxima')
                     ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'fce')
                     ->join('fce.idFormulario','f')
                     ->join('f.secciones','s')
@@ -887,29 +907,35 @@ foreach ($lista_cedu as $cd) {
                 $puntosPorIndicadorData=array();
                 foreach ($puntosPorIndicador as $puntoPorIndicador) {
                     $ponderacionObtenida=$em->createQueryBuilder()
-                        ->select('avg(v.ponderacionGanada)/100 as ponderacionGanada')
+                        ->select('avg(v.ponderacionGanada) as ponderacionGanada')
                         ->from('AcreditacionBundle:ViewFormularioPorCentroEducativoIndicadorPonderacion', 'v')
                         ->join('v.idFormularioPorCentroEducativo','fce')
+                        ->join('fce.idFormulario','f')
                         ->where('fce.idCentroEducativo=:idCentroEducativo')
+                        ->andWhere('f.codFormulario=:codFormulario')
                         ->andWhere('v.idIndicador=:idIndicador')
                         ->andWhere('fce.fechaAplicacion between :fechaIni and :fechaFin')
                             ->setParameter('idCentroEducativo',$idCentroEducativo)
+                            ->setParameter('codFormulario',$formulario['codFormulario'])
                             ->setParameter('idIndicador',$puntoPorIndicador['idIndicador'])
                             ->setParameter('fechaIni',new \DateTime($anio . '-1-1'))
                             ->setParameter('fechaFin',new \DateTime($anio . '-12-31'))
                                 ->getQuery()->getSingleResult();
-                    if(!$versionParaCoordinador || $puntoPorIndicador['ponderacionMaxima'] - $ponderacionObtenida['ponderacionGanada']>0){
+                    $ponderacionMaxima=round($puntoPorIndicador['ponderacionMaxima']/100,2);
+                    $ponderacionGanada=round($ponderacionObtenida['ponderacionGanada']/100,2);
+                    $ponderacionPerdida=$ponderacionMaxima - $ponderacionGanada;
+                    if(!$versionParaCoordinador || ($ponderacionMaxima - $ponderacionGanada)>0){
                         $puntosPorIndicadorData[]=array(
                             $puntoPorIndicador['nbrIndicador'],
-                            number_format(round($puntoPorIndicador['ponderacionMaxima'],2),2),
-                            number_format(round($ponderacionObtenida['ponderacionGanada'],2),2),
-                            number_format(round($puntoPorIndicador['ponderacionMaxima'] - $ponderacionObtenida['ponderacionGanada'],2),2),
+                            number_format($ponderacionMaxima,2),
+                            number_format($ponderacionGanada,2),
+                            number_format($ponderacionPerdida,2),
                         );
                         $mostrarCriterio=true;
                     }
-                    $tot1+=round($puntoPorIndicador['ponderacionMaxima'],2);
-                    $tot2+=round($ponderacionObtenida['ponderacionGanada'],2);
-                    $tot3+=round($puntoPorIndicador['ponderacionMaxima'] - $ponderacionObtenida['ponderacionGanada'],2);
+                    $tot1+=$ponderacionMaxima;
+                    $tot2+=$ponderacionGanada;
+                    $tot3+=$ponderacionPerdida;
                 }
                 $puntosPorIndicadorData[]=array(
                     'Resultado de evaluación',
@@ -2401,6 +2427,7 @@ MINISTERIO DE EDUCACIÓN',0,'C');
             );
         }
         if($formato==$formato_tipo){
+            $this->pdfObj->setColorearTotales(true);
             $this->pdfObj->crossTab($reporteArr,'nbrDepartamento','Departamento',array(
                 array('cod' => $codigo1, 'nbr' => $texto1),
                 array('cod' => $codigo2, 'nbr' => $texto2),
