@@ -1512,8 +1512,42 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 $phpExcelObject->getActiveSheet()->setTitle('Sistema de Acreditación');
                 //Fin header
                 
+                $styleArrayCabecera = array(
+                'font'  => array(
+                    'color' => array('rgb' => 'FFFFFF'),
+                    'name'  => 'Verdana'
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => '1D365F')
+                )
+            );
+
+            $styleArrayItem = array(
+                'font'  => array(
+                    'color' => array('rgb' => '000000'),
+                    'name'  => 'Verdana'
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => 'D9EDF7')
+                    )
+            );
+
+            $phpExcelObject->getActiveSheet()->getStyle('B1')->applyFromArray($styleArrayCabecera);
+            $phpExcelObject->getActiveSheet()->getStyle('B1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $phpExcelObject->getActiveSheet()->getRowDimension(1)->setRowHeight(20);
+            
+            $phpExcelObject->getActiveSheet()->getStyle('B2:E2')->applyFromArray($styleArrayItem);
+            $phpExcelObject->getActiveSheet()->getRowDimension(2)->setRowHeight(20);
+           
+            
+        
+                
+            
+                
                 $phpExcelObject->setActiveSheetIndex(0)
-                    ->mergeCells('B1:H1')
+                    ->mergeCells('B1:E1')
                     ->setCellValue('B1', $excel_titulo);
                 $phpExcelObject->setActiveSheetIndex(0)
                         ->setCellValue('E2','Totales');
@@ -1529,7 +1563,8 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 $phpExcelObject->setActiveSheetIndex(0)
                     ->setCellValue('B' . $filaXls,'Año')
                     ->getColumnDimension('B')
-                    ->setWidth(15);
+                    ->setWidth(7);
+                $phpExcelObject->getActiveSheet()->getStyle('B' . $filaXls)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);   
                 foreach ($estados as $estado) {
                     $phpExcelObject->setActiveSheetIndex(0)
                         ->setCellValue(chr($letra) . $filaXls,$estado['nbrEstadoAcreditacion'])
@@ -1557,8 +1592,13 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 
                 //Encabezados
                 $xlsFila=($xlsFila+2);
+                
+                $phpExcelObject->getActiveSheet()->getStyle('B'.$xlsFila)->applyFromArray($styleArrayCabecera);
+                $phpExcelObject->getActiveSheet()->getStyle('B'.$xlsFila)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $phpExcelObject->getActiveSheet()->getRowDimension($xlsFila)->setRowHeight(20);
+                
                 $phpExcelObject->setActiveSheetIndex(0)
-                    ->mergeCells('B'.$xlsFila.':D'.$xlsFila)
+                    ->mergeCells('B'.$xlsFila.':E'.$xlsFila)
                     ->setCellValue('B'.$xlsFila, 'No evaluados');
                     
                 $xlsFila=($xlsFila+1);    
@@ -1677,12 +1717,43 @@ MINISTERIO DE EDUCACIÓN',0,'C');
             $phpExcelObject->getActiveSheet()->setTitle('Sistema de Acreditación');
             //Fin header
             
+            $styleArrayCabecera = array(
+                'font'  => array(
+                    'color' => array('rgb' => 'FFFFFF'),
+                    'name'  => 'Verdana'
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => '1D365F')
+                )
+            );
+
+            $styleArrayItem = array(
+                'font'  => array(
+                    'color' => array('rgb' => '000000'),
+                    'name'  => 'Verdana'
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => 'D9EDF7')
+                    )
+            );
+
+            $phpExcelObject->getActiveSheet()->getStyle('B1')->applyFromArray($styleArrayCabecera);
+            $phpExcelObject->getActiveSheet()->getStyle('B1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $phpExcelObject->getActiveSheet()->getRowDimension(1)->setRowHeight(20);
+            
+            $phpExcelObject->getActiveSheet()->getStyle('B2:D2')->applyFromArray($styleArrayCabecera);
+            $phpExcelObject->getActiveSheet()->getStyle('B2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $phpExcelObject->getActiveSheet()->getRowDimension(2)->setRowHeight(20);
+            
+            
             $phpExcelObject->setActiveSheetIndex(0)
-                ->mergeCells('B1:H1')
+                ->mergeCells('B1:D1')
                 ->setCellValue('B1', $excel_titulo);
 
             $phpExcelObject->setActiveSheetIndex(0)
-                ->mergeCells('B2:H2')
+                ->mergeCells('B2:D2')
                 ->setCellValue('B2', 'Centros educativos evaluados');
                 
             //Encabezados
@@ -1707,7 +1778,10 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 ->setCellValue('D3','Dirección')
                 ->getColumnDimension('D')
                 ->setWidth(100);
-                    
+            
+            $phpExcelObject->getActiveSheet()->getStyle('B3:D3')->applyFromArray($styleArrayItem);
+            $phpExcelObject->getActiveSheet()->getStyle('B3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $phpExcelObject->getActiveSheet()->getRowDimension(3)->setRowHeight(20);     
                     
             $xlsFila=4; //3?
             foreach($porAnioEstado as $registro){
@@ -1720,8 +1794,12 @@ MINISTERIO DE EDUCACIÓN',0,'C');
             //Encabezados
             $xlsFila=($xlsFila+2);
             
+            $phpExcelObject->getActiveSheet()->getStyle('B'.$xlsFila.':D'.$xlsFila)->applyFromArray($styleArrayCabecera);
+            $phpExcelObject->getActiveSheet()->getStyle('B'.$xlsFila)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $phpExcelObject->getActiveSheet()->getRowDimension($xlsFila)->setRowHeight(20);
+            
             $phpExcelObject->setActiveSheetIndex(0)
-                ->mergeCells('B'.$xlsFila.':H'.$xlsFila)
+                ->mergeCells('B'.$xlsFila.':D'.$xlsFila)
                 ->setCellValue('B'.$xlsFila, 'Centros educativos no evaluados');
 
             $xlsFila=($xlsFila+1);
@@ -1729,7 +1807,9 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 ->setCellValue('B'.$xlsFila,'Código')
                 ->setCellValue('C'.$xlsFila,'Nombre')
                 ->setCellValue('D'.$xlsFila,'Dirección');
-                
+            $phpExcelObject->getActiveSheet()->getStyle('B'.$xlsFila.':D'.$xlsFila)->applyFromArray($styleArrayItem);
+            
+            $phpExcelObject->getActiveSheet()->getRowDimension($xlsFila)->setRowHeight(20);     
                 
             $xlsFila=($xlsFila+1);    
             foreach($noEvaluados as $registro){
@@ -1871,10 +1951,14 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                    
             if($formato==$formato_tipo){
                 $this->pdfObj->SetFontSize(12);
-                $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'PROMEDIOS POR CRITERIO',0,'C');
+               // $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'PROMEDIOS POR CRITERIO',0,'C');
                 $this->pdfObj->newLine();
                 $this->pdfObj->SetFontSize(7);
                 $this->pdfObj->crossTab($promedios,'anio','Año',$criterios,'idSeccion','nbrSeccion',2);
+                //-
+                $this->pdfObj->Output("promedio" . str_replace(' ','',ucwords(str_replace('_',' ',$tipoReporte))) . ".pdf", 'I');
+                
+                
             }else{
                 //Inicia excel
                 $excel_titulo="PROMEDIOS POR CRITERIO";
@@ -1892,22 +1976,50 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 $phpExcelObject->getActiveSheet()->setTitle('Sistema de Acreditación');
                 //Fin header
                 
+                $styleArrayCabecera = array(
+                'font'  => array(
+                    'color' => array('rgb' => 'FFFFFF'),
+                    'name'  => 'Verdana'
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => '1D365F')
+                )
+            );
+
+            $styleArrayItem = array(
+                'font'  => array(
+                    'color' => array('rgb' => '000000'),
+                    'name'  => 'Verdana'
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => 'D9EDF7')
+                    )
+            );
+
+            $phpExcelObject->getActiveSheet()->getStyle('B1')->applyFromArray($styleArrayCabecera);
+            $phpExcelObject->getActiveSheet()->getStyle('B1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $phpExcelObject->getActiveSheet()->getStyle('B2:H2')->applyFromArray($styleArrayItem);
+            
+            $phpExcelObject->getActiveSheet()->getRowDimension(1)->setRowHeight(20);
+            $phpExcelObject->getActiveSheet()->getRowDimension(2)->setRowHeight(20);
                 
                 $contar="67";
                 $phpExcelObject->setActiveSheetIndex(0)
                     ->mergeCells('B1:H1')
                     ->setCellValue('B1', $excel_titulo)
-                    ->setCellValue('B3', "Año")
-                    ->setCellValue('H3', "Totales");
+                    ->setCellValue('B2', "Año")
+                    ->setCellValue('H2', "Totales");
                 foreach($criterios as $criterio){
                     $letra=chr($contar);
                     $phpExcelObject->setActiveSheetIndex(0)
-                        ->setCellValue(''.$letra.'3', $criterio['nbrSeccion'])
+                        ->setCellValue(''.$letra.'2', $criterio['nbrSeccion'])
                         ->getColumnDimension($letra)
                         ->setWidth(15);
                         $contar++;
                 }
-                $row = 4;
+                $row = 3;
                 $contarr="67";
                 $arrFilas=array();
                     foreach($promedios as $promedio){
@@ -1944,6 +2056,8 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                     }
                     $row=($row-1);
                     $rowv=($row+1);
+                    $phpExcelObject->getActiveSheet()->getStyle('B'.$rowv.':H'.$rowv)->applyFromArray($styleArrayItem);
+                    $phpExcelObject->getActiveSheet()->getRowDimension($rowv)->setRowHeight(20);
                     $phpExcelObject->setActiveSheetIndex(0)
                     ->setCellValue('B'.$rowv, "Totales")
                     ->setCellValue('C'.$rowv, '=sum(C2:C'.$row.')')
@@ -1985,45 +2099,77 @@ MINISTERIO DE EDUCACIÓN',0,'C');
             //Inicia excel
                 $excel_titulo="PROMEDIOS POR INDICADOR";
                 
+            //Header
+            $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+            $phpExcelObject->getProperties()
+                ->setCreator("Sistema de Acreditación")
+                ->setLastModifiedBy("")
+                ->setTitle("Sistema de Acreditación")
+                ->setSubject("")
+                ->setDescription("")
+                ->setKeywords("");
+            $phpExcelObject->setActiveSheetIndex(0);
+            $phpExcelObject->getActiveSheet()->setTitle('Sistema de Acreditación');
+            //Fin header
+            
+            
+            $styleArrayCabecera = array(
+                'font'  => array(
+                    'color' => array('rgb' => 'FFFFFF'),
+                    'name'  => 'Verdana'
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => '1D365F')
+                )
+            );
+
+            $styleArrayItem = array(
+                'font'  => array(
+                    'color' => array('rgb' => '000000'),
+                    'name'  => 'Verdana'
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => 'D9EDF7')
+                    )
+            );
+
+            $phpExcelObject->getActiveSheet()->getStyle('B1')->applyFromArray($styleArrayCabecera);
+            $phpExcelObject->getActiveSheet()->getStyle('B1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $phpExcelObject->getActiveSheet()->getRowDimension(1)->setRowHeight(20);
+            
+            $phpExcelObject->getActiveSheet()->getStyle('B2:AJ2')->applyFromArray($styleArrayItem);
+            
+            $phpExcelObject->getActiveSheet()->getRowDimension(2)->setRowHeight(20);
+            //$phpExcelObject->getActiveSheet()->getRowDimension(2)->setRowHeight(20);
+            
                 
-                //Header
-                $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
-                $phpExcelObject->getProperties()
-                    ->setCreator("Sistema de Acreditación")
-                    ->setLastModifiedBy("")
-                    ->setTitle("Sistema de Acreditación")
-                    ->setSubject("")
-                    ->setDescription("")
-                    ->setKeywords("");
-                $phpExcelObject->setActiveSheetIndex(0);
-                $phpExcelObject->getActiveSheet()->setTitle('Sistema de Acreditación');
-                //Fin header
-                
-                $contar="67";
-                $A="A";
-                $rango="67";
-                $phpExcelObject->setActiveSheetIndex(0)
-                    ->mergeCells('B1:H1')
-                    ->setCellValue('B1', $excel_titulo)
-                    ->setCellValue('B3', "Año")
-                     ->setCellValue('AJ3', "Totales");
-                foreach($indicadores as $indicador){
-                    if($rango<=90){
-                        $letra=chr($contar);
-                    }elseif($rango==91){
-                        $contar="65";
-                        $letra=$A.chr($contar);
-                    }else{
-                        $letra=$A.chr($contar);
-                    }
-                    $phpExcelObject->setActiveSheetIndex(0)
-                        ->setCellValue(''.$letra.'3', $indicador['nbrIndicador'])
-                        ->getColumnDimension($letra)
-                        ->setWidth(15);
-                        $contar++;
-                        $rango++;
-                    }
-                $row = 4;
+            $contar="67";
+            $A="A";
+            $rango="67";
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->mergeCells('B1:AJ1')
+                ->setCellValue('B1', $excel_titulo)
+                ->setCellValue('B2', "Año")
+                ->setCellValue('AJ2', "Totales");
+            foreach($indicadores as $indicador){
+                if($rango<=90){
+                    $letra=chr($contar);
+                }elseif($rango==91){
+                    $contar="65";
+                    $letra=$A.chr($contar);
+                }else{
+                    $letra=$A.chr($contar);
+                }
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->setCellValue(''.$letra.'2', $indicador['nbrIndicador'])
+                    ->getColumnDimension($letra)
+                    ->setWidth(15);
+                    $contar++;
+                    $rango++;
+                }
+                $row = 3;
                 $contarr="67";
                 $arrFilas=array();
                     foreach($promedios as $promedio){
@@ -2067,6 +2213,8 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                     }
                     $row=($row-1);
                     $rowv=($row+1);
+                    $phpExcelObject->getActiveSheet()->getStyle('B'.$rowv.':AJ'.$rowv)->applyFromArray($styleArrayItem);
+                    $phpExcelObject->getActiveSheet()->getRowDimension($rowv)->setRowHeight(20);
                     $phpExcelObject->setActiveSheetIndex(0)
                     ->setCellValue('B'.$rowv, "Totales");
                      $A="A";
@@ -2274,14 +2422,42 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 $phpExcelObject->getActiveSheet()->setTitle('Sistema de Acreditación');
                 //Fin header
             
-            
+            $styleArrayCabecera = array(
+                'font'  => array(
+                    'color' => array('rgb' => 'FFFFFF'),
+                    'name'  => 'Verdana'
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => '1D365F')
+                )
+            );
+
+            $styleArrayItem = array(
+                'font'  => array(
+                    'color' => array('rgb' => '000000'),
+                    'name'  => 'Verdana'
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => 'D9EDF7')
+                    )
+            );
+
+            $phpExcelObject->getActiveSheet()->getStyle('B1')->applyFromArray($styleArrayCabecera);
+            $phpExcelObject->getActiveSheet()->getRowDimension(1)->setRowHeight(20);
+            $phpExcelObject->getActiveSheet()->getStyle('B2:D2')->applyFromArray($styleArrayItem);
+            $phpExcelObject->getActiveSheet()->getRowDimension(2)->setRowHeight(20);
+                
+            $phpExcelObject->getActiveSheet()->getStyle('B1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+           
             
             $phpExcelObject->setActiveSheetIndex(0)
             ->mergeCells('B1:D1')
             ->setCellValue('B1', $excel_titulo)
-            ->setCellValue('B3', "Departamento")
-            ->setCellValue('C3', $texto1)
-            ->setCellValue('D3', $texto2);
+            ->setCellValue('B2', "Departamento")
+            ->setCellValue('C2', $texto1)
+            ->setCellValue('D2', $texto2);
         $phpExcelObject->setActiveSheetIndex(0)
             ->getColumnDimension('B')
             ->setWidth(40);
@@ -2291,7 +2467,7 @@ MINISTERIO DE EDUCACIÓN',0,'C');
         $phpExcelObject->setActiveSheetIndex(0)
             ->getColumnDimension('D')
             ->setWidth(20);
-        $row = 4;
+        $row = 3;
         $suma1="0";
         $suma2="0";
         
@@ -2325,7 +2501,8 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 ->setCellValue('D'.$row, $var_dato2);
                 $row++;
         }
-        
+        //$phpExcelObject->getActiveSheet()->getStyle('B'.$row.':D'.$row)->applyFromArray($styleArrayItem);
+        $phpExcelObject->getActiveSheet()->getRowDimension(2)->setRowHeight(20);
         $phpExcelObject->setActiveSheetIndex(0)
             ->setCellValue('B'.$row, "Totales")
             ->setCellValue('C'.$row, $suma1)
@@ -2459,18 +2636,46 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 ->setKeywords($nbrReporte);
             $phpExcelObject->getActiveSheet()->setTitle($nbrReporteCorto);
             
+            $styleArrayCabecera = array(
+                'font'  => array(
+                    'color' => array('rgb' => 'FFFFFF'),
+                    'name'  => 'Verdana'
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => '1D365F')
+                )
+            );
+
+            $styleArrayItem = array(
+                'font'  => array(
+                    'color' => array('rgb' => '000000'),
+                    'name'  => 'Verdana'
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => 'D9EDF7')
+                    )
+            );
+
+            $phpExcelObject->getActiveSheet()->getStyle('B1')->applyFromArray($styleArrayCabecera);
+            $phpExcelObject->getActiveSheet()->getRowDimension(1)->setRowHeight(20);   
+            $phpExcelObject->getActiveSheet()->getStyle('B1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
             
+            $phpExcelObject->getActiveSheet()->getStyle('B2:F2')->applyFromArray($styleArrayItem);
+            $phpExcelObject->getActiveSheet()->getRowDimension(2)->setRowHeight(20);
+           
             
             $phpExcelObject->setActiveSheetIndex(0)
                 ->mergeCells('B1:F1')
                 ->setCellValue('B1',$nbrReporte)
-                ->setCellValue('B3','Fecha/hora')
-                ->setCellValue('C3','Usuario')
-                ->setCellValue('D3','Dirección IP')
-                ->setCellValue('E3','Acción')
-                ->setCellValue('F3','Detalle');
+                ->setCellValue('B2','Fecha/hora')
+                ->setCellValue('C2','Usuario')
+                ->setCellValue('D2','Dirección IP')
+                ->setCellValue('E2','Acción')
+                ->setCellValue('F2','Detalle');
 
-            $row=4;
+            $row=3;
             foreach ($acciones as $accion) {
                 $phpExcelObject->setActiveSheetIndex(0)
                     ->setCellValue('B'.$row,$accion['fechaHora']->format('m/d/Y H:i:s'))

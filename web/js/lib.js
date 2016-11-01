@@ -10,6 +10,35 @@ $( document ).ready( function () {
     },
     "Formato incorrecto, forma correcto 20-10-2016"
 );
+
+	/*--------------------------------------------------------------------------------
+	Validación de formulario de actividad de usuario
+	--------------------------------------------------------------------------------*/
+	$( "#reporte_info_general" ).validate( {
+		rules: {
+			centrosEducativo: { valueNotEquals: "0" },
+		},
+		messages: {
+	    	centrosEducativo: { valueNotEquals: "Por favor seleccione un centro educativo" },
+    	
+		},
+		highlight: function(element) {
+	        $(element).closest('.form-group').addClass('has-error').removeClass( "has-success" );
+	    },
+	    unhighlight: function(element) {
+	        $(element).closest('.form-group').addClass( "has-success" ).removeClass('has-error');
+	    },
+	    errorElement: 'span',
+	    errorClass: 'help-block',
+	    errorPlacement: function(error, element) {
+	        if(element.parent('.input-group').length) {
+	            error.insertAfter(element.parent());
+	        } else {
+	            error.insertAfter(element);
+	        }
+	    }
+	});
+
 	
 	/*--------------------------------------------------------------------------------
 	Validación de formulario de actividad de usuario
