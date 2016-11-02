@@ -299,6 +299,18 @@ $( document ).ready( function () {
 				maxlength: 15,
 				number: true,
 			},
+			["CentroEducativoType[totalDocentesMasculinos]"]: {
+				required: true,
+				minlength: 1,
+				maxlength: 15,
+				number: true,
+			},
+			["CentroEducativoType[totalDocentesFemeninos]"]: {
+				required: true,
+				minlength: 1,
+				maxlength: 15,
+				number: true,
+			},
 			["CentroEducativoType[idMunicipio]"]: { valueNotEquals: "null" },
 			["CentroEducativoType[idJornadaCentroEducativo]"]: { valueNotEquals: "null" },
 			["CentroEducativoType[idTamannoCentroEducativo]"]: { valueNotEquals: "null" }
@@ -309,6 +321,14 @@ $( document ).ready( function () {
 			["CentroEducativoType[direccionCentroEducativo]"]: "La dirección es requerida",
 			["CentroEducativoType[totalAlumnos]"]: {
 				required: "El total de alumnos es requerido",
+				number: "Debe ser un número"
+			},
+			["CentroEducativoType[totalDocentesMasculinos]"]: {
+				required: "El total de docentes es requerido",
+				number: "Debe ser un número"
+			},
+			["CentroEducativoType[totalDocentesFemeninos]"]: {
+				required: "El total de docentes es requerido",
 				number: "Debe ser un número"
 			},
 			["CentroEducativoType[idMunicipio]"]: { valueNotEquals: "Por favor seleccione un municipio" },

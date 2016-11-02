@@ -90,8 +90,7 @@ class CentroEducativoController extends Controller{
             ->getQuery()->getResult();
         return $this->render('centro-educativo/lista.index.html.twig',array(
             'lista'=>$res,
-            'nbr'=>$nbrq,
-            'debug'=>true
+            'nbr'=>$nbrq
             ));
     }
     

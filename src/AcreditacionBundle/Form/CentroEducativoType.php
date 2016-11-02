@@ -21,7 +21,9 @@ class CentroEducativoType extends AbstractType{
         $this->comboMun=array(
             'choices' => $muni,
             'choices_as_values' => true,
-            'label' => 'Municipio'
+            'label' => 'Municipio',
+            'empty_value' => false,
+            
         );
         //Fin Gerardo
         
@@ -35,7 +37,8 @@ class CentroEducativoType extends AbstractType{
          $this->comboJda=array(
             'choices' => $jda,
             'choices_as_values' => true,
-            'label' => 'Jornadas'
+            'label' => 'Jornadas',
+            'empty_value' => false,
         );
         
         $resTamanno=$em->getRepository('AcreditacionBundle:TamannoCentroEducativo')->findAll();
@@ -48,7 +51,8 @@ class CentroEducativoType extends AbstractType{
          $this->comboTnno=array(
             'choices' => $tnno,
             'choices_as_values' => true,
-            'label' => 'Tamaño'
+            'label' => 'Tamaño',
+            'empty_value' => false,
         );
 
         $zonaCentroEducativo=array();
@@ -56,6 +60,7 @@ class CentroEducativoType extends AbstractType{
         foreach($resZonaCentroEducativo as $regZonaCentroEducativo){
             $zonaCentroEducativo[$regZonaCentroEducativo->getNbrZonaCentroEducativo()]=$regZonaCentroEducativo;
         }
+        
         $this->comboZonaCentroEducativo=array(
             'choices' => $zonaCentroEducativo,
             'choices_as_values' => true,
@@ -71,6 +76,7 @@ class CentroEducativoType extends AbstractType{
             'choices' => $modalidadCentroEducativo,
             'choices_as_values' => true,
             'label' => 'Modalidad',
+            'empty_value' => false,
         );
     }
 

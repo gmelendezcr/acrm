@@ -1977,14 +1977,11 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                    
             if($formato==$formato_tipo){
                 $this->pdfObj->SetFontSize(12);
-               // $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'PROMEDIOS POR CRITERIO',0,'C');
+               $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),'PROMEDIOS POR CRITERIO',0,'C');
                 $this->pdfObj->newLine();
                 $this->pdfObj->SetFontSize(7);
                 $this->pdfObj->crossTab($promedios,'anio','Año',$criterios,'idSeccion','nbrSeccion',2);
-                //-
                 $this->pdfObj->Output("promedio" . str_replace(' ','',ucwords(str_replace('_',' ',$tipoReporte))) . ".pdf", 'I');
-                
-                
             }else{
                 //Inicia excel
                 $excel_titulo="PROMEDIOS POR CRITERIO";
