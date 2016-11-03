@@ -9,12 +9,12 @@
     </div>
     <div class="col-md-12">
         <div class="header-control-general">
-            <form class="form-registro form-border" method="post" action="{{ path('centro_educativo_form_dig_corr_cargar') }}">
+            <form class="form-registro form-border" method="post" action="{{ path('centro_educativo_form_dig_corr_cargar') }}" id="form_dig_corregir">
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="centrosEducativos">Centro educativo</label>
                         <select class="form-control" id="centrosEducativos" name="centrosEducativos">
-                            <option>Seleccione uno</option>
+                            <option value="0">Seleccione uno</option>
                             {% for ced in lista_ced %}
                             <option value="{{ ced.idCentroEducativo }}">{{ ced.codCentroEducativo ~ ' ' ~ ced.nbrCentroEducativo }}</option>
                              {% endfor %}                             
@@ -29,7 +29,7 @@
                     <div class="form-group">
                         <label for="formularios">Formulario</label>
                         <select class="form-control" id="formularios" name="formularios">
-                            <option>Seleccione uno</option>
+                            <option value="0">Seleccione uno</option>
                             {% for form in lista_form %}
                             <option value="{{ form.idFormulario }}">{{ form.codFormulario ~ ' ' ~ form.nbrFormulario }}</option>
                              {% endfor %}                             
@@ -47,7 +47,8 @@
                 </div>
                 <div class="col-sm-12 text-center">
                 <div class="form-group text-center"> 
-                    <button type="submit" class="btn btn-info btn-md" onClick="return digitarCorregirCargarFormulario();"><span class="glyphicon glyphicon-th-list"></span> Cargar formulario</button>
+                {#onClick="return digitarCorregirCargarFormulario();"#}
+                    <button type="submit" class="btn btn-info btn-md" ><span class="glyphicon glyphicon-th-list"></span> Cargar formulario</button>
                 </div>
                 </div>
                 <div class="clearfix"></div>

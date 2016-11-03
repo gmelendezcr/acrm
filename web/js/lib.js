@@ -3,24 +3,23 @@ $( document ).ready( function () {
     	return arg != value;
 	});
 	$.validator.addMethod(
-    "fecha_",
-    function(value, element) {
-        // put your own logic here, this is just a (crappy) example
-        return value.match(/^\d\d?\-\d\d?\-\d\d\d\d$/);
-    },
-    "Formato incorrecto, forma correcto 20-10-2016"
-);
+    	"fecha_",
+    	function(value, element) {
+        	// put your own logic here, this is just a (crappy) example
+        	return value.match(/^\d\d?\-\d\d?\-\d\d\d\d$/);
+    	},
+    	"Formato incorrecto, ejemplo: 20-10-2016"
+	);
 
 	/*--------------------------------------------------------------------------------
 	Validación de formulario de actividad de usuario
 	--------------------------------------------------------------------------------*/
-	$( "#reporte_info_general" ).validate( {
+	$( "#reporte_info_general" ).validate({
 		rules: {
 			centrosEducativo: { valueNotEquals: "0" },
 		},
 		messages: {
 	    	centrosEducativo: { valueNotEquals: "Por favor seleccione un centro educativo" },
-    	
 		},
 		highlight: function(element) {
 	        $(element).closest('.form-group').addClass('has-error').removeClass( "has-success" );
@@ -38,7 +37,6 @@ $( document ).ready( function () {
 	        }
 	    }
 	});
-
 	
 	/*--------------------------------------------------------------------------------
 	Validación de formulario de actividad de usuario
@@ -46,9 +44,9 @@ $( document ).ready( function () {
 	$( "#reporte_actividad_usuario" ).validate( {
 		rules: {
 			fechaIni: {
-	    			required: true,
-	        		fecha_: true
-	    		},
+				required: true,
+        		fecha_: true
+    		},
 			fechaFin: {
 				required: true,
 	    		fecha_: true
@@ -56,17 +54,17 @@ $( document ).ready( function () {
 		},
 		messages: {
 	    	fechaIni: {
-	    			required: "La fecha es requerida",
-	    		},
-    		fechaFin: {
     			required: "La fecha es requerida",
+    		},
+    		fechaFin: {
+				required: "La fecha es requerida",
     		},
 		},
 		highlight: function(element) {
-	        $(element).closest('.form-group').addClass('has-error').removeClass( "has-success" );
+        	$(element).closest('.form-group').addClass('has-error').removeClass( "has-success" );
 	    },
 	    unhighlight: function(element) {
-	        $(element).closest('.form-group').addClass( "has-success" ).removeClass('has-error');
+        	$(element).closest('.form-group').addClass( "has-success" ).removeClass('has-error');
 	    },
 	    errorElement: 'span',
 	    errorClass: 'help-block',
@@ -78,8 +76,6 @@ $( document ).ready( function () {
 	        }
 	    }
 	});
-	
-	
 	
 	/*--------------------------------------------------------------------------------
 	Validación de reportes
@@ -88,7 +84,7 @@ $( document ).ready( function () {
 	$( "#form_reporte_cuantitativo_cualitativo" ).validate( {
 		rules: {
 			anno: {
-    			required: true,
+				required: true,
         		date: true
     		},
     		centrosEducativo: { valueNotEquals: "0" },
@@ -121,11 +117,10 @@ $( document ).ready( function () {
 	    }
 	});
 	
-	
-	$( "#form_reporte_x_anio" ).validate( {
+	$("#form_reporte_x_anio" ).validate({
 		rules: {
 			anno: {
-    			required: true,
+				required: true,
         		date: true
     		},
     		centrosEducativo: { valueNotEquals: "0" },
@@ -134,8 +129,8 @@ $( document ).ready( function () {
     		estado: { valueNotEquals: "0" },
 		},
 		messages: {
-	    	anno: {
-    			required: "El año es requerido",
+    		anno: {
+				required: "El año es requerido",
         		date: "Formato incorrecto ejem: 20016",
     		},
 			centrosEducativo: { valueNotEquals: "Por favor seleccione un centro educativo" },
@@ -202,8 +197,6 @@ $( document ).ready( function () {
 	    }
 	});
 	
-
-	
 	$( "#rep_cedu_estado_actual" ).validate( {
 		rules: {
 			estado_acred: { valueNotEquals: "0" },
@@ -236,16 +229,13 @@ $( document ).ready( function () {
 	    }
 	});
 	
-	
-	
-	
 	/*--------------------------------------------------------------------------------
 	Validación para centros educativos
 	--------------------------------------------------------------------------------*/
 	//Registro
-	$( "#form_validar" ).validate( {
+	$("#form_validar" ).validate( {
 		rules: {
-	    	codigo: "required",
+    		codigo: "required",
 			nombre: "required",
 			direccion: "required",
 			total_alumnos: {
@@ -256,19 +246,46 @@ $( document ).ready( function () {
 			},
 			municipio: { valueNotEquals: "0" },
 			jornada: { valueNotEquals: "0" },
-			tamanno: { valueNotEquals: "0" }
+			tamanno: { valueNotEquals: "0" },
+			modalidades: { valueNotEquals: "0" },
+			zonasCE: { valueNotEquals: "0" },
+			totalDocentesMasculinos: {
+				required: true,
+				minlength: 1,
+				maxlength: 15,
+				number: true,
+			},
+			totalDocentesFemeninos: {
+				required: true,
+				minlength: 1,
+				maxlength: 15,
+				number: true,
+			}
 		},
 		messages: {
-	    codigo: "Código requerido",
-		  nombre: "El nombre es requerido",
-		  direccion: "La dirección es requerida",
-		  total_alumnos: {
+			codigo: "Código requerido",
+			nombre: "El nombre es requerido",
+			direccion: "La dirección es requerida",
+			total_alumnos: {
 				required: "El total de alumnos es requerido",
-				number: "Debe ser un número"
+				number: "Debe ser un número",
+				maxlength:"Límite superado"
 			},
 			municipio: { valueNotEquals: "Por favor seleccione un municipio" },
 			jornada: { valueNotEquals: "Por favor seleccione una jornada" },
-			tamanno: { valueNotEquals: "Por favor seleccione un tamaño" }
+			tamanno: { valueNotEquals: "Por favor seleccione un tamaño" },
+			modalidades: { valueNotEquals: "Por favor seleccione una modalidad" },
+			zonasCE: { valueNotEquals: "Por favor seleccione una zona" },
+			totalDocentesMasculinos: {
+				required: "La cantidad de docentes es requerido",
+				number: "Debe ser un número",
+				maxlength:"Límite superado"
+			},
+			totalDocentesFemeninos: {
+				required: "La cantidad de docentes es requerido",
+				number: "Debe ser un número",
+				maxlength:"Límite superado"
+			},
 		},
 		 highlight: function(element) {
 	        $(element).closest('.form-group').addClass('has-error').removeClass( "has-success" );
@@ -311,9 +328,9 @@ $( document ).ready( function () {
 				maxlength: 15,
 				number: true,
 			},
-			["CentroEducativoType[idMunicipio]"]: { valueNotEquals: "null" },
-			["CentroEducativoType[idJornadaCentroEducativo]"]: { valueNotEquals: "null" },
-			["CentroEducativoType[idTamannoCentroEducativo]"]: { valueNotEquals: "null" }
+			["CentroEducativoType[idMunicipio]"]: { valueNotEquals: "0" },
+			["CentroEducativoType[idJornadaCentroEducativo]"]: { valueNotEquals: "0" },
+			["CentroEducativoType[idTamannoCentroEducativo]"]: { valueNotEquals: "0" }
 		},
 		messages: {
 	    	["CentroEducativoType[codCentroEducativo]"]: "Código requerido",
@@ -321,15 +338,18 @@ $( document ).ready( function () {
 			["CentroEducativoType[direccionCentroEducativo]"]: "La dirección es requerida",
 			["CentroEducativoType[totalAlumnos]"]: {
 				required: "El total de alumnos es requerido",
-				number: "Debe ser un número"
+				number: "Debe ser un número",
+				maxlength:"Límite superado"
 			},
 			["CentroEducativoType[totalDocentesMasculinos]"]: {
 				required: "El total de docentes es requerido",
-				number: "Debe ser un número"
+				number: "Debe ser un número",
+				maxlength:"Límite superado"
 			},
 			["CentroEducativoType[totalDocentesFemeninos]"]: {
 				required: "El total de docentes es requerido",
-				number: "Debe ser un número"
+				number: "Debe ser un número",
+				maxlength:"Límite superado"
 			},
 			["CentroEducativoType[idMunicipio]"]: { valueNotEquals: "Por favor seleccione un municipio" },
 			["CentroEducativoType[idJornadaCentroEducativo]"]: { valueNotEquals: "Por favor seleccione una jornada" },
@@ -356,8 +376,8 @@ $( document ).ready( function () {
 	Validación para cuotas
 	--------------------------------------------------------------------------------*/	
 	//Registro
-	$( "#form_validar_cuota_agregar" ).validate( {
-	    rules: {
+	$("#form_validar_cuota_agregar" ).validate( {
+    	rules: {
 			grado: { valueNotEquals: "0" },
 			matricula: {
 				required: true,
@@ -560,7 +580,7 @@ $( document ).ready( function () {
 	    }
 	});
 	
-		//Registro editar
+	//Registro editar
 	$( "#form_cambio_clave" ).validate( {
 		rules: {
 	        ["fos_user_change_password_form[current_password]"]:{
@@ -586,14 +606,12 @@ $( document ).ready( function () {
         	["fos_user_change_password_form[plainPassword][first]"]: {
 	            required: "Por favor digite su nueva clave de acceso",
 	            minlength: "La clave debe superar los 4 caracteres",
-	           
 	        },
 	        ["fos_user_change_password_form[plainPassword][second]"]: {
 	            required: "Por favor repita su nueva clave de acceso",
 	            minlength: "La clave debe superar los 4 caracteres",
 	            equalTo:"Las claves no coinciden, por favor verificar"
 	        },
-	        
 	    },
 	    highlight: function(element) {
 	        $(element).closest('.form-group').addClass('has-error').removeClass( "has-success" );
@@ -612,11 +630,42 @@ $( document ).ready( function () {
 	    }
 	});
 	
+	$( "#form_dig_corregir" ).validate( {
+		rules: {
+			centrosEducativos: { valueNotEquals: "0" },
+			formularios: { valueNotEquals: "0" },
+			fechaAplicacion: {
+				required: true,
+	    		fecha_: true
+			},
+			lugarAplicacion: "required",
+		},
+		messages: {
+	    	centrosEducativos: { valueNotEquals: "Por favor seleccione un centro educativo" },
+	    	formularios: { valueNotEquals: "Por favor seleccione un formulario" },
+    		fechaAplicacion: {
+				required: "La fecha es requerida",
+    		},
+    		lugarAplicacion: "Digite el lugar",
+		},
+		highlight: function(element) {
+        	$(element).closest('.form-group').addClass('has-error').removeClass( "has-success" );
+	    },
+	    unhighlight: function(element) {
+        	$(element).closest('.form-group').addClass( "has-success" ).removeClass('has-error');
+	    },
+	    errorElement: 'span',
+	    errorClass: 'help-block',
+	    errorPlacement: function(error, element) {
+	        if(element.parent('.input-group').length) {
+	            error.insertAfter(element.parent());
+	        } else {
+	            error.insertAfter(element);
+	        }
+	    }
+	});
 	
 });
-
-
-
 
 /*--------------------------------------------------------------------------------
 Msj informativo title
@@ -644,7 +693,7 @@ function cargarDepartamentos(comboDepartamento,selected,comboMunicipio,municipio
     		comboDepartamento.html(html);
     		comboDepartamento.val(selected);
     		if(!comboMunicipio.val() && (municipioHidden==null || municipioHidden.val())){
-        		cargarMunicipios(comboDepartamento.val(),comboMunicipio,(municipioHidden?municipioHidden.val():null));
+    			cargarMunicipios(comboDepartamento.val(),comboMunicipio,(municipioHidden?municipioHidden.val():null));
     		}
     	}
 	});
@@ -694,27 +743,6 @@ Advertencia
 $("#warning-alert").fadeTo(3000, 6000).slideUp(6000, function(){
 	$("#warning-alert").slideUp(6000);
 });
-
-/*--------------------------------------------------------------------------------
-Cargar de archivos
---------------------------------------------------------------------------------*/	
-/*
-$(function(){
-    $("input[name='archivo']").on("change", function(){
-        var formData = new FormData($("#formulario")[0]);
-        $.ajax({
-            url: appSf + '/lista-centros-educativos/archivo-cuota-cargar',
-            type: "POST",
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(datos){
-            	$("#respuesta").html(datos);
-            }
-        });
-    });
-});
-*/
 
 
   

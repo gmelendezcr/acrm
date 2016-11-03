@@ -189,22 +189,22 @@
                     locale: 'es',
                     format: 'DD-MM-YYYY'
                 });
-                $('#fecha_annio1,#fecha_annio,#anno,#anno_rango1').datetimepicker({
+                $('#fecha_annio1,#fecha_annio,#anno,#anno_rango1,#CuotaAnualPorGradoEscolarPorCentroEducativoType_anno').datetimepicker({
                     viewMode: 'years',
                     locale: 'es',   
                     format: 'YYYY'
                 });
-                $('#fecha_annio2,#anno_rango2').datetimepicker({
+                $('#anno_rango2,#fecha_annio2').datetimepicker({
                     viewMode: 'years',
                     locale: 'es',   
                     format: 'YYYY',
                     useCurrent: false
                 });
-                $("#anno_rango1,#fechaIni").on("dp.change", function (e) {
-                $('#anno_rango2,#fechaFin').data("DateTimePicker").minDate(e.date);
+                $("#anno_rango1,#fechaIni,#fecha_annio").on("dp.change", function (e) {
+                $('#anno_rango2,#fechaFin,#fecha_annio2').data("DateTimePicker").minDate(e.date);
                 });
-                $("#anno_rango2,#fechaFin").on("dp.change", function (e) {
-                $("#anno_rango1,#fechaIni").data("DateTimePicker").maxDate(e.date);
+                $("#anno_rango2,#fechaFin,#fecha_annio2").on("dp.change", function (e) {
+                $("#anno_rango1,#fechaIni,#fecha_annio").data("DateTimePicker").maxDate(e.date);
                 });
             });
         </script>

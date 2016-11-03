@@ -49,6 +49,7 @@ class CentroEducativoController extends Controller{
             ->join('depto.idZonaGeografica','zg')
             ->join('ce.idJornadaCentroEducativo','jda')
             ->join('ce.idTamannoCentroEducativo','tce')
+            ->orderBy('ce.nbrCentroEducativo', 'ASC')
                 ->getQuery()->getResult();
         return $this->render('centro-educativo/lista.index.html.twig',array(
             'lista'=>$res,
@@ -80,6 +81,7 @@ class CentroEducativoController extends Controller{
             ->join('ce.idTamannoCentroEducativo','tce')
                 ->where('ce.nbrCentroEducativo like :nbr')
                 ->orWhere('ce.codCentroEducativo like :nbr')
+                ->orWhere('ce.direccionCentroEducativo like :nbr')
                 ->orWhere('ce.totalAlumnos like :nbr')
                 ->orWhere('zg.nbrZonaGeografica like :nbr')
                 ->orWhere('depto.nbrDepartamento like :nbr')
@@ -87,6 +89,7 @@ class CentroEducativoController extends Controller{
                 ->orWhere('jda.nbrJornadaCentroEducativo like :nbr')
                 ->orWhere('tce.nbrTamannoCentroEducativo like :nbr')
                 ->setParameter('nbr', $nbr)
+                ->orderBy('ce.nbrCentroEducativo', 'ASC')
             ->getQuery()->getResult();
         return $this->render('centro-educativo/lista.index.html.twig',array(
             'lista'=>$res,
@@ -136,8 +139,6 @@ class CentroEducativoController extends Controller{
         $zonaCE = $em->getRepository('AcreditacionBundle:ZonaCentroEducativo')->find($request->get('zonasCE'));
         $modalidad = $em->getRepository('AcreditacionBundle:ModalidadCentroEducativo')->find($request->get('modalidades'));
 
-        //$jornadas=$request->get('jornadas');
-        //$tamanno=$request->get('tamanno');
         $ce=new CentroEducativo();
         $ce->setCodCentroEducativo($codigo);
         $ce->setNbrCentroEducativo($nombre);
@@ -156,7 +157,7 @@ class CentroEducativoController extends Controller{
         new AccionPorUsuario($em,$this->getUser(),'AC',$ce);
         $em->persist($ce);
         $em->flush();
-        return $this->redirectToRoute('centro_educativo_lista');
+        return $this->redirectToRoute('centro_educativo_buscar',array('nbr'=>$codigo));
     }
     
     /**
@@ -172,7 +173,7 @@ class CentroEducativoController extends Controller{
                /* echo  $postData['students2']; */
                 /*
                  * do you update stuff here
-                 * */
+                * */
             }
        }
     }

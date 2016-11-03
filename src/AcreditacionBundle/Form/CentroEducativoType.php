@@ -65,6 +65,7 @@ class CentroEducativoType extends AbstractType{
             'choices' => $zonaCentroEducativo,
             'choices_as_values' => true,
             'label' => 'Zona',
+            'empty_value' => false,
         );
 
         $modalidadCentroEducativo=array();
