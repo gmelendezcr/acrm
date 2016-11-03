@@ -61,7 +61,7 @@ class Pregunta
     /**
      * @var string
      *
-     * @ORM\Column(name="JS_ON_CHANGE", type="string", length=100, nullable=true)
+     * @ORM\Column(name="JS_ON_CHANGE", type="string", length=150, nullable=true)
      */
     private $jsOnChange;
 
@@ -232,7 +232,7 @@ class Pregunta
     /**
      * @var string
      *
-     * @ORM\Column(name="FORMULA_PONDERACION", type="string", length=255, nullable=true)
+     * @ORM\Column(name="FORMULA_PONDERACION", type="string", length=500, nullable=true)
      */
     private $formulaPonderacion;
 

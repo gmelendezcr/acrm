@@ -6,7 +6,7 @@
             {% set checked = '' %}
         {% endif %}
         <label class="checkbox-inline btn btn-info btn-xs">
-            <input type='radio' class='subPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' value='{{ opcion.codigo }}' {{ checked }} {{ disabled }}>{{ opcion.texto }}
+            <input type='radio' class='subPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }}' id='{{ id }}' name='{{ id }}' value='{{ opcion.codigo }}' {{ checked }} {{ disabled }} {{ ( pregunta.jsOnChange ? "onChange=\"" ~ pregunta.jsOnChange ~ "\"" : null )|raw }}>{{ opcion.texto }}
         </label>
     {% endif %}
 {% endfor %}

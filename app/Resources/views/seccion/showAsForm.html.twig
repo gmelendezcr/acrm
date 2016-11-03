@@ -28,7 +28,10 @@
                             <td class="col-sm-2 success"><strong>Centro educativo:</strong> </td><td clas="col-sm-10">{{ app.session.get('nbrCentroEducativo') }}</td>
                         </tr>
                         <tr>
-                            <td class="col-sm-2 success"><strong>Formulario:</strong> </td><td class="col-sm-10">{{ app.session.get('nbrFormulario') }}</td>
+                            <td class="col-sm-2 success"><strong>Formulario:</strong> </td><td class="col-sm-10">{{ app.session.get('codFormulario') ~ ' - ' ~ app.session.get('nbrFormulario') }}</td>
+                        </tr>
+                        <tr>
+                            <td class="col-sm-2 success"><strong>Sección/criterio:</strong> </td><td class="col-sm-10">{{ seccion.codSeccion ~ ' - ' ~ seccion.nbrSeccion }}</td>
                         </tr>
                     </tbody>
                 </table>

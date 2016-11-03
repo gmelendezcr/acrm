@@ -24,7 +24,7 @@
                         {% if regExp %}
                             <script type="text/javascript">
                                 function {{ id }}_regExp(){
-                                    if(!$('#{{ id }}').val().match($('#{{ id }}').attr('regExp'))) {
+                                    if($('#{{ id }}').val()!='' && !$('#{{ id }}').val().match($('#{{ id }}').attr('regExp'))) {
                                         $('#{{ id }}_noValido').addClass('noValido');
                                     }
                                     else {
@@ -36,7 +36,7 @@
                         {% endif %}
                         <textarea class='tipoPregunta{{ pregunta.idTipoPregunta.codTipoPregunta }} form-control' id='{{ id }}' name='{{ id }}' {{ maxLength }} {{ regExp|raw }} {{ (regExp ? 'onBlur="' ~ id ~ '_regExp();"' : '')|raw }} {{ readonly }} {{ disabled2 }}>{{ respuestas[pregunta.idPregunta] ?? null }}</textarea>
                         {% if regExp %}
-                            <span id="{{ id }}_noValido" class="noValidoOculto">Digite una cuenta de correo válida</span>
+                            <span id="{{ id }}_noValido" class="noValidoOculto">El valor ingresado no cumple con el formato esperado.</span>
                         {% endif %}
                         {{ btRevisar|raw }}
                     </td>

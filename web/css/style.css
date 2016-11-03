@@ -458,3 +458,7 @@ Control de td de tabla
     font-size: 15px;
     z-index: 999999999999999999999999999999999999999999999999999999999999999999;
 }
+
+.bg-info2{
+    background-color: #ddd;
+}

@@ -51,7 +51,7 @@ class SeccionController extends Controller
         }
 
         $resFormulario=$em->createQueryBuilder()
-            ->select('f.idFormulario, f.nbrFormulario, c.codCentroEducativo, c.nbrCentroEducativo')
+            ->select('f.idFormulario, f.codFormulario, f.nbrFormulario, c.codCentroEducativo, c.nbrCentroEducativo')
             ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'fce')
             ->join('fce.idFormulario','f')
             ->join('fce.idCentroEducativo','c')
@@ -62,6 +62,7 @@ class SeccionController extends Controller
 
         $session->set('codCentroEducativo', $resFormulario['codCentroEducativo']);
         $session->set('nbrCentroEducativo', $resFormulario['nbrCentroEducativo']);
+        $session->set('codFormulario', $resFormulario['codFormulario']);
         $session->set('nbrFormulario', $resFormulario['nbrFormulario']);
 
         $seccions=$em->createQueryBuilder()

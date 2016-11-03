@@ -78,5 +78,11 @@
                 </tr>
             </tbody>
         </table>
+        {% if pregunta.jsCargar %}
+            <script languaje='javascript'>
+                setTimeout(function(){ {{ pregunta.jsCargar|raw }} }, 1000);
+            </script>
+        {% endif %}
+
     </div>
 </div>

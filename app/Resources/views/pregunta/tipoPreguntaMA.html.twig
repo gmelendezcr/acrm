@@ -29,7 +29,7 @@
                     {% set sumaFila, sumaFila2, ceroColumnas = '', '', '' %}
                     {% if fila.encabezadoOpciones %}
                         <tr>
-                            <th colspan={{ pregunta.subPreguntas|length + (pregunta.totalesFilas == 'S' or pregunta.totalesColumnas == 'S' ? 1 : 0) }}>
+                            <th class="bg-info2" colspan={{ pregunta.subPreguntas|length + (pregunta.totalesFilas == 'S' or pregunta.totalesColumnas == 'S' ? 1 : 0) }}>
                                 {{ fila.encabezadoOpciones }}
                             </th>
                         </tr>
