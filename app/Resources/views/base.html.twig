@@ -155,6 +155,13 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                {% block ayuda %}
+                    <div class="ayuda-sistema">
+                        <a href="{{ asset('documentos/login.pdf') }}" target="_ventana">
+                            <span class="glyphicon glyphicon-info-sign"></span> Ayuda?
+                        </a>
+                    </div>
+                {% endblock %}
                {% block body %}{% endblock %}
            </div>
         </div>

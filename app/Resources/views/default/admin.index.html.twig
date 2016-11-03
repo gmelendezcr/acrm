@@ -1,6 +1,11 @@
 {% extends 'login.base.html.twig' %}
 
 {% block body %}
+<div class="ayuda-sistema">
+    <a href="{{ asset('documentos/login.pdf') }}" target="_ventana">
+        <span class="glyphicon glyphicon-info-sign"></span> Ayuda?
+    </a>
+</div>
 <div class="header-control-login">
             <div class="container">
                 <div class="row">

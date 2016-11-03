@@ -413,7 +413,7 @@ Control de td de tabla
 }
 
 .noValidoOculto{
-    color: #a94442;;
+    color: #a94442;
     display: none;
 }
 
@@ -451,3 +451,10 @@ Control de td de tabla
     display: block;
 }
 
+.ayuda-sistema{
+    position: absolute;
+    right: 5px;
+    bottom: 10px;
+    font-size: 15px;
+    z-index: 999999999999999999999999999999999999999999999999999999999999999999;
+}
