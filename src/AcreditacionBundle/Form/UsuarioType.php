@@ -62,9 +62,9 @@ class UsuarioType extends AbstractType
             ->add('email',null,array(
                 'label' =>'Correo electrónico',
             ))
-            ->add('password',PasswordType::class, array('required' => true, 'attr' => array('value'=>'abcd')))
+            ->add('password',PasswordType::class, array('required' => true, 'label'=>'Clave','attr' => array('value'=>'abcd')))
             ->add('passwordConfirmation', PasswordType::class, array(
-                'label' =>'Confirmación',
+                'label' =>'Confirmación de clave',
                 'mapped' => false,
                 'required' => true,
                 'attr' => array('value'=>'abcd'),

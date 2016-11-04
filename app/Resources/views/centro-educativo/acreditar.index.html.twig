@@ -20,16 +20,16 @@
                                 <th class="col-sm-4">
                                     Nombre del centro educativo
                                 </th>
-                                <th class="col-sm-1 text-center">
+                                <th class="col-sm-2 text-center">
                                     Puntuación parvularia
                                 </th>
-                                <th class="col-sm-1 text-center">
+                                <th class="col-sm-2 text-center">
                                     Puntuación básica y media
                                 </th>
                                 <th class="col-sm-1 text-center">
                                     Puntuación promedio
                                 </th>
-                                <th class="col-sm-2">
+                                <th class="col-sm-1 text-center">
                                     Estado
                                 </th>
                                 <th class="col-sm-1 text-center">
@@ -59,7 +59,7 @@
                                             ((centroEducativo.puntuacionParvularia is defined ? 1 : 0) + (centroEducativo.puntuacionBasica is defined ? 1 : 0))) %}
                                         {{ promedio|number_format(2) }}
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         {% if centroEducativo.codEstadoFormulario == 'CA' %}
                                             <span class="label label-success">
                                                 <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="top" title="{{ centroEducativo.nbrEstadoFormulario }}"></span>
@@ -69,27 +69,29 @@
                                                 <span class="glyphicon glyphicon-tags" data-toggle="tooltip" data-placement="top" title="{{ centroEducativo.nbrEstadoFormulario }}"></span>
                                             </span> 
                                         {% endif %}
+                                        <br />
                                         {{ centroEducativo.nbrEstadoFormulario }}
                                     </td>
                                     <td class="text-center">
+                                        <div class="form-group">
                                         {% set validacion = validacion ~ " || $('#dictamen" ~ centroEducativo.idCentroEducativo ~ ":checked').val()!=undefined" %}
                                         {% if centroEducativo.codEstadoFormulario == 'CA' %}
                                             {% if promedio >= arrayLimites.min and promedio <= ( arrayLimites.med1 + arrayLimites.margen ) %}
-                                                <label class="checkbox-inline btn btn-info btn-xs">
-                                                    <input type='radio' id='dictamen{{ centroEducativo.idCentroEducativo }}' name='dictamen{{ centroEducativo.idCentroEducativo }}' value='NA' >No acreditado
-                                                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                                <label class="checkbox-inline btn btn-info">
+                                                    <input type='radio' id='dictamen{{ centroEducativo.idCentroEducativo }}' name='dictamen{{ centroEducativo.idCentroEducativo }}' value='NA' >
+                                                    <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> No acreditado
                                                 </label>
                                             {% endif %}
                                             {% if promedio >= ( arrayLimites.med1 - arrayLimites.margen ) and promedio <= ( arrayLimites.med2 + arrayLimites.margen ) %}
-                                                <label class="checkbox-inline btn btn-info btn-xs">
-                                                    <input type='radio' id='dictamen{{ centroEducativo.idCentroEducativo }}' name='dictamen{{ centroEducativo.idCentroEducativo }}' value='AO' >Acreditado con observaciones
-                                                    <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
+                                                <label class="checkbox-inline btn btn-info">
+                                                    <input type='radio' id='dictamen{{ centroEducativo.idCentroEducativo }}' name='dictamen{{ centroEducativo.idCentroEducativo }}' value='AO' >
+                                                    <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> Acreditado con observaciones
                                                 </label>
                                             {% endif %}
                                             {% if promedio >= ( arrayLimites.med2 - arrayLimites.margen ) and promedio <= arrayLimites.max %}
-                                                <label class="checkbox-inline btn btn-info btn-xs">
-                                                    <input type='radio' id='dictamen{{ centroEducativo.idCentroEducativo }}' name='dictamen{{ centroEducativo.idCentroEducativo }}' value='AC' >Acreditado
-                                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                                <label class="checkbox-inline btn btn-info">
+                                                    <input type='radio' id='dictamen{{ centroEducativo.idCentroEducativo }}' name='dictamen{{ centroEducativo.idCentroEducativo }}' value='AC' >
+                                                    <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Acreditado
                                                 </label>
                                             {% endif %}
                                         {% elseif centroEducativo.acreditado in ['A','N'] %}
@@ -100,6 +102,7 @@
                                             {% endif %}
                                             <button type="submit" class="btn btn-info btn-md" href="#" onClick="return reporteAcreditado('{{ action }}',{{ centroEducativo.fechaAplicacion }},{{ centroEducativo.idCentroEducativo }});"><span class="glyphicon glyphicon-save-file"></span> Reporte</button>
                                         {% endif %}
+                                        </div>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -121,7 +124,7 @@
                 <div class="col-sm-4"></div>
                 <div class="col-sm-12 text-center">
                     <div class="form-group text-center"> 
-                        <button type="submit" class="btn btn-info btn-md" onClick="return validarRegistrarAcreditacion();"><span class="glyphicon glyphicon-save-file"></span> Registrar acreditación</button>
+                        <button type="submit" class="btn btn-info btn-md" onClick="return validarRegistrarAcreditacion();"><span class="glyphicon glyphicon-ok"></span> Registrar acreditación</button>
                     </div>
                 </div>
             </form>

@@ -453,10 +453,9 @@ Control de td de tabla
 
 .ayuda-sistema{
     position: absolute;
-    right: 5px;
-    bottom: 10px;
+    left: 5px;
+    top: 10px;
     font-size: 15px;
-    z-index: 999999999999999999999999999999999999999999999999999999999999999999;
 }
 
 .bg-info2{
