@@ -169,5 +169,10 @@
                 setTimeout(function(){ calcularTotalesPregunta{{ pregunta.idTipoPregunta.codTipoPregunta ~ pregunta.idPregunta }}(null,null); }, 1000);
             </script>
         {% endif %}
+        {% if pregunta.jsCargar %}
+            <script languaje='javascript'>
+                setTimeout(function(){ {{ pregunta.jsCargar|raw }} }, 1000);
+            </script>
+        {% endif %}
     </div>
 </div>

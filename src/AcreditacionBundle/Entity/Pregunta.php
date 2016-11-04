@@ -54,7 +54,7 @@ class Pregunta
     /**
      * @var string
      *
-     * @ORM\Column(name="JS_CARGAR", type="string", length=100, nullable=true)
+     * @ORM\Column(name="JS_CARGAR", type="string", length=350, nullable=true)
      */
     private $jsCargar;
 
