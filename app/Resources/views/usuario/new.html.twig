@@ -1,6 +1,4 @@
 {% extends 'base.html.twig' %}
-{% block ayuda %}
-{% endblock %}
 
 {% block body %}
 
@@ -35,11 +33,11 @@
                  {% block password %}
                     <div class="form-group">
                         {{ form_label(form.password) }}
-                        {{ form_widget(form.password, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite la contraseña','required':'required','value':''}}) }}
+                        {{ form_widget(form.password, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite la clave','required':'required','value':''}}) }}
                     </div>
                     <div class="form-group">
                         {{ form_label(form.passwordConfirmation) }}
-                        {{ form_widget(form.passwordConfirmation, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite la confirmación de la contraseña','required':'required','value':''}}) }}
+                        {{ form_widget(form.passwordConfirmation, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite la confirmación de la clave','required':'required','value':''}}) }}
                     </div>
                 {% endblock %}
                 <div class="form-group">

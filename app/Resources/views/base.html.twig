@@ -155,12 +155,15 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                
                 {% block ayuda %}
-                    <div class="ayuda-sistema">
-                        <a href="{{ asset('documentos/login.pdf') }}" target="_ventana">
-                            <span class="glyphicon glyphicon-info-sign"></span> Ayuda?
-                        </a>
-                    </div>
+                    {% if documento is defined %}
+                        <div class="ayuda-sistema">
+                            <a href="{{ asset('documentos/' ~ documento) }}" target="_ventana">
+                                <span class="glyphicon glyphicon-info-sign"></span> Ayuda?
+                            </a>
+                        </div>
+                    {%endif%}
                 {% endblock %}
                {% block body %}{% endblock %}
            </div>
@@ -192,7 +195,7 @@
         <script src="{{ asset('js/bootstrap-datetimepicker.js') }}"></script>
         <script type="text/javascript">
             $(function () {
-                $('#fecha,#fechaIniDiv,#fechaIni,#fechaFinDiv,#fechaFin,#fechaAplicacion,#FE_9,#fechaDiv').datetimepicker({
+                $('#fecha,#fechaIniDiv,#fechaIni,#fechaFinDiv,#fechaFin,#fechaAplicacion,#FE_9,#fechaDiv,#fechaInicio').datetimepicker({
                     locale: 'es',
                     format: 'DD-MM-YYYY'
                 });
