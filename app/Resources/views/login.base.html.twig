@@ -20,6 +20,18 @@
     <body>
        
         <div class="container">
+            <div class="col-md-12">
+                {% block ayuda %}
+                    {% set documento = 'login.png' %}
+                    {% if documento is defined %}
+                        <div class="ayuda-sistema z-index-1">
+                            <a href="{{ asset('documentos/' ~ documento) }}" target="_ventana">
+                                <span class="glyphicon glyphicon-info-sign"></span> Ayuda
+                            </a>
+                        </div>
+                    {%endif%}
+                {% endblock %}
+            </div>
             <div class="row">
                {% block body %}{% endblock %}
             </div>

@@ -1,5 +1,8 @@
 {% extends 'base.html.twig' %}
 
+{% if documento is not defined %}
+    {% set documento='crear-usuario.png' %}
+{% endif %}
 {% block body %}
 
     <div class="col-md-12 text-center">

@@ -158,9 +158,9 @@
                 
                 {% block ayuda %}
                     {% if documento is defined %}
-                        <div class="ayuda-sistema">
+                        <div class="ayuda-sistema z-index-1">
                             <a href="{{ asset('documentos/' ~ documento) }}" target="_ventana">
-                                <span class="glyphicon glyphicon-info-sign"></span> Ayuda?
+                                <span class="glyphicon glyphicon-info-sign"></span> Ayuda
                             </a>
                         </div>
                     {%endif%}

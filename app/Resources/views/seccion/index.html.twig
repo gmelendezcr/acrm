@@ -1,4 +1,11 @@
 {% extends 'base.html.twig' %}
+
+{% if idFormularioPorCentroEducativoRevisar %}
+    {% set documento='aprobar-rechazar.png' %}
+{% else %}
+    {% set documento='instrumento-de-evaluacion-institucional.png' %}
+{% endif %}
+
 {% block body %}
     <div class="col-md-10 text-center">                                            
         <strong>
