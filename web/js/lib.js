@@ -394,8 +394,10 @@ $( document ).ready( function () {
 			cantidadCuotas: {
 				required: true,
 				minlength: 1,
-				maxlength: 10,
+				maxlength: 3,
 				number: true,
+				min:10,
+				max:12
 			},
 	    	anno: {
         		required: true,
@@ -418,7 +420,9 @@ $( document ).ready( function () {
 			cantidadCuotas: {
 				required: "La cantidad de colegiatura es requerida",
 				number: "Debe ser un número",
-				maxlength: "Límite de caracteres superado"
+				maxlength: "Límite de caracteres superado",
+				min:"Digite la cantidad de colegiaturas, se permite entre 10 y 12 colegiaturas",
+				max:"Solo se permite colegiaturas entre 10 y 12 colegiaturas."
 			},
 			anno: {
 				required: "El año es requerido",
