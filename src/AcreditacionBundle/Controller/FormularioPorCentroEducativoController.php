@@ -75,7 +75,7 @@ class FormularioPorCentroEducativoController extends Controller
     }
 
     /**
-     * @Security("has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_COORDINADOR')")
      */
     public function calificarAction(Request $request)
     {

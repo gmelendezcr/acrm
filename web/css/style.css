@@ -461,3 +461,7 @@ Control de td de tabla
 .bg-info2{
     background-color: #ddd;
 }
+
+.tipoPreguntaTA_5000{
+    height: 350px !important;
+}

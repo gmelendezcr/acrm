@@ -201,7 +201,7 @@ class ReportesController extends Controller{
     }
 
     /**
-     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_COORDINADOR') or has_role('ROLE_ACREDITADOR')")
      */
     public function cuantitativo_cualitativoAction(Request $request){
         $em = $this->getDoctrine()->getManager();
@@ -240,7 +240,7 @@ class ReportesController extends Controller{
     }
     
     /**
-     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_COORDINADOR') or has_role('ROLE_ACREDITADOR')")
      */
     public function estadoAction(Request $request){
         $em = $this->getDoctrine()->getManager();
@@ -261,7 +261,7 @@ class ReportesController extends Controller{
     }
     
     /**
-     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_COORDINADOR') or has_role('ROLE_ACREDITADOR')")
      */
     public function zonaAction(Request $request){
         $em = $this->getDoctrine()->getManager();
@@ -282,7 +282,7 @@ class ReportesController extends Controller{
     }
     
     /**
-     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_COORDINADOR') or has_role('ROLE_ACREDITADOR')")
      */
     public function rango_fechaAction(Request $request){
         $em = $this->getDoctrine()->getManager();
@@ -306,7 +306,7 @@ class ReportesController extends Controller{
     
     
     /**
-     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_COORDINADOR') or has_role('ROLE_ACREDITADOR')")
      */
     public function form_estado_actual_ceduAction(Request $request){
         $em = $this->getDoctrine()->getManager();
@@ -327,7 +327,7 @@ class ReportesController extends Controller{
     
     
 /**
-* @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+* @Security("has_role('ROLE_MINED') or has_role('ROLE_COORDINADOR') or has_role('ROLE_ACREDITADOR')")
 */
 public function pdf_estado_actual_ceduAction(Request $request){
     $estado_acred=$request->get('estado_acred');
@@ -482,7 +482,7 @@ foreach ($lista_cedu as $cd) {
         <tr>
             <td>'.$cd["codCentroEducativo"].'</td>
             <td>'.$cd["nbrCentroEducativo"].'</td>
-            <td>'.$cd["nbrDepartamento"].','.$cd["nbrMunicipio"].''.$cd["direccionCentroEducativo"].'</td>
+            <td>'.$cd["nbrDepartamento"].', '.$cd["nbrMunicipio"].', '.$cd["direccionCentroEducativo"].'</td>
             <td align="center">'.$cd["fechaInicio"]->format('d-m-Y').'</td>
             <td align="center">'.$cd["fechaFin"]->format('d-m-Y').'</td>
         </tr>';
@@ -746,7 +746,7 @@ foreach ($lista_cedu as $cd) {
     }
     
     /**
-     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_COORDINADOR') or has_role('ROLE_ACREDITADOR')")
      */
     public function informeCuantitativoAction(Request $request)
     {
@@ -1080,7 +1080,7 @@ foreach ($lista_cedu as $cd) {
     }
 
     /**
-     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_COORDINADOR') or has_role('ROLE_ACREDITADOR')")
      */
     public function informeCualitativoAction(Request $request)
     {
@@ -1211,7 +1211,7 @@ foreach ($lista_cedu as $cd) {
     }
 
     /**
-     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_COORDINADOR') or has_role('ROLE_ACREDITADOR')")
      */
     public function diplomaAction(Request $request)
     {
@@ -1284,7 +1284,7 @@ $this->pdfObj->setTextShadow(array('enabled' => true, 'depth_w' => 0.4, 'depth_h
     }
 
     /**
-     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_COORDINADOR') or has_role('ROLE_ACREDITADOR')")
      */
     public function noAcreditadoAction(Request $request)
     {
@@ -1342,7 +1342,7 @@ MINISTERIO DE EDUCACIÓN',0,'C');
     }
 
     /**
-     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_COORDINADOR') or has_role('ROLE_ACREDITADOR')")
      */
     public function estadisticoGeneralAction(Request $request)
     {
@@ -1863,7 +1863,7 @@ MINISTERIO DE EDUCACIÓN',0,'C');
     }
 
     /**
-     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_COORDINADOR') or has_role('ROLE_ACREDITADOR')")
      */
     public function promedioCriterioIndicadorAction(Request $request)
     {
@@ -2278,7 +2278,7 @@ MINISTERIO DE EDUCACIÓN',0,'C');
     }
 
     /**
-     * @Security("has_role('ROLE_MINED') or has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_COORDINADOR') or has_role('ROLE_ACREDITADOR')")
      */
     public function porDepartamentoAction (Request $request)
     {

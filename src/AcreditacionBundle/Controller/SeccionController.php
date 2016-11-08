@@ -23,7 +23,7 @@ class SeccionController extends Controller
     /**
      * Lists all Seccion entities.
      *
-     * @Security("has_role('ROLE_DIGITADOR') or has_role('ROLE_REVISOR') or has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_DIGITADOR') or has_role('ROLE_REVISOR') or has_role('ROLE_COORDINADOR')")
      */
     public function indexAction(Request $request)
     {
@@ -42,7 +42,7 @@ class SeccionController extends Controller
         $estadoFormularioPorCentroEducativo=$formularioPorCentroEducativo
             ->getIdEstadoFormulario()->getCodEstadoFormulario();
         if($formularioPorCentroEducativo->getIdformularioPorCentroEducativo()==$session->get('idFormularioPorCentroEducativo') &&
-            !in_array($formularioPorCentroEducativo->getIdEstadoFormulario()->getCodEstadoFormulario(),array('NU','DI','CO'))){
+            !in_array($formularioPorCentroEducativo->getIdEstadoFormulario()->getCodEstadoFormulario(),array('NU','DI','CO','RE'))){
             $idFormularioPorCentroEducativo=null;
             $session->remove('idFormularioPorCentroEducativo');
         }
@@ -99,7 +99,7 @@ class SeccionController extends Controller
     /**
      * Finds and displays a Seccion entity.
      *
-     * @Security("has_role('ROLE_DIGITADOR') or has_role('ROLE_REVISOR') or has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_DIGITADOR') or has_role('ROLE_REVISOR') or has_role('ROLE_COORDINADOR')")
      */
     public function showAction(Seccion $seccion, Request $request)
     {
@@ -288,7 +288,7 @@ class SeccionController extends Controller
 
 
             $seccSinRespuesta=$em->createQueryBuilder()
-                ->select('s.codSeccion, s.nbrSeccion')
+                ->select('s.codSeccion, s.nbrSeccion, fce.nbrArchivo, fce.rutaArchivo')
                 ->from('AcreditacionBundle:FormularioPorCentroEducativo', 'fce')
                 ->join('fce.idFormulario','f')
                 ->join('f.secciones','s')
@@ -325,7 +325,11 @@ class SeccionController extends Controller
                 foreach ($seccSinRespuesta as $secc) {
                     $seccStrArr[]='<li>' . $secc['codSeccion'] . ' - ' . $secc['nbrSeccion'] . '</li>';
                 }
-                $session->getFlashBag()->add('error','Las siguientes secciones/criterios no tienen respuestas registradas: <ul>' . implode('', $seccStrArr) . '</ul>');
+                $msgArchivo='';
+                if($secc['nbrArchivo']=='' || $secc['rutaArchivo']==''){
+                    $msgArchivo='Debe cargar el archivo correspondiente al instrumento';
+                }
+                $session->getFlashBag()->add('error','Las siguientes secciones/criterios no tienen respuestas registradas: <ul>' . implode('', $seccStrArr) . '</ul>' . $msgArchivo);
             }
         }
         else{

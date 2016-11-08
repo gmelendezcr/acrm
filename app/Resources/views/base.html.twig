@@ -89,7 +89,7 @@
                                     </ul>
                                 </li>
                             {% endif %}
-                            {% if is_granted('ROLE_MINED') or is_granted('ROLE_DIGITADOR') or is_granted('ROLE_REVISOR') or is_granted('ROLE_EVALUADOR') %}
+                            {% if is_granted('ROLE_MINED') or is_granted('ROLE_DIGITADOR') or is_granted('ROLE_REVISOR') or is_granted('ROLE_COORDINADOR') or is_granted('ROLE_ACREDITADOR') %}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Centros educativos <span class="caret"></span></a>
                                     <ul class="dropdown-menu">
@@ -103,27 +103,31 @@
                                         {% if is_granted('ROLE_REVISOR') %}
                                             <li><a href="{{path('centro_educativo_form_lista_revisar')}}">Revisar formulario</a></li>
                                         {% endif %}
-                                        {% if is_granted('ROLE_EVALUADOR') %}
+                                        {% if is_granted('ROLE_COORDINADOR') %}
                                             <li><a href="{{path('centro_educativo_form_lista_evaluar')}}">Evaluar formulario</a></li>
+                                        {% endif %}
+                                        {% if is_granted('ROLE_ACREDITADOR') %}
                                             <li><a href="{{path('centro_educativo_registrar_acreditacion')}}">Registrar acreditación</a></li>
                                         {% endif %}
                                     </ul>
                                 </li>
                             {% endif %}
-                            {% if is_granted('ROLE_MINED') or is_granted('ROLE_EVALUADOR') or is_granted('ROLE_SUPER_ADMIN') %}
+                            {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_MINED') or is_granted('ROLE_COORDINADOR') or is_granted('ROLE_ACREDITADOR') %}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-indent-left" aria-hidden="true"></span> Reportes <span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         {% if is_granted('ROLE_SUPER_ADMIN') %}
-                                            <li><a href="{{ path('reporte_actividad_usuario_form') }}">Actividad por usuario</a></li>
+                                            <li><a href="{{ path('reporte_actividad_usuario_form') }}">Actividad de usuarios</a></li>
                                         {% endif %}
-                                        {% if is_granted('ROLE_MINED') or is_granted('ROLE_EVALUADOR') %}
-                                            <li><a href="{{path('reporte_x_zona')}}">Distribuciones por departamento</a></li>
-                                            <li><a href="{{path('reporte_cuantitativo_cualitativo')}}">Cuantitativo y Cualitativo</a></li>
-                                            <li><a href="{{path('reporte_x_estado')}}">Estado por año</a></li>
-                                            <li><a href="{{path('reporte_x_rango_fecha')}}">Por rango de años</a></li>
-                                            <li><a href="{{path('reporte_form_estado_actual_cedu')}}">Por estado actual de centros educativos</a></li>
+                                        {% if is_granted('ROLE_MINED') %}
                                             <li><a href="{{path('reporte_general_cedu')}}">Información general del centro educativo</a></li>
+                                            <li><a href="{{path('reporte_x_zona')}}">Centros educativos por departamento</a></li>
+                                        {% endif %}
+                                        {% if is_granted('ROLE_COORDINADOR') or is_granted('ROLE_ACREDITADOR') %}
+                                            <li><a href="{{path('reporte_cuantitativo_cualitativo')}}">Cuantitativo y cualitativo</a></li>
+                                            <li><a href="{{path('reporte_x_estado')}}">Estado de acreditación por año</a></li>
+                                            <li><a href="{{path('reporte_x_rango_fecha')}}">Promedios por criterio/indicador</a></li>
+                                            <li><a href="{{path('reporte_form_estado_actual_cedu')}}">Estado actual de centros educativos</a></li>
                                         {% endif %}
                                     </ul>
                                 </li>

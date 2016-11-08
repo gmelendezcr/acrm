@@ -306,7 +306,7 @@ class CentroEducativoController extends Controller{
     }
     
     /**
-     * @Security("has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_COORDINADOR')")
      */
     public function form_lista_evaluarAction(){
         $em = $this->getDoctrine()->getManager();
@@ -831,7 +831,7 @@ class CentroEducativoController extends Controller{
     /**
      * Lista
      *
-     * @Security("has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_COORDINADOR')")
      */
     public function observacionesAction(Request $request, $id,$form){
         $em = $this->getDoctrine()->getManager();
@@ -874,7 +874,7 @@ class CentroEducativoController extends Controller{
     /**
      * Guardar
      *
-     * @Security("has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_COORDINADOR')")
      */
     public function observaciones_guardarAction(Request $request){
         $em = $this->getDoctrine()->getManager();
@@ -916,7 +916,7 @@ class CentroEducativoController extends Controller{
     
     
     /**
-     * @Security("has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_COORDINADOR')")
      */
     public function observaciones_verAction(Request $request, $id,$form){
         
@@ -966,7 +966,7 @@ class CentroEducativoController extends Controller{
     /**
      * Editar
      *
-     * @Security("has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_COORDINADOR')")
      */
     public function observaciones_editarAction(Request $request, $id,$form){
     $em = $this->getDoctrine()->getManager();
@@ -1012,7 +1012,7 @@ class CentroEducativoController extends Controller{
     /**
      * Guardar editar
      *
-     * @Security("has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_COORDINADOR')")
      */
      public function observaciones_editar_guardarAction(Request $request){
         $em = $this->getDoctrine()->getManager();
@@ -1051,7 +1051,7 @@ class CentroEducativoController extends Controller{
     }
 
     /**
-     * @Security("has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_ACREDITADOR')")
      */
     public function registrarAcreditacionAction()
     {
@@ -1126,7 +1126,7 @@ class CentroEducativoController extends Controller{
     }
 
     /**
-     * @Security("has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_ACREDITADOR')")
      */
     public function acreditarAction(Request $request)
     {
@@ -1238,7 +1238,7 @@ class CentroEducativoController extends Controller{
     /**
      * Cargar archivo al instrumento
      *
-     * @Security("has_role('ROLE_DIGITADOR') or has_role('ROLE_REVISOR') or has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_DIGITADOR') or has_role('ROLE_REVISOR') or has_role('ROLE_COORDINADOR') or has_role('ROLE_ACREDITADOR')")
      */
     public function descargarArchivoInstrumentoAction(Request $request){
 

@@ -15,8 +15,8 @@
         <div class="capa-separador-1"></div>
     </div>
     <div class="col-md-2 text-right">
-        {% if is_granted('ROLE_EVALUADOR') or is_granted('ROLE_REVISOR') %}
-            {% if is_granted('ROLE_EVALUADOR') %}
+        {% if is_granted('ROLE_COORDINADOR') or is_granted('ROLE_REVISOR') %}
+            {% if is_granted('ROLE_COORDINADOR') %}
                 <a class="btn btn-info" href="{{path('centro_educativo_form_lista_evaluar')}}"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
             {% elseif is_granted('ROLE_REVISOR') %}
                 <a class="btn btn-info" href="{{path('centro_educativo_form_lista_revisar')}}"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>

@@ -11,18 +11,18 @@
         </div>
         <div class="clearfix capa-separador-1"></div>
     </div>
-    {% if is_granted('ROLE_SUPER_ADMIN') and is_granted('ROLE_MINED') and is_granted('ROLE_DIGITADOR') and is_granted('ROLE_REVISOR') and is_granted('ROLE_EVALUADOR') %}
+    {% if is_granted('ROLE_SUPER_ADMIN') and is_granted('ROLE_MINED') and is_granted('ROLE_DIGITADOR') and is_granted('ROLE_REVISOR') and is_granted('ROLE_COORDINADOR') and is_granted('ROLE_ACREDITADOR') %}
          {% set col = '4' %}
     {% elseif is_granted('ROLE_REVISOR') %}
         {% set col = '6' %}
-    {% elseif is_granted('ROLE_EVALUADOR') %}
+    {% elseif is_granted('ROLE_COORDINADOR') %}
         {% set col = '4' %}
-    {% elseif is_granted('ROLE_REVISOR') or is_granted('ROLE_EVALUADOR') %}
+    {% elseif is_granted('ROLE_REVISOR') or is_granted('ROLE_COORDINADOR') or is_granted('ROLE_ACREDITADOR') %}
         {% set col = '4' %}
     {% else %}
         {% set col = '4' %}
     {% endif %}
-    {% if is_granted('ROLE_REVISOR') or is_granted('ROLE_EVALUADOR') %}
+    {% if is_granted('ROLE_REVISOR') or is_granted('ROLE_COORDINADOR') or is_granted('ROLE_ACREDITADOR') %}
         <div class="col-md-{{col}}">
             <div class="panel panel-primary">
                 <div class="panel-heading">
@@ -114,7 +114,7 @@
         </div>
     {% endif %}
 
-    {% if is_granted('ROLE_EVALUADOR') %}
+    {% if is_granted('ROLE_COORDINADOR') or is_granted('ROLE_ACREDITADOR') %}
         <div class="col-md-{{col}}">
             <div class="panel panel-primary">
                 <div class="panel-heading">

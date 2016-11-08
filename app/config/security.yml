@@ -9,11 +9,11 @@ security:
     #mtto centros       ROLE_MINED
     #digitar            ROLE_DIGITADOR
     #revisar            ROLE_REVISOR
-    #evaluar            ROLE_EVALUADOR
-    #registrar acred.   ROLE_EVALUADOR
+    #evaluar            ROLE_EVALUADOR -> ROLE_COORDINADOR
+    #registrar acred.   ROLE_EVALUADOR -> ROLE_ACREDITADOR
     #reportes           ROLE_MINED, ROLE_EVALUADOR, ROLE_SUPER_ADMIN (usuarios)
     role_hierarchy:
-        ROLE_DEVELOPER:     [ ROLE_SUPER_ADMIN, ROLE_MINED, ROLE_DIGITADOR, ROLE_REVISOR, ROLE_EVALUADOR ]
+        ROLE_DEVELOPER:     [ ROLE_SUPER_ADMIN, ROLE_MINED, ROLE_DIGITADOR, ROLE_REVISOR, ROLE_COORDINADOR, ROLE_ACREDITADOR ]
         default_roles:      [ ROLE_USER ]
 
     providers:
@@ -43,4 +43,4 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, role: [ ROLE_SUPER_ADMIN, ROLE_MINED, ROLE_DIGITADOR, ROLE_REVISOR, ROLE_EVALUADOR ] }
+        - { path: ^/, role: [ ROLE_SUPER_ADMIN, ROLE_MINED, ROLE_DIGITADOR, ROLE_REVISOR, ROLE_COORDINADOR, ROLE_ACREDITADOR ] }

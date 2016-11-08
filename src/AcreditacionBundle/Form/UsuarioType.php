@@ -77,7 +77,8 @@ class UsuarioType extends AbstractType
                 'choices'  => array(
                     'Digitador' => 'ROLE_DIGITADOR',
                     'Revisor' => 'ROLE_REVISOR',
-                    'Evaluador' => 'ROLE_EVALUADOR',
+                    'Coordinador' => 'ROLE_COORDINADOR',
+                    'Acreditador' => 'ROLE_ACREDITADOR',
                     'MINED' => 'ROLE_MINED',
                     'Administrador' => 'ROLE_SUPER_ADMIN',
                 ),

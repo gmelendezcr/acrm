@@ -32,7 +32,7 @@ class PreguntaController extends Controller
     /**
      * Finds and displays a Pregunta entity.
      *
-     * @Security("has_role('ROLE_DIGITADOR') or has_role('ROLE_REVISOR') or has_role('ROLE_EVALUADOR')")
+     * @Security("has_role('ROLE_DIGITADOR') or has_role('ROLE_REVISOR') or has_role('ROLE_COORDINADOR')")
      */
     public function showAction(Pregunta $pregunta)
     {

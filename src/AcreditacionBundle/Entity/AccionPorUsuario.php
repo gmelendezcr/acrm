@@ -67,7 +67,11 @@ class AccionPorUsuario
         $this->setIdTipoAccionUsuario($em->getRepository('AcreditacionBundle:TipoAccionUsuario')->findOneByCodTipoAccionUsuario($codTipoAccionUsuario));
 
         if(is_object($objeto)){
-            $this->setDetalleAccionUsuario(trim($objeto->vaciarPropiedades()));
+            $detalleAccion=trim($objeto->vaciarPropiedades());
+            if(strlen($detalleAccion)>1000){
+                $detalleAccion=substr($detalleAccion,0,1000);
+            }
+            $this->setDetalleAccionUsuario($detalleAccion);
         }
         else{
             $this->setDetalleAccionUsuario('');
