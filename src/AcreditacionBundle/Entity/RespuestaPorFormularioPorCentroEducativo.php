@@ -278,17 +278,17 @@ class RespuestaPorFormularioPorCentroEducativo
     public function vaciarPropiedades()
     {
         $detalle='';
-        $detalle.='centro educativo: ' . substr($this->getIdFormularioPorCentroEducativo()->getIdCentroEducativo()->__toString(),0,100) . "\n";
+        $detalle.='centro educativo: ' . mb_substr($this->getIdFormularioPorCentroEducativo()->getIdCentroEducativo()->__toString(),0,100) . "\n";
         $detalle.='formulario: ' . $this->getIdFormularioPorCentroEducativo()->__toString() . "\n";
         if($this->getIdOpcionRespuesta()){
-            $detalle.='pregunta: ' . substr($this->getIdOpcionRespuesta()->getIdPregunta()->getIdPreguntaPadre()->__toString(),0,100) . "\n";
+            $detalle.='pregunta: ' . mb_substr($this->getIdOpcionRespuesta()->getIdPregunta()->getIdPreguntaPadre()->__toString(),0,100) . "\n";
             $detalle.='fila: ' . $this->getIdOpcionRespuesta()->__toString() . "\n";
             $detalle.='columna: ' . $this->getIdPregunta()->__toString() . "\n";
         }
         else{
-            $detalle.='pregunta: ' . substr($this->getIdPregunta()->__toString(),0,100) . "\n";
+            $detalle.='pregunta: ' . mb_substr($this->getIdPregunta()->__toString(),0,100) . "\n";
         }
-        $detalle.='respuesta: ' . (strlen($this->getValorRespuesta())>200?substr($this->getValorRespuesta(),0,200) . '...':$this->getValorRespuesta()) . "\n";
+        $detalle.='respuesta: ' . (mb_strlen($this->getValorRespuesta())>200?mb_substr($this->getValorRespuesta(),0,200) . '...':$this->getValorRespuesta()) . "\n";
         $detalle.='revisar: ' . ($this->getRevisar()=='S'?'Sí':'') . "\n";
         return $detalle;
     }
