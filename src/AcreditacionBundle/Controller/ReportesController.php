@@ -234,7 +234,7 @@ class ReportesController extends Controller{
         ->getQuery()->getResult();
         
         
-        return $this->render('reportes/reporte.CuantitativoCualidativo.html.twig',array(
+        return $this->render('reportes/reporte.CuantitativoCualitativo.html.twig',array(
             'lista_cedu'=>$lista_cedu
             ));
     }

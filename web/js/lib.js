@@ -378,7 +378,7 @@ $( document ).ready( function () {
 	//Registro
 	$("#form_validar_cuota_agregar" ).validate( {
     	rules: {
-			grado: { valueNotEquals: "0" },
+			grado: { valueNotEquals: "valor0" },
 			matricula: {
 				required: true,
 				minlength: 1,
