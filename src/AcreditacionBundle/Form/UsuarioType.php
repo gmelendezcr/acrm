@@ -1,5 +1,4 @@
 <?php
-
 namespace AcreditacionBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -9,49 +8,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
-class UsuarioType extends AbstractType
-{
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
-     
-  
-    
-     
+class UsuarioType extends AbstractType{
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        
- 
-        
-/*
-        $permisos = array(
-        'ROLE_DIG'        => 'Digitador',
-        
-    );
-    
-     $permissions = array(
-             'ROLE_USER'        => 'Digitador',
-             'ROLE_CONSULT'     => 'Corrector',
-             'ROLE_SUPER_ADMIN' => 'Calificador'
-         );
-*/
-
-        
-    /*->add('roles', null, array(
-                    'type' => 'choice',
-                    'label' => 'Roles',
-                    'mapped' => true,
-                    'options' => array(
-                        'label' => false,
-                        'choices' => $permissions,
-                        'multiple' => false,
-                        'data' => 1
-                    ),
-                    
-                    
-            ));*/
-       
         
         $builder
             ->add('username',null,array(

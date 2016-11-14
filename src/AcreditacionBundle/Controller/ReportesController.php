@@ -128,20 +128,10 @@ class ReportesController extends Controller{
             end as estado
         ')
         ->from('AcreditacionBundle:CentroEducativo', 'ce')
-        //->join('ce.acreditaciones','acred' )
         ->join('ce.idMunicipio','m')
         ->join('m.idDepartamento','d')
         ->where('ce.nbrCentroEducativo like :nbr')
         ->orWhere('ce.codCentroEducativo like :nbr')
-            /*->andWhere('exists (
-                select 1
-                    from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
-                        where a.fechaInicio<=:fechaRef
-                            and a.fechaFin>=:fechaRef
-                            and e.codEstadoAcreditacion in (\'AC\',\'AO\')
-                            and a.idEstadoAcreditacion=e.idEstadoAcreditacion
-                            and a.idCentroEducativo=ce.idCentroEducativo
-            )')*/
         
         ->setParameter('nbr', $criterio)
         ->setParameter('fechaRef', new \DateTime())
@@ -149,7 +139,6 @@ class ReportesController extends Controller{
     }else{
         $lista_cedu=array();
     }
-        //var_dump($lista_cedu); 
         
         return $this->render('reportes/reporte.ConsultaPublica.html.twig',
             array(
@@ -191,7 +180,6 @@ class ReportesController extends Controller{
         ->setParameter('nbr', $criterio)
         ->setParameter('fechaRef', new \DateTime())
         ->getQuery()->getResult();
-        //var_dump($lista_cedu); 
          
         return $this->render('reportes/reporte.ConsultaPublicaReporte.html.twig',
             array(
@@ -221,7 +209,6 @@ class ReportesController extends Controller{
         ->join('acred.idEstadoAcreditacion','est' )
         ->join('ce.idMunicipio','m')
         ->join('m.idDepartamento','d')
-        //->where('ce.nbrCentroEducativo like :nbr')
             ->andWhere('exists (
                 select 1
                     from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
@@ -229,8 +216,6 @@ class ReportesController extends Controller{
                             and a.idEstadoAcreditacion=e.idEstadoAcreditacion
                             and a.idCentroEducativo=ce.idCentroEducativo
             )')
-        //->setParameter('nbr', $criterio)
-        //->setParameter('fechaRef', new \DateTime())
         ->getQuery()->getResult();
         
         
@@ -245,15 +230,11 @@ class ReportesController extends Controller{
     public function estadoAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $lista_tamanno = $em->getRepository('AcreditacionBundle:TamannoCentroEducativo')->findAll();
-        //$lista_departamento = $em->getRepository('AcreditacionBundle:Departamento')->findAll();
-        //$lista_municipio = $em->getRepository('AcreditacionBundle:Municipio')->findAll();
         $lista_zona = $em->getRepository('AcreditacionBundle:ZonaCentroEducativo')->findAll();
         $lista_modalidad = $em->getRepository('AcreditacionBundle:ModalidadCentroEducativo')->findAll();
         $lista_estado_acred = $em->getRepository('AcreditacionBundle:EstadoAcreditacion')->findAll();
         return $this->render('reportes/reporte.Estado.html.twig',array(
             'lista_tamanno'         =>$lista_tamanno,
-            //'lista_departamento'    =>$lista_departamento,
-            //'lista_municipio'       =>$lista_municipio,
             'lista_zona'            =>$lista_zona,
             'lista_modalidad'       =>$lista_modalidad,
             'lista_estado_acred'    =>$lista_estado_acred,
@@ -266,15 +247,11 @@ class ReportesController extends Controller{
     public function zonaAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $lista_tamanno = $em->getRepository('AcreditacionBundle:TamannoCentroEducativo')->findAll();
-        //$lista_departamento = $em->getRepository('AcreditacionBundle:Departamento')->findAll();
-        //$lista_municipio = $em->getRepository('AcreditacionBundle:Municipio')->findAll();
         $lista_zona = $em->getRepository('AcreditacionBundle:ZonaCentroEducativo')->findAll();
         $lista_modalidad = $em->getRepository('AcreditacionBundle:ModalidadCentroEducativo')->findAll();
         $lista_estado_acred = $em->getRepository('AcreditacionBundle:EstadoAcreditacion')->findAll();
         return $this->render('reportes/reporte.Zona.html.twig',array(
             'lista_tamanno'         =>$lista_tamanno,
-            //'lista_departamento'    =>$lista_departamento,
-            //'lista_municipio'       =>$lista_municipio,
             'lista_zona'            =>$lista_zona,
             'lista_modalidad'       =>$lista_modalidad,
             'lista_estado_acred'    =>$lista_estado_acred,
@@ -287,14 +264,10 @@ class ReportesController extends Controller{
     public function rango_fechaAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $lista_tamanno = $em->getRepository('AcreditacionBundle:TamannoCentroEducativo')->findAll();
-        //$lista_departamento = $em->getRepository('AcreditacionBundle:Departamento')->findAll();
-        //$lista_municipio = $em->getRepository('AcreditacionBundle:Municipio')->findAll();
         $lista_zona = $em->getRepository('AcreditacionBundle:ZonaCentroEducativo')->findAll();
         $lista_modalidad = $em->getRepository('AcreditacionBundle:ModalidadCentroEducativo')->findAll();
         return $this->render('reportes/reporte.RangoFecha.html.twig',array(
             'lista_tamanno'         =>$lista_tamanno,
-            //'lista_departamento'    =>$lista_departamento,
-            //'lista_municipio'       =>$lista_municipio,
             'lista_zona'            =>$lista_zona,
             'lista_modalidad'       =>$lista_modalidad,
         ));
@@ -310,20 +283,10 @@ class ReportesController extends Controller{
      */
     public function form_estado_actual_ceduAction(Request $request){
         $em = $this->getDoctrine()->getManager();
-        //$lista_estado_acred = $em->getRepository('AcreditacionBundle:EstadoAcreditacion')->findAll();
          return $this->render('reportes/formReporte.EstadoCEDU.html.twig',array(
-            //'lista_estado_acred'         =>$lista_estado_acred
         ));
         
     }
-    
-    
-    
-    
-    
-    
-    
-    
     
     
 /**
@@ -512,8 +475,6 @@ foreach ($lista_cedu as $cd) {
                 $styleArray = array(
                     'font'  => array(
                         'bold'  => true,
-                        //'color' => array('rgb' => 'FF0000'),
-                        //'size'  => 15,
                         'name'  => 'Verdana'
                     )
                 );
@@ -1521,7 +1482,6 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                     array($noEvaluados),
                 ));
             }else{
-                /////////////////////////////////////////////////////////////////////////////
                 //Inicia excel
                 $excel_titulo="ESTADÍSTICO GENERAL DE EVALUACIÓN";
                 
@@ -1644,17 +1604,7 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 $response->headers->set('Content-Disposition', $dispositionHeader);
                 return $response;
                 //Fin excel
-                //////////////////////////////////////////////////////////////////////////
             }
-            
-            
-            
-            
-            
-            
-            
-            
-            
             
         }
         else{
@@ -1726,7 +1676,6 @@ MINISTERIO DE EDUCACIÓN',0,'C');
             
             
             
-            /////////////////////////////////////////////////////////////////////////////
             //Inicia excel
             $excel_titulo="ESTADÍSTICO GENERAL DE EVALUACIÓN";
             
@@ -1858,7 +1807,6 @@ MINISTERIO DE EDUCACIÓN',0,'C');
             $response->headers->set('Content-Disposition', $dispositionHeader);
             return $response;
             //Fin excel
-            //////////////////////////////////////////////////////////////////////////
         }
     }
 
@@ -2165,7 +2113,6 @@ MINISTERIO DE EDUCACIÓN',0,'C');
             $phpExcelObject->getActiveSheet()->getStyle('B2:AJ2')->applyFromArray($styleArrayItem);
             
             $phpExcelObject->getActiveSheet()->getRowDimension(2)->setRowHeight(20);
-            //$phpExcelObject->getActiveSheet()->getRowDimension(2)->setRowHeight(20);
             
                 
             $contar="67";
@@ -2525,7 +2472,6 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 ->setCellValue('D'.$row, $var_dato2);
                 $row++;
         }
-        //$phpExcelObject->getActiveSheet()->getStyle('B'.$row.':D'.$row)->applyFromArray($styleArrayItem);
         $phpExcelObject->getActiveSheet()->getRowDimension(2)->setRowHeight(20);
         $phpExcelObject->setActiveSheetIndex(0)
             ->setCellValue('B'.$row, "Totales")
@@ -2778,7 +2724,6 @@ MINISTERIO DE EDUCACIÓN',0,'C');
         $msj_historial="Historial de evaluaciones";
         
         //Datos de centros educativos
-        //$codCentroEducativo="";
         
         $codCentroEducativo=$CentroEducativo["codCentroEducativo"];
         $nbrCentroEducativo=$CentroEducativo["nbrCentroEducativo"];

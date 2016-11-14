@@ -10,12 +10,10 @@
         <div class="capa-separador-1"></div>
     </div>
     <div class="col-md-12">
-        {#"{{ cedu.nbrCentroEducativo ?? null }}#}
         <div class="header-control-general">
             <form class="form-registro form-border" method="{{ form.vars.method }}" action="{{ form.vars.action }}" id="form_validar_editar">
                 
                 <div class="form-group">
-                    {#{{ form_widget(form.idCentroEducativo) }}#}                                
                     {{  form_label(form.codCentroEducativo)  }}
                     {{ form_widget(form.codCentroEducativo, {'attr': {'class': 'form-control input-3', 'placeholder': 'Digite el código del centro educativo','name':'codigo'}}) }}
                     {{ form_errors(form.codCentroEducativo) }}                           

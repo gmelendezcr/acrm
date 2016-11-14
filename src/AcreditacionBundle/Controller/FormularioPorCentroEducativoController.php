@@ -23,7 +23,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class FormularioPorCentroEducativoController extends Controller
 {
     /**
-     * Lists all FormularioPorCentroEducativo entities.
      *
      * @Security("has_role('ROLE_REVISOR')")
      */

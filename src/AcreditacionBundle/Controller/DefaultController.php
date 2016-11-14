@@ -21,8 +21,6 @@ class DefaultController extends Controller{
         }else{
             $csrfToken = $this->get('security.csrf.token_manager')->getToken('authenticate')->getValue();
             return $this->render('default/admin.index.html.twig',array(
-//            'last_username' => $lastUsername,
-              ///'error' => $error,
                 'csrf_token' => $csrfToken,
             ));
         }

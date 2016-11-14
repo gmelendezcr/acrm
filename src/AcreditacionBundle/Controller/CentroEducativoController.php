@@ -168,12 +168,6 @@ class CentroEducativoController extends Controller{
             $EditForm->submit($request);
             if ($form->isValid()) {
                 $postData = current($request->request->all());
-                var_dump($postData); /* All post data is here */
-               /* echo  $postData['students']; */
-               /* echo  $postData['students2']; */
-                /*
-                 * do you update stuff here
-                * */
             }
        }
     }
@@ -210,7 +204,6 @@ class CentroEducativoController extends Controller{
         }
         $editForm = $this->createForm(new CentroEducativoType($em), $entity); 
         $editForm->handleRequest($request);
-        //if ($editForm->isSubmitted() && $editForm->isValid()) {
         if ($editForm->isSubmitted()) {
             $codCentroEducativo = $editForm->get('codCentroEducativo')->getData();
             $nbrCentroEducativo = $editForm->get('nbrCentroEducativo')->getData();
@@ -274,11 +267,9 @@ class CentroEducativoController extends Controller{
 
         $lista_ced = $em->getRepository('AcreditacionBundle:CentroEducativo')->findAll();
         $lista_form = $em->getRepository('AcreditacionBundle:Formulario')->findAll();
-        //$lista_form_estado = $em->getRepository('AcreditacionBundle:EstadoFormulario')->findAll();
         return $this->render('centro-educativo/form_dig_corr.index.html.twig',array(
         'lista_ced'=>$lista_ced,
         'lista_form'=>$lista_form,
-        //'lista_form_estado'=>$lista_form_estado
         ));
     }
     
@@ -299,7 +290,6 @@ class CentroEducativoController extends Controller{
             ->orderBy('e.codEstadoFormulario desc, c.codCentroEducativo, f.codFormulario')
                 ->setParameter('codEstadoFormulario',array('TE','AP'))
                     ->getQuery()->getArrayResult();
-        //var_dump($lista);
         return $this->render('centro-educativo/form_lista_revisar.index.html.twig',array(
             'lista'=>$lista    
         ));
@@ -405,21 +395,7 @@ class CentroEducativoController extends Controller{
         }
         $centro_escolar_id= $ce_show->getIdCentroEducativo();
         
-        /*
-        $idselector=$em->createQueryBuilder()
-        ->distinct()
-        ->select('gece.idGradoEscolarPorCentroEducativo')
-        ->from('AcreditacionBundle:GradoEscolarPorCentroEducativo', 'gece')
-            ->where('gece.idCentroEducativo = :id')
-            ->setParameter('id', $centro_escolar_id)
-            ->setMaxResults('1')
-            ->getQuery()
-            ->getResult();
-        */
-         
         $resanno=array();
-        //if((isset( $idselector)) && (!empty( $idselector))){
-        //$grado_escolar_ce_id= $idselector[0]['idGradoEscolarPorCentroEducativo'];
         $resanno=$em->createQueryBuilder()
             ->select('cagece.anno')->distinct()
             ->from('AcreditacionBundle:GradoEscolarPorCentroEducativo', 'gece')
@@ -429,7 +405,6 @@ class CentroEducativoController extends Controller{
             ->setParameter('id', $id)
             ->getQuery()
             ->getResult();
-        //}
             
         $res=$em->createQueryBuilder()
         ->select(
@@ -566,7 +541,6 @@ class CentroEducativoController extends Controller{
         
         $entity = $em->getRepository('AcreditacionBundle:CuotaAnualPorGradoEscolarPorCentroEducativo')->find($idcuota);
         $ce_show = $em->getRepository('AcreditacionBundle:CentroEducativo')->find($id);
-        //$ce_show=$ce_show->getnbrCentroEducativo();
         
         
         $grado=$em->createQueryBuilder()
@@ -860,8 +834,6 @@ class CentroEducativoController extends Controller{
                 ->setParameter('idform', $form)
                 ->getQuery()->getResult();
                 
-        //var_dump($criterio);
-        //exit();
         
         
         return $this->render('centro-educativo/observaciones.index.html.twig',array(
@@ -938,7 +910,6 @@ class CentroEducativoController extends Controller{
             ->join('f_x_ce.idCentroEducativo','ce')
             ->join('f_x_ce.seccionesPorFormularioPorCentroEducativo','sec_form_ce')
             ->join('f_x_ce.idFormulario','form')
-            //->join('form.secciones','secc')
             ->join('sec_form_ce.idSeccion','secc')
             ->where('ce.idCentroEducativo = :id')
                 ->andWhere('exists (
@@ -950,11 +921,8 @@ class CentroEducativoController extends Controller{
                 ->andWhere('form.idFormulario = :idform')
                 ->setParameter('id', $id)
                 ->setParameter('idform', $form)
-                //->groupBy('secc.idSeccion')
                 ->getQuery()->getResult();
                 
-        //var_dump($criterio);
-        //exit();
         
         
         return $this->render('centro-educativo/observaciones_ver.index.html.twig',array(
@@ -988,7 +956,6 @@ class CentroEducativoController extends Controller{
         ->join('f_x_ce.idCentroEducativo','ce')
         ->join('f_x_ce.seccionesPorFormularioPorCentroEducativo','sec_form_ce')
         ->join('f_x_ce.idFormulario','form')
-        //->join('form.secciones','secc')
         ->join('sec_form_ce.idSeccion','secc')
         ->where('ce.idCentroEducativo = :id')
             ->andWhere('exists (
@@ -1000,7 +967,6 @@ class CentroEducativoController extends Controller{
             ->andWhere('form.idFormulario = :idform')
             ->setParameter('id', $id)
             ->setParameter('idform', $form)
-            //->groupBy('secc.idSeccion')
             ->getQuery()->getResult();
         return $this->render('centro-educativo/observaciones_editar.index.html.twig',array(
             'criterio'=>$criterio,
@@ -1035,8 +1001,6 @@ class CentroEducativoController extends Controller{
             
            
             $idseccion = $em->getRepository('AcreditacionBundle:SeccionPorFormularioPorCentroEducativo')->find($idseccion);
-            //$form=new SeccionPorFormularioPorCentroEducativo();
-            //$idseccion->setidFormularioPorCentroEducativo($idFormularioPorCentroEducativo);
             $idseccion->setobservacion($g);
            
             new AccionPorUsuario($em,$this->getUser(),'MO',$idseccion);

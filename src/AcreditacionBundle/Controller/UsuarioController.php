@@ -47,9 +47,7 @@ class UsuarioController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            //$request->get('usuario');
             $us=$request->get('usuario');
-            //$usuario->addRole($us['roles']['0']);
             $roles=$request->get('roles');
             $usuario->addRole($roles);
             $usuario->setPlainPassword($usuario->getPassword());
@@ -93,39 +91,6 @@ class UsuarioController extends Controller
 public function setRole($role) {
     $this->setRoles(array($role));
 }
-     
-   /* public function editAction(Request $request, Usuario $usuario)
-    {
-       $request = $this->container->get('request');
-
-    //$formEditUser = $this->createForm(new ChangeUserRoleType());
-    $formEditUser = $this->createForm('AcreditacionBundle\Form\UsuarioType', $usuario);
-    $formEditUser->handleRequest($request);
-    if ($formEditUser->isValid()) {
-        $em = $this->getDoctrine()->getManager();
-      
-         $roles = $formEditUser->get('roles')->getData();
-         //$roles->addRole($roles['roles']['0']);
-        
-         
-            
-            $em->persist($roles);
-            $em->flush();
-         
-      
-    }
-    return $this->render('usuario/edit.html.twig', array(
-            'usuario' => $usuario,
-            'form' => $formEditUser->createView(),
-            
-        ));
-    
-    }
-    
-    */
-    
-    /* copia editar usuario*/
-    
     /**
      * Edits a Usuario entity.
      *
@@ -164,20 +129,6 @@ public function setRole($role) {
         ));
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
     /**
      * Deletes a Usuario entity.
      *

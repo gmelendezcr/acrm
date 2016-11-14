@@ -6,7 +6,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CentroEducativoType extends AbstractType{
     public function __construct($em){
-        //Gerardo
         $resZona=$em->getRepository('AcreditacionBundle:ZonaGeografica')->findAll();
         $muni=array();
         foreach($resZona as $zona){
@@ -25,12 +24,9 @@ class CentroEducativoType extends AbstractType{
             'empty_value' => false,
             
         );
-        //Fin Gerardo
         
         $resJornada=$em->getRepository('AcreditacionBundle:JornadaCentroEducativo')->findAll();
-        //$jda=array();
         foreach($resJornada as $jornada){
-             //$jda[$jornada->getNbrJornadaCentroEducativo()]=array();
              $jda[$jornada->getNbrJornadaCentroEducativo()]=$jornada;
          }
          
@@ -42,9 +38,7 @@ class CentroEducativoType extends AbstractType{
         );
         
         $resTamanno=$em->getRepository('AcreditacionBundle:TamannoCentroEducativo')->findAll();
-        //$jda=array();
         foreach($resTamanno as $tamanno){
-             //$jda[$jornada->getNbrJornadaCentroEducativo()]=array();
              $tnno[$tamanno->getNbrTamannoCentroEducativo()]=$tamanno;
          }
          
@@ -81,16 +75,7 @@ class CentroEducativoType extends AbstractType{
         );
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
-     
     public function buildForm(FormBuilderInterface $builder, array $options){
-        /*Probando code*/
-         
-        /*Fin*/
-        
         $estado = $builder->getData()->getActivo();
         $builder
         ->add('codCentroEducativo','text',array('label' => 'Código'))
