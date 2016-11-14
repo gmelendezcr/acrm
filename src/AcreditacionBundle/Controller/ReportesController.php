@@ -955,7 +955,7 @@ foreach ($lista_cedu as $cd) {
                 $observacionesArr=array();
                 foreach ($observaciones as $observacion) {
                     $observacionStr='';
-                    $observacionArr=explode("\n",$observacion['valorRespuesta']);
+                    $observacionArr=explode("\n",trim($observacion['valorRespuesta']));
                     foreach ($observacionArr as $oa) {
                         if($oa){
                             $observacionStr.='• ' . $oa . "\n";

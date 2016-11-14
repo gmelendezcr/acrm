@@ -711,7 +711,7 @@ class CentroEducativoController extends Controller{
                         if(!is_numeric($cuota) || $cuota<0){
                             $errorArr[]='el monto de la cuota "' . $cuota . '" no es válido';
                         }
-                        if(!is_numeric($cantCuotas) || $cantCuotas<0){
+                        if(!is_numeric($cantCuotas) || $cantCuotas<10 || $cantCuotas>12){
                             $errorArr[]='la cantidad de cuotas "' . $cantCuotas . '" no es válida';
                         }
 

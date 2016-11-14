@@ -68,8 +68,8 @@ class AccionPorUsuario
 
         if(is_object($objeto)){
             $detalleAccion=trim($objeto->vaciarPropiedades());
-            if(strlen($detalleAccion)>1000){
-                $detalleAccion=substr($detalleAccion,0,1000);
+            if(mb_strlen($detalleAccion)>1000){
+                $detalleAccion=mb_substr($detalleAccion,0,1000);
             }
             $this->setDetalleAccionUsuario($detalleAccion);
         }
