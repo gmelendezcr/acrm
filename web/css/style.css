@@ -1,13 +1,6 @@
 body{
     margin-top: 155px;
 }
-
-/*
---------------------------------------------------------------------------------
-> Control de logo
---------------------------------------------------------------------------------
-*/
-
 .logo{
     float:left;
     width:180px;
@@ -21,8 +14,6 @@ body{
     align-items: center;
     justify-content: center;
 }
-
-
 .header-control {
     padding:  20px 0 4px;
     position: relative;
@@ -50,12 +41,6 @@ body{
 .control-panel-border{
     border-color: #244167 !important;
 }
-
-/*
---------------------------------------------------------------------------------
-> Control de relleno
---------------------------------------------------------------------------------
-*/
 .sin-padding{
     padding: 0px;
 }
@@ -71,12 +56,6 @@ body{
 .sin-padding-bottom{
     padding-bottom: 0px;
 }
-
-/*
---------------------------------------------------------------------------------
-> Control de margenes
---------------------------------------------------------------------------------
-*/
 .margin-auto{
     margin:auto;
 }
@@ -95,12 +74,6 @@ body{
 .sin-margin-bottom{
     margin-bottom: 0px;
 }
-
-/*
---------------------------------------------------------------------------------
-> Control de color
---------------------------------------------------------------------------------
-*/
 .fondo-1{
     background: #244167 !important;
     background-image: linear-gradient(to bottom, #244167 0px, #000039 100%) !important;
@@ -108,43 +81,20 @@ body{
 }
 .fondo-2{
     background: #1d365f !important;
-    /*background: #03162f !important;
-    background-image: linear-gradient(to bottom, #244167 0px, #000039 100%) !important;
-    background-repeat: repeat-x;*/
 }
-
-
 .text-color-1{
     color: #fff !important;
 }
 .text-color-2{
     color: #ccc !important;
 }
-
-/*
---------------------------------------------------------------------------------
-> Control de color href
---------------------------------------------------------------------------------
-*/
 .href-color-1 a{
    color: #fff !important;
 }
-
-/*
---------------------------------------------------------------------------------
-> Control separador
---------------------------------------------------------------------------------
-*/
 .capa-separador-1{
  height: 10px;
  clear:both;
 }
-
-/*
---------------------------------------------------------------------------------
-> Form control
---------------------------------------------------------------------------------
-*/
 .form-login {
     margin: 0 auto;
     max-width: 330px;
@@ -155,24 +105,15 @@ body{
     max-width: 800px;
     padding: 15px;
 }
-
 .form-border{
-  -webkit-border-radius: 10px;
--moz-border-radius: 10px;
-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
     border-top:5px solid #ccc;
     border-bottom:5px solid #ccc;
     border-left:1px solid #ccc;
     border-right:1px solid #ccc;
 }
-
-
-
-/*
---------------------------------------------------------------------------------
-> Control de border
---------------------------------------------------------------------------------
-*/
 .sin-border{
     border: 0px;
 }
@@ -188,39 +129,15 @@ border-radius: 10px;
 .border-right{
     border-right: 1px dashed #ccc;
 }
-
-/*
---------------------------------------------------------------------------------
-> Control de menú
---------------------------------------------------------------------------------
-*/
 .open > ul > li a{
-color:#204d74 !important;
+    color:#204d74 !important;
 }
-
-/*
---------------------------------------------------------------------------------
-> Control de sobre
---------------------------------------------------------------------------------
-*/
 .z-index-1{
     z-index:999999999999999999999;
 }
-
-/*
---------------------------------------------------------------------------------
-> Control de footer
---------------------------------------------------------------------------------
-*/
 .capa-footer{
 
 }
-
-/*
---------------------------------------------------------------------------------
-> Control de campos
---------------------------------------------------------------------------------
-*/
 .input-1{
     max-width: 75% !important;
 }
@@ -230,12 +147,6 @@ color:#204d74 !important;
 .input-3{
     max-width: 25% !important;
 }
-
-/*
---------------------------------------------------------------------------------
-> Control de tabla y celdas
---------------------------------------------------------------------------------
-*/
 .ctrol-tabla-1{
     max-width:75%;
 }
@@ -245,7 +156,6 @@ color:#204d74 !important;
 .ctrol-tabla-3{
     max-width: 25%;
 }
-
 .ctrol-celda-1{
     max-width: 75%;
 }
@@ -258,34 +168,9 @@ color:#204d74 !important;
 .control-celda-num{
     max-width: 10px;
 }
-
-/*
---------------------------------------------------------------------------------
-> Control de botones
---------------------------------------------------------------------------------
-*/
 .btn{
     box-shadow: 0 -3px 0 0 rgba(0, 0, 0, 0.2) inset;
 }
-
-/*
---------------------------------------------------------------------------------
-> Control de cuotas
---------------------------------------------------------------------------------
-*/
-
-
-
-
-
-
-
-
-/*
---------------------------------------------------------------------------------
-> Control de dispositivos
---------------------------------------------------------------------------------
-*/
 .dispositivo-movil{
     display: none;
 }
@@ -293,7 +178,6 @@ color:#204d74 !important;
     .btnk {
         display: flex;
     }
-
     .logo{
         float:inherit !important;
         width:180px;
@@ -312,19 +196,12 @@ color:#204d74 !important;
     .logo-text h3{
         font-size: 20px;
     }
-    
-    
-    /*Activo solo para dispositivos móviles y tablets*/    
     .dispositivo-movil {
         display: block;
     }
-    
-    /*Fondo de submenú */
     .open{
         background: #fff !important;
     }
-    
-  /*Control de campos*/
     .input-1{
         max-width:inherit !important;
     }
@@ -334,25 +211,17 @@ color:#204d74 !important;
     .input-3{
         max-width:inherit !important;
     }
-    /*Control de header page */
     .header-control-page {
         padding: 15px 0 !important;
         position: relative;
     }
-    
     .header-control-page > .container > .col-md-8 h2{
         font-size: 24px !important;
     }
-    
-    
 }
-
-/*Control cursor*/
 .cursor{
     cursor: pointer;
 }
-
-
 .revisar{
     background-color: #f0ad4e;
     border-radius: 0.25em;
@@ -366,71 +235,39 @@ color:#204d74 !important;
     vertical-align: baseline;
     white-space: nowrap;
 }
-
 .puntuacion{
     border-style: solid;
 }
-
 .puntuacion-baja{
     background-color: red;
 }
-
 .puntuacion-completa{
     background-color: lightgreen;
 }
-
-/*
-Control de td de tabla
-*/
-
 .table-criterio td , th{
     padding:5px !important;
 }
 .table-criterio  .checkbox-inline + .checkbox-inline, .radio-inline + .radio-inline{
     margin-left: 0px !important;
 }
-
-
-/*
---------------------------------------------------------------------------------
-> Control de íconos
---------------------------------------------------------------------------------
-*/
 .icon-lg{
     font-size: 50px !important;
 }
-
-
-/*
---------------------------------------------------------------------------------
-> Error
---------------------------------------------------------------------------------
-*/
-
 .error_sistema{
     max-width:600px;
     margin:auto;
 }
-
 .noValidoOculto{
     color: #a94442;
     display: none;
 }
-
 .noValido{
     display: block;
 }
-
-/*
---------------------------------------------------------------------------------
-> Control de align
---------------------------------------------------------------------------------
-*/
 .label-right{
     float:right;
     position:relative;
 }
-
 .btn-file {
     position: relative;
     overflow: hidden;
@@ -450,18 +287,15 @@ Control de td de tabla
     cursor: inherit;
     display: block;
 }
-
 .ayuda-sistema{
     position: absolute;
     left: 5px;
     top: 10px;
     font-size: 15px;
 }
-
 .bg-info2{
     background-color: #ddd;
 }
-
 .tipoPreguntaTA_5000{
     height: 350px !important;
 }

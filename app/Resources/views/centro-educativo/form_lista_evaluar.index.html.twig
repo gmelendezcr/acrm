@@ -56,7 +56,7 @@
                                     {% elseif form.codEstadoFormulario == 'CA' %}
                                     <span class="label label-success">
                                         <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="top" title="{{ form.nbrEstadoFormulario }}"></span>
-                                    </span> 
+                                    </span><br /> 
                                     {{ form.nbrEstadoFormulario }}
 
                                     {% endif %}
@@ -71,7 +71,7 @@
                                         <input type="hidden" name="formato" value="pdf">
                                         <input type="hidden" name="versionParaCoordinador" value="1">
                                     </form>
-                                    <a href="#" onClick="$('#versionParaCoordinador{{ form.idFormularioPorCentroEducativo }}').submit();" class="btn btn-info btn-block">Reporte el para coordinador</a>
+                                    <a href="#" onClick="$('#versionParaCoordinador{{ form.idFormularioPorCentroEducativo }}').submit();" class="btn btn-info btn-block">Reporte para coordinador</a>
                                     
                                     {% if form.estadoCriterioCentroEducativo=='TER' %}
                                     <a href="{{path('centro_educativo_criterio_observaciones_ver',{'id':form.idCentroEducativo,'form':form.idFormulario})}}" class="btn btn-success btn-block">

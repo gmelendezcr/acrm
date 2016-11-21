@@ -11,11 +11,6 @@ body{
     width:300px;
     text-align: center;
 }
-/*
---------------------------------------------------------------------------------
-> Control de relleno
---------------------------------------------------------------------------------
-*/
 .sin-padding{
     padding: 0px;
 }
@@ -31,12 +26,6 @@ body{
 .sin-padding-bottom{
     padding-bottom: 0px;
 }
-
-/*
---------------------------------------------------------------------------------
-> Control de margenes
---------------------------------------------------------------------------------
-*/
 .margin-auto{
     margin:auto;
 }
@@ -59,7 +48,6 @@ body{
     max-width:600px;
     margin:auto;
 }
-
 .bandera-warning{
     background-color:#ec971f !important;
     border-color:#ec971f !important;;
@@ -67,10 +55,8 @@ body{
 .bandera-border-warning{
     border-color:#ec971f !important;;
 }
-
 @media (max-width: 767px) {
     body{
         margin-top: 25px;
     }
 }
-

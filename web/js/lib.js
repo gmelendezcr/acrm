@@ -5,15 +5,11 @@ $( document ).ready( function () {
 	$.validator.addMethod(
     	"fecha_",
     	function(value, element) {
-        	// put your own logic here, this is just a (crappy) example
         	return value.match(/^\d\d?\-\d\d?\-\d\d\d\d$/);
     	},
     	"Formato incorrecto, ejemplo: 20-10-2016"
 	);
 
-	/*--------------------------------------------------------------------------------
-	Validación de formulario de actividad de usuario
-	--------------------------------------------------------------------------------*/
 	$( "#reporte_info_general" ).validate({
 		rules: {
 			centrosEducativo: { valueNotEquals: "0" },
@@ -38,9 +34,6 @@ $( document ).ready( function () {
 	    }
 	});
 	
-	/*--------------------------------------------------------------------------------
-	Validación de formulario de actividad de usuario
-	--------------------------------------------------------------------------------*/
 	$( "#reporte_actividad_usuario" ).validate( {
 		rules: {
 			fechaIni: {
@@ -77,10 +70,6 @@ $( document ).ready( function () {
 	    }
 	});
 	
-	/*--------------------------------------------------------------------------------
-	Validación de reportes
-	--------------------------------------------------------------------------------*/
-	//Cuantitativo cualitativo
 	$( "#form_reporte_cuantitativo_cualitativo" ).validate( {
 		rules: {
 			anno: {
@@ -229,10 +218,6 @@ $( document ).ready( function () {
 	    }
 	});
 	
-	/*--------------------------------------------------------------------------------
-	Validación para centros educativos
-	--------------------------------------------------------------------------------*/
-	//Registro
 	$("#form_validar" ).validate( {
 		rules: {
     		codigo: "required",
@@ -304,7 +289,6 @@ $( document ).ready( function () {
 	    }
 	});
 	
-	//Editar
 	$( "#form_validar_editar" ).validate( {
 		rules: {
 			["CentroEducativoType[codCentroEducativo]"]: "required",
@@ -372,10 +356,6 @@ $( document ).ready( function () {
 	    }
 	});
 	
-	/*--------------------------------------------------------------------------------
-	Validación para cuotas
-	--------------------------------------------------------------------------------*/	
-	//Registro
 	$("#form_validar_cuota_agregar" ).validate( {
     	rules: {
 			grado: { valueNotEquals: "valor0" },
@@ -447,7 +427,6 @@ $( document ).ready( function () {
 	    }
 	});
 	
-	//Editar
 	$('#form_validar_cuota_editar').validate({
     	rules: {
     		["CuotaAnualPorGradoEscolarPorCentroEducativoType[matricula]"]: {
@@ -516,10 +495,6 @@ $( document ).ready( function () {
     	}
 	});
 	
-	/*--------------------------------------------------------------------------------
-	Validación de usuarios
-	--------------------------------------------------------------------------------*/
-	//Registro editar
 	$( "#form_registro_usuario" ).validate( {
 		rules: {
     		["usuario[username]"]: {
@@ -588,7 +563,6 @@ $( document ).ready( function () {
 	    }
 	});
 	
-	//Registro editar
 	$( "#form_cambio_clave" ).validate( {
 		rules: {
 	        ["fos_user_change_password_form[current_password]"]:{
@@ -675,16 +649,10 @@ $( document ).ready( function () {
 	
 });
 
-/*--------------------------------------------------------------------------------
-Msj informativo title
---------------------------------------------------------------------------------*/
 $(function () {
 	$('[data-toggle="tooltip"]').tooltip()
 });
 
-/*--------------------------------------------------------------------------------
-Validad formulario Digitar / corregir formulario
---------------------------------------------------------------------------------*/
 function digitarCorregirCargarFormulario(){
 	if($('#centrosEducativos').val()=='' || $('#formularios').val()=='' || $('#lugarAplicacion').val()=='' ||  $('#fechaAplicacion').val()==''){
     	return false;
@@ -739,19 +707,11 @@ function marcarRevisar(control,idFormularioPorCentroEducativoRevisar,idPregunta,
 	        	control.addClass('label-success');
 	        	control.removeClass('label-warning');
 	    	}else{
-	        	//control.removeClass('label-success');
 	    	}
     	}
 	});
 }
 
-/*--------------------------------------------------------------------------------
-Advertencia
---------------------------------------------------------------------------------*/
 $("#warning-alert").fadeTo(3000, 6000).slideUp(6000, function(){
 	$("#warning-alert").slideUp(6000);
 });
-
-
-  
-  
