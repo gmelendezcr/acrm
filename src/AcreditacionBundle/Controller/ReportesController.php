@@ -1844,14 +1844,14 @@ MINISTERIO DE EDUCACIÓN',0,'C');
             }
 
             $promediosQuery=$em->createQueryBuilder()
-                ->select('YEAR(fc.fechaAplicacion) as anio, s.idSeccion as codigo, ROUND(AVG(v.ponderacionGanada/100),2) as cantidad')
+                ->select('YEAR(fc.fechaAplicacion) as anio, min(s.idSeccion) as codigo, s.nbrSeccion, ROUND(AVG(v.ponderacionGanada/100),2) as cantidad')
                 ->from('AcreditacionBundle:ViewFormularioPorCentroEducativoSeccionPonderacion','v')
                 ->join('v.idFormularioPorCentroEducativo','fc')
                 ->join('fc.idCentroEducativo','ce')
                 ->join('ce.idMunicipio','m')
                 ->join('m.idDepartamento','d')
                 ->join('v.idSeccion','s')
-                ->groupBy('anio, s.idSeccion');
+                ->groupBy('anio, s.nbrSeccion');
 
         }
         elseif($tipoReporte=='por_indicador'){
@@ -1913,7 +1913,7 @@ MINISTERIO DE EDUCACIÓN',0,'C');
         if($tipoReporte=='por_criterio'){
 
             $criterios=$em->createQueryBuilder()
-                ->select('s.idSeccion, s.nbrSeccion')
+                ->select('min(s.idSeccion) as idSeccion, s.nbrSeccion')
                 ->from('AcreditacionBundle:Seccion','s')
                 ->where('exists (
                     select 1
@@ -1921,6 +1921,8 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                     where p.ponderacionMaxima is not null
                     and p.idSeccion=s.idSeccion
                 )')
+                ->groupBy('s.nbrSeccion')
+                ->orderBy('idSeccion')
                 ->getQuery()->getResult();
                    
             if($formato==$formato_tipo){
