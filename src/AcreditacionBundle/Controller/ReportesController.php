@@ -2517,6 +2517,8 @@ MINISTERIO DE EDUCACIÓN',0,'C');
      * @Security("has_role('ROLE_SUPER_ADMIN')")
      */
     public function actividadUsuarioAction(Request $request){
+        ini_set('max_execution_time', 60);
+        ini_set('memory_limit', '256M');
         $em = $this->getDoctrine()->getManager();
 
         $fechaIni=$request->get('fechaIni');
