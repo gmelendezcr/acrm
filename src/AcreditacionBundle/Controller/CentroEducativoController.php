@@ -1022,9 +1022,11 @@ class CentroEducativoController extends Controller{
         $em = $this->getDoctrine()->getManager();
         $em->getConfiguration()
             ->addCustomDatetimeFunction('YEAR', 'AcreditacionBundle\DQL\YearFunction');
+        $em->getConfiguration()
+            ->addCustomDatetimeFunction('ROUND', 'AcreditacionBundle\DQL\RoundFunction');
 
         $formulariosCalificados=$em->createQueryBuilder()
-            ->select('fce.idFormularioPorCentroEducativo, c.idCentroEducativo, c.codCentroEducativo, c.nbrCentroEducativo, c.direccionCentroEducativo, f.codFormulario, f.nbrFormulario, e.codEstadoFormulario, e.nbrEstadoFormulario, sum(v.ponderacionGanada)/100 as ponderacionGanada,
+            ->select('fce.idFormularioPorCentroEducativo, c.idCentroEducativo, c.codCentroEducativo, c.nbrCentroEducativo, c.direccionCentroEducativo, f.codFormulario, f.nbrFormulario, e.codEstadoFormulario, e.nbrEstadoFormulario, ROUND(sum(v.ponderacionGanada)/100,2) as ponderacionGanada,
                 case
                     when e.codEstadoFormulario=\'DC\' and exists (
                         select 1
@@ -1074,7 +1076,9 @@ class CentroEducativoController extends Controller{
 
         $nFormulariosCalificados=array();
         foreach ($formulariosCalificados as $formularioCalificado) {
-            $nFormulariosCalificados[$formularioCalificado['idCentroEducativo']]=$formularioCalificado;
+            if(!isset($nFormulariosCalificados[$formularioCalificado['idCentroEducativo']])){
+                $nFormulariosCalificados[$formularioCalificado['idCentroEducativo']]=$formularioCalificado;
+            }
             if($formularioCalificado['codFormulario']=='F1P'){
                 $nFormulariosCalificados[$formularioCalificado['idCentroEducativo']]['puntuacionParvularia']=$formularioCalificado['ponderacionGanada'];
             }
