@@ -193,22 +193,16 @@ class ReportesController extends Controller{
      */
     public function cuantitativo_cualitativoAction(Request $request){
         $em = $this->getDoctrine()->getManager();
-        $lista_cedu = $em->getRepository('AcreditacionBundle:CentroEducativo')->findAll();
+       
         
         $lista_cedu=$em->createQueryBuilder()
         ->select('
-            ce.idCentroEducativo, ce.codCentroEducativo, ce.nbrCentroEducativo, ce.direccionCentroEducativo,
-            d.nbrDepartamento,
-            m.nbrMunicipio,
-            acred.fechaInicio,
-            acred.fechaFin,
-            est.nbrEstadoAcreditacion
+            ce.idCentroEducativo, ce.codCentroEducativo, ce.nbrCentroEducativo
         ')
         ->from('AcreditacionBundle:CentroEducativo', 'ce')
         ->join('ce.acreditaciones','acred' )
         ->join('acred.idEstadoAcreditacion','est' )
-        ->join('ce.idMunicipio','m')
-        ->join('m.idDepartamento','d')
+        
             ->andWhere('exists (
                 select 1
                     from AcreditacionBundle:Acreditacion a, AcreditacionBundle:EstadoAcreditacion e
@@ -2940,5 +2934,18 @@ MINISTERIO DE EDUCACIÓN',0,'C');
         }
     }
     
+     /**
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_COORDINADOR') or has_role('ROLE_ACREDITADOR')")
+     */
+    public function ReporteAnioFormularioAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $lista_form = $em->getRepository('AcreditacionBundle:Formulario')->findAll();
+        return $this->
+        render('reportes/reporte.AnioFormulario.html.twig',
+            array(
+                'lista_form'=>$lista_form,
+            )
+        );
+    }
     
 }

@@ -646,6 +646,31 @@ $( document ).ready( function () {
 	        }
 	    }
 	});
+	$( "#AnioFormulario" ).validate( {
+		rules: {
+			anno: "required",
+			formularios: { valueNotEquals: "0" },
+		},
+		messages: {
+    		anno: "Digite el año",
+    		formularios: { valueNotEquals: "Por favor seleccione un formulario" },
+		},
+		highlight: function(element) {
+        	$(element).closest('.form-group').addClass('has-error').removeClass( "has-success" );
+	    },
+	    unhighlight: function(element) {
+        	$(element).closest('.form-group').addClass( "has-success" ).removeClass('has-error');
+	    },
+	    errorElement: 'span',
+	    errorClass: 'help-block',
+	    errorPlacement: function(error, element) {
+	        if(element.parent('.input-group').length) {
+	            error.insertAfter(element.parent());
+	        } else {
+	            error.insertAfter(element);
+	        }
+	    }
+	});
 	
 });
 
