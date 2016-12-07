@@ -75,3 +75,7 @@ reporte_general_cedu_generar:
     path:     /reporte-general-de-centro-educativo
     defaults: { _controller: AcreditacionBundle:Reportes:ReporteGeneralCeduGenerar }
     methods:  [POST]
+reporte_anio_formulario:
+    path:     /formulario-anio
+    defaults: { _controller: AcreditacionBundle:Reportes:ReporteAnioFormulario }
+    methods:  [GET]

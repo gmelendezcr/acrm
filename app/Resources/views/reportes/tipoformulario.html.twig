@@ -1,0 +1,9 @@
+<div class="form-group">
+    <label for="formularios">Formulario</label>
+        <select class="form-control input-1" id="formularios" name="formularios">
+            <option value="0">Seleccione uno</option>
+                {% for form in lista_form %}
+                    <option value="{{ form.idFormulario }}">{{ form.codFormulario ~ ' ' ~ form.nbrFormulario }}</option>
+                {% endfor %}                             
+        </select>                                
+</div>
