@@ -54,6 +54,9 @@ class ReportesController extends Controller{
             return 'No definido';
         }
         switch ($formato) {
+            case 'HTML':
+                return '<strong>' . $this->autoridades[$autoridad]['titulo'] . ' ' . $this->autoridades[$autoridad]['nombre'] . "</strong><br>" . $this->autoridades[$autoridad]['cargo'];
+                break;
             case 'ST':
                 return $this->autoridades[$autoridad]['nombre'] . "\n" . $this->autoridades[$autoridad]['cargo'];
                 break;
@@ -567,20 +570,20 @@ foreach ($lista_cedu as $cd) {
         );
         $rows=array(
             array(
-                'Centro educativo:',
-                $this->centroEducativo['nbrCentroEducativo'],
+                'CENTRO EDUCATIVO:',
+                strtoupper($this->centroEducativo['nbrCentroEducativo']),
             ),
             array(
-                'Código:',
-                $this->centroEducativo['codCentroEducativo'],
+                'CÓDIGO:',
+                strtoupper($this->centroEducativo['codCentroEducativo']),
             ),
             array(
-                'Departamento:',
-                $this->centroEducativo['nbrDepartamento'],
+                'DEPARTAMENTO:',
+                strtoupper($this->centroEducativo['nbrDepartamento']),
             ),
             array(
-                'Municipio:',
-                $this->centroEducativo['nbrMunicipio'],
+                'MUNICIPIO:',
+                strtoupper($this->centroEducativo['nbrMunicipio']),
             ),
         );
         $differentHeader=array();
@@ -602,7 +605,7 @@ foreach ($lista_cedu as $cd) {
         $titulo='RESULTADOS DE LA EVALUACIÓN EXTERNA PARA LA ACREDITACIÓN INSTITUCIONAL DE CENTROS EDUCATIVOS PRIVADOS AÑO ' . $anio;
         if($this->formato=='pdf'){
             $this->pdfObj->setHeaderType('newLogoHeader');
-            $this->pdfObj->setFooterType('simpleFooter');
+            //$this->pdfObj->setFooterType('simpleFooter');
             $this->pdfObj->startPageGroup();
             $this->pdfObj->AddPage();
             $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),$titulo,0,'C');
@@ -797,9 +800,9 @@ foreach ($lista_cedu as $cd) {
         );
         $puntosPorCriterioTitulos=array(
             array('title' => 'CRITERIOS PROMEDIADOS BÁSICA, MEDIA Y PARVULARIA','border' => 1,'width' => 50,),
-            array('title' => 'Puntuación global esperada','border' => 1,),
-            array('title' => 'Puntuación global obtenida','border' => 1,),
-            array('title' => 'Diferencia','border' => 1,),
+            array('title' => 'Puntuación global esperada','border' => 1,'align' => 'C','valign' => 'M',),
+            array('title' => 'Puntuación global obtenida','border' => 1,'align' => 'C','valign' => 'M',),
+            array('title' => 'Diferencia','border' => 1,'align' => 'C','valign' => 'M',),
         );
         if($this->formato=='pdf'){
             $this->pdfObj->setColorearTotales(true);
@@ -825,6 +828,7 @@ foreach ($lista_cedu as $cd) {
                 ->getQuery()->getResult();
 
         $primerFormulario=true;
+        $margins=$this->pdfObj->getMargins();
         foreach ($formularios as $formulario) {
 
             if(!$primerFormulario){
@@ -902,12 +906,15 @@ foreach ($lista_cedu as $cd) {
                 if($mostrarCriterio){
                     $puntosPorIndicadorDataTitulos=array(
                         array('title' => 'INDICADORES','border' => 1,'width' => 50,),
-                        array('title' => 'Puntuación global esperada','border' => 1,),
-                        array('title' => 'Puntuación global obtenida','border' => 1,),
-                        array('title' => 'Diferencia','border' => 1,),
+                        array('title' => 'Puntuación global esperada','border' => 1,'align' => 'C','valign' => 'M',),
+                        array('title' => 'Puntuación global obtenida','border' => 1,'align' => 'C','valign' => 'M',),
+                        array('title' => 'Diferencia','border' => 1,'align' => 'C','valign' => 'M',),
                     );
                     $nbrCriterioStr=$criterio['nbrSeccion'] . "\n" . $formulario['nbrFormulario'];
                     if($this->formato=='pdf'){
+                        if($this->pdfObj->GetY()+50>$this->pdfObj->getPageHeight()-$margins['bottom']){
+                            $this->pdfObj->AddPage();
+                        }
                         $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth(),$this->pdfObj->getLineHeight(),$nbrCriterioStr,0,'C');
                         $this->pdfObj->newLine();
 
@@ -990,11 +997,11 @@ foreach ($lista_cedu as $cd) {
                 $this->pdfObj->MultiCell($col2,2*$this->pdfObj->getLineHeight(),$resultado,1,'C',
                     false,1,'','',true,0,false,true,2*$this->pdfObj->getLineHeight(),'M'
                     );
-                $this->pdfObj->newLine(2);
+                $this->pdfObj->newLine(3.5);
 
                 $this->pdfObj->SetFontSize(9);
-                $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth()/2,$this->pdfObj->getLineHeight(),$this->getAutoridad('directorGestion'),0,'C',false,0);
-                $this->pdfObj->MultiCell($this->pdfObj->getWorkAreaWidth()/2,$this->pdfObj->getLineHeight(),$this->getAutoridad('jefeAcreditacion'),0,'C');
+                $this->pdfObj->writeHTMLCell($this->pdfObj->getWorkAreaWidth()/2,$this->pdfObj->getLineHeight(),$this->pdfObj->GetX(),$this->pdfObj->GetY(),$this->getAutoridad('directorGestion','HTML'),0,0,false,true,'C');
+                $this->pdfObj->writeHTMLCell($this->pdfObj->getWorkAreaWidth()/2,$this->pdfObj->getLineHeight(),$this->pdfObj->GetX(),$this->pdfObj->GetY(),$this->getAutoridad('jefeAcreditacion','HTML'),0,1,false,true,'C');
             }
             else{
                 $this->phpExcelObject->getActiveSheet()
@@ -2700,6 +2707,9 @@ MINISTERIO DE EDUCACIÓN',0,'C');
         );
     }
     
+    /**
+     * @Security("has_role('ROLE_MINED') or has_role('ROLE_COORDINADOR') or has_role('ROLE_ACREDITADOR')")
+     */
     public function ReporteGeneralCeduGenerarAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         

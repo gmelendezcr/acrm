@@ -137,11 +137,11 @@
 					$this->SetFont(null,'B');
 					$this->MultiCell(100, 20, 'MINISTERIO DE EDUCACIÓN
 República de El Salvador. C. A.', null, 'C');
-					$this->SetY($y + 10);
+					$this->SetY($y + 11);
 					$this->SetX($x + 8);
 					$this->SetFontSize(7);
 					$this->SetFont(null,'');
-					$this->MultiCell(100, 20, 'Dirección  Nacional de Gestión Educativa
+					$this->MultiCell(100, 20, 'Dirección Nacional de Gestión Educativa
 Gerencia de Acreditación y Presupuesto Escolar
 Departamento de Acreditación Institucional', null, 'C');
 					$this->SetY($y + 19);
@@ -278,6 +278,9 @@ Departamento de Acreditación Institucional', null, 'C');
 				if(!isset($column['align'])){
 					$columns[$key]['align']='L';
 				}
+				if(!isset($column['valign'])){
+					$columns[$key]['valign']='T';
+				}
 			}
 			reset($columns);
 			$missingWidth=100 - $totalWidth;
@@ -341,7 +344,7 @@ Departamento de Acreditación Institucional', null, 'C');
 						$this->SetFillColorArray($this->colorFondoEncabezado);
 						reset($columns);
 						foreach($columns as $key => $column){
-							$this->MultiCell($column['realWidth'],$maxHeightHeader,$column['title'],(isset($column['headerBorder'])?$column['headerBorder']:1),'C',(isset($column['headerFill'])?$column['headerFill']:1),0);
+							$this->MultiCell($column['realWidth'],$maxHeightHeader,$column['title'],(isset($column['headerBorder'])?$column['headerBorder']:1),'C',(isset($column['headerFill'])?$column['headerFill']:1),0,'','',true,0,false,true,$maxHeightHeader,'M');
 						}
 						$this->SetX(0);
 						$this->SetY($this->GetY() + $maxHeightHeader);
@@ -379,7 +382,7 @@ Departamento de Acreditación Institucional', null, 'C');
 								$fill=1;
 							}
 						}
-						$this->MultiCell($columns[$key]['realWidth'],$maxHeightRow,$value,(isset($columns[$key]['border'])?$columns[$key]['border']:1),$columns[$key]['align'],$fill,0);
+						$this->MultiCell($columns[$key]['realWidth'],$maxHeightRow,$value,(isset($columns[$key]['border'])?$columns[$key]['border']:1),$columns[$key]['align'],$fill,0,'','',true,0,false,true,$maxHeightRow,$columns[$key]['valign']);
 					}
 					if(isset($columns[$key]['style']) || (is_array($value) && isset($value['style'])))
 						$this->SetFont(null,'');
