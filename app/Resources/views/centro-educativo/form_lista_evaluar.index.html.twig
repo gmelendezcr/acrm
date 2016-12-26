@@ -74,9 +74,10 @@
                                     <a href="#" onClick="$('#versionParaCoordinador{{ form.idFormularioPorCentroEducativo }}').submit();" class="btn btn-info btn-block">Reporte para coordinador</a>
                                     
                                     {% if form.estadoCriterioCentroEducativo=='TER' %}
-                                    <a href="{{path('centro_educativo_criterio_observaciones_ver',{'id':form.idCentroEducativo,'form':form.idFormulario})}}" class="btn btn-success btn-block">
-                                       <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Observación
+                                    <a href="{{path('centro_educativo_criterio_observaciones_editar',{'id':form.idCentroEducativo,'form':form.idFormulario})}}" class="btn btn-success btn-block">
+                                       <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Observación
                                     </a>
+                                    {#centro_educativo_criterio_observaciones_ver      glyphicon-eye-open#}
                                     
                                     {% elseif form.estadoCriterioCentroEducativo=='EDIT'%}
                                     

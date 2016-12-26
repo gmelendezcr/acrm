@@ -968,10 +968,17 @@ class CentroEducativoController extends Controller{
             ->setParameter('id', $id)
             ->setParameter('idform', $form)
             ->getQuery()->getResult();
-        return $this->render('centro-educativo/observaciones_editar.index.html.twig',array(
-            'criterio'=>$criterio,
-            'debug'=>true
-        ));
+            $verifico=array_key_exists('0', $criterio);
+            
+            if($verifico==false){
+                 return $this->redirectToRoute('centro_educativo_criterio_observaciones', array('id' => $id,'form'=>$form));
+                
+            }else{
+                return $this->render('centro-educativo/observaciones_editar.index.html.twig',array(
+                    'criterio'=>$criterio,
+                    'debug'=>true
+                ));
+            }
     }
     
     
