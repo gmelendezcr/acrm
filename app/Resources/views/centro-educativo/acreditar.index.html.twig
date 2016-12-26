@@ -59,7 +59,7 @@
                                         {% set promedio = (((centroEducativo.puntuacionParvularia is defined ? centroEducativo.puntuacionParvularia : 0) +
                                             (centroEducativo.puntuacionBasica is defined ? centroEducativo.puntuacionBasica : 0)) /
                                             ((centroEducativo.puntuacionParvularia is defined ? 1 : 0) + (centroEducativo.puntuacionBasica is defined ? 1 : 0))) %}
-                                        {{ promedio|number_format(2) }}
+                                        {{ promedio|round(2)|number_format(2) }}
                                     </td>
                                     <td class="text-center">
                                         {% if centroEducativo.codEstadoFormulario == 'CA' %}
