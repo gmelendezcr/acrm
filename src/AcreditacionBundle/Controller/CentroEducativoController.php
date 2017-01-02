@@ -1033,7 +1033,7 @@ class CentroEducativoController extends Controller{
             ->addCustomDatetimeFunction('ROUND', 'AcreditacionBundle\DQL\RoundFunction');
 
         $formulariosCalificados=$em->createQueryBuilder()
-            ->select('fce.idFormularioPorCentroEducativo, c.idCentroEducativo, c.codCentroEducativo, c.nbrCentroEducativo, c.direccionCentroEducativo, f.codFormulario, f.nbrFormulario, e.codEstadoFormulario, e.nbrEstadoFormulario, ROUND(sum(v.ponderacionGanada)/100,2) as ponderacionGanada,
+            ->select('fce.idFormularioPorCentroEducativo, c.idCentroEducativo, c.codCentroEducativo, c.nbrCentroEducativo, c.direccionCentroEducativo, f.idFormulario,f.codFormulario, f.nbrFormulario, e.codEstadoFormulario, e.nbrEstadoFormulario, ROUND(sum(v.ponderacionGanada)/100,2) as ponderacionGanada,
                 case
                     when e.codEstadoFormulario=\'DC\' and exists (
                         select 1
