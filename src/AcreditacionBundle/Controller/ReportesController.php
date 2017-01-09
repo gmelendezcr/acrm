@@ -2958,4 +2958,8 @@ MINISTERIO DE EDUCACIÓN',0,'C');
         );
     }
     
+    public function ReporteGeneralNotaCriterioAction(Request $request){
+                return $this->render('reportes/reporte.GeneralNotas_x_Criterios.html.twig');
+    }
+    
 }

@@ -75,7 +75,7 @@ centro_educativo_cuota_form_archivo_cargar:
     defaults: { _controller: AcreditacionBundle:CentroEducativo:formCuotaArchivoCargar }
     methods:  [POST]
 centro_educativo_criterio_observaciones:
-    path:     /{id}/{form}/observaciones
+    path:     /{id}/{form}/{temp}/observaciones
     defaults: { _controller: AcreditacionBundle:CentroEducativo:observaciones }
     methods:  [GET]
 centro_educativo_criterio_observaciones_guardar:
@@ -87,7 +87,7 @@ centro_educativo_criterio_observaciones_ver:
     defaults: { _controller: AcreditacionBundle:CentroEducativo:observaciones_ver }
     methods:  [GET]
 centro_educativo_criterio_observaciones_editar:
-    path:     /{id}/{form}/editar-observaciones
+    path:     /{id}/{form}/{temp}/editar-observaciones
     defaults: { _controller: AcreditacionBundle:CentroEducativo:observaciones_editar }
     methods:  [GET]
 centro_educativo_criterio_observaciones_editar_guardar:

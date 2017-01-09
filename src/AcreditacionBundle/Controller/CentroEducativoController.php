@@ -807,7 +807,7 @@ class CentroEducativoController extends Controller{
      *
      * @Security("has_role('ROLE_COORDINADOR')")
      */
-    public function observacionesAction(Request $request, $id,$form){
+    public function observacionesAction(Request $request, $id,$form,$temp){
         $em = $this->getDoctrine()->getManager();
         $criterio=$em->createQueryBuilder()
         ->select('
@@ -838,6 +838,7 @@ class CentroEducativoController extends Controller{
         
         return $this->render('centro-educativo/observaciones.index.html.twig',array(
             'criterio'=>$criterio,
+            'temp'=>$temp,
             'debug'=>true
         ));
     }
@@ -877,13 +878,14 @@ class CentroEducativoController extends Controller{
             $form->setidSeccion($idseccion);
             new AccionPorUsuario($em,$this->getUser(),'AO',$form);
             $em->persist($form);
+        }               
+        $em->flush();
+        $temp=$request->get('temp');
+        if($temp=="no"){
+            return $this->redirectToRoute('centro_educativo_form_lista_evaluar');
+        }else{
+            return $this->redirectToRoute('centro_educativo_registrar_acreditacion');
         }
-       
-      
-       
-                $em->flush();
-        return $this->redirectToRoute('centro_educativo_form_lista_evaluar');
-        
     }
     
     
@@ -936,7 +938,7 @@ class CentroEducativoController extends Controller{
      *
      * @Security("has_role('ROLE_COORDINADOR')")
      */
-    public function observaciones_editarAction(Request $request, $id,$form){
+    public function observaciones_editarAction(Request $request, $id,$form,$temp){
     $em = $this->getDoctrine()->getManager();
     $criterio=$em->createQueryBuilder()
     ->select(
@@ -970,12 +972,17 @@ class CentroEducativoController extends Controller{
             ->getQuery()->getResult();
             $verifico=array_key_exists('0', $criterio);
             
+           // $referer = $this->getRequest()->headers->get('referer');
+           //echo $referer;
+           //exit();
+           //return $this->redirect($referer);
+            
             if($verifico==false){
-                 return $this->redirectToRoute('centro_educativo_criterio_observaciones', array('id' => $id,'form'=>$form));
-                
+                 return $this->redirectToRoute('centro_educativo_criterio_observaciones', array('id' => $id,'form'=>$form,'temp'=>$temp));
             }else{
                 return $this->render('centro-educativo/observaciones_editar.index.html.twig',array(
                     'criterio'=>$criterio,
+                    'temp'=>$temp,
                     'debug'=>true
                 ));
             }
@@ -988,6 +995,7 @@ class CentroEducativoController extends Controller{
      * @Security("has_role('ROLE_COORDINADOR')")
      */
      public function observaciones_editar_guardarAction(Request $request){
+         
         $em = $this->getDoctrine()->getManager();
         $btn_accion= $request->get('btn_guardar');
         $idFormularioPorCentroEducativo=$request->get('idFormularioPorCentroEducativo');
@@ -1017,7 +1025,16 @@ class CentroEducativoController extends Controller{
       
        
                 $em->flush();
-        return $this->redirectToRoute('centro_educativo_form_lista_evaluar');
+                
+                
+        $temp=$request->get('temp');
+        if($temp=="no"){
+            return $this->redirectToRoute('centro_educativo_form_lista_evaluar');
+        }else{
+            return $this->redirectToRoute('centro_educativo_registrar_acreditacion');
+        }
+                
+        
         
     }
 

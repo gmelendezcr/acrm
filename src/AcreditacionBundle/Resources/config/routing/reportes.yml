@@ -79,3 +79,7 @@ reporte_anio_formulario:
     path:     /formulario-anio
     defaults: { _controller: AcreditacionBundle:Reportes:ReporteAnioFormulario }
     methods:  [GET]
+reporte_general_notas_x_criterio:
+    path:     /formulario-general-de-notas-criterio
+    defaults: { _controller: AcreditacionBundle:Reportes:ReporteGeneralNotaCriterio }
+    methods:  [GET]

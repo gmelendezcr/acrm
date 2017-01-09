@@ -9,10 +9,17 @@
     </div>
     <div class="col-md-2 text-right">
         <div class="btn-group" role="group">
-            <a class="btn btn-info" href="{{ path('centro_educativo_form_lista_evaluar') }}">
-                <span class="glyphicon glyphicon-triangle-left"></span> 
-                Regresar
-            </a>
+             {% if temp == 'no'%}
+                <a class="btn btn-info" href="{{ path('centro_educativo_form_lista_evaluar') }}">
+                    <span class="glyphicon glyphicon-triangle-left"></span> 
+                    Regresar
+                </a>
+            {% else %}
+                <a class="btn btn-info" href="{{ path('centro_educativo_registrar_acreditacion') }}">
+                    <span class="glyphicon glyphicon-triangle-left"></span> 
+                    Regresar
+                </a>
+        {%endif%}
         </div>
         <div class="clearfix capa-separador-1 border-bottom"></div>
         <div class="capa-separador-1"></div>
@@ -38,6 +45,7 @@
         <div class="header-control-general">
             <div class="clearfix capa-separador-1"></div>
             <form class="form-border" method="post" action="{{path('centro_educativo_criterio_observaciones_editar_guardar')}}" >
+                <input type="hidden" name="temp" value="{{temp}}" />
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover table-striped"> 
                         <tbody>
