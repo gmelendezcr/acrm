@@ -2962,4 +2962,8 @@ MINISTERIO DE EDUCACIÓN',0,'C');
                 return $this->render('reportes/reporte.GeneralNotas_x_Criterios.html.twig');
     }
     
+    public function ReporteListaCeduAcreditadosAction(Request $request){
+                return $this->render('reportes/reporte.ListaCeduAcreditados.html.twig');
+    }
+    
 }

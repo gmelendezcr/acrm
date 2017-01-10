@@ -83,3 +83,7 @@ reporte_general_notas_x_criterio:
     path:     /formulario-general-de-notas-criterio
     defaults: { _controller: AcreditacionBundle:Reportes:ReporteGeneralNotaCriterio }
     methods:  [GET]
+reporte_centro_educativo_acreditado:
+    path:     /formulario-lista-centros-educativos-acreditados
+    defaults: { _controller: AcreditacionBundle:Reportes:ReporteListaCeduAcreditados }
+    methods:  [GET]

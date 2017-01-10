@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+    <div class="col-md-12 text-center">                                            
+        <h2 class="sin-margin">
+            Listado de centros educativos acreditados
+        </h2>
+        <div class="clearfix capa-separador-1 border-bottom"></div>
+        <div class="capa-separador-1"></div>
+    </div>
+    
+    <div class="col-md-12">
+        <div class="header-control-general">
+            <form class="form-registro form-border" method="post" action="" target="_blank" id="reporte_info_general">
+                <div class="col-sm-6">
+                  {% include 'reportes/anno.html.twig'%}
+                  {% include 'reportes/ordenar_asc_desc.html.twig'%}
+                </div>
+                <div class="col-sm-6">
+                    {% include 'reportes/formato.reporte.html.twig'%}
+                </div>
+                <div class="col-sm-12 text-center">
+                    <button type="submit" class="btn btn-info btn-md"><span class="glyphicon glyphicon-th-list"></span> Generar</button>
+                </div>
+                <div class="clearfix"></div>
+            </form>
+        </div>
+    </div>   
+    
+{% endblock %}
